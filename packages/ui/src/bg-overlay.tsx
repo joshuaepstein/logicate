@@ -1,0 +1,9 @@
+import { cn } from "@logicate/ui";
+
+export const backgroundOverlayStylesTW = (className?: string) =>
+  cn(
+    "fixed inset-0 z-50 bg-[#05051440] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+    className,
+  );
+
+export const OVERLAY_COLOUR_TW = "bg-[#05051430]";

@@ -1,0 +1,17 @@
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+enum TimeFormat {
+  hours12
+  hours24
+
+  @@map("time_format")
+}

@@ -1,0 +1,4 @@
+{
+    "extends": "@logicate/tsconfig/react.json",
+    "include": ["**/*.ts", "**/*.tsx"],
+  }

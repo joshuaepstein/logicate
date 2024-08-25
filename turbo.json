@@ -1,18 +1,83 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "globalDependencies": [
+    ".env"
+  ],
   "tasks": {
     "build": {
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
+    },
+    "@logicate/web#build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [
+        ".next/**"
+      ]
+    },
+    "@logicate/landing#build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "src/**/*",
+        "tests/**/*"
+      ],
+      "env": [
+        "CI"
+      ],
+      "dependsOn": [
+        "^build:test"
+      ]
+    },
+    "test:unit": {
+      "cache": true
+    },
+    "test:integration": {
+      "inputs": [
+        "playwright.config.ts",
+        ".env.test",
+        "src/**/*",
+        "tests/**/*"
+      ],
+      "cache": true
+    },
+    "db:generate": {
+      "cache": false
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "outputs": []
+    },
+    "type-check": {
+      "outputs": []
     },
     "dev": {
+      "cache": false
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "@logicate/web#start": {
+      "cache": false,
+      "persistent": true
+    },
+    "@logicate/landing#start": {
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalEnv": [
+    "DATABASE_URL",
+    "SECRET_PASSWORD",
+    "NEXT_PUBLIC_*",
+    "SUPPORT_EMAIL"
+  ]
 }

@@ -1,0 +1,11 @@
+
+/* @logicate/ui/styles */
+/* import logicate styles */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply font-default;
+}

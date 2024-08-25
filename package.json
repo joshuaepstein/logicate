@@ -1,19 +1,51 @@
 {
-  "name": "coursework",
+  "name": "logicate",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "turbo dev --filter=@logicate/web",
+    "dev:emails": "turbo dev --filter=@logicate/emails",
+    "dev:landing": "dotenv -c development turbo dev --filter=@logicate/landing",
+    "start": "turbo start --filter=@logicate/landing",
+    "build": "dotenv -c turbo run build --filter=@logicate/landing",
+    "build:test": "turbo build:test",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "test:integration": "turbo test:integration",
+    "test:unit": "turbo test:unit",
+    "type-check": "turbo type-check",
+    "prettier": "prettier --write .",
+    "release": "./scripts/create-release.sh"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "framer-motion": "^11.3.28",
+    "next": "^14.2.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.5.4",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.14",
-    "typescript": "^5.4.5"
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@types/node": "^22.5.0",
+    "tailwindcss": "^3.4.10",
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3.0",
+    "dotenv-cli": "^7.4.2",
+    "dotenv": "^16.4.5",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.6",
+    "prettier-plugin-packagejson": "2.5.2",
+    "prettier-plugin-prisma": "^5.0.0",
+    "prettier-plugin-sort-json": "^4.0.0",
+    "prettier-plugin-organize-imports": "^4.0.0",
+    "turbo": "^2.0.14"
+  },
+  "prisma": {
+    "seed": "pnpm --filter @logicate/database db:seed"
   },
   "packageManager": "pnpm@8.15.6",
   "engines": {
-    "node": ">=18"
+    "node": "20.x"
   }
 }

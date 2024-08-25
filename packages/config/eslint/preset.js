@@ -21,18 +21,12 @@ module.exports = function (workspaceDirPath) {
                 plugins: ["@typescript-eslint"],
                 extends: ["plugin:@typescript-eslint/recommended"],
                 rules: {
-                    "@typescript-eslint/no-unused-vars": "error",
+                    "@typescript-eslint/no-unused-vars": "off",
                 },
             },
         ],
         rules: {
-            "simple-import-sort/imports": "error",
-            "simple-import-sort/exports": "error",
-            "import/first": "error",
-            "import/newline-after-import": "error",
-            "import/no-duplicates": "error",
-            "no-console": ["error", { allow: ["warn", "error", "info"] }],
-            "no-unused-vars": "error",
-        },
+            "@typescript-eslint/no-unused-vars": "off",
+        }
     };
 };

@@ -556,6 +556,10 @@ const config: Config = {
           "0%": { transform: "rotateX(0deg) scale(1)", opacity: "1" },
           "100%": { transform: "rotateX(-10deg) scale(0.95)", opacity: "0" },
         },
+        "scale-in": {
+          "0%": { transform: "scale(0.9)" },
+          "100%": { transform: "scale(1)" },
+        },
         // Custom wiggle animation
         wiggle: {
           "0%, 100%": {
@@ -691,6 +695,7 @@ const config: Config = {
         overlayShow: "overlayShow 250ms cubic-bezier(0.16, 1, 0.3, 1)",
         contentShow: "contentShow 250ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideRight: "slideRight 250ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "scale-in": "scale-in 250ms cubic-bezier(0.16, 1, 0.3, 1)",
       },
 
       screens: {

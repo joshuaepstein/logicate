@@ -10,6 +10,7 @@ const kbdVariants = cva(
       variant: {
         default: "bg-neutralgrey-200 text-neutralgrey-700",
         outline: "bg-white text-neutralgrey-1100",
+        ghost: "bg-transparent text-neutralgrey-1100",
       },
     },
     defaultVariants: {
@@ -52,3 +53,4 @@ const Kbd = React.forwardRef<HTMLUnknownElement, KbdProps>(
 Kbd.displayName = "Kbd";
 
 export { Kbd };
+export default Kbd;

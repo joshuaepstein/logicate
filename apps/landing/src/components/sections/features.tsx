@@ -170,16 +170,8 @@ export default function Features() {
           </div>
         </div>
         <div className="flex flex-col w-2/3">
-          {/* <div className="aspect-video w-full bg-neutralgrey-500" /> */}
-          {/* {features.find((feature) => feature.id === selected) && (
-            <Image
-              src={features.find((feature) => feature.id === selected)!.demo}
-              alt="Demo"
-              className="aspect-video w-full"
-            />
-          )} */}
           <AnimatePresence mode="wait">
-            {features.map((feature, index) => {
+            {features.map((feature) => {
               if (feature.id === selected) {
                 return (
                   <motion.div
@@ -202,7 +194,7 @@ export default function Features() {
                     <Image
                       src={feature.demo}
                       alt="Demo"
-                      className="aspect-video w-full"
+                      className="aspect-video rounded-md shadow-hard-2xs w-full"
                     />
                   </motion.div>
                 );

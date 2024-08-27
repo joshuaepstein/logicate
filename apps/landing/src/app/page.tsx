@@ -15,8 +15,8 @@ export default function Page() {
         alt="Landing Gradient"
         className="absolute xl:-left-56 lg:-left-40 md:-left-20 top-0 w-3/4 -z-50"
       />
+
       <div className="container">
-        <Navbar />
         <div className="flex flex-col items-center relative justify-center py-36">
           <AndGate />
           <OrGate />

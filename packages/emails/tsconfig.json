@@ -1,0 +1,5 @@
+{
+  "exclude": ["node_modules", ".react-email"],
+  "extends": "@logicate/tsconfig/react.json",
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
+}

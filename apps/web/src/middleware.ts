@@ -1,4 +1,8 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { parse } from "@logicate/utils/middleware/parse";
+import { getSession } from "./lib/auth/utils";
+import { getServerSession } from "next-auth";
+import { getUserViaToken } from "@/lib/auth/middleware/get-user-via-token";
 
 export const config = {
   matcher: [
@@ -16,31 +20,32 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  // const { domain, path, fullPath, key, fullKey } = parse(req);
+  const { domain, path, fullPath, key, fullKey } = parse(req);
+  const user = await getUserViaToken(req);
 
-  const user = null;
-
-  // if (
-  //   path !== "/login" &&
-  //   path !== "/register" &&
-  //   !user &&
-  //   !path.startsWith("/auth/reset-password/")
-  // ) {
-  //   return NextResponse.redirect(
-  //     new URL(
-  //       `/login${path === "/" ? "" : `?next=${encodeURIComponent(fullPath)}`}`,
-  //       req.url,
-  //     ),
-  //   );
-  // } else if (user) {
-  //   if (
-  //     user.createdAt &&
-  //     new Date(user.createdAt).getTime() > Date.now() - 10000 &&
-  //     path !== "/welcome"
-  //   ) {
-  //     return NextResponse.redirect(new URL("/welcome", req.url));
-  //   }
-  // }
+  if (
+    !user &&
+    path !== "/login" &&
+    path !== "/register" &&
+    !path.startsWith("/auth/reset-password/")
+  ) {
+    return NextResponse.redirect(
+      new URL(
+        `/login${path === "/" ? "" : `?next=${encodeURIComponent(fullPath)}`}`,
+        req.url,
+      ),
+    );
+  } else if (user) {
+    if (
+      user.createdAt &&
+      new Date(user.createdAt).getTime() > Date.now() - 10000 &&
+      path !== "/welcome"
+    ) {
+      return NextResponse.redirect(new URL("/welcome", req.url));
+    } else if (path === "/login" || path === "/register") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
 
   return NextResponse.next();
 }

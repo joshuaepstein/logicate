@@ -3,10 +3,12 @@
 import { Input } from "@logicate/ui/input/index";
 import { SubmitButton } from "@logicate/ui/submit-button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { authenticate } from "./action";
+import { signIn } from "next-auth/react";
+import { Button } from "@logicate/ui/button";
+import { cn } from "@logicate/ui";
+import LoadingCircle from "@logicate/ui/icons/loading-circle";
 
 const errorCodes = {
   "no-credentials": "Invalid email or password",
@@ -18,32 +20,65 @@ const errorCodes = {
 };
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const next = searchParams?.get("next");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, login] = useTransition();
 
   useEffect(() => {
     const error = searchParams?.get("error");
     error && toast.error(error);
   }, [searchParams]);
 
-  useEffect(() => {
-    if (errorMessage && errorMessage !== "success") {
-      toast.error(
-        errorCodes[errorMessage as keyof typeof errorCodes] || errorMessage,
-      );
-    } else if (errorMessage === "success") {
-      toast.success("Login successful");
-      router.push("/");
-    }
-  }, [errorMessage]);
-
   return (
     <form
       className="h-full flex flex-col justify-center items-center w-full"
-      action={dispatch}
+      onSubmit={async (e) => {
+        e.preventDefault();
+
+        login(async () => {
+          const res = await fetch("/api/auth/account-exists", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          if (!res.ok) {
+            const error = await res.text();
+            toast.error(error);
+            return;
+          }
+
+          const { accountExists } = await res.json();
+          if (accountExists) {
+            const signInRes = await signIn("credentials", {
+              email,
+              password,
+              redirect: false,
+              ...(next ? { callbackUrl: next } : {}),
+            });
+            if (!signInRes) return;
+
+            if (!signInRes.ok && signInRes.error) {
+              if (errorCodes[signInRes.error as keyof typeof errorCodes]) {
+                toast.error(
+                  errorCodes[signInRes.error as keyof typeof errorCodes],
+                );
+              } else {
+                toast.error(signInRes.error);
+              }
+
+              return;
+            }
+
+            router.push(next ?? "/");
+          } else {
+            toast.error("No account found with that email address.");
+          }
+        });
+      }}
     >
       <div className="flex flex-col justify-start items-start relative">
         <h2 className="font-medium text-2xl">Login</h2>
@@ -72,18 +107,24 @@ export default function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* <Button className="w-full" variant="dark" disabled={pending}>
-            {pending ? "Logging in..." : "Login"}
-          </Button> */}
-          <SubmitButton className="w-full" variant="dark">
+          {/* <SubmitButton className="w-full" variant="dark">
             Login
-          </SubmitButton>
-          {errorMessage && errorMessage !== "success" && (
+          </SubmitButton> */}
+          <Button disabled={loading} variant="dark" className="relative w-full">
+            <span className={cn({ "opacity-0": loading })}>Login</span>
+
+            {loading && (
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <LoadingCircle className="size-5" />
+              </div>
+            )}
+          </Button>
+          {/* {errorMessage && errorMessage !== "success" && (
             <p className="text-red-700 max-w-xs absolute -bottom-24">
               {errorCodes[errorMessage as keyof typeof errorCodes] ||
                 errorMessage}
             </p>
-          )}
+          )} */}
         </div>
       </div>
     </form>

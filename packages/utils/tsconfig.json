@@ -1,4 +1,7 @@
 {
-    "extends": "@logicate/tsconfig/react.json",
-    "include": ["**/*.ts", "**/*.tsx"],
-  }
+  "compilerOptions": {
+    "target": "ES2020"
+  },
+  "extends": "@logicate/tsconfig/react.json",
+  "include": ["**/*.ts", "**/*.tsx"]
+}

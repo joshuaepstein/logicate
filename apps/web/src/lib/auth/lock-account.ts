@@ -1,6 +1,5 @@
 import { prisma, User } from "@logicate/database";
-
-const MAX_LOGIN_ATTEMPTS = 10;
+import { MAX_LOGIN_ATTEMPTS } from "./constants";
 
 export const incrementLoginAttemps = async (
   user: Pick<User, "id" | "email">,

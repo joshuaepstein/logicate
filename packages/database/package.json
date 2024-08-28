@@ -9,15 +9,22 @@
         "db:migrate": "prisma migrate dev",
         "db:seed": "tsx prisma/seed.ts"
     },
-    "exports": "./index.ts",
+    "exports": {
+        "./edge": "./edge.ts",
+        ".": "./index.ts"
+    },
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",
         "@logicate/tsconfig": "workspace:*",
+        "@logicate/utils": "workspace:*",
+        "@types/ws": "^8.5.12",
         "prisma": "^5.18.0",
-        "tsx": "^4.17.0",
-        "@logicate/utils": "workspace:*"
+        "tsx": "^4.17.0"
     },
     "dependencies": {
-        "@prisma/client": "5.18.0"
+        "@neondatabase/serverless": "^0.9.4",
+        "@prisma/adapter-neon": "^5.19.0",
+        "@prisma/client": "5.18.0",
+        "ws": "^8.18.0"
     }
 }

@@ -1,18 +1,18 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@logicate/database";
+import { sendEmail } from "@logicate/emails";
 import { subscribe } from "@logicate/emails/resend";
-import { verifyPassword } from "@logicate/utils/encrypt";
 import { waitUntil } from "@vercel/functions";
-import { NextAuthConfig } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
   exceededLoginAttemptsThreshold,
   incrementLoginAttemps,
 } from "./lock-account";
-
+import { validatePassword } from "./password";
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
-export const authConfig = {
+export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -23,14 +23,18 @@ export const authConfig = {
         password: { type: "password" },
       },
       async authorize(credentials, req) {
-        if (!credentials) throw new Error("no-credentials");
+        if (!credentials) {
+          throw new Error("no-credentials");
+        }
 
         const { email, password } = credentials as {
           email?: string;
           password?: string;
         };
 
-        if (!email || !password) throw new Error("no-credentials");
+        if (!email || !password) {
+          throw new Error("no-credentials");
+        }
 
         const user = await prisma.user.findUnique({
           where: { email },
@@ -48,12 +52,18 @@ export const authConfig = {
           },
         });
 
-        if (!user || !user.password) throw new Error("invalid-credentials");
+        if (!user || !user.password) {
+          throw new Error("invalid-credentials");
+        }
 
-        if (exceededLoginAttemptsThreshold(user))
+        if (exceededLoginAttemptsThreshold(user)) {
           throw new Error("exceeded-login-attempts");
+        }
 
-        const passwordMatch = await verifyPassword(password, user.password);
+        const passwordMatch = await validatePassword({
+          password,
+          passwordHash: user.password,
+        });
 
         if (!passwordMatch) {
           const exceededLoginAttempts = exceededLoginAttemptsThreshold(
@@ -67,7 +77,7 @@ export const authConfig = {
           }
         }
 
-        await prisma.user.update({
+        const updatedUser = await prisma.user.update({
           where: { id: user.id },
           data: {
             invalidLoginAttempts: 0,
@@ -75,17 +85,12 @@ export const authConfig = {
         });
 
         return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image:
-            user.publicDisplay && user.publicDisplay.length > 0
-              ? user.publicDisplay[0].profilePicture
-              : null,
+          ...updatedUser,
         };
       },
     }),
   ],
+  // @ts-ignore
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
@@ -164,18 +169,18 @@ export const authConfig = {
           waitUntil(
             Promise.allSettled([
               subscribe({ email, name: user.name }),
-              // TODO: Uncomment this when the welcome email is ready
-              // sendEmail({
-              //   subject: "Welcome to Logicate",
-              //   email,
-              //   react: WelcomeEmail({
-              //     email,
-              //     name: user.name,
-              //     accountType: user.accountType,
-              //   }),
-              //   scheduledAt: new Date(Date.now() + 5 * 60 + 1000).toISOString(),
-              //   marketing: true,
-              // }),
+              sendEmail({
+                subject: "Welcome to Logicate",
+                email,
+                // react: WelcomeEmail({
+                //   email,
+                //   name: user.name,
+                //   accountType: user.accountType,
+                // }),
+                text: "Welcome to Logicate - We are working on this email template and should be ready soon!",
+                scheduledAt: new Date(Date.now() + 5 * 60 + 1000).toISOString(),
+                marketing: true,
+              }),
             ]),
           );
         }
@@ -183,4 +188,4 @@ export const authConfig = {
     },
   },
   secret: process.env.SECRET_PASSWORD,
-} satisfies NextAuthConfig;
+};

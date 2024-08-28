@@ -27,25 +27,17 @@ import { Gate, GateType, gateTypeToIcon } from "../node/gate";
 import type { Item, Wire as TypeWire } from "../types";
 import { Wire } from "../wire";
 import useDisableHook from "./disable-hook";
+import { Click } from "@logicate/utils/buttons";
+import { TemporaryGate } from "../node/temporary-gate";
 
-const DraggableItem = ({
-  type,
-  onDrag,
-}: {
-  type: GateType;
-  onDrag?: () => void;
-}) => {
-  const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData("text/plain", type);
-    onDrag?.();
-  };
-
+const DraggableItem = ({ type }: { type: GateType }) => {
   return (
     <div
-      draggable
-      onDragStart={handleDragStart}
       key={type}
       className="rounded-sm shadow-hard-soft-2xs p-3 aspect-square"
+      data-logicate-draggable
+      data-logicate-draggable-sidebar
+      data-logicate-gate-type={type}
     >
       <div
         className="size-6"
@@ -64,14 +56,17 @@ export default function Canvas() {
   const canvasReference = useRef<HTMLDivElement>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [wires, setWires] = useState<TypeWire[]>([]);
-  const [connecting, setConnecting] = useState<number | null>(null);
-  const [dragging, setDragging] = useState<number | null>(null);
   const [canvas, setCanvas] = useState<{
     x: number;
     y: number;
     zoom: number;
   }>({ x: 0, y: 0, zoom: 1 });
   const [confirmClear, setConfirmClear] = useState(false);
+  const [draggingNewElement, setDraggingNewElement] = useState<{
+    type: GateType;
+    x: number;
+    y: number;
+  } | null>(null);
 
   useDisableHook(canvasReference);
 
@@ -180,39 +175,116 @@ export default function Canvas() {
     simulate();
   }, [wires, simulate]);
 
-  useHotkeys("Escape", () => {
-    setConnecting(null);
-    setDragging(null);
-  });
-
-  useHotkeys("ctrl+s", () => {
-    console.log("save");
-  });
-
-  useHotkeys("ctrl+z", () => {
-    console.log("undo");
-  });
-
   useEffect(() => {
     setCookie("logicate-unsaved_items", SuperJSON.stringify(items));
     setCookie("logicate-unsaved_wires", SuperJSON.stringify(wires));
   }, [items, wires]);
 
-  const scrollCanvas = useCallback((e: React.WheelEvent) => {
-    const isOverElement = items.some((item) => {
-      const element = document.querySelector(`[data-logicate-id="${item.id}"]`);
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        return (
-          e.clientX > rect.left &&
-          e.clientX < rect.right &&
-          e.clientY > rect.top &&
-          e.clientY < rect.bottom
+  // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
+  useEffect(() => {
+    const handleDrag = (e: MouseEvent) => {
+      if (draggingNewElement && e.buttons === Click.Primary) {
+        const element = document.querySelector(
+          "[data-logicate-temporary-dragging-gate]",
         );
+        if (!element) return;
+        setDraggingNewElement((previous) => {
+          if (previous) {
+            return {
+              ...previous,
+              x: mouseX - element.getBoundingClientRect().width / 2,
+              y: mouseY - element.getBoundingClientRect().height / 2,
+            };
+          }
+          return null;
+        });
       }
-      return false;
-    });
-    if (isOverElement) return;
+
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const mouseOverElement = document.elementFromPoint(mouseX, mouseY);
+      if (mouseOverElement) {
+        if (mouseOverElement.getAttribute("data-logicate-draggable")) {
+          if (
+            mouseOverElement.getAttribute("data-logicate-draggable-sidebar")
+          ) {
+            const type = mouseOverElement.getAttribute(
+              "data-logicate-gate-type",
+            );
+            if (type && !draggingNewElement && e.buttons === Click.Primary) {
+              setDraggingNewElement({
+                type: type as GateType,
+                x: mouseX - 16 / -canvas.zoom,
+                y: mouseY + 16 / -canvas.zoom,
+              });
+            }
+          }
+        }
+      }
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      if (draggingNewElement) {
+        setDraggingNewElement(null);
+        // We need to adjust the x and y to be the one relative to the canvas so that it doesnt account for the width of the sidebar
+        if (!canvasReference.current) return;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        if (
+          clientX < canvasReference.current.getBoundingClientRect().left ||
+          clientX > canvasReference.current.getBoundingClientRect().right ||
+          clientY < canvasReference.current.getBoundingClientRect().top ||
+          clientY > canvasReference.current.getBoundingClientRect().bottom
+        ) {
+          return;
+        }
+        const xOnCanvas =
+          (draggingNewElement.x -
+            canvasReference.current.getBoundingClientRect().left) /
+          canvas.zoom;
+        const yOnCanvas =
+          (draggingNewElement.y -
+            canvasReference.current.getBoundingClientRect().top) /
+          canvas.zoom;
+        setItems((prevItems) => [
+          ...prevItems,
+          {
+            id: randomGateId(),
+            type: draggingNewElement.type,
+            x: xOnCanvas,
+            y: yOnCanvas,
+            inputs: [],
+            outputs: [],
+            value: false,
+            computedValue: false,
+          },
+        ]);
+      }
+    };
+
+    document.addEventListener("mousemove", handleDrag);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleDrag);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  });
+
+  const scrollCanvas = useCallback((e: React.WheelEvent) => {
+    // const isOverElement = items.some((item) => {
+    //   const element = document.querySelector(`[data-logicate-id="${item.id}"]`);
+    //   if (element) {
+    //     const rect = element.getBoundingClientRect();
+    //     return (
+    //       e.clientX > rect.left &&
+    //       e.clientX < rect.right &&
+    //       e.clientY > rect.top &&
+    //       e.clientY < rect.bottom
+    //     );
+    //   }
+    //   return false;
+    // });
+    // if (isOverElement) return;
     setCanvas((previous) => {
       return {
         ...previous,
@@ -373,6 +445,24 @@ export default function Canvas() {
           </Button>
         </div>
       </main>
+      {draggingNewElement && (
+        <div
+          className="absolute origin-top-left pointer-events-none"
+          style={{
+            width: "1000000px",
+          }}
+        >
+          <TemporaryGate
+            canvasZoom={canvas.zoom}
+            type={draggingNewElement.type}
+            inputs={0}
+            state={false}
+            gateId={"temporary-dragging-logicate-element"}
+            x={draggingNewElement.x}
+            y={draggingNewElement.y}
+          />
+        </div>
+      )}
     </>
   );
 }

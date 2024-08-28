@@ -33,6 +33,4 @@ async function main() {
   console.log(password);
 }
 
-/*Clemmie_Klein72@hotmail.com 7n8fmUrmlFSDQ78 */
-
 main();

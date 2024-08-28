@@ -1,11 +1,12 @@
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
-}
+  relationMode = "prisma"
+  }
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native"]
+  previewFeatures = ["driverAdapters", "fullTextSearch", "fullTextIndex", "prismaSchemaFolder", "omitApi"]
 }
 
 enum TimeFormat {
@@ -65,6 +66,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   verificationTokens VerificationToken[]
+  tokens Token[]
 }
 
 enum Language {

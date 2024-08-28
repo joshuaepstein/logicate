@@ -10,6 +10,12 @@ export const Wire = ({
   endX: number;
   endY: number;
   isActive: boolean;
+  canvas: {
+    x: number;
+    y: number;
+    zoom: number;
+  };
+  canvasReference: React.RefObject<HTMLDivElement>;
 }) => {
   // Calculate control points for the Bézier curve
   const controlX1 = startX + (endX - startX) / 2;

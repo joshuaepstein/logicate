@@ -11,3 +11,12 @@ export const randomid = customAlphabet(
 );
 
 export const generateOtp = customAlphabet("0123456789", 6);
+
+export const randomGateId = () => {
+  var result = "logicate-gate-";
+  for (let i = 0; i < 3; i++) {
+    result += nanoid(6);
+    result += "-";
+  }
+  return result;
+};

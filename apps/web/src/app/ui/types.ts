@@ -1,19 +1,33 @@
-import { gates } from "./gates";
+import { GateType } from "./node/gate";
 
 interface Item {
-  id: number;
-  type: keyof typeof gates | "INPUT" | "OUTPUT";
+  id: string;
+  type: GateType;
   x: number;
   y: number;
   value: boolean | null;
-  inputs: number[];
-  outputs: number[];
+  inputs: string[];
+  outputs: string[];
   computedValue?: boolean;
 }
 
 interface Wire {
-  from: number;
-  to: number;
+  from: string;
+  to: string;
+  id: string;
+  active?: boolean;
 }
 
-export type { Item, Wire };
+interface TempWire {
+  from: {
+    x: number;
+    y: number;
+  };
+  to: {
+    x: number;
+    y: number;
+  };
+  active: boolean;
+}
+
+export type { Item, TempWire, Wire };

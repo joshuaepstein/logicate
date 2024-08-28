@@ -9,7 +9,7 @@ export default function Home({
   //   return <div>New Login</div>;
   // }
   return (
-    <div className="w-full h-dvh flex flex-col">
+    <div className="w-full max-h-dvh overflow-hidden h-dvh flex flex-col">
       <nav className="w-full h-16 border-b border-neutralgrey-400"></nav>
       <Canvas />
     </div>

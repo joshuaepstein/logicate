@@ -1,5 +1,6 @@
 import { cn } from "@logicate/ui";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
+import { Item } from "../types";
 
 export enum GateType {
   AND = "AND",
@@ -64,6 +65,7 @@ export const Gate = forwardRef<
     y: number;
     canvasZoom: number;
     savePosition: (x: number, y: number) => void;
+    toggleSelect: (gateId: string) => void;
   } & React.HTMLAttributes<HTMLDivElement>
 >(
   (
@@ -77,6 +79,7 @@ export const Gate = forwardRef<
       isSelected = false,
       canvasZoom,
       savePosition,
+      toggleSelect,
       ...rest
     },
     ref,
@@ -145,9 +148,6 @@ export const Gate = forwardRef<
         <div
           className={cn(
             "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
-            {
-              "filter-[drop-shadow(0px_0px_3px_#0079db)]": true,
-            },
           )}
           style={{ left: position.x, top: position.y }}
           tabIndex={-1}
@@ -159,6 +159,8 @@ export const Gate = forwardRef<
           {...rest}
           onMouseDown={handleMouseDown}
           data-logicate-dragging={dragging}
+          onClick={() => toggleSelect(gateId)}
+          data-logicate-selected={isSelected}
         >
           <div
             className="flex flex-col items-start justify-center"
@@ -249,9 +251,9 @@ export const Gate = forwardRef<
           </div>
           <div
             className={cn(
-              "bg-transparent w-8 min-h-8 min-w-[30px] border-black flex justify-center items-center",
+              "bg-transparent w-8 min-h-8 min-w-[30px] transition-[filter] duration-100 border-black flex justify-center items-center",
               {
-                "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
+                // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
                 "border-none": inputs < 4,
                 "border-l-2 my-[5.25px] self-stretch": inputs > 3,
                 "-ml-[4.5px] -mr-px w-[36px]": isOrType,
@@ -261,6 +263,7 @@ export const Gate = forwardRef<
             style={{
               gridColumn: "2 / span 1",
               gridRow: "2 / span 1",
+              filter: isSelected ? "drop-shadow(0px 0px 3px #0079db)" : "none",
             }}
           >
             <div className="pointer-events-auto w-full h-full flex items-center justify-center">

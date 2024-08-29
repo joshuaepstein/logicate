@@ -1,17 +1,22 @@
-import Canvas from "./ui/canvas";
+import { getSession } from "@/lib/auth/utils";
+import { prisma } from "@logicate/database";
+import { redirect } from "next/navigation";
 
-export default function Home({
-  searchParams: { newLogin },
-}: {
-  searchParams: Record<string, string>;
-}) {
-  // if (newLogin) {
-  //   return <div>New Login</div>;
-  // }
-  return (
-    <div className="w-full max-h-dvh overflow-hidden h-dvh flex flex-col">
-      <nav className="w-full h-16 border-b border-neutralgrey-400"></nav>
-      <Canvas />
-    </div>
-  );
+const createDatabaseSession = async (userId: string) => {
+  "use server";
+  const response = await prisma.logicateSession.create({
+    data: {
+      items: [],
+      wires: [],
+      ownerId: userId,
+    },
+  });
+  return response;
+};
+
+export default async function Home() {
+  const session = await getSession();
+  const logicateSession = await createDatabaseSession(session.user.id);
+
+  redirect(`/canvas/${logicateSession.id}`);
 }

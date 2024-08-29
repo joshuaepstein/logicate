@@ -9,3 +9,7 @@ export function popCookie(key: string) {
   Cookies.remove(key);
   return value;
 }
+
+export function getCookie(key: string) {
+  return Cookies.get(key);
+}

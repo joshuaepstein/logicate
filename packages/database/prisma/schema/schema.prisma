@@ -67,6 +67,8 @@ model User {
   sessions      Session[]
   verificationTokens VerificationToken[]
   tokens Token[]
+
+  LogicateSession LogicateSession[]
 }
 
 enum Language {

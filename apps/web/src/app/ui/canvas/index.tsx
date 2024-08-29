@@ -1,6 +1,6 @@
 "use client";
 
-import { setCookie } from "@/lib/cookies";
+import { setCookie, getCookie } from "@/lib/cookies";
 import { CenterIcon, Eraser01Icon } from "@jfstech/icons-react/24/outline";
 import { Button } from "@logicate/ui/button";
 import {
@@ -29,6 +29,9 @@ import { Wire } from "../wire";
 import useDisableHook from "./disable-hook";
 import { Click } from "@logicate/utils/buttons";
 import { TemporaryGate } from "../node/temporary-gate";
+import { useEffectOnce } from "react-use";
+import { useDebounce } from "use-debounce";
+import { LogicateSession } from "@logicate/database";
 
 const DraggableItem = ({ type }: { type: GateType }) => {
   return (
@@ -52,10 +55,21 @@ const DraggableItem = ({ type }: { type: GateType }) => {
   );
 };
 
-export default function Canvas() {
+export default function Canvas({
+  sessionId,
+  logicateSession,
+}: {
+  sessionId: string;
+  logicateSession: LogicateSession;
+}) {
   const canvasReference = useRef<HTMLDivElement>(null);
-  const [items, setItems] = useState<Item[]>([]);
-  const [wires, setWires] = useState<TypeWire[]>([]);
+  const [items, setItems] = useState<Item[]>(
+    SuperJSON.parse(SuperJSON.stringify(logicateSession.items ?? [])),
+  );
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [wires, setWires] = useState<TypeWire[]>(
+    SuperJSON.parse(SuperJSON.stringify(logicateSession.wires ?? [])),
+  );
   const [canvas, setCanvas] = useState<{
     x: number;
     y: number;
@@ -175,10 +189,24 @@ export default function Canvas() {
     simulate();
   }, [wires, simulate]);
 
-  useEffect(() => {
-    setCookie("logicate-unsaved_items", SuperJSON.stringify(items));
-    setCookie("logicate-unsaved_wires", SuperJSON.stringify(wires));
-  }, [items, wires]);
+  useHotkeys("esc", () => {
+    if (draggingNewElement) {
+      setDraggingNewElement(null);
+    }
+    if (selectedItems.length > 0) {
+      setSelectedItems([]);
+    }
+    if (confirmClear) {
+      setConfirmClear(false);
+    }
+  });
+
+  useHotkeys("ctrl+z", () => {
+    if (selectedItems.length > 0) {
+      setSelectedItems([]);
+      // TODO: Undo last action.
+    }
+  });
 
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
   useEffect(() => {
@@ -271,6 +299,7 @@ export default function Canvas() {
   });
 
   const scrollCanvas = useCallback((e: React.WheelEvent) => {
+    // vv This isnt needed as there is no action on scroll vv
     // const isOverElement = items.some((item) => {
     //   const element = document.querySelector(`[data-logicate-id="${item.id}"]`);
     //   if (element) {
@@ -389,6 +418,16 @@ export default function Canvas() {
                   });
                 }}
                 canvasZoom={canvas.zoom}
+                isSelected={selectedItems.some(
+                  (selectedItem) => selectedItem === item.id,
+                )}
+                toggleSelect={(gateId) => {
+                  if (!selectedItems.includes(gateId)) {
+                    setSelectedItems((prevSelectedItems) => {
+                      return [...prevSelectedItems, gateId];
+                    });
+                  }
+                }}
               />
             ))}
           </div>

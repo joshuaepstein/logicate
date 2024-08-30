@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { LogicateError } from "./error";
 
-export const parseRequestBody = async (req: NextRequest) => {
+export const parseRequestBody = async (req: NextRequest | Request) => {
   try {
     return req.json();
   } catch (error) {

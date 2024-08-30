@@ -8,15 +8,19 @@
         "./types/*": "./src/types/**/*.ts"
     },
     "dependencies": {
-        "@ai-sdk/openai": "^0.0.54",
         "@ai-sdk/anthropic": "^0.0.48",
-        "@logicate/utils": "workspace:*",
+        "@ai-sdk/openai": "^0.0.54",
         "@logicate/database": "workspace:*",
+        "@logicate/types": "workspace:*",
+        "@logicate/utils": "workspace:*",
         "ai": "^3.3.20",
+        "lodash": "^4.17.21",
         "zod": "^3.23.8"
     },
     "devDependencies": {
         "@logicate/tsconfig": "workspace:*",
+        "@logicate/types": "workspace:*",
+        "@types/lodash": "^4.17.7",
         "ts-node": "^10.9.2"
     },
     "scripts": {

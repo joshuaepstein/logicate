@@ -1,0 +1,28 @@
+{
+    "name": "@logicate/types",
+    "version": "0.0.1",
+    "description": "Shared types for logicate",
+    "type": "module",
+    "author": {
+        "name": "Joshua Epstein",
+        "email": "18082@jfs.brent.sch.uk",
+        "url": "https://joshepstein.co.uk"
+    },
+    "scripts": {
+        "type-check": "tsc --noEmit --pretty"
+    },
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        "./*": {
+            "import": "./src/*.ts",
+            "types": "./src/*.ts"
+        }
+    },
+    "dependencies": {
+        "@logicate/utils": "workspace:*"
+    },
+    "devDependencies": {
+        "@logicate/tsconfig": "workspace:*"
+    }
+}

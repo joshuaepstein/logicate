@@ -51,11 +51,6 @@ export const withSession =
               },
             },
           },
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
         });
 
         if (!user) {
@@ -76,8 +71,13 @@ export const withSession =
         session = {
           user: {
             id: user.id,
-            name: user.name || "",
-            email: user.email || "",
+            accountType: user.accountType,
+            createdAt: user.createdAt,
+            email: user.email,
+            name: user.name,
+            progressLevel: user.progressLevel,
+            updatedAt: user.updatedAt,
+            username: user.username,
           },
         };
       } else {

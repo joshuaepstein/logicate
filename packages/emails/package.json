@@ -21,6 +21,7 @@
     },
     "exports": {
         ".": "./src/index.ts",
-        "./resend": "./src/resend.ts"
+        "./resend": "./src/resend.ts",
+        "./templates/*": "./src/templates/*"
     }
 }

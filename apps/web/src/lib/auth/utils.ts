@@ -2,13 +2,10 @@ import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import { LogicateError } from "../api/error";
 import { authConfig } from "./options";
+import { User } from "@logicate/database";
 
 export interface Session {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  user: Omit<User, "password" | "invalidLoginAttempts" | "lockedAt">;
 }
 
 export const getSession = async () => {

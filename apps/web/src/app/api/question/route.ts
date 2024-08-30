@@ -13,6 +13,13 @@ export const POST = withSession(
 
     const questionId = generateQuestionId();
 
+    const questionData = {
+      generatedQuestionType: questionType,
+      generatedQuestion: generatedQuestion,
+      userId: session.user.id,
+      id: questionId,
+    };
+
     const question = await prisma.question.create({
       data: {
         generatedQuestionType: questionType,
@@ -22,6 +29,13 @@ export const POST = withSession(
       },
     });
 
-    return NextResponse.json(question, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        id: questionId,
+        data: questionData,
+      },
+      { status: 200 },
+    );
   },
 );

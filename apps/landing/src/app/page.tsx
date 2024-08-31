@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import Navbar from "@/components/navbar";
 import landingGradient from "~/landing_gradient.png";
 import landingDemo from "~/landing_demo.png";
 import Features from "@/components/sections/features";

@@ -1,10 +1,10 @@
+// @ts-ignore - This needs to be fixed as we are using next-auth v4
 "use server";
 
-import { signIn } from "@/lib/auth";
 import { Failure, Success } from "@/types/api";
 import { prisma } from "@logicate/database";
 import { hashPassword } from "@logicate/utils/encrypt";
-import { AuthError } from "next-auth";
+import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -16,11 +16,11 @@ const registerSchema = z.object({
 });
 
 // Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character
-const passwordRegex =
+export const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export async function registerAction(
-  prevState: Failure<string> | Success<string> | undefined,
+  _: Failure<string> | Success<string> | undefined,
   formData: FormData,
 ) {
   const validatedFields = registerSchema.safeParse({
@@ -74,6 +74,17 @@ export async function registerAction(
     },
   });
 
+  if (newUser) {
+    const login = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    if (login) {
+      redirect("/?newLogin=true");
+    }
+  }
+
   try {
     const login = await signIn("credentials", {
       email,
@@ -84,11 +95,6 @@ export async function registerAction(
       redirect("/?newLogin=true");
     }
   } catch (error) {
-    if (error instanceof AuthError) {
-      return Failure(
-        error?.cause?.err?.message || error.message || "An error occurred",
-      );
-    }
     throw error;
   }
 

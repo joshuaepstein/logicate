@@ -1,6 +1,5 @@
 "use client";
 
-import { setCookie, getCookie } from "@/lib/cookies";
 import { CenterIcon, Eraser01Icon } from "@jfstech/icons-react/24/outline";
 import { Button } from "@logicate/ui/button";
 import {
@@ -29,9 +28,8 @@ import { Wire } from "../wire";
 import useDisableHook from "./disable-hook";
 import { Click } from "@logicate/utils/buttons";
 import { TemporaryGate } from "../node/temporary-gate";
-import { useEffectOnce } from "react-use";
-import { useDebounce } from "use-debounce";
 import { LogicateSession } from "@logicate/database";
+import { useCookie } from "react-use";
 
 const DraggableItem = ({ type }: { type: GateType }) => {
   return (
@@ -63,6 +61,7 @@ export default function Canvas({
   logicateSession: LogicateSession;
 }) {
   const canvasReference = useRef<HTMLDivElement>(null);
+  const [] = useCookie(`logicate-session-${sessionId}`);
   const [items, setItems] = useState<Item[]>(
     SuperJSON.parse(SuperJSON.stringify(logicateSession.items ?? [])),
   );

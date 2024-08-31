@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@logicate/ui/input/index";
-import { SubmitButton } from "@logicate/ui/submit-button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";

@@ -2,15 +2,14 @@
 
 import { AppContext } from "@/app/providers";
 import Kbd from "@logicate/ui/kbd";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 export default function Navbar() {
   const { setShowCMDK } = useContext(AppContext);
-  const router = useRouter();
   useHotkeys("l", () => {
-    router.push("/login");
+    window.location.href = "https://app.logicate.io/login";
+    // TODO: ^^ Fix the above as its not the correct URL
   });
 
   return (
@@ -39,7 +38,10 @@ export default function Navbar() {
               </div>
             </div>
             <button
-              onClick={() => router.push("/login")}
+              onClick={() => {
+                window.location.href = "https://app.logicate.io/login";
+                // TODO: ^^ Fix the above as its not the correct URL
+              }}
               className="flex items-center gap-2 justify-center px-2 py-1 rounded-md bg-neutralgrey-200 group transition"
             >
               <span className="text-sm text-neutralgrey-1000 group-hover:text-neutralgrey-1200 transition">
@@ -50,7 +52,10 @@ export default function Navbar() {
               </Kbd>
             </button>
             <button
-              onClick={() => router.push("/signup")}
+              onClick={() => {
+                window.location.href = "https://app.logicate.io/register";
+                // TODO: ^^ Fix the above as its not the correct URL
+              }}
               className="flex items-center gap-2 justify-center px-2 py-1 rounded-md bg-neutralgrey-1100 hover:bg-neutralgrey-1300 group transition"
             >
               <span className="text-sm text-neutralgrey-100 transition">

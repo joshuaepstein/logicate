@@ -28,8 +28,6 @@ export const withSession =
   ) => {
     try {
       let session: Session | undefined;
-      let headers = {};
-
       const authorizationHeader = req.headers.get("Authorization");
       if (authorizationHeader) {
         if (!authorizationHeader.includes("Bearer ")) {

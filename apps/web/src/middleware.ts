@@ -1,8 +1,6 @@
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { parse } from "@logicate/utils/middleware/parse";
-import { getSession } from "./lib/auth/utils";
-import { getServerSession } from "next-auth";
 import { getUserViaToken } from "@/lib/auth/middleware/get-user-via-token";
+import { parse } from "@logicate/utils/middleware/parse";
+import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
   matcher: [
@@ -19,8 +17,8 @@ export const config = {
   ],
 };
 
-export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  const { domain, path, fullPath, key, fullKey } = parse(req);
+export default async function middleware(req: NextRequest) {
+  const { path, fullPath } = parse(req);
   const user = await getUserViaToken(req);
 
   if (

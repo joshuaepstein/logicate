@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "module": "nodenext"
+  },
+  "extends": "@logicate/tsconfig/base.json",
+  "include": ["**/*.ts", "**/*.tsx"]
+}

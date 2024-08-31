@@ -1,41 +1,47 @@
+import { LogicateError } from "@/lib/api/error";
 import { parseRequestBody } from "@/lib/api/utils";
 import { withSession } from "@/lib/auth/session";
 import { prisma } from "@logicate/database";
 import { generateQuestionId } from "@logicate/utils/id";
 import { NextResponse } from "next/server";
 
-export const POST = withSession(
-  async ({ session, params, req, searchParams }) => {
-    const data = await parseRequestBody(req);
+export const POST = withSession(async ({ session, req }) => {
+  const data = await parseRequestBody(req);
 
-    const questionType = data.questionType;
-    const generatedQuestion = data.generatedQuestion;
+  const questionType = data.questionType;
+  const generatedQuestion = data.generatedQuestion;
 
-    const questionId = generateQuestionId();
+  const questionId = generateQuestionId();
 
-    const questionData = {
+  const questionData = {
+    generatedQuestionType: questionType,
+    generatedQuestion: generatedQuestion,
+    userId: session.user.id,
+    id: questionId,
+  };
+
+  const question = await prisma.question.create({
+    data: {
       generatedQuestionType: questionType,
       generatedQuestion: generatedQuestion,
       userId: session.user.id,
       id: questionId,
-    };
+    },
+  });
 
-    const question = await prisma.question.create({
-      data: {
-        generatedQuestionType: questionType,
-        generatedQuestion: generatedQuestion,
-        userId: session.user.id,
-        id: questionId,
-      },
+  if (!question) {
+    throw new LogicateError({
+      code: "bad_request",
+      message: "Failed to create question",
     });
+  }
 
-    return NextResponse.json(
-      {
-        success: true,
-        id: questionId,
-        data: questionData,
-      },
-      { status: 200 },
-    );
-  },
-);
+  return NextResponse.json(
+    {
+      success: true,
+      id: questionId,
+      data: questionData,
+    },
+    { status: 200 },
+  );
+});

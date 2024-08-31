@@ -6,7 +6,8 @@
       "@/*": ["src/*"],
       "~/*": ["public/*"]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "target": "ES2020"
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", ".next/types/**/*.ts"],
   "exclude": ["node_modules", ".next/**/*"]

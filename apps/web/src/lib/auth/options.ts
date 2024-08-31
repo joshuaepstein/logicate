@@ -22,7 +22,7 @@ export const authConfig: NextAuthOptions = {
         email: { type: "email" },
         password: { type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials) {
           throw new Error("no-credentials");
         }

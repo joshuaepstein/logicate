@@ -30,7 +30,10 @@ const errorCodeToHttpStatus: Record<z.infer<typeof ErrorCode>, number> = {
   internal_server_error: 500,
 };
 
-const speakeasyErrorOverrides: Record<z.infer<typeof ErrorCode>, string> = {
+export const speakeasyErrorOverrides: Record<
+  z.infer<typeof ErrorCode>,
+  string
+> = {
   bad_request: "BadRequest",
   unauthorized: "Unauthorized",
   forbidden: "Forbidden",

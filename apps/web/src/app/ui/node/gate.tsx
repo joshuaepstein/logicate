@@ -1,6 +1,5 @@
 import { cn } from "@logicate/ui";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
-import { Item } from "../types";
 
 export enum GateType {
   AND = "AND",

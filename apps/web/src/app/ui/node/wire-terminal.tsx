@@ -24,6 +24,7 @@ export const WireTerminal = forwardRef<
             height: "12.5px",
             ...style,
           }}
+          ref={ref}
           {...rest}
         >
           <circle

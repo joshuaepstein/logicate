@@ -9,7 +9,7 @@
         "analyze": "cross-env ANALYZE=true next build",
         "start": "next start",
         "lint": "eslint .",
-        "type-check": "tsc --noEmit --pretty",
+        "type-check": "tsc --noEmit --pretty --target ES2020",
         "prettier": "prettier --write ./src",
         "test:integration": "NODE_ENV=test playwright test",
         "test:unit": "vitest run",
@@ -51,7 +51,9 @@
         "superjson": "^2.2.1",
         "timezone-soft": "^1.5.2",
         "use-debounce": "^10.0.3",
-        "zod-error": "^1.5.0"
+        "zod-error": "^1.5.0",
+        "@logicate/questions": "workspace:*",
+        "@logicate/types": "workspace:*"
     },
     "devDependencies": {
         "@logicate/eslint-config": "workspace:*",
@@ -59,8 +61,10 @@
         "@playwright/test": "^1.46.1",
         "@types/bcryptjs": "^2.4.6",
         "@types/js-cookie": "^3.0.6",
+        "@next/env": "^14.2.7",
         "cross-env": "^7.0.3",
         "vitest": "^2.0.5",
-        "wait-on": "^8.0.0"
+        "wait-on": "^8.0.0",
+        "@logicate/types": "workspace:*"
     }
 }

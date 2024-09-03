@@ -12,5 +12,6 @@
   "useTabs": false,
   "trailingComma": "all",
   "singleQuote": false,
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "printWidth": 120
 }

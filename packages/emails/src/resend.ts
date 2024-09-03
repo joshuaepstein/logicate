@@ -14,14 +14,14 @@ export async function subscribe({
     return;
   }
 
-  return await resend.contacts.create({
-    email,
-    ...(name && {
-      firstName: name.split(" ")[0],
-      lastName: name.split(" ").slice(1).join(" "),
-    }),
-    audienceId: process.env.RESEND_AUDIENCE_ID as string,
-  });
+    return await resend.contacts.create({
+      email,
+      ...(name && {
+        firstName: name.split(" ")[0],
+        lastName: name.split(" ").slice(1).join(" "),
+      }),
+      audienceId: process.env.RESEND_AUDIENCE_ID as string,
+    });
 }
 
 export async function unsubscribe({ email }: { email: string }) {

@@ -27,6 +27,9 @@ export default async function middleware(req: NextRequest) {
     path !== "/register" &&
     !path.startsWith("/auth/reset-password/")
   ) {
+    if (fullPath.startsWith("/logout")) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
     return NextResponse.redirect(
       new URL(
         `/login${path === "/" ? "" : `?next=${encodeURIComponent(fullPath)}`}`,

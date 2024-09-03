@@ -124,8 +124,19 @@ export const authConfig: NextAuthOptions = {
 
         if (refreshedUser) {
           token.user = refreshedUser;
+          console.log("refreshedUser", refreshedUser);
         } else {
           return {};
+        }
+      } else if (trigger === undefined) {
+        // refresh the user because we want to make sure we have the latest data
+        const refreshedUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+        });
+
+        if (refreshedUser) {
+          token.user = refreshedUser;
+          console.log("refreshedUser-", refreshedUser);
         }
       }
 

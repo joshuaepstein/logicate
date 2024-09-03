@@ -1,0 +1,44 @@
+import { useEffect, useRef } from "react";
+import useCanvasStore from "./hooks/useCanvasStore";
+
+export default function BackgroundElement({
+  showBackground = true,
+  canvasReference,
+}: {
+  showBackground: boolean;
+  canvasReference: React.RefObject<HTMLDivElement>;
+}) {
+  const { canvas } = useCanvasStore();
+  const backgroundElementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!backgroundElementRef.current) return;
+    if (!canvasReference.current) return;
+    const { zoom } = canvas;
+    const { width, height } = canvasReference.current.getBoundingClientRect();
+
+    // Update the background size style property on the background element - HOWEVer, we want it to zoom around the center of the canvas
+    const newBackgroundSize = `${50 * zoom}px ${50 * zoom}px`;
+    backgroundElementRef.current.style.backgroundSize = newBackgroundSize;
+    backgroundElementRef.current.style.backgroundPosition = `${width / 2}px ${height / 2}px`;
+  }, [canvasReference, canvas]);
+
+  if (!canvasReference || !showBackground) return null;
+  if (!canvasReference.current) return null;
+
+  return (
+    <div
+      data-logicate-canvas-background
+      className="absolute inset-0 pointer-events-none -z-10 "
+      style={{
+        backgroundImage: `url(/grid.png)`,
+        backgroundRepeat: "repeat",
+        backgroundSize: "50px 50px",
+        // backgroundPosition: "center",
+        imageResolution: "300dpi",
+        backgroundPosition: `${canvas.x}px ${canvas.y}px`,
+      }}
+      ref={backgroundElementRef}
+    />
+  );
+}

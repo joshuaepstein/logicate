@@ -21,12 +21,11 @@ export default function GenTemp() {
     <>
       <Button
         onClick={() => {
-          const expression = BooleanExpressionGenerator.generate(
+          const booleanExpression = new BooleanExpressionGenerator(
             ExpressionDifficulty.EASY,
           );
+          const expression = booleanExpression.generateExpression();
           setExpression(expression);
-          const nodes = BooleanExpressionGenerator.countNodes(expression);
-          console.log(nodes);
           console.log(expression);
           setString(createString(expression));
           setSimplified(createString(simplifyBooleanExpression(expression)));
@@ -35,7 +34,7 @@ export default function GenTemp() {
         Generate
       </Button>
       <div>{string}</div>
-      <div>{simplified}</div>
+      <div>{simplified.slice(1, -1)}</div>
     </>
   );
 }

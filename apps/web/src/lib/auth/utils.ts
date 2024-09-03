@@ -5,7 +5,7 @@ import { authConfig } from "./options";
 import { User } from "@logicate/database";
 
 export interface Session {
-  user: Omit<User, "password" | "invalidLoginAttempts" | "lockedAt">;
+  user: Exclude<User, "password" | "invalidLoginAttempts" | "lockedAt">;
 }
 
 export const getSession = async () => {

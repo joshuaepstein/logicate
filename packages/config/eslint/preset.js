@@ -5,6 +5,10 @@ module.exports = function (workspaceDirPath) {
         root: true,
         extends: ["next", "turbo"],
         plugins: ["simple-import-sort", "@typescript-eslint"],
+        extends: [
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended"
+        ],
         ignorePatterns: ["dist/", "playwright-report/"],
         globals: {
             React: true,
@@ -21,12 +25,12 @@ module.exports = function (workspaceDirPath) {
                 plugins: ["@typescript-eslint"],
                 extends: ["plugin:@typescript-eslint/recommended"],
                 rules: {
-                    "@typescript-eslint/no-unused-vars": "off",
-                },
+                    "@typescript-eslint/no-unused-vars": "off"
+                }
             },
         ],
         rules: {
-            "@typescript-eslint/no-unused-vars": "off",
-        }
+            "@typescript-eslint/no-unused-vars": "off"
+        },
     };
 };

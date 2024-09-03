@@ -1,6 +1,7 @@
 import { getSession } from "@/lib/auth/utils";
 import { prisma } from "@logicate/database";
 import Canvas from "../../ui/canvas";
+import { userAgent } from "next/server";
 
 const getDatabaseSession = async (canvasId: string) => {
   "use server";
@@ -30,10 +31,13 @@ export default async function Home({
 
   return (
     <div className="w-full max-h-dvh overflow-hidden h-dvh flex flex-col">
-      <nav className="w-full h-16 border-b border-neutralgrey-400"></nav>
+      <nav className="w-full h-16 border-b border-neutralgrey-400">
+        {session.user.name}
+      </nav>
       <Canvas
         sessionId={logicateSession.id}
         logicateSession={logicateSession}
+        user={session.user}
       />
     </div>
   );

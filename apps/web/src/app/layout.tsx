@@ -3,6 +3,7 @@ import { cn } from "@logicate/ui";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import Providers from "./providers";
+import { Session } from "next-auth";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

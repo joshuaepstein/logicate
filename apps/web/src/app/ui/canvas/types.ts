@@ -1,8 +1,7 @@
-import { GateType } from "./node/gate";
-
+import { NodeType } from "./node/type";
 interface Item {
   id: string;
-  type: GateType;
+  type: NodeType;
   x: number;
   y: number;
   value: boolean | null;

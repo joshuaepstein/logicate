@@ -1,5 +1,6 @@
 import { cn } from "@logicate/ui";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
+import useCanvasStore from "../hooks/useCanvasStore";
 
 export enum GateType {
   AND = "AND",
@@ -12,10 +13,7 @@ export enum GateType {
   BUFFER = "BUFFER",
 }
 
-export const gateTypeToIcon: Record<
-  GateType,
-  `data:image/svg+xml;base64,${string}`
-> = {
+export const gateTypeToIcon: Record<GateType, `data:image/svg+xml;base64,${string}`> = {
   [GateType.AND]:
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMQpMIDEgMzEgMTYgMzEKUSAyMi4yIDMxIDI2LjYgMjYuNiAzMSAyMi4yIDMxIDE2IDMxIDkuOCAyNi42IDUuNCAyMi4yIDEgMTYgMQpMIDEgMSBaIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8xX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMyIgZmlsbD0ibm9uZSIgZD0iCk0gMSAxCkwgMTYgMQpRIDIyLjIgMSAyNi42IDUuNCAzMSA5LjggMzEgMTYgMzEgMjIuMiAyNi42IDI2LjYgMjIuMiAzMSAxNiAzMQpMIDEgMzEgMSAxIFoiLz4KPC9zdmc+",
   [GateType.OR]:
@@ -54,7 +52,6 @@ export type GateProps = {
   inputs: number;
   state: GateState;
   gateId: string;
-  isSelected?: boolean;
 };
 
 export const Gate = forwardRef<
@@ -62,116 +59,140 @@ export const Gate = forwardRef<
   GateProps & {
     x: number;
     y: number;
-    canvasZoom: number;
-    savePosition: (x: number, y: number) => void;
-    toggleSelect: (gateId: string) => void;
   } & React.HTMLAttributes<HTMLDivElement>
->(
-  (
-    {
-      type,
-      inputs,
-      x,
-      y,
-      state,
-      gateId,
-      isSelected = false,
-      canvasZoom,
-      savePosition,
-      toggleSelect,
-      ...rest
-    },
-    ref,
-  ) => {
-    const isInverted = useMemo(() => {
-      return inverted.includes(type);
-    }, [type]);
-    const isOrType = useMemo(() => {
-      return type === GateType.OR || type === GateType.NOR;
-    }, [type]);
-    const isXorXnorType = useMemo(() => {
-      return type === GateType.XOR || type === GateType.XNOR;
-    }, [type]);
-    const [position, setPosition] = useState({ x, y });
-    const [dragging, setDragging] = useState(false);
-    const [offset, setOffset] = useState({ x, y });
+>(({ type, inputs, x, y, state, gateId, ...rest }, ref) => {
+  const { setHolding, canvas, updateItem, selectId: select, isSelected } = useCanvasStore();
+  const isInverted = useMemo(() => {
+    return inverted.includes(type);
+  }, [type]);
+  const isOrType = useMemo(() => {
+    return type === GateType.OR || type === GateType.NOR;
+  }, [type]);
+  const isXorXnorType = useMemo(() => {
+    return type === GateType.XOR || type === GateType.XNOR;
+  }, [type]);
+  const [position, setPosition] = useState({ x, y });
+  const [offset, setOffset] = useState({ x, y });
+  const [dragging, setDragging] = useState(false);
 
-    const handleMouseDown = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
-        const target = e.target as HTMLDivElement;
-        if (target.dataset.logicateBody) {
-          setDragging(true);
-          setOffset({
-            x: e.clientX - position.x,
-            y: e.clientY - position.y,
-          });
-        }
-      },
-      [position],
-    );
-
-    const handleMouseMove = useCallback(
-      (event: MouseEvent) => {
-        if (dragging) {
-          setPosition({
-            x: event.clientX - offset.x,
-            y: event.clientY - offset.y,
-          });
-        }
-      },
-      [dragging, offset],
-    );
-
-    const handleMouseUp = useCallback(() => {
-      setDragging(false);
-      savePosition(position.x, position.y);
-    }, [position]);
-
-    useEffect(() => {
-      if (dragging) {
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
-      } else {
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mouseup", handleMouseUp);
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const target = e.target as HTMLDivElement;
+      if (target.dataset.logicateBody) {
+        setDragging(true);
+        // const logicateCanvas = document.querySelector("[data-logicate-canvas]") as HTMLDivElement;
+        // const rect = logicateCanvas.getBoundingClientRect();
+        setOffset({
+          x: e.clientX - position.x,
+          y: e.clientY - position.y,
+        });
       }
+    },
+    [position, canvas.zoom, offset],
+  );
 
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mouseup", handleMouseUp);
-      };
-    }, [dragging, handleMouseMove, handleMouseUp]);
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (dragging) {
+        // Account for the canvas zoom
+        setPosition({
+          x: event.clientX - offset.x,
+          y: event.clientY - offset.y,
+        });
+      }
+    },
+    [dragging, offset, canvas.zoom],
+  );
 
-    return (
-      <>
+  const handleMouseUp = useCallback(() => {
+    setDragging(false);
+    updateItem(gateId, { x: position.x, y: position.y });
+  }, [position]);
+
+  useEffect(() => {
+    if (dragging) {
+      setHolding(true);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      setHolding(false);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [dragging, handleMouseMove, handleMouseUp]);
+
+  return (
+    <>
+      <div
+        className={cn(
+          "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
+        )}
+        style={{ left: position.x, top: position.y }}
+        tabIndex={-1}
+        data-logicate-id={gateId}
+        data-logicate-type={type}
+        data-logicate-inputs={inputs}
+        data-logicate-state={state}
+        ref={ref}
+        {...rest}
+        onMouseDown={handleMouseDown}
+        data-logicate-dragging={dragging}
+        data-logicate-selected={isSelected(gateId)}
+      >
         <div
-          className={cn(
-            "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
-          )}
-          style={{ left: position.x, top: position.y }}
-          tabIndex={-1}
-          data-logicate-id={gateId}
-          data-logicate-type={type}
-          data-logicate-inputs={inputs}
-          data-logicate-state={state}
-          ref={ref}
-          {...rest}
-          onMouseDown={handleMouseDown}
-          data-logicate-dragging={dragging}
-          onClick={() => toggleSelect(gateId)}
-          data-logicate-selected={isSelected}
+          className="flex flex-col items-start justify-center"
+          style={{
+            gridColumn: "3 / span 1",
+            gridRow: "2 / span 1",
+          }}
         >
-          <div
-            className="flex flex-col items-start justify-center"
-            style={{
-              gridColumn: "3 / span 1",
-              gridRow: "2 / span 1",
-            }}
-          >
-            <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
+          <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
+            <div className="order-2 z-[1] pointer-events-auto" style={{ lineHeight: 0 }}>
+              <svg
+                style={{
+                  overflow: "visible",
+                  width: "12.5px",
+                  height: "12.5px",
+                }}
+                className="pointer-events-auto hover:scale-[1.2] transition-transform"
+              >
+                <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+              </svg>
+            </div>
+            <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
+            <div
+              className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute", {
+                hidden: !isInverted,
+              })}
+            ></div>
+          </div>
+        </div>
+        <div
+          className="flex flex-col items-end justify-center"
+          style={{
+            gridColumn: "1 / span 1",
+            gridRow: "2 / span 1",
+          }}
+        >
+          {Array.from({
+            length:
+              // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
+              Math.max(inputs, defaultInputs[type]),
+          }).map((_, index) => (
+            <div
+              key={index}
+              className="pointer-events-none flex flex-row w-7 items-center mb-[2.5px] relative last-of-type:mb-0"
+            >
               <div
-                className="order-2 z-[1] pointer-events-auto"
-                style={{ lineHeight: 0 }}
+                className="z-[1] relative"
+                style={{
+                  lineHeight: 0,
+                }}
               >
                 <svg
                   style={{
@@ -180,109 +201,50 @@ export const Gate = forwardRef<
                     height: "12.5px",
                   }}
                   className="pointer-events-auto hover:scale-[1.2] transition-transform"
+                  data-logicate-input-terminal={index}
                 >
-                  <circle
-                    cx="6.5"
-                    cy="6.5"
-                    r="6"
-                    stroke="black"
-                    strokeWidth="1"
-                    fill="white"
-                  ></circle>
+                  <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
                 </svg>
               </div>
-              <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
-              <div
-                className={cn(
-                  "-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute",
-                  {
-                    hidden: !isInverted,
-                  },
-                )}
-              ></div>
+              <div className="grow min-w-4 h-[2px] bg-black"></div>
+              <div className="hidden z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute"></div>
             </div>
-          </div>
-          <div
-            className="flex flex-col items-end justify-center"
-            style={{
-              gridColumn: "1 / span 1",
-              gridRow: "2 / span 1",
-            }}
-          >
-            {Array.from({
-              length:
-                // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
-                Math.max(inputs, defaultInputs[type]),
-            }).map((_, index) => (
-              <div
-                key={index}
-                className="pointer-events-none flex flex-row w-7 items-center mb-[2.5px] relative last-of-type:mb-0"
-              >
-                <div
-                  className="z-[1] relative"
-                  style={{
-                    lineHeight: 0,
-                  }}
-                >
-                  <svg
-                    style={{
-                      overflow: "visible",
-                      width: "12.5px",
-                      height: "12.5px",
-                    }}
-                    className="pointer-events-auto hover:scale-[1.2] transition-transform"
-                    data-logicate-input-terminal={index}
-                  >
-                    <circle
-                      cx="6.5"
-                      cy="6.5"
-                      r="6"
-                      stroke="black"
-                      strokeWidth="1"
-                      fill="white"
-                    ></circle>
-                  </svg>
-                </div>
-                <div className="grow min-w-4 h-[2px] bg-black"></div>
-                <div className="hidden z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute"></div>
-              </div>
-            ))}
-          </div>
-          <div
-            className={cn(
-              "bg-transparent w-8 min-h-8 min-w-[30px] transition-[filter] duration-100 border-black flex justify-center items-center",
-              {
-                // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
-                "border-none": inputs < 4,
-                "border-l-2 my-[5.25px] self-stretch": inputs > 3,
-                "-ml-[4.5px] -mr-px w-[36px]": isOrType,
-                "-ml-[9px] -mr-px w-[40px]": isXorXnorType,
-              },
-            )}
-            style={{
-              gridColumn: "2 / span 1",
-              gridRow: "2 / span 1",
-              filter: isSelected ? "drop-shadow(0px 0px 3px #0079db)" : "none",
-            }}
-          >
-            <div className="pointer-events-auto w-full h-full flex items-center justify-center">
-              <span
-                className={cn("w-8 min-h-8 bg-no-repeat", {
-                  "-ml-[2px]": inputs > 3,
-                  "w-[38px]": isOrType,
-                  "w-[40px]": isXorXnorType,
-                })}
-                style={{
-                  backgroundImage: `url(${gateTypeToIcon[type]})`,
-                }}
-                data-logicate-body
-              ></span>
-            </div>
+          ))}
+        </div>
+        <div
+          className={cn(
+            "bg-transparent w-8 min-h-8 min-w-[30px] transition-[filter] duration-100 border-black flex justify-center items-center",
+            {
+              // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
+              "border-none": inputs < 4,
+              "border-l-2 my-[5.25px] self-stretch": inputs > 3,
+              "-ml-[4.5px] -mr-px w-[36px]": isOrType,
+              "-ml-[9px] -mr-px w-[40px]": isXorXnorType,
+            },
+          )}
+          style={{
+            gridColumn: "2 / span 1",
+            gridRow: "2 / span 1",
+            filter: isSelected(gateId) ? "drop-shadow(0px 0px 3px #0079db)" : "none",
+          }}
+        >
+          <div className="pointer-events-auto w-full h-full flex items-center justify-center">
+            <span
+              className={cn("w-8 min-h-8 bg-no-repeat select-none", {
+                "-ml-[2px]": inputs > 3,
+                "w-[38px]": isOrType,
+                "w-[40px]": isXorXnorType,
+              })}
+              style={{
+                backgroundImage: `url(${gateTypeToIcon[type]})`,
+              }}
+              data-logicate-body
+            ></span>
           </div>
         </div>
-      </>
-    );
-  },
-);
+      </div>
+    </>
+  );
+});
 
 Gate.displayName = "Logicate Logic Gate";

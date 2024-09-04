@@ -19,16 +19,23 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import BackgroundElement from "./background-element";
 import useDisableHook from "./disable-hook";
+import { DraggableItem } from "./draggable-item";
 import useCanvasStore from "./hooks/useCanvasStore";
 import { Gate, GateType } from "./node/gate";
+import { Input, InputType } from "./node/inputs";
 import { TemporaryGate } from "./node/temporary-gate";
-import { Wire } from "./wire";
-import updateStore from "./store-hook";
-import { InputType } from "./node/inputs";
 import { NodeType } from "./node/type";
-import { DraggableItem } from "./draggable-item";
+import updateStore from "./update-store-hook";
+import { Wire } from "./wire";
 
-export default function Canvas({ sessionId, user }: { sessionId: string; logicateSession: LogicateSession; user: User }) {
+export default function Canvas({
+  sessionId,
+  user,
+}: {
+  sessionId: string;
+  logicateSession: LogicateSession;
+  user: User;
+}) {
   const canvasReference = useRef<HTMLDivElement>(null);
   const {
     items,
@@ -44,6 +51,7 @@ export default function Canvas({ sessionId, user }: { sessionId: string; logicat
     setY,
     isHolding,
     setHolding,
+    itemsUpdate,
   } = useCanvasStore();
   const [confirmClear, setConfirmClear] = useState(false);
   const [draggingNewElement, setDraggingNewElement] = useState<{
@@ -141,10 +149,20 @@ export default function Canvas({ sessionId, user }: { sessionId: string; logicat
     }
   });
 
-  useHotkeys("ctrl+z", () => {
-    if (selected.length > 0) {
-      setSelected([]);
-      // TODO: Undo last action.
+  useHotkeys("ctrl+z", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (selected.length > 0) setSelected([]);
+    if (draggingNewElement) setDraggingNewElement(null);
+    if (confirmClear) setConfirmClear(false);
+
+    const recentItem = items[items.length - 1];
+    if (recentItem) {
+      itemsUpdate((items) => items.slice(0, -1));
+      const wiresConnecting = wires.filter((wire) => wire.from === recentItem.id || wire.to === recentItem.id);
+      const updatedWires = wires.filter((wire) => !wiresConnecting.includes(wire));
+      setWires(updatedWires);
     }
   });
 
@@ -326,15 +344,14 @@ export default function Canvas({ sessionId, user }: { sessionId: string; logicat
                   y={item.y + canvas.y}
                 />
               ) : item.type.type === "input" ? (
-                // <Input
-                //   key={item.id}
-                //   // type={item.type as InputType}
-                //   // state={item.computedValue ?? false}
-                //   // inputId={item.id}
-                //   // x={item.x + canvas.x}
-                //   // y={item.y + canvas.y}
-                // />
-                <>{item.type.inputType}</>
+                <Input
+                  key={item.id}
+                  type={item.type.inputType}
+                  state={item.computedValue ?? false}
+                  inputId={item.id}
+                  x={item.x + canvas.x}
+                  y={item.y + canvas.y}
+                />
               ) : null,
             )}
           </div>

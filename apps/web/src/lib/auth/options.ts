@@ -5,10 +5,7 @@ import { subscribe } from "@logicate/emails/resend";
 import { waitUntil } from "@vercel/functions";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import {
-  exceededLoginAttemptsThreshold,
-  incrementLoginAttemps,
-} from "./lock-account";
+import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account";
 import { validatePassword } from "./password";
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -66,9 +63,7 @@ export const authConfig: NextAuthOptions = {
         });
 
         if (!passwordMatch) {
-          const exceededLoginAttempts = exceededLoginAttemptsThreshold(
-            await incrementLoginAttemps(user),
-          );
+          const exceededLoginAttempts = exceededLoginAttemptsThreshold(await incrementLoginAttemps(user));
 
           if (exceededLoginAttempts) {
             throw new Error("exceeded-login-attempts");
@@ -90,7 +85,7 @@ export const authConfig: NextAuthOptions = {
       },
     }),
   ],
-  // @ts-ignore
+  // @ts-expect-error - because
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
@@ -103,9 +98,7 @@ export const authConfig: NextAuthOptions = {
         sameSite: "lax",
         path: "/",
         // When working on localhost, the cookie domain must be omitted entirely
-        domain: VERCEL_DEPLOYMENT
-          ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
-          : undefined,
+        domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
         secure: VERCEL_DEPLOYMENT,
       },
     },
@@ -124,7 +117,6 @@ export const authConfig: NextAuthOptions = {
 
         if (refreshedUser) {
           token.user = refreshedUser;
-          console.log("refreshedUser", refreshedUser);
         } else {
           return {};
         }
@@ -136,7 +128,6 @@ export const authConfig: NextAuthOptions = {
 
         if (refreshedUser) {
           token.user = refreshedUser;
-          console.log("refreshedUser-", refreshedUser);
         }
       }
 
@@ -145,7 +136,7 @@ export const authConfig: NextAuthOptions = {
     session: async ({ session, token }) => {
       session.user = {
         id: token.sub,
-        // @ts-ignore
+        // @ts-expect-error - token.user is not always defined
         ...(token || session).user,
       };
 
@@ -173,10 +164,7 @@ export const authConfig: NextAuthOptions = {
         });
         if (!user) return;
 
-        if (
-          user.createdAt &&
-          new Date(user.createdAt).getTime() > Date.now() - 10000
-        ) {
+        if (user.createdAt && new Date(user.createdAt).getTime() > Date.now() - 10000) {
           waitUntil(
             Promise.allSettled([
               subscribe({ email, name: user.name }),

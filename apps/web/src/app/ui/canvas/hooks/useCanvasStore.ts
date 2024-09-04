@@ -31,6 +31,7 @@ interface Actions {
   getX: () => number;
   getY: () => number;
   canvasU: (update: (canvas: State["canvas"]) => State["canvas"]) => void;
+  itemsUpdate: (update: (items: State["items"]) => State["items"]) => void;
   updateItem: (id: Item["id"], item: Partial<Item>) => void;
   setHolding: (isHolding: boolean) => void;
   isSelected: (itemId: Item["id"] | Wire["id"]) => boolean;
@@ -69,6 +70,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
       items: state.items.map((i) => (i.id === id ? { ...i, ...item } : i)),
     })),
   canvasU: (update) => set((state) => ({ canvas: update(state.canvas) })),
+  itemsUpdate: (update) => set((state) => ({ items: update(state.items) })),
   setHolding: (isHolding) => set({ isHolding }),
   isSelected: (itemId) => get().selected.some((i) => i.id === itemId),
   getItem: (id) => get().items.find((i) => i.id === id),

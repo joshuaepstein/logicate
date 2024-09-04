@@ -1,3 +1,7 @@
+import { cn } from "@logicate/ui";
+import { forwardRef, useCallback, useEffect, useState } from "react";
+import useCanvasStore from "../../hooks/useCanvasStore";
+
 export enum InputType {
   BUTTON = "BUTTON",
   SWITCH = "SWITCH",
@@ -16,6 +20,139 @@ export const inputTypeToIcon: Record<InputType, `data:image/${string}` | ""> = {
   [InputType.CLOCK]: "",
 };
 
-export const Input = () => {
-  return <div>Light</div>;
+type InputState = boolean | number | string | null;
+
+export type InputProps = {
+  type: InputType;
+  state: InputState;
+  inputId: string;
 };
+
+export const Input = forwardRef<
+  HTMLDivElement,
+  InputProps & {
+    x: number;
+    y: number;
+  } & React.HTMLAttributes<HTMLDivElement>
+>(({ type, x, y, state, inputId, ...rest }, ref) => {
+  const { setHolding, canvas, updateItem, selectId: select, isSelected } = useCanvasStore();
+  const [position, setPosition] = useState({ x, y });
+  const [offset, setOffset] = useState({ x, y });
+  const [dragging, setDragging] = useState(false);
+
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const target = e.target as HTMLDivElement;
+      if (target.dataset.logicateBody) {
+        setDragging(true);
+        // const logicateCanvas = document.querySelector("[data-logicate-canvas]") as HTMLDivElement;
+        // const rect = logicateCanvas.getBoundingClientRect();
+        setOffset({
+          x: e.clientX - position.x,
+          y: e.clientY - position.y,
+        });
+      }
+    },
+    [position, canvas.zoom, offset],
+  );
+
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (dragging) {
+        // Account for the canvas zoom
+        setPosition({
+          x: event.clientX - offset.x,
+          y: event.clientY - offset.y,
+        });
+      }
+    },
+    [dragging, offset, canvas.zoom],
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setDragging(false);
+    updateItem(inputId, { x: position.x, y: position.y });
+  }, [position]);
+
+  useEffect(() => {
+    if (dragging) {
+      setHolding(true);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      setHolding(false);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [dragging, handleMouseMove, handleMouseUp]);
+
+  return (
+    <>
+      <div
+        className={cn(
+          "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
+        )}
+        style={{ left: position.x, top: position.y }}
+        tabIndex={-1}
+        data-logicate-id={inputId}
+        data-logicate-type={type}
+        data-logicate-state={state}
+        ref={ref}
+        {...rest}
+        onMouseDown={handleMouseDown}
+        data-logicate-dragging={dragging}
+        data-logicate-selected={isSelected(inputId)}
+      >
+        <div
+          className="flex flex-col items-start justify-center"
+          style={{
+            gridColumn: "3 / span 1",
+            gridRow: "2 / span 1",
+          }}
+        >
+          <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
+            <div className="order-2 z-[1] pointer-events-auto" style={{ lineHeight: 0 }}>
+              <svg
+                style={{
+                  overflow: "visible",
+                  width: "12.5px",
+                  height: "12.5px",
+                }}
+                className="pointer-events-auto hover:scale-[1.2] transition-transform"
+              >
+                <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+              </svg>
+            </div>
+            <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
+            <div className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute")}></div>
+          </div>
+        </div>
+        <div
+          className={cn(
+            "bg-transparent w-8 min-h-8 min-w-[30px] transition-[filter] duration-100 border-black flex justify-center items-center",
+          )}
+          style={{
+            gridColumn: "2 / span 1",
+            gridRow: "2 / span 1",
+            filter: isSelected(inputId) ? "drop-shadow(0px 0px 3px #0079db)" : "none",
+          }}
+        >
+          <div className="pointer-events-auto w-full h-full flex items-center justify-center">
+            <span
+              className={cn("w-8 min-h-8 bg-no-repeat select-none")}
+              style={{
+                backgroundImage: `url(${inputTypeToIcon[type]})`,
+              }}
+              data-logicate-body
+            ></span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+});

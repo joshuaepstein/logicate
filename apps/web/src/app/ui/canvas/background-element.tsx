@@ -15,16 +15,16 @@ export default function BackgroundElement({
     if (!backgroundElementRef.current) return;
     if (!canvasReference.current) return;
     const { zoom } = canvas;
-    const { width, height } = canvasReference.current.getBoundingClientRect();
+    // const { width, height } = canvasReference.current.getBoundingClientRect();
 
     // Update the background size style property on the background element - HOWEVer, we want it to zoom around the center of the canvas
     const newBackgroundSize = `${50 * zoom}px ${50 * zoom}px`;
     backgroundElementRef.current.style.backgroundSize = newBackgroundSize;
-    backgroundElementRef.current.style.backgroundPosition = `${width / 2}px ${height / 2}px`;
+    // backgroundElementRef.current.style.backgroundPosition = `${width / 2}px ${height / 2}px`;
   }, [canvasReference, canvas]);
 
-  if (!canvasReference || !showBackground) return null;
-  if (!canvasReference.current) return null;
+  if (!showBackground) return null;
+  // if (!canvasReference.current) return null;
 
   return (
     <div
@@ -35,8 +35,10 @@ export default function BackgroundElement({
         backgroundRepeat: "repeat",
         backgroundSize: "50px 50px",
         // backgroundPosition: "center",
-        imageResolution: "300dpi",
-        backgroundPosition: `${canvas.x}px ${canvas.y}px`,
+        // imageResolution: "72dpi",
+        // backgroundPosition: `${canvas.x || 0}px ${canvas.y || 0}px`,
+        // transition for background position
+        transition: "background-position 1s ease-in-out",
       }}
       ref={backgroundElementRef}
     />

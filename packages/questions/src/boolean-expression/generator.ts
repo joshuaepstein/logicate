@@ -8,6 +8,7 @@ import {
   ExpressionDifficulty,
   OrOperator,
 } from "@logicate/types/question/expression/boolean";
+import { simplifyBooleanExpression } from "./simplifier";
 
 /**
  * Get a random boolean value based on the chance
@@ -15,8 +16,7 @@ import {
  */
 const chance = (chance: number) => Math.random() < chance / 100;
 
-const randomOf = (array: any[]) =>
-  array[Math.floor(Math.random() * array.length)];
+const randomOf = (array: any[]) => array[Math.floor(Math.random() * array.length)];
 
 export class BooleanExpressionGenerator {
   private static operators: BooleanOperator[] = [AndOperator, OrOperator];
@@ -68,19 +68,44 @@ export class BooleanExpressionGenerator {
     this.currentDepth = 0;
   }
 
+  private difficultyToChance(): number {
+    let chance: number = 0;
+    switch (this.maxDepth) {
+      case ExpressionDifficulty.EASY:
+        chance = 70;
+        break;
+      case ExpressionDifficulty.MEDIUM:
+        chance = 65;
+        break;
+      case ExpressionDifficulty.HARD:
+        chance = 60;
+        break;
+      case ExpressionDifficulty.CHALLENGING:
+        chance = 55;
+        break;
+      case ExpressionDifficulty.EXTREME:
+        chance = 50;
+        break;
+    }
+    return chance;
+  }
+
   public generateExpression(): BooleanExpression {
     if (this.currentDepth >= this.maxDepth) {
       // Base case: return a simple expression (variable or constant)
       return this.generateSimpleExpression();
     }
 
+    if (chance(40) && this.currentDepth > 0) {
+      return this.selectVariable();
+    }
+    if (chance(20) && this.currentDepth > 0) {
+      return this.selectConstant();
+    }
+
     const operator = BooleanExpressionGenerator.selectOperator();
-    const left = chance(70)
-      ? this.generateSimpleExpression()
-      : this.generateExpression();
-    const right = chance(70)
-      ? this.generateSimpleExpression()
-      : this.generateExpression();
+    const left = chance(this.difficultyToChance()) ? this.generateSimpleExpression() : this.generateExpression();
+    const right = chance(this.difficultyToChance()) ? this.generateSimpleExpression() : this.generateExpression();
 
     const expression: BooleanExpression = {
       operator,
@@ -129,3 +154,6 @@ const expression = generator.generateExpression();
 console.log(expression);
 
 console.log(createString(expression));
+
+const simplified = simplifyBooleanExpression(expression);
+console.log("Simplified:", createString(simplified));

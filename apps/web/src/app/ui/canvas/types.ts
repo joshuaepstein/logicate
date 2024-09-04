@@ -70,4 +70,4 @@ interface TempWire {
   active: boolean;
 }
 
-export type { Item, TempWire, Wire, Alphabet, GateItem, InputItem, OutputItem };
+export type { Alphabet, GateItem, InputItem, Item, OutputItem, TempWire, Wire };

@@ -15,6 +15,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@l
 import { Click } from "@logicate/utils/buttons";
 import { randomGateId, randomWireId } from "@logicate/utils/id";
 import { useEffect, useOptimistic, useRef, useState } from "react";
+import { useBeforeunload } from "react-beforeunload";
 import { useHotkeys } from "react-hotkeys-hook";
 import SuperJSON from "superjson";
 import BackgroundElement from "./background-element";
@@ -30,7 +31,6 @@ import SettingsPopup from "./settings-popup";
 import { Item } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
-import { useBeforeunload } from "react-beforeunload";
 
 export default function Canvas({
   sessionId,
@@ -73,6 +73,8 @@ export default function Canvas({
     updateItem,
     updateSelected,
   } = useCanvasStore();
+  const [simulatedItems, setSimulatedItems] = useState<Item[]>([]);
+  const [simulatedWires, setSimulatedWires] = useState<WireType[]>([]);
   const [confirmClear, setConfirmClear] = useState(false);
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType;

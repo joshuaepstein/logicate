@@ -5,20 +5,20 @@ import { NodeType } from "./node/type";
 
 export const DraggableItem = ({ type }: { type: NodeType }) => {
   return (
-    <Tooltip key={type.type === "gate" ? type.gateType : type.inputType}>
+    <Tooltip key={type.type === "gate" ? type.node : type.node}>
       <TooltipTrigger asChild>
         <div
-          key={type.type === "gate" ? type.gateType : type.inputType}
+          key={type.node}
           className="rounded-sm shadow-hard-soft-2xs p-3 aspect-square w-max h-max"
           data-logicate-draggable
           data-logicate-draggable-sidebar
           data-logicate-gate-type-type={type.type}
-          data-logicate-type={type.type === "gate" ? type.gateType : type.inputType}
+          data-logicate-type={type.node}
         >
           <div
             className="size-6"
             style={{
-              backgroundImage: `url(${type.type === "gate" ? gateTypeToIcon[type.gateType] : inputTypeToIcon[type.inputType]})`,
+              backgroundImage: `url(${type.type === "gate" ? gateTypeToIcon[type.node] : inputTypeToIcon[type.node]})`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
@@ -27,7 +27,7 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <p>{type.type === "gate" ? type.gateType : type.inputType}</p>
+        <p>{type.node}</p>
       </TooltipContent>
     </Tooltip>
   );

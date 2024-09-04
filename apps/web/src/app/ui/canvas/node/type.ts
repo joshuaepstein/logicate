@@ -4,9 +4,13 @@ import { InputType } from "./inputs";
 export type NodeType =
   | {
       type: "gate";
-      gateType: GateType;
+      node: GateType;
     }
   | {
       type: "input";
-      inputType: InputType;
+      node: InputType;
     };
+
+export enum OutputType {
+  LIGHT,
+}

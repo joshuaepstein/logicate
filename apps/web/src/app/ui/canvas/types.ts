@@ -1,15 +1,36 @@
-import { NodeType } from "./node/type";
+import { GateType } from "./node/gate";
+import { InputType } from "./node/inputs";
+import { OutputType } from "./node/type";
 
-interface Item {
-  id: string;
-  type: NodeType;
-  x: number;
-  y: number;
-  value: boolean | null;
-  inputs: string[];
-  outputs: string[];
-  computedValue?: boolean;
-}
+type Item =
+  | {
+      id: string;
+      type: GateType;
+      x: number;
+      y: number;
+      inputs: string[];
+      outputs: string[];
+      computedValue?: boolean;
+      itemType: "gate";
+    }
+  | {
+      id: string;
+      type: InputType;
+      x: number;
+      y: number;
+      outputs: string[];
+      value: boolean;
+      itemType: "input";
+    }
+  | {
+      id: string;
+      type: OutputType;
+      x: number;
+      y: number;
+      inputs: string[];
+      computedValue?: boolean;
+      itemType: "output";
+    };
 
 interface Wire {
   from: string;

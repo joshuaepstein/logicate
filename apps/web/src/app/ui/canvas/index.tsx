@@ -27,6 +27,9 @@ import { TemporaryGate } from "./node/temporary-gate";
 import { NodeType } from "./node/type";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
+import { TemporaryInput } from "./node/inputs/temporary";
+import { Item, Wire as WireType } from "./types";
+import { gates } from "./node";
 
 export default function Canvas({
   sessionId,
@@ -53,6 +56,8 @@ export default function Canvas({
     setHolding,
     itemsUpdate,
   } = useCanvasStore();
+  const [simulatedItems, setSimulatedItems] = useState<Item[]>([]);
+  const [simulatedWires, setSimulatedWires] = useState<WireType[]>([]);
   const [confirmClear, setConfirmClear] = useState(false);
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType;
@@ -83,59 +88,57 @@ export default function Canvas({
   }, []);
 
   const simulate = useCallback(() => {
-    // setItems((prevItems) => {
-    //   const newItems = [...prevItems];
-    //   const getValue = (id: number) => {
-    //     const item = newItems.find((item) => item.id === id);
-    //     return item
-    //       ? item.type === "INPUT"
-    //         ? item.value
-    //         : item.computedValue
-    //       : false;
-    //   };
-    //   const visited = new Set<number>();
-    //   const stack: number[] = [];
-    //   const visit = (id: number) => {
-    //     if (visited.has(id)) return;
-    //     visited.add(id);
-    //     const item = newItems.find((item) => item.id === id);
-    //     if (item) {
-    //       item.outputs.forEach((outputId) => visit(outputId));
-    //       stack.push(id);
-    //     }
-    //   };
-    //   newItems.forEach((item) => {
-    //     if (!visited.has(item.id)) {
-    //       visit(item.id);
-    //     }
-    //   });
-    //   while (stack.length > 0) {
-    //     const id = stack.pop();
-    //     if (id !== undefined) {
-    //       const item = newItems.find((item) => item.id === id);
-    //       if (item) {
-    //         if (item.type !== "INPUT") {
-    //           const inputValues = item.inputs
-    //             .map(getValue)
-    //             .map((a) => a || false);
-    //           if (item.type === "OUTPUT") {
-    //             item.computedValue = inputValues[0] || false;
-    //           } else if (item.type in gates) {
-    //             item.computedValue = gates[item.type](inputValues);
-    //           }
-    //         } else {
-    //           item.computedValue = item.value || false;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return newItems;
-    // });
+    setSimulatedItems((prevItems) => {
+      const newItems = [...prevItems];
+      const getValue = (id: string) => {
+        const item = newItems.find((item) => item.id === id);
+        return item ? (item.itemType === "input" ? item.value : item.computedValue) : false;
+      };
+      const visited = new Set<string>();
+      const stack: string[] = [];
+      const visit = (id: string) => {
+        if (visited.has(id)) return;
+        visited.add(id);
+        const item = newItems.find((item) => item.id === id);
+        if (item) {
+          if (item.itemType === "output") {
+            stack.push(id);
+          } else {
+            item.outputs.forEach((outputId) => visit(outputId));
+            stack.push(id);
+          }
+        }
+      };
+      newItems.forEach((item) => {
+        if (!visited.has(item.id)) {
+          visit(item.id);
+        }
+      });
+      while (stack.length > 0) {
+        const id = stack.pop();
+        if (id !== undefined) {
+          const item = newItems.find((item) => item.id === id);
+          if (item) {
+            if (item.itemType !== "input") {
+              const inputValues = item.inputs.map(getValue).map((a) => a || false);
+              if (item.itemType === "output") {
+                item.computedValue = inputValues[0] || false;
+              } else if (item.itemType === "gate") {
+                item.computedValue = gates[item.type](inputValues);
+              }
+            } else {
+              item.value = item.value || false;
+            }
+          }
+        }
+      }
+      return newItems;
+    });
   }, []);
 
   useEffect(() => {
     simulate();
-  }, [wires, simulate]);
+  }, [items, wires, simulate]);
 
   useHotkeys("esc", () => {
     if (draggingNewElement) {
@@ -170,7 +173,7 @@ export default function Canvas({
   useEffect(() => {
     const handleDrag = (e: MouseEvent) => {
       if (draggingNewElement && e.buttons === Click.Primary) {
-        const element = document.querySelector("[data-logicate-temporary-dragging-gate]");
+        const element = document.querySelector("[data-logicate-temporary-dragging-node]");
         if (!element) return;
         setDraggingNewElement((previous) => {
           if (previous) {
@@ -199,7 +202,7 @@ export default function Canvas({
           setDraggingNewElement({
             type: {
               type: type as NodeType["type"],
-              ...(type === "gate" ? { gateType: typeType as GateType } : { inputType: typeType as InputType }),
+              node: typeType as NodeType["node"],
             } as NodeType,
             x: mouseX - 16 / -canvas.zoom,
             y: mouseY + 16 / -canvas.zoom,
@@ -230,13 +233,22 @@ export default function Canvas({
         const maxMinY = Math.max(0, Math.min(yOnCanvas, 1000));
         addItem({
           id: randomGateId(),
-          type: draggingNewElement.type,
           x: maxMinX,
           y: maxMinY,
-          inputs: [],
-          outputs: [],
-          value: false,
-          computedValue: false,
+          ...(draggingNewElement.type.type === "input"
+            ? {
+                itemType: "input" as const,
+                type: draggingNewElement.type.node as InputType,
+                value: false,
+                outputs: [],
+              }
+            : {
+                itemType: "gate" as const,
+                type: draggingNewElement.type.node as GateType,
+                computedValue: false,
+                inputs: [],
+                outputs: [],
+              }),
         });
         setHolding(false);
       }
@@ -270,7 +282,7 @@ export default function Canvas({
               <AccordionContent>
                 <div className="flex flex-wrap gap-5 p-4 justify-between items-start">
                   {Object.values(InputType).map((type) => (
-                    <DraggableItem key={type} type={{ type: "input", inputType: type }} />
+                    <DraggableItem key={type} type={{ type: "input", node: type }} />
                   ))}
                 </div>
               </AccordionContent>
@@ -280,7 +292,7 @@ export default function Canvas({
               <AccordionContent>
                 <div className="flex flex-wrap gap-5 p-4 justify-between items-start">
                   {Object.values(GateType).map((type) => (
-                    <DraggableItem key={type} type={{ type: "gate", gateType: type }} />
+                    <DraggableItem key={type} type={{ type: "gate", node: type }} />
                   ))}
                 </div>
               </AccordionContent>
@@ -333,21 +345,21 @@ export default function Canvas({
             }}
           >
             {items.map((item) =>
-              item.type.type === "gate" ? (
+              item.itemType === "gate" ? (
                 <Gate
                   key={item.id}
-                  type={item.type.gateType}
+                  type={item.type}
                   inputs={item.inputs.length}
                   state={item.computedValue ?? false}
                   gateId={item.id}
                   x={item.x + canvas.x}
                   y={item.y + canvas.y}
                 />
-              ) : item.type.type === "input" ? (
+              ) : item.itemType === "input" ? (
                 <Input
                   key={item.id}
-                  type={item.type.inputType}
-                  state={item.computedValue ?? false}
+                  type={item.type}
+                  computedValue={item.value ?? false}
                   inputId={item.id}
                   x={item.x + canvas.x}
                   y={item.y + canvas.y}
@@ -411,10 +423,18 @@ export default function Canvas({
           {draggingNewElement.type.type === "gate" ? (
             <TemporaryGate
               canvasZoom={canvas.zoom}
-              type={draggingNewElement.type.gateType}
+              type={draggingNewElement.type.node}
               inputs={0}
               state={false}
               gateId={"temporary-dragging-logicate-element"}
+              x={draggingNewElement.x}
+              y={draggingNewElement.y}
+            />
+          ) : draggingNewElement.type.type === "input" ? (
+            <TemporaryInput
+              canvasZoom={canvas.zoom}
+              type={draggingNewElement.type.node}
+              inputId={"temporary-dragging-logicate-element"}
               x={draggingNewElement.x}
               y={draggingNewElement.y}
             />

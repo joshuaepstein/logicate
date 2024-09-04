@@ -40,7 +40,7 @@ export const TemporaryGate = forwardRef<
         style={{ left: x, top: y, transform: `scale(${canvasZoom})` }}
         tabIndex={-1}
         ref={ref}
-        data-logicate-temporary-dragging-gate
+        data-logicate-temporary-dragging-node
         {...rest}
       >
         <div
@@ -51,10 +51,7 @@ export const TemporaryGate = forwardRef<
           }}
         >
           <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
-            <div
-              className="order-2 z-[1] pointer-events-auto"
-              style={{ lineHeight: 0 }}
-            >
+            <div className="order-2 z-[1] pointer-events-auto" style={{ lineHeight: 0 }}>
               <svg
                 style={{
                   overflow: "visible",
@@ -63,24 +60,14 @@ export const TemporaryGate = forwardRef<
                 }}
                 className="pointer-events-auto hover:scale-[1.2] transition-transform"
               >
-                <circle
-                  cx="6.5"
-                  cy="6.5"
-                  r="6"
-                  stroke="black"
-                  strokeWidth="1"
-                  fill="white"
-                ></circle>
+                <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
               </svg>
             </div>
             <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
             <div
-              className={cn(
-                "-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute",
-                {
-                  hidden: !isInverted,
-                },
-              )}
+              className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute", {
+                hidden: !isInverted,
+              })}
             ></div>
           </div>
         </div>
@@ -115,14 +102,7 @@ export const TemporaryGate = forwardRef<
                   className="pointer-events-auto hover:scale-[1.2] transition-transform"
                   data-logicate-input-terminal={index}
                 >
-                  <circle
-                    cx="6.5"
-                    cy="6.5"
-                    r="6"
-                    stroke="black"
-                    strokeWidth="1"
-                    fill="white"
-                  ></circle>
+                  <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
                 </svg>
               </div>
               <div className="grow min-w-4 h-[2px] bg-black"></div>
@@ -131,15 +111,12 @@ export const TemporaryGate = forwardRef<
           ))}
         </div>
         <div
-          className={cn(
-            "bg-transparent w-8 min-h-8 min-w-[30px] border-black flex justify-center items-center",
-            {
-              "border-none": inputs < 4,
-              "border-l-2 my-[5.25px] self-stretch": inputs > 3,
-              "-ml-[4.5px] -mr-px w-[36px]": isOrType,
-              "-ml-[9px] -mr-px w-[40px]": isXorXnorType,
-            },
-          )}
+          className={cn("bg-transparent w-8 min-h-8 min-w-[30px] border-black flex justify-center items-center", {
+            "border-none": inputs < 4,
+            "border-l-2 my-[5.25px] self-stretch": inputs > 3,
+            "-ml-[4.5px] -mr-px w-[36px]": isOrType,
+            "-ml-[9px] -mr-px w-[40px]": isXorXnorType,
+          })}
           style={{
             gridColumn: "2 / span 1",
             gridRow: "2 / span 1",

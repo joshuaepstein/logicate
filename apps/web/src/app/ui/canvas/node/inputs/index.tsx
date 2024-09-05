@@ -95,12 +95,18 @@ export const Input = forwardRef<
 
   useEffect(() => {
     if (dragging) {
-      console.log("dragging", dragging);
+      setHolding(true);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
+      console.log("added event listeners - inputs", inputId);
     } else {
       setHolding(false);
     }
+
+    // listen to custom event: Cancel Dragging Node
+    window.addEventListener("cancelDragging", () => {
+      setDragging(false);
+    });
 
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
@@ -160,9 +166,9 @@ export const Input = forwardRef<
         >
           <div
             className="pointer-events-auto w-full h-full flex items-center justify-center"
-            onMouseDown={handleClickDown}
-            onMouseUp={handleClickUp}
-            onMouseLeave={handleClickUp}
+            // onMouseDown={handleClickDown}
+            // onMouseUp={handleClickUp}
+            // onMouseLeave={handleClickUp}
             data-logicate-body
           >
             <svg

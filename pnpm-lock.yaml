@@ -9,7 +9,7 @@ importers:
     dependencies:
       "@prisma/client":
         specifier: ^5.19.1
-        version: 5.19.1
+        version: 5.19.1(prisma@5.19.0)
       framer-motion:
         specifier: ^11.5.3
         version: 11.5.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -73,7 +73,7 @@ importers:
         version: 4.0.0(prettier@3.3.3)
       prettier-plugin-tailwindcss:
         specifier: ^0.6.6
-        version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.3.1)(prettier-plugin-organize-imports@4.0.0)(prettier@3.3.3)
+        version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.3.1(@vue/compiler-sfc@3.4.38)(prettier@3.3.3))(prettier-plugin-organize-imports@4.0.0(prettier@3.3.3)(typescript@5.5.4))(prettier@3.3.3)
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.10(ts-node@10.9.2(@types/node@22.5.4)(typescript@5.5.4))
@@ -109,7 +109,7 @@ importers:
         version: 0.7.0
       cmdk:
         specifier: ^1.0.0
-        version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+        version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -136,19 +136,19 @@ importers:
         version: 0.20.0(react@18.3.1)
       react-hotkeys-hook:
         specifier: ^4.5.0
-        version: 4.5.0(react-dom@18.3.1)(react@18.3.1)
+        version: 4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-use:
         specifier: ^17.5.1
-        version: 17.5.1(react-dom@18.3.1)(react@18.3.1)
+        version: 17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
-        version: 1.5.0(react-dom@18.3.1)(react@18.3.1)
+        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       use-debounce:
         specifier: ^10.0.3
         version: 10.0.3(react@18.3.1)
       vaul:
         specifier: ^0.9.1
-        version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+        version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       "@logicate/tsconfig":
         specifier: workspace:*
@@ -233,7 +233,7 @@ importers:
         version: 1.4.1
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.41)
+        version: 10.4.20(postcss@8.4.45)
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -272,13 +272,13 @@ importers:
         version: 7.53.0(react@18.3.1)
       react-hotkeys-hook:
         specifier: ^4.5.0
-        version: 4.5.0(react-dom@18.3.1)(react@18.3.1)
+        version: 4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-use:
         specifier: ^17.5.1
         version: 17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
-        version: 1.5.0(react-dom@18.3.1)(react@18.3.1)
+        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -348,7 +348,7 @@ importers:
         version: 2.7.1(eslint-plugin-import@2.29.1)(eslint@8.57.0)
       eslint-plugin-import:
         specifier: ^2.22.1
-        version: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0)
+        version: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0)
       eslint-plugin-react:
         specifier: ^7.23.2
         version: 7.35.0(eslint@8.57.0)
@@ -372,7 +372,7 @@ importers:
         version: 0.5.15(tailwindcss@3.4.10(ts-node@10.9.2(@types/node@22.5.4)(typescript@5.5.4)))
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.41)
+        version: 10.4.20(postcss@8.4.45)
       tailwind-scrollbar:
         specifier: ^3.1.0
         version: 3.1.0(tailwindcss@3.4.10(ts-node@10.9.2(@types/node@22.5.4)(typescript@5.5.4)))
@@ -433,13 +433,13 @@ importers:
     dependencies:
       "@react-email/components":
         specifier: ^0.0.23
-        version: 0.0.23(react-dom@18.3.1)(react@18.3.1)
+        version: 0.0.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-email:
         specifier: ^3.0.1
-        version: 3.0.1(react-dom@18.3.1)(react@18.3.1)
+        version: 3.0.1(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       resend:
         specifier: ^4.0.0
-        version: 4.0.0(react-dom@18.3.1)(react@18.3.1)
+        version: 4.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       "@logicate/database":
         specifier: workspace:*
@@ -473,7 +473,7 @@ importers:
         version: link:../utils
       ai:
         specifier: ^3.3.20
-        version: 3.3.21(react@18.3.1)(svelte@4.2.19)(vue@3.4.38)(zod@3.23.8)
+        version: 3.3.21(react@18.3.1)(sswr@2.1.0(svelte@4.2.19))(svelte@4.2.19)(vue@3.4.38(typescript@5.5.4))(zod@3.23.8)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -598,7 +598,7 @@ importers:
         version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
       "@radix-ui/react-tooltip":
         specifier: ^1.1.2
-        version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+        version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       class-variance-authority:
         specifier: ^0.6.0
         version: 0.6.1
@@ -607,7 +607,7 @@ importers:
         version: 1.2.1
       cmdk:
         specifier: ^1.0.0
-        version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+        version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -616,13 +616,13 @@ importers:
         version: 8.2.0(react@18.3.1)
       input-otp:
         specifier: ^1.2.4
-        version: 1.2.4(react-dom@18.3.1)(react@18.3.1)
+        version: 1.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       lucide-react:
         specifier: ^0.435.0
         version: 0.435.0(react@18.3.1)
       next-themes:
         specifier: ^0.3.0
-        version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
+        version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-day-picker:
         specifier: 8.10.1
         version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
@@ -631,19 +631,19 @@ importers:
         version: 7.53.0(react@18.3.1)
       react-resizable-panels:
         specifier: ^2.1.1
-        version: 2.1.2(react-dom@18.3.1)(react@18.3.1)
+        version: 2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^2.12.7
-        version: 2.12.7(react-dom@18.3.1)(react@18.3.1)
+        version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
-        version: 1.5.0(react-dom@18.3.1)(react@18.3.1)
+        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-merge:
         specifier: ^1.12.0
         version: 1.14.0
       vaul:
         specifier: ^0.9.1
-        version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
+        version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -2411,9 +2411,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ppc64]
     os: [aix]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/aix-ppc64@0.21.5:
     resolution:
@@ -2421,9 +2418,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ppc64]
     os: [aix]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/aix-ppc64@0.23.1:
     resolution:
@@ -2431,9 +2425,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [ppc64]
     os: [aix]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/android-arm64@0.19.11:
     resolution:
@@ -2441,9 +2432,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/android-arm64@0.21.5:
     resolution:
@@ -2451,9 +2439,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/android-arm64@0.23.1:
     resolution:
@@ -2461,9 +2446,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/android-arm@0.19.11:
     resolution:
@@ -2471,9 +2453,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm]
     os: [android]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/android-arm@0.21.5:
     resolution:
@@ -2481,9 +2460,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/android-arm@0.23.1:
     resolution:
@@ -2491,9 +2467,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/android-x64@0.19.11:
     resolution:
@@ -2501,9 +2474,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [android]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/android-x64@0.21.5:
     resolution:
@@ -2511,9 +2481,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/android-x64@0.23.1:
     resolution:
@@ -2521,9 +2488,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/darwin-arm64@0.19.11:
     resolution:
@@ -2531,9 +2495,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/darwin-arm64@0.21.5:
     resolution:
@@ -2541,9 +2502,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/darwin-arm64@0.23.1:
     resolution:
@@ -2551,9 +2509,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/darwin-x64@0.19.11:
     resolution:
@@ -2561,9 +2516,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/darwin-x64@0.21.5:
     resolution:
@@ -2571,9 +2523,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/darwin-x64@0.23.1:
     resolution:
@@ -2581,9 +2530,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/freebsd-arm64@0.19.11:
     resolution:
@@ -2591,9 +2537,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [freebsd]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/freebsd-arm64@0.21.5:
     resolution:
@@ -2601,9 +2544,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [freebsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/freebsd-arm64@0.23.1:
     resolution:
@@ -2611,9 +2551,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm64]
     os: [freebsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/freebsd-x64@0.19.11:
     resolution:
@@ -2621,9 +2558,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/freebsd-x64@0.21.5:
     resolution:
@@ -2631,9 +2565,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/freebsd-x64@0.23.1:
     resolution:
@@ -2641,9 +2572,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-arm64@0.19.11:
     resolution:
@@ -2651,9 +2579,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-arm64@0.21.5:
     resolution:
@@ -2661,9 +2586,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-arm64@0.23.1:
     resolution:
@@ -2671,9 +2593,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-arm@0.19.11:
     resolution:
@@ -2681,9 +2600,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-arm@0.21.5:
     resolution:
@@ -2691,9 +2607,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-arm@0.23.1:
     resolution:
@@ -2701,9 +2614,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-ia32@0.19.11:
     resolution:
@@ -2711,9 +2621,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ia32]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-ia32@0.21.5:
     resolution:
@@ -2721,9 +2628,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ia32]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-ia32@0.23.1:
     resolution:
@@ -2731,9 +2635,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [ia32]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-loong64@0.19.11:
     resolution:
@@ -2741,9 +2642,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [loong64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-loong64@0.21.5:
     resolution:
@@ -2751,9 +2649,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [loong64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-loong64@0.23.1:
     resolution:
@@ -2761,9 +2656,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [loong64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-mips64el@0.19.11:
     resolution:
@@ -2771,9 +2663,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [mips64el]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-mips64el@0.21.5:
     resolution:
@@ -2781,9 +2670,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [mips64el]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-mips64el@0.23.1:
     resolution:
@@ -2791,9 +2677,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [mips64el]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-ppc64@0.19.11:
     resolution:
@@ -2801,9 +2684,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ppc64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-ppc64@0.21.5:
     resolution:
@@ -2811,9 +2691,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ppc64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-ppc64@0.23.1:
     resolution:
@@ -2821,9 +2698,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [ppc64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-riscv64@0.19.11:
     resolution:
@@ -2831,9 +2705,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [riscv64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-riscv64@0.21.5:
     resolution:
@@ -2841,9 +2712,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [riscv64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-riscv64@0.23.1:
     resolution:
@@ -2851,9 +2719,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [riscv64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-s390x@0.19.11:
     resolution:
@@ -2861,9 +2726,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [s390x]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-s390x@0.21.5:
     resolution:
@@ -2871,9 +2733,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [s390x]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-s390x@0.23.1:
     resolution:
@@ -2881,9 +2740,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [s390x]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-x64@0.19.11:
     resolution:
@@ -2891,9 +2747,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/linux-x64@0.21.5:
     resolution:
@@ -2901,9 +2754,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/linux-x64@0.23.1:
     resolution:
@@ -2911,9 +2761,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/netbsd-x64@0.19.11:
     resolution:
@@ -2921,9 +2768,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [netbsd]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/netbsd-x64@0.21.5:
     resolution:
@@ -2931,9 +2775,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [netbsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/netbsd-x64@0.23.1:
     resolution:
@@ -2941,9 +2782,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [netbsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/openbsd-arm64@0.23.1:
     resolution:
@@ -2951,9 +2789,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm64]
     os: [openbsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/openbsd-x64@0.19.11:
     resolution:
@@ -2961,9 +2796,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [openbsd]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/openbsd-x64@0.21.5:
     resolution:
@@ -2971,9 +2803,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [openbsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/openbsd-x64@0.23.1:
     resolution:
@@ -2981,9 +2810,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [openbsd]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/sunos-x64@0.19.11:
     resolution:
@@ -2991,9 +2817,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [sunos]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/sunos-x64@0.21.5:
     resolution:
@@ -3001,9 +2824,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [sunos]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/sunos-x64@0.23.1:
     resolution:
@@ -3011,9 +2831,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [sunos]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/win32-arm64@0.19.11:
     resolution:
@@ -3021,9 +2838,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/win32-arm64@0.21.5:
     resolution:
@@ -3031,9 +2845,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/win32-arm64@0.23.1:
     resolution:
@@ -3041,9 +2852,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/win32-ia32@0.19.11:
     resolution:
@@ -3051,9 +2859,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/win32-ia32@0.21.5:
     resolution:
@@ -3061,9 +2866,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/win32-ia32@0.23.1:
     resolution:
@@ -3071,9 +2873,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/win32-x64@0.19.11:
     resolution:
@@ -3081,9 +2880,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@esbuild/win32-x64@0.21.5:
     resolution:
@@ -3091,9 +2887,6 @@ packages:
     engines: { node: ">=12" }
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@esbuild/win32-x64@0.23.1:
     resolution:
@@ -3101,9 +2894,6 @@ packages:
     engines: { node: ">=18" }
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@eslint-community/eslint-utils@4.4.0(eslint@8.57.0):
     resolution:
@@ -3111,10 +2901,6 @@ packages:
     engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-    dependencies:
-      eslint: 8.57.0
-      eslint-visitor-keys: 3.4.3
-    dev: true
 
   /@eslint-community/regexpp@4.11.0:
     resolution:
@@ -3212,9 +2998,6 @@ packages:
       { integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg== }
     peerDependencies:
       react-hook-form: ^7.0.0
-    dependencies:
-      react-hook-form: 7.53.0(react@18.3.1)
-    dev: false
 
   /@humanwhocodes/config-array@0.11.14:
     resolution:
@@ -3239,7 +3022,6 @@ packages:
     resolution:
       { integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA== }
     deprecated: Use @eslint/object-schema instead
-    dev: true
 
   /@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.3.3):
     resolution:
@@ -3400,9 +3182,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-darwin-arm64@14.2.8":
     resolution:
@@ -3410,9 +3189,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-darwin-x64@14.2.3:
     resolution:
@@ -3420,9 +3196,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-darwin-x64@14.2.8":
     resolution:
@@ -3430,9 +3203,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-linux-arm64-gnu@14.2.3:
     resolution:
@@ -3440,9 +3210,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-linux-arm64-gnu@14.2.8":
     resolution:
@@ -3450,9 +3217,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-linux-arm64-musl@14.2.3:
     resolution:
@@ -3460,9 +3224,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-linux-arm64-musl@14.2.8":
     resolution:
@@ -3470,9 +3231,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-linux-x64-gnu@14.2.3:
     resolution:
@@ -3480,9 +3238,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-linux-x64-gnu@14.2.8":
     resolution:
@@ -3490,9 +3245,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-linux-x64-musl@14.2.3:
     resolution:
@@ -3500,9 +3252,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-linux-x64-musl@14.2.8":
     resolution:
@@ -3510,9 +3259,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-win32-arm64-msvc@14.2.3:
     resolution:
@@ -3520,9 +3266,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-win32-arm64-msvc@14.2.8":
     resolution:
@@ -3530,9 +3273,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-win32-ia32-msvc@14.2.3:
     resolution:
@@ -3540,9 +3280,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-win32-ia32-msvc@14.2.8":
     resolution:
@@ -3550,9 +3287,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@next/swc-win32-x64-msvc@14.2.3:
     resolution:
@@ -3560,9 +3294,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   "@next/swc-win32-x64-msvc@14.2.8":
     resolution:
@@ -3570,9 +3301,6 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@nodelib/fs.scandir@2.1.5:
     resolution:
@@ -3805,8 +3533,6 @@ packages:
       { integrity: sha512-Fq6SwLujA/DOIvNC2EL/SojJnkKf/rAwJ//APpJJHRyMi1PdKrY3Az+4XNQ51N4RTbItbIByQ0jgd1tayq1aeA== }
     engines: { node: ">=18" }
     hasBin: true
-    dependencies:
-      playwright: 1.46.1
 
   /@polka/url@1.0.0-next.25:
     resolution:
@@ -3833,9 +3559,6 @@ packages:
     peerDependenciesMeta:
       prisma:
         optional: true
-    dependencies:
-      prisma: 5.19.0
-    dev: false
 
   /@prisma/client@5.19.1:
     resolution:
@@ -3847,7 +3570,6 @@ packages:
     peerDependenciesMeta:
       prisma:
         optional: true
-    dev: false
 
   /@prisma/debug@5.19.0:
     resolution:
@@ -4585,9 +4307,6 @@ packages:
       { integrity: sha512-jQxj/0LKgp+j9BiTXz3O3sgs26RNet2iLWmsPyRz2SIcR4q/4SbazXfnYwbAr+vLYKSfc7qxzyGQA1HLlYiuNw== }
     peerDependencies:
       react: ^16.x || ^17.x || ^18.x
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@radix-ui/react-id@1.0.1(@types/react@18.3.5)(react@18.3.1):
     resolution:
@@ -5668,9 +5387,6 @@ packages:
       { integrity: sha512-dMJyL9aU25ieatdPtVjCyQ/WHZYHwNc+Hy/XpF8Cc18gu21cUynVEeYQzFSeigDRMeBQ3PGAyjVDPIob7YlGwA== }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/button@0.0.17(react@18.3.1):
     resolution:
@@ -5678,9 +5394,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/code-block@0.0.7(react@18.3.1):
     resolution:
@@ -5688,10 +5401,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      prismjs: 1.29.0
-      react: 18.3.1
-    dev: false
 
   /@react-email/code-inline@0.0.4(react@18.3.1):
     resolution:
@@ -5699,9 +5408,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/column@0.0.12(react@18.3.1):
     resolution:
@@ -5709,9 +5415,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/components@0.0.23(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -5751,18 +5454,12 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/font@0.0.8(react@18.3.1):
     resolution:
       { integrity: sha512-fSBEqYyVPAyyACBBHcs3wEYzNknpHMuwcSAAKE8fOoDfGqURr/vSxKPdh4tOa9z7G4hlcEfgGrCYEa2iPT22cw== }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/head@0.0.11(react@18.3.1):
     resolution:
@@ -5770,9 +5467,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/heading@0.0.14(react@18.3.1):
     resolution:
@@ -5780,9 +5474,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/hr@0.0.10(react@18.3.1):
     resolution:
@@ -5790,9 +5481,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/html@0.0.10(react@18.3.1):
     resolution:
@@ -5800,9 +5488,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/img@0.0.10(react@18.3.1):
     resolution:
@@ -5810,9 +5495,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/link@0.0.10(react@18.3.1):
     resolution:
@@ -5820,9 +5502,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/markdown@0.0.12(react@18.3.1):
     resolution:
@@ -5830,10 +5509,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      md-to-react-email: 5.0.2(react@18.3.1)
-      react: 18.3.1
-    dev: false
 
   /@react-email/preview@0.0.11(react@18.3.1):
     resolution:
@@ -5841,9 +5516,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/render@0.0.17(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -5881,9 +5553,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/section@0.0.14(react@18.3.1):
     resolution:
@@ -5891,9 +5560,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/tailwind@0.1.0(react@18.3.1):
     resolution:
@@ -5901,9 +5567,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   /@react-email/text@0.0.10(react@18.3.1):
     resolution:
@@ -5911,9 +5574,6 @@ packages:
     engines: { node: ">=18.0.0" }
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
-    dependencies:
-      react: 18.3.1
-    dev: false
 
   "@rollup/pluginutils@4.2.1":
     resolution:
@@ -5925,144 +5585,96 @@ packages:
       { integrity: sha512-fSuPrt0ZO8uXeS+xP3b+yYTCBUd05MoSp2N/MFOgjhhUhMmchXlpTQrTpI8T+YAwAQuK7MafsCOxW7VrPMrJcg== }
     cpu: [arm]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-android-arm64@4.21.2:
     resolution:
       { integrity: sha512-xGU5ZQmPlsjQS6tzTTGwMsnKUtu0WVbl0hYpTPauvbRAnmIvpInhJtgjj3mcuJpEiuUw4v1s4BimkdfDWlh7gA== }
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-darwin-arm64@4.21.2:
     resolution:
       { integrity: sha512-99AhQ3/ZMxU7jw34Sq8brzXqWH/bMnf7ZVhvLk9QU2cOepbQSVTns6qoErJmSiAvU3InRqC2RRZ5ovh1KN0d0Q== }
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-darwin-x64@4.21.2:
     resolution:
       { integrity: sha512-ZbRaUvw2iN/y37x6dY50D8m2BnDbBjlnMPotDi/qITMJ4sIxNY33HArjikDyakhSv0+ybdUxhWxE6kTI4oX26w== }
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-arm-gnueabihf@4.21.2:
     resolution:
       { integrity: sha512-ztRJJMiE8nnU1YFcdbd9BcH6bGWG1z+jP+IPW2oDUAPxPjo9dverIOyXz76m6IPA6udEL12reYeLojzW2cYL7w== }
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-arm-musleabihf@4.21.2:
     resolution:
       { integrity: sha512-flOcGHDZajGKYpLV0JNc0VFH361M7rnV1ee+NTeC/BQQ1/0pllYcFmxpagltANYt8FYf9+kL6RSk80Ziwyhr7w== }
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-arm64-gnu@4.21.2:
     resolution:
       { integrity: sha512-69CF19Kp3TdMopyteO/LJbWufOzqqXzkrv4L2sP8kfMaAQ6iwky7NoXTp7bD6/irKgknDKM0P9E/1l5XxVQAhw== }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-arm64-musl@4.21.2:
     resolution:
       { integrity: sha512-48pD/fJkTiHAZTnZwR0VzHrao70/4MlzJrq0ZsILjLW/Ab/1XlVUStYyGt7tdyIiVSlGZbnliqmult/QGA2O2w== }
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-powerpc64le-gnu@4.21.2:
     resolution:
       { integrity: sha512-cZdyuInj0ofc7mAQpKcPR2a2iu4YM4FQfuUzCVA2u4HI95lCwzjoPtdWjdpDKyHxI0UO82bLDoOaLfpZ/wviyQ== }
     cpu: [ppc64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-riscv64-gnu@4.21.2:
     resolution:
       { integrity: sha512-RL56JMT6NwQ0lXIQmMIWr1SW28z4E4pOhRRNqwWZeXpRlykRIlEpSWdsgNWJbYBEWD84eocjSGDu/XxbYeCmwg== }
     cpu: [riscv64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-s390x-gnu@4.21.2:
     resolution:
       { integrity: sha512-PMxkrWS9z38bCr3rWvDFVGD6sFeZJw4iQlhrup7ReGmfn7Oukrr/zweLhYX6v2/8J6Cep9IEA/SmjXjCmSbrMQ== }
     cpu: [s390x]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-x64-gnu@4.21.2:
     resolution:
       { integrity: sha512-B90tYAUoLhU22olrafY3JQCFLnT3NglazdwkHyxNDYF/zAxJt5fJUB/yBoWFoIQ7SQj+KLe3iL4BhOMa9fzgpw== }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-linux-x64-musl@4.21.2:
     resolution:
       { integrity: sha512-7twFizNXudESmC9oneLGIUmoHiiLppz/Xs5uJQ4ShvE6234K0VB1/aJYU3f/4g7PhssLGKBVCC37uRkkOi8wjg== }
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-win32-arm64-msvc@4.21.2:
     resolution:
       { integrity: sha512-9rRero0E7qTeYf6+rFh3AErTNU1VCQg2mn7CQcI44vNUWM9Ze7MSRS/9RFuSsox+vstRt97+x3sOhEey024FRQ== }
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-win32-ia32-msvc@4.21.2:
     resolution:
       { integrity: sha512-5rA4vjlqgrpbFVVHX3qkrCo/fZTj1q0Xxpg+Z7yIo3J2AilW7t2+n6Q8Jrx+4MrYpAnjttTYF8rr7bP46BPzRw== }
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rollup/rollup-win32-x64-msvc@4.21.2:
     resolution:
       { integrity: sha512-6UUxd0+SKomjdzuAcp+HAmxw1FlGBnl1v2yEPSabtx4lBfdXHDVsW7+lQkgz9cNFJGY3AWR7+V8P5BqkD9L9nA== }
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   /@rushstack/eslint-patch@1.10.4:
     resolution:
@@ -6325,10 +5937,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-    dependencies:
-      typescript: 5.5.4
-      zod: 3.23.8
-    dev: false
 
   /@t3-oss/env-nextjs@0.11.1(typescript@5.5.4)(zod@3.23.8):
     resolution:
@@ -15189,10 +14797,10 @@ snapshots:
       natural-compare: 1.4.0
       semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.4)
+    optionalDependencies:
       typescript: 5.5.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4):
     resolution:
@@ -15211,10 +14819,10 @@ snapshots:
       "@typescript-eslint/visitor-keys": 6.21.0
       debug: 4.3.6
       eslint: 8.57.0
+    optionalDependencies:
       typescript: 5.5.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/scope-manager@6.21.0:
     resolution:
@@ -15241,10 +14849,10 @@ snapshots:
       debug: 4.3.6
       eslint: 8.57.0
       ts-api-utils: 1.3.0(typescript@5.5.4)
+    optionalDependencies:
       typescript: 5.5.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/types@6.21.0:
     resolution:
@@ -15270,10 +14878,10 @@ snapshots:
       minimatch: 9.0.3
       semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.4)
+    optionalDependencies:
       typescript: 5.5.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/utils@6.21.0(eslint@8.57.0)(typescript@5.5.4):
     resolution:
@@ -15293,7 +14901,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
-    dev: true
 
   /@typescript-eslint/visitor-keys@6.21.0:
     resolution:
@@ -15302,7 +14909,6 @@ snapshots:
     dependencies:
       "@typescript-eslint/types": 6.21.0
       eslint-visitor-keys: 3.4.3
-    dev: true
 
   "@ungap/structured-clone@1.2.0": {}
 
@@ -15313,7 +14919,9 @@ snapshots:
       next: 14.2.8(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       server-only: 0.0.1
-    dev: false
+    optionalDependencies:
+      next: 14.2.8(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
 
   /@vercel/blob@0.23.4:
     resolution:
@@ -15325,7 +14933,6 @@ snapshots:
       is-buffer: 2.0.5
       is-plain-object: 5.0.0
       undici: 5.28.4
-    dev: false
 
   "@vercel/build-utils@7.3.0": {}
 
@@ -15477,14 +15084,12 @@ snapshots:
       "@vitest/utils": 2.0.5
       chai: 5.1.1
       tinyrainbow: 1.2.0
-    dev: true
 
   /@vitest/pretty-format@2.0.5:
     resolution:
       { integrity: sha512-h8k+1oWHfwTkyTkb9egzwNMfJAEx4veaPSnMeKbVSjp4euqGSbQlm5+6VHwTr7u4FJslVVsUG5nopCaAYdOmSQ== }
     dependencies:
       tinyrainbow: 1.2.0
-    dev: true
 
   /@vitest/runner@2.0.5:
     resolution:
@@ -15492,7 +15097,6 @@ snapshots:
     dependencies:
       "@vitest/utils": 2.0.5
       pathe: 1.1.2
-    dev: true
 
   /@vitest/snapshot@2.0.5:
     resolution:
@@ -15501,14 +15105,12 @@ snapshots:
       "@vitest/pretty-format": 2.0.5
       magic-string: 0.30.11
       pathe: 1.1.2
-    dev: true
 
   /@vitest/spy@2.0.5:
     resolution:
       { integrity: sha512-c/jdthAhvJdpfVuaexSrnawxZz6pywlTPe84LUB2m/4t3rl2fTo9NFGBG4oWgaD+FTgDDV8hJ/nibT7IfH3JfA== }
     dependencies:
       tinyspy: 3.0.0
-    dev: true
 
   /@vitest/utils@2.0.5:
     resolution:
@@ -15518,7 +15120,6 @@ snapshots:
       estree-walker: 3.0.3
       loupe: 3.1.1
       tinyrainbow: 1.2.0
-    dev: true
 
   /@vue/compiler-core@3.4.38:
     resolution:
@@ -15529,7 +15130,6 @@ snapshots:
       entities: 4.5.0
       estree-walker: 2.0.2
       source-map-js: 1.2.0
-    dev: false
 
   /@vue/compiler-dom@3.4.38:
     resolution:
@@ -15550,9 +15150,8 @@ snapshots:
       "@vue/shared": 3.4.38
       estree-walker: 2.0.2
       magic-string: 0.30.11
-      postcss: 8.4.41
+      postcss: 8.4.45
       source-map-js: 1.2.0
-    dev: false
 
   /@vue/compiler-ssr@3.4.38:
     resolution:
@@ -15585,7 +15184,6 @@ snapshots:
       "@vue/runtime-core": 3.4.38
       "@vue/shared": 3.4.38
       csstype: 3.1.3
-    dev: false
 
   /@vue/server-renderer@3.4.38(vue@3.4.38):
     resolution:
@@ -15596,7 +15194,6 @@ snapshots:
       "@vue/compiler-ssr": 3.4.38
       "@vue/shared": 3.4.38
       vue: 3.4.38(typescript@5.5.4)
-    dev: false
 
   /@vue/shared@3.4.38:
     resolution:
@@ -15626,7 +15223,6 @@ snapshots:
     dependencies:
       mime-types: 2.1.35
       negotiator: 0.6.3
-    dev: false
 
   /acorn-jsx@5.3.2(acorn@8.12.1):
     resolution:
@@ -15635,7 +15231,6 @@ snapshots:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
       acorn: 8.12.1
-    dev: true
 
   /acorn-walk@8.3.3:
     resolution:
@@ -15658,7 +15253,6 @@ snapshots:
       debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   aggregate-error@3.1.0:
     dependencies:
@@ -15679,15 +15273,16 @@ snapshots:
       json-schema: 0.4.0
       jsondiffpatch: 0.6.0
       nanoid: 3.3.6
-      react: 18.3.1
       secure-json-parse: 2.7.0
+      zod-to-json-schema: 3.23.2(zod@3.23.8)
+    optionalDependencies:
+      react: 18.3.1
+      sswr: 2.1.0(svelte@4.2.19)
       svelte: 4.2.19
       zod: 3.23.8
-      zod-to-json-schema: 3.23.2(zod@3.23.8)
     transitivePeerDependencies:
       - solid-js
       - vue
-    dev: false
 
   /ajv@6.12.6:
     resolution:
@@ -15697,7 +15292,6 @@ snapshots:
       fast-json-stable-stringify: 2.1.0
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
-    dev: true
 
   ajv@8.6.3:
     dependencies:
@@ -15758,7 +15352,6 @@ snapshots:
     dependencies:
       delegates: 1.0.0
       readable-stream: 3.6.2
-    dev: false
 
   /arg@4.1.0:
     resolution:
@@ -15780,7 +15373,6 @@ snapshots:
       { integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg== }
     dependencies:
       sprintf-js: 1.0.3
-    dev: false
 
   /argparse@2.0.1:
     resolution:
@@ -15792,21 +15384,18 @@ snapshots:
     engines: { node: ">=10" }
     dependencies:
       tslib: 2.7.0
-    dev: false
 
   /aria-query@5.1.3:
     resolution:
       { integrity: sha512-R5iJ5lkuHybztUfuOAznmboyjWq8O6sqNqtK7CLOqdydi54VNbORp49mb14KbWgG1QD3JFO9hJdZ+y4KutfdOQ== }
     dependencies:
       deep-equal: 2.2.3
-    dev: true
 
   /aria-query@5.3.0:
     resolution:
       { integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A== }
     dependencies:
       dequal: 2.0.3
-    dev: false
 
   /array-buffer-byte-length@1.0.1:
     resolution:
@@ -15815,7 +15404,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       is-array-buffer: 3.0.4
-    dev: true
 
   /array-includes@3.1.8:
     resolution:
@@ -15828,7 +15416,6 @@ snapshots:
       es-object-atoms: 1.0.0
       get-intrinsic: 1.2.4
       is-string: 1.0.7
-    dev: true
 
   /array-union@2.1.0:
     resolution:
@@ -15847,7 +15434,6 @@ snapshots:
       es-errors: 1.3.0
       es-object-atoms: 1.0.0
       es-shim-unscopables: 1.0.2
-    dev: true
 
   /array.prototype.findlastindex@1.2.5:
     resolution:
@@ -15860,7 +15446,6 @@ snapshots:
       es-errors: 1.3.0
       es-object-atoms: 1.0.0
       es-shim-unscopables: 1.0.2
-    dev: true
 
   /array.prototype.flat@1.3.2:
     resolution:
@@ -15871,7 +15456,6 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       es-shim-unscopables: 1.0.2
-    dev: true
 
   /array.prototype.flatmap@1.3.2:
     resolution:
@@ -15882,7 +15466,6 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       es-shim-unscopables: 1.0.2
-    dev: true
 
   /array.prototype.tosorted@1.1.4:
     resolution:
@@ -15894,7 +15477,6 @@ snapshots:
       es-abstract: 1.23.3
       es-errors: 1.3.0
       es-shim-unscopables: 1.0.2
-    dev: true
 
   /arraybuffer.prototype.slice@1.0.3:
     resolution:
@@ -15909,7 +15491,6 @@ snapshots:
       get-intrinsic: 1.2.4
       is-array-buffer: 3.0.4
       is-shared-array-buffer: 1.0.3
-    dev: true
 
   /assertion-error@2.0.1:
     resolution:
@@ -15948,7 +15529,6 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.0.0
-    dev: true
 
   /axe-core@4.10.0:
     resolution:
@@ -15965,14 +15545,12 @@ snapshots:
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
-    dev: true
 
   /axobject-query@3.1.1:
     resolution:
       { integrity: sha512-goKlv8DZrK9hUh975fnHzhNIO4jUnFCfv/dszV5VwUGDFjI6vQ2VwoyjYjYNEbBE8AH87TduWP5uyDR1D+Iteg== }
     dependencies:
       deep-equal: 2.2.3
-    dev: true
 
   /axobject-query@4.1.0:
     resolution:
@@ -15992,7 +15570,6 @@ snapshots:
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /babel-plugin-polyfill-corejs3@0.10.6(@babel/core@7.25.2):
     resolution:
@@ -16005,7 +15582,6 @@ snapshots:
       core-js-compat: 3.38.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /babel-plugin-polyfill-regenerator@0.6.2(@babel/core@7.25.2):
     resolution:
@@ -16017,7 +15593,6 @@ snapshots:
       "@babel/helper-define-polyfill-provider": 0.6.2(@babel/core@7.25.2)
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /balanced-match@1.0.2:
     resolution:
@@ -16045,7 +15620,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    dev: false
 
   bcryptjs@2.4.3: {}
 
@@ -16067,7 +15641,6 @@ snapshots:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.2
-    dev: false
 
   bl@5.1.0:
     dependencies:
@@ -16122,7 +15695,6 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
-    dev: false
 
   buffer@6.0.3:
     dependencies:
@@ -16136,7 +15708,6 @@ snapshots:
   busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
-    dev: false
 
   /bytes@3.1.0:
     resolution:
@@ -16203,7 +15774,6 @@ snapshots:
       deep-eql: 5.0.2
       loupe: 3.1.1
       pathval: 2.0.0
-    dev: true
 
   /chalk@2.4.2:
     resolution:
@@ -16278,14 +15848,12 @@ snapshots:
       { integrity: sha512-eurOEGc7YVx3majOrOb099PNKgO3KnKSApOprXI4BTq6bcfbqbQXPN2u+rPPmIJ2di23bMwhk0SxCCthBmszEQ== }
     dependencies:
       clsx: 1.2.1
-    dev: false
 
   /class-variance-authority@0.7.0:
     resolution:
       { integrity: sha512-jFI8IQw4hczaL4ALINxqLEXQbWcNjoSkloa4IaufXCJr6QawJyw7tuRysRsrE8w2p/4gGaxKIt/hX3qz/IbD1A== }
     dependencies:
       clsx: 2.0.0
-    dev: false
 
   clean-stack@2.2.0: {}
 
@@ -16329,7 +15897,6 @@ snapshots:
       acorn: 8.12.1
       estree-walker: 3.0.3
       periscopic: 3.1.0
-    dev: false
 
   /color-convert@1.9.3:
     resolution:
@@ -16364,7 +15931,6 @@ snapshots:
     engines: { node: ">= 0.8" }
     dependencies:
       delayed-stream: 1.0.0
-    dev: true
 
   /commander@10.0.1:
     resolution:
@@ -16399,7 +15965,6 @@ snapshots:
     dependencies:
       ini: 1.3.8
       proto-list: 1.2.4
-    dev: false
 
   /console-control-strings@1.1.0:
     resolution:
@@ -16444,21 +16009,18 @@ snapshots:
     engines: { node: ">=12.13" }
     dependencies:
       is-what: 4.1.16
-    dev: false
 
   /copy-to-clipboard@3.3.3:
     resolution:
       { integrity: sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA== }
     dependencies:
       toggle-selection: 1.0.6
-    dev: false
 
   /core-js-compat@3.38.1:
     resolution:
       { integrity: sha512-JRH6gfXxGmrzF3tZ57lFx97YARxCXPaMzPo6jELZhv88pBH5VXpQ+y0znKGlFnzuaihqhLbefxSJxWJMPtfDzw== }
     dependencies:
       browserslist: 4.23.3
-    dev: false
 
   /cors@2.8.5:
     resolution:
@@ -16467,7 +16029,6 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
-    dev: false
 
   /cosmiconfig@8.3.6(typescript@5.5.4):
     resolution:
@@ -16483,8 +16044,8 @@ snapshots:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
+    optionalDependencies:
       typescript: 5.5.4
-    dev: false
 
   /create-require@1.1.1:
     resolution:
@@ -16498,7 +16059,6 @@ snapshots:
     hasBin: true
     dependencies:
       cross-spawn: 7.0.3
-    dev: true
 
   /cross-spawn@6.0.5:
     resolution:
@@ -16510,7 +16070,6 @@ snapshots:
       semver: 5.7.2
       shebang-command: 1.2.0
       which: 1.3.1
-    dev: true
 
   /cross-spawn@7.0.3:
     resolution:
@@ -16532,7 +16091,6 @@ snapshots:
       { integrity: sha512-fJAcud6B3rRu+KHYk+Bwf+WFL2MDCJJ1XG9x137tJQ0xYxor7XziQtuGFbWNdqrvF4Tk26O3H73nfVqXt/fW1A== }
     dependencies:
       hyphenate-style-name: 1.1.0
-    dev: false
 
   /css-select@5.1.0:
     resolution:
@@ -16543,7 +16101,6 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.1.0
       nth-check: 2.1.1
-    dev: false
 
   /css-tree@1.1.3:
     resolution:
@@ -16552,7 +16109,6 @@ snapshots:
     dependencies:
       mdn-data: 2.0.14
       source-map: 0.6.1
-    dev: false
 
   /css-tree@2.2.1:
     resolution:
@@ -16561,7 +16117,6 @@ snapshots:
     dependencies:
       mdn-data: 2.0.28
       source-map-js: 1.2.0
-    dev: false
 
   /css-tree@2.3.1:
     resolution:
@@ -16591,7 +16146,6 @@ snapshots:
     engines: { node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: ">=7.0.0" }
     dependencies:
       css-tree: 2.2.1
-    dev: false
 
   /csstype@3.1.3:
     resolution:
@@ -16603,7 +16157,6 @@ snapshots:
     engines: { node: ">=12" }
     dependencies:
       internmap: 2.0.3
-    dev: false
 
   /d3-color@3.1.0:
     resolution:
@@ -16629,7 +16182,6 @@ snapshots:
     engines: { node: ">=12" }
     dependencies:
       d3-color: 3.1.0
-    dev: false
 
   /d3-path@3.1.0:
     resolution:
@@ -16647,7 +16199,6 @@ snapshots:
       d3-interpolate: 3.0.1
       d3-time: 3.1.0
       d3-time-format: 4.1.0
-    dev: false
 
   /d3-shape@3.2.0:
     resolution:
@@ -16655,7 +16206,6 @@ snapshots:
     engines: { node: ">=12" }
     dependencies:
       d3-path: 3.1.0
-    dev: false
 
   /d3-time-format@4.1.0:
     resolution:
@@ -16663,7 +16213,6 @@ snapshots:
     engines: { node: ">=12" }
     dependencies:
       d3-time: 3.1.0
-    dev: false
 
   /d3-time@3.1.0:
     resolution:
@@ -16671,7 +16220,6 @@ snapshots:
     engines: { node: ">=12" }
     dependencies:
       d3-array: 3.2.4
-    dev: false
 
   /d3-timer@3.0.1:
     resolution:
@@ -16691,7 +16239,6 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-data-view: 1.0.1
-    dev: true
 
   /data-view-byte-length@1.0.1:
     resolution:
@@ -16701,7 +16248,6 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-data-view: 1.0.1
-    dev: true
 
   /data-view-byte-offset@1.0.0:
     resolution:
@@ -16786,7 +16332,6 @@ snapshots:
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.2
       which-typed-array: 1.1.15
-    dev: true
 
   /deep-is@0.1.4:
     resolution:
@@ -16814,7 +16359,6 @@ snapshots:
   defaults@1.0.4:
     dependencies:
       clone: 1.0.4
-    dev: false
 
   /define-data-property@1.1.4:
     resolution:
@@ -16824,7 +16368,6 @@ snapshots:
       es-define-property: 1.0.0
       es-errors: 1.3.0
       gopd: 1.0.1
-    dev: true
 
   define-lazy-prop@3.0.0: {}
 
@@ -16833,7 +16376,6 @@ snapshots:
       define-data-property: 1.1.4
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
-    dev: true
 
   /delayed-stream@1.0.0:
     resolution:
@@ -16899,7 +16441,6 @@ snapshots:
     engines: { node: ">=8" }
     dependencies:
       path-type: 4.0.0
-    dev: true
 
   /dlv@1.1.3:
     resolution:
@@ -16912,7 +16453,6 @@ snapshots:
     engines: { node: ">=0.10.0" }
     dependencies:
       esutils: 2.0.3
-    dev: true
 
   /doctrine@3.0.0:
     resolution:
@@ -16920,7 +16460,6 @@ snapshots:
     engines: { node: ">=6.0.0" }
     dependencies:
       esutils: 2.0.3
-    dev: true
 
   /dom-helpers@5.2.1:
     resolution:
@@ -16928,7 +16467,6 @@ snapshots:
     dependencies:
       "@babel/runtime": 7.25.6
       csstype: 3.1.3
-    dev: false
 
   /dom-serializer@2.0.0:
     resolution:
@@ -16937,7 +16475,6 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
-    dev: false
 
   /domelementtype@2.3.0:
     resolution:
@@ -16950,7 +16487,6 @@ snapshots:
     engines: { node: ">= 4" }
     dependencies:
       domelementtype: 2.3.0
-    dev: false
 
   /domutils@3.1.0:
     resolution:
@@ -16959,7 +16495,6 @@ snapshots:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
       domhandler: 5.0.3
-    dev: false
 
   /dot-case@3.0.4:
     resolution:
@@ -16967,7 +16502,6 @@ snapshots:
     dependencies:
       no-case: 3.0.4
       tslib: 2.7.0
-    dev: false
 
   /dotenv-cli@7.4.2:
     resolution:
@@ -16978,7 +16512,6 @@ snapshots:
       dotenv: 16.4.5
       dotenv-expand: 10.0.0
       minimist: 1.2.8
-    dev: true
 
   /dotenv-expand@10.0.0:
     resolution:
@@ -17028,7 +16561,6 @@ snapshots:
       commander: 10.0.1
       minimatch: 9.0.1
       semver: 7.6.3
-    dev: false
 
   /electron-to-chromium@1.5.13:
     resolution:
@@ -17043,7 +16575,6 @@ snapshots:
       embla-carousel: 8.2.0
       embla-carousel-reactive-utils: 8.2.0(embla-carousel@8.2.0)
       react: 18.3.1
-    dev: false
 
   /embla-carousel-reactive-utils@8.2.0(embla-carousel@8.2.0):
     resolution:
@@ -17052,7 +16583,6 @@ snapshots:
       embla-carousel: 8.2.0
     dependencies:
       embla-carousel: 8.2.0
-    dev: false
 
   embla-carousel@8.2.0: {}
 
@@ -17095,7 +16625,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
 
   /enhanced-resolve@5.17.1:
     resolution:
@@ -17104,7 +16633,6 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.1
-    dev: true
 
   /entities@4.5.0:
     resolution:
@@ -17123,7 +16651,6 @@ snapshots:
       { integrity: sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ== }
     dependencies:
       stackframe: 1.3.4
-    dev: false
 
   /es-abstract@1.23.3:
     resolution:
@@ -17176,7 +16703,6 @@ snapshots:
       typed-array-length: 1.0.6
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.15
-    dev: true
 
   /es-define-property@1.0.0:
     resolution:
@@ -17184,7 +16710,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       get-intrinsic: 1.2.4
-    dev: true
 
   /es-errors@1.3.0:
     resolution:
@@ -17205,7 +16730,6 @@ snapshots:
       is-string: 1.0.7
       isarray: 2.0.5
       stop-iteration-iterator: 1.0.0
-    dev: true
 
   /es-iterator-helpers@1.0.19:
     resolution:
@@ -17226,7 +16750,6 @@ snapshots:
       internal-slot: 1.0.7
       iterator.prototype: 1.1.2
       safe-array-concat: 1.1.2
-    dev: true
 
   /es-object-atoms@1.0.0:
     resolution:
@@ -17234,7 +16757,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       es-errors: 1.3.0
-    dev: true
 
   /es-set-tostringtag@2.0.3:
     resolution:
@@ -17244,14 +16766,12 @@ snapshots:
       get-intrinsic: 1.2.4
       has-tostringtag: 1.0.2
       hasown: 2.0.2
-    dev: true
 
   /es-shim-unscopables@1.0.2:
     resolution:
       { integrity: sha512-J3yBRXCzDu4ULnQwxyToo/OjdMx6akgVC7K6few0a7F/0wLtmKKN7I73AH5T2836UuXRqN7Qg+IIUw/+YJksRw== }
     dependencies:
       hasown: 2.0.2
-    dev: true
 
   /es-to-primitive@1.2.1:
     resolution:
@@ -17261,7 +16781,6 @@ snapshots:
       is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
-    dev: true
 
   esbuild-android-64@0.14.47:
     optional: true
@@ -17468,17 +16987,17 @@ snapshots:
       "@typescript-eslint/parser": 6.21.0(eslint@8.57.0)(typescript@5.5.4)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.9.0(eslint@8.57.0)
       eslint-plugin-react: 7.35.0(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
+    optionalDependencies:
       typescript: 5.5.4
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - eslint-plugin-import-x
       - supports-color
-    dev: true
 
   /eslint-config-turbo@2.1.0(eslint@8.57.0):
     resolution:
@@ -17488,7 +17007,6 @@ snapshots:
     dependencies:
       eslint: 8.57.0
       eslint-plugin-turbo: 2.1.0(eslint@8.57.0)
-    dev: true
 
   /eslint-import-resolver-node@0.3.9:
     resolution:
@@ -17499,7 +17017,6 @@ snapshots:
       resolve: 1.22.8
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.29.1)(eslint@8.57.0):
     resolution:
@@ -17511,14 +17028,13 @@ snapshots:
     dependencies:
       debug: 4.3.6
       eslint: 8.57.0
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0)
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.8
       tsconfig-paths: 3.15.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0):
     resolution:
@@ -17538,18 +17054,18 @@ snapshots:
       debug: 4.3.6
       enhanced-resolve: 5.17.1
       eslint: 8.57.0
-      eslint-module-utils: 2.8.2(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-module-utils: 2.8.2(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.8.0
       is-bun-module: 1.1.0
       is-glob: 4.0.3
+    optionalDependencies:
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
     transitivePeerDependencies:
       - "@typescript-eslint/parser"
       - eslint-import-resolver-node
       - eslint-import-resolver-webpack
       - supports-color
-    dev: true
 
   /eslint-module-utils@2.8.2(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0):
     resolution:
@@ -17580,7 +17096,6 @@ snapshots:
       eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.29.1)(eslint@8.57.0)
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /eslint-module-utils@2.8.2(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0):
     resolution:
@@ -17608,10 +17123,9 @@ snapshots:
       debug: 3.2.7
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0):
     resolution:
@@ -17633,7 +17147,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.2(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.0)
+      eslint-module-utils: 2.8.2(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -17647,7 +17161,6 @@ snapshots:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
-    dev: true
 
   /eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0):
     resolution:
@@ -17669,7 +17182,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.2(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-module-utils: 2.8.2(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -17683,7 +17196,6 @@ snapshots:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
-    dev: true
 
   /eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0):
     resolution:
@@ -17709,7 +17221,6 @@ snapshots:
       object.fromentries: 2.0.8
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
-    dev: true
 
   /eslint-plugin-react-hooks@4.6.2(eslint@8.57.0):
     resolution:
@@ -17719,7 +17230,6 @@ snapshots:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
     dependencies:
       eslint: 8.57.0
-    dev: true
 
   /eslint-plugin-react@7.35.0(eslint@8.57.0):
     resolution:
@@ -17747,7 +17257,6 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.11
       string.prototype.repeat: 1.0.0
-    dev: true
 
   /eslint-plugin-simple-import-sort@7.0.0(eslint@8.57.0):
     resolution:
@@ -17756,7 +17265,6 @@ snapshots:
       eslint: ">=5.0.0"
     dependencies:
       eslint: 8.57.0
-    dev: true
 
   /eslint-plugin-turbo@2.1.0(eslint@8.57.0):
     resolution:
@@ -17766,7 +17274,6 @@ snapshots:
     dependencies:
       dotenv: 16.0.3
       eslint: 8.57.0
-    dev: true
 
   /eslint-scope@7.2.2:
     resolution:
@@ -17775,7 +17282,6 @@ snapshots:
     dependencies:
       esrecurse: 4.3.0
       estraverse: 5.3.0
-    dev: true
 
   /eslint-visitor-keys@3.4.3:
     resolution:
@@ -17829,7 +17335,6 @@ snapshots:
       text-table: 0.2.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /espree@9.6.1:
     resolution:
@@ -17854,7 +17359,6 @@ snapshots:
     engines: { node: ">=0.10" }
     dependencies:
       estraverse: 5.3.0
-    dev: true
 
   /esrecurse@4.3.0:
     resolution:
@@ -17862,7 +17366,6 @@ snapshots:
     engines: { node: ">=4.0" }
     dependencies:
       estraverse: 5.3.0
-    dev: true
 
   /estraverse@5.3.0:
     resolution:
@@ -17955,14 +17458,12 @@ snapshots:
       onetime: 6.0.0
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
-    dev: true
 
   exit-hook@2.2.1: {}
 
   extend-shallow@2.0.1:
     dependencies:
       is-extendable: 0.1.1
-    dev: false
 
   /fast-deep-equal@2.0.1:
     resolution:
@@ -17989,7 +17490,6 @@ snapshots:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.8
-    dev: true
 
   /fast-json-stable-stringify@2.1.0:
     resolution:
@@ -18016,7 +17516,6 @@ snapshots:
       { integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w== }
     dependencies:
       reusify: 1.0.4
-    dev: true
 
   fd-slicer@1.1.0:
     dependencies:
@@ -18030,7 +17529,6 @@ snapshots:
   file-entry-cache@6.0.1:
     dependencies:
       flat-cache: 3.2.0
-    dev: true
 
   file-uri-to-path@1.0.0: {}
 
@@ -18045,7 +17543,6 @@ snapshots:
     dependencies:
       locate-path: 6.0.0
       path-exists: 4.0.0
-    dev: true
 
   /flat-cache@3.2.0:
     resolution:
@@ -18055,7 +17552,6 @@ snapshots:
       flatted: 3.3.1
       keyv: 4.5.4
       rimraf: 3.0.2
-    dev: true
 
   /flatted@3.3.1:
     resolution:
@@ -18078,7 +17574,6 @@ snapshots:
       { integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw== }
     dependencies:
       is-callable: 1.2.7
-    dev: true
 
   /foreground-child@3.3.0:
     resolution:
@@ -18106,10 +17601,10 @@ snapshots:
 
   framer-motion@11.5.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
+      tslib: 2.7.0
+    optionalDependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      tslib: 2.7.0
-    dev: false
 
   fs-extra@11.1.0:
     dependencies:
@@ -18130,7 +17625,6 @@ snapshots:
   fs-minipass@2.1.0:
     dependencies:
       minipass: 3.3.6
-    dev: false
 
   /fs.realpath@1.0.0:
     resolution:
@@ -18163,7 +17657,6 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       functions-have-names: 1.2.3
-    dev: true
 
   /functions-have-names@1.2.3:
     resolution:
@@ -18191,7 +17684,6 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wide-align: 1.1.5
-    dev: false
 
   geist@1.3.1(next@14.2.8(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
@@ -18219,7 +17711,6 @@ snapshots:
       has-proto: 1.0.3
       has-symbols: 1.0.3
       hasown: 2.0.2
-    dev: true
 
   /get-nonce@1.0.1:
     resolution:
@@ -18249,14 +17740,12 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
-    dev: true
 
   /get-tsconfig@4.8.0:
     resolution:
       { integrity: sha512-Pgba6TExTZ0FJAn1qkJAjIeKoDJ3CsI2ChuLohJnZl/tTU8MVrq3b+2t5UOPfRa4RMsorClBjJALkJUMjG1PAw== }
     dependencies:
       resolve-pkg-maps: 1.0.0
-    dev: true
 
   /git-hooks-list@3.1.0:
     resolution:
@@ -18276,7 +17765,6 @@ snapshots:
     engines: { node: ">=10.13.0" }
     dependencies:
       is-glob: 4.0.3
-    dev: true
 
   /glob@10.3.10:
     resolution:
@@ -18289,7 +17777,6 @@ snapshots:
       minimatch: 9.0.5
       minipass: 7.1.2
       path-scurry: 1.11.1
-    dev: true
 
   /glob@10.3.4:
     resolution:
@@ -18302,7 +17789,6 @@ snapshots:
       minimatch: 9.0.5
       minipass: 7.1.2
       path-scurry: 1.11.1
-    dev: false
 
   /glob@10.4.5:
     resolution:
@@ -18339,7 +17825,6 @@ snapshots:
     engines: { node: ">=8" }
     dependencies:
       type-fest: 0.20.2
-    dev: true
 
   /globalthis@1.0.4:
     resolution:
@@ -18348,7 +17833,6 @@ snapshots:
     dependencies:
       define-properties: 1.2.1
       gopd: 1.0.1
-    dev: true
 
   /globby@11.1.0:
     resolution:
@@ -18361,7 +17845,6 @@ snapshots:
       ignore: 5.3.2
       merge2: 1.4.1
       slash: 3.0.0
-    dev: true
 
   /globby@13.2.2:
     resolution:
@@ -18373,14 +17856,12 @@ snapshots:
       ignore: 5.3.2
       merge2: 1.4.1
       slash: 4.0.0
-    dev: true
 
   /gopd@1.0.1:
     resolution:
       { integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA== }
     dependencies:
       get-intrinsic: 1.2.4
-    dev: true
 
   /graceful-fs@4.2.11:
     resolution:
@@ -18400,7 +17881,6 @@ snapshots:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
-    dev: false
 
   /gzip-size@6.0.0:
     resolution:
@@ -18429,7 +17909,6 @@ snapshots:
       { integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg== }
     dependencies:
       es-define-property: 1.0.0
-    dev: true
 
   /has-proto@1.0.3:
     resolution:
@@ -18449,7 +17928,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-symbols: 1.0.3
-    dev: true
 
   /has-unicode@2.0.1:
     resolution:
@@ -18489,7 +17967,6 @@ snapshots:
       dom-serializer: 2.0.0
       htmlparser2: 8.0.2
       selderee: 0.11.0
-    dev: false
 
   /htmlparser2@8.0.2:
     resolution:
@@ -18499,7 +17976,6 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.1.0
       entities: 4.5.0
-    dev: false
 
   http-errors@1.4.0:
     dependencies:
@@ -18513,7 +17989,6 @@ snapshots:
       setprototypeof: 1.1.1
       statuses: 1.5.0
       toidentifier: 1.0.0
-    dev: false
 
   /https-proxy-agent@5.0.1:
     resolution:
@@ -18524,7 +17999,6 @@ snapshots:
       debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   human-signals@1.1.1: {}
 
@@ -18545,7 +18019,6 @@ snapshots:
     engines: { node: ">=0.10.0" }
     dependencies:
       safer-buffer: 2.1.2
-    dev: false
 
   /ieee754@1.2.1:
     resolution:
@@ -18592,7 +18065,6 @@ snapshots:
       { integrity: sha512-lhYo5qNTQp3EvSSp3sRvXMbVQTLrvGV6DycRMJ5dm2BLMiJ30wpXKdDdgX+GmJZ5uQMucwRKHamXSst3Sj/Giw== }
     dependencies:
       css-in-js-utils: 3.1.0
-    dev: false
 
   /input-otp@1.2.4(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -18603,7 +18075,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /internal-slot@1.0.7:
     resolution:
@@ -18613,7 +18084,6 @@ snapshots:
       es-errors: 1.3.0
       hasown: 2.0.2
       side-channel: 1.0.6
-    dev: true
 
   /internmap@2.0.3:
     resolution:
@@ -18626,7 +18096,6 @@ snapshots:
       { integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA== }
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   is-absolute@1.0.0:
     dependencies:
@@ -18637,7 +18106,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       has-tostringtag: 1.0.2
-    dev: true
 
   /is-array-buffer@3.0.4:
     resolution:
@@ -18646,7 +18114,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       get-intrinsic: 1.2.4
-    dev: true
 
   /is-arrayish@0.2.1:
     resolution:
@@ -18658,14 +18125,12 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-tostringtag: 1.0.2
-    dev: true
 
   /is-bigint@1.0.4:
     resolution:
       { integrity: sha512-zB9CruMamjym81i2JZ3UMn54PKGsQzsJeo6xvN3HJJ4CAsQNB6iRutp2To77OfCNuoxspsIhzaPoO1zyCEhFOg== }
     dependencies:
       has-bigints: 1.0.2
-    dev: true
 
   /is-binary-path@2.1.0:
     resolution:
@@ -18681,7 +18146,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       has-tostringtag: 1.0.2
-    dev: true
 
   /is-buffer@2.0.5:
     resolution:
@@ -18694,7 +18158,6 @@ snapshots:
       { integrity: sha512-4mTAVPlrXpaN3jtF0lsnPCMGnq4+qZjVIKq0HCpfcqf8OC1SM5oATCIAPM5V5FN05qp2NNnFndphmdZS9CV3hA== }
     dependencies:
       semver: 7.6.3
-    dev: true
 
   /is-callable@1.2.7:
     resolution:
@@ -18715,7 +18178,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       is-typed-array: 1.1.13
-    dev: true
 
   /is-date-object@1.0.5:
     resolution:
@@ -18723,7 +18185,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-tostringtag: 1.0.2
-    dev: true
 
   is-docker@2.2.1: {}
 
@@ -18741,7 +18202,6 @@ snapshots:
       { integrity: sha512-0by5vtUJs8iFQb5TYUHHPudOR+qXYIMKtiUzvLIZITZUjknFmziyBJuLhVRc+Ds0dREFlskDNJKYIdIzu/9pfw== }
     dependencies:
       call-bind: 1.0.7
-    dev: true
 
   /is-fullwidth-code-point@3.0.0:
     resolution:
@@ -18754,7 +18214,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-tostringtag: 1.0.2
-    dev: true
 
   is-git-repository@2.0.0:
     dependencies:
@@ -18791,7 +18250,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-tostringtag: 1.0.2
-    dev: true
 
   /is-number@7.0.0:
     resolution:
@@ -18829,7 +18287,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       has-tostringtag: 1.0.2
-    dev: true
 
   is-relative@1.0.0:
     dependencies:
@@ -18843,7 +18300,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       call-bind: 1.0.7
-    dev: true
 
   is-stream@2.0.1: {}
 
@@ -18855,7 +18311,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-tostringtag: 1.0.2
-    dev: true
 
   /is-symbol@1.0.4:
     resolution:
@@ -18863,7 +18318,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       has-symbols: 1.0.3
-    dev: true
 
   /is-typed-array@1.1.13:
     resolution:
@@ -18871,7 +18325,6 @@ snapshots:
     engines: { node: ">= 0.4" }
     dependencies:
       which-typed-array: 1.1.15
-    dev: true
 
   is-unc-path@1.0.0:
     dependencies:
@@ -18892,7 +18345,6 @@ snapshots:
       { integrity: sha512-qctsuLZmIQ0+vSSMfoVvyFe2+GSEvnmZ2ezTup1SBse9+twCCeial6EEi3Nc2KFcf6+qz2FBPnjXsk8xhKSaPQ== }
     dependencies:
       call-bind: 1.0.7
-    dev: true
 
   /is-weakset@2.0.3:
     resolution:
@@ -18901,7 +18353,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       get-intrinsic: 1.2.4
-    dev: true
 
   is-what@4.1.16: {}
 
@@ -18931,7 +18382,6 @@ snapshots:
       has-symbols: 1.0.3
       reflect.getprototypeof: 1.0.6
       set-function-name: 2.0.2
-    dev: true
 
   /jackspeak@2.3.6:
     resolution:
@@ -18988,7 +18438,6 @@ snapshots:
       glob: 10.4.5
       js-cookie: 3.0.5
       nopt: 7.2.1
-    dev: false
 
   /js-cookie@2.2.1:
     resolution:
@@ -19012,7 +18461,6 @@ snapshots:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
-    dev: false
 
   /js-yaml@4.1.0:
     resolution:
@@ -19073,7 +18521,6 @@ snapshots:
     hasBin: true
     dependencies:
       minimist: 1.2.8
-    dev: true
 
   /json5@2.2.3:
     resolution:
@@ -19090,7 +18537,6 @@ snapshots:
       "@types/diff-match-patch": 1.0.36
       chalk: 5.3.0
       diff-match-patch: 1.0.5
-    dev: false
 
   jsonfile@4.0.0:
     optionalDependencies:
@@ -19121,7 +18567,6 @@ snapshots:
       array.prototype.flat: 1.3.2
       object.assign: 4.1.5
       object.values: 1.2.0
-    dev: true
 
   jwa@1.4.1:
     dependencies:
@@ -19137,7 +18582,6 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
-    dev: true
 
   kind-of@6.0.3: {}
 
@@ -19154,7 +18598,6 @@ snapshots:
     engines: { node: ">=0.10" }
     dependencies:
       language-subtag-registry: 0.3.23
-    dev: true
 
   /leac@0.6.0:
     resolution:
@@ -19168,7 +18611,6 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
-    dev: true
 
   /lilconfig@2.1.0:
     resolution:
@@ -19200,7 +18642,6 @@ snapshots:
       parse-json: 4.0.0
       pify: 3.0.0
       strip-bom: 3.0.0
-    dev: true
 
   /locate-character@3.0.0:
     resolution:
@@ -19213,7 +18654,6 @@ snapshots:
     engines: { node: ">=10" }
     dependencies:
       p-locate: 5.0.0
-    dev: true
 
   /lodash.castarray@4.4.0:
     resolution:
@@ -19249,7 +18689,6 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       is-unicode-supported: 0.1.0
-    dev: false
 
   log-symbols@5.1.0:
     dependencies:
@@ -19265,14 +18704,12 @@ snapshots:
       { integrity: sha512-edNu/8D5MKVfGVFRhFf8aAxiTM6Wumfz5XsaatSxlD3w4R1d/WEKUTydCdPGbl9K7QG/Ca3GnDV2sIKIpXRQcw== }
     dependencies:
       get-func-name: 2.0.2
-    dev: true
 
   /lower-case@2.0.2:
     resolution:
       { integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg== }
     dependencies:
       tslib: 2.7.0
-    dev: false
 
   /lru-cache@10.4.3:
     resolution:
@@ -19290,7 +18727,6 @@ snapshots:
     engines: { node: ">=10" }
     dependencies:
       yallist: 4.0.0
-    dev: false
 
   /lucide-react@0.435.0(react@18.3.1):
     resolution:
@@ -19299,7 +18735,6 @@ snapshots:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
     dependencies:
       react: 18.3.1
-    dev: false
 
   /magic-string@0.30.11:
     resolution:
@@ -19335,7 +18770,6 @@ snapshots:
     dependencies:
       marked: 7.0.4
       react: 18.3.1
-    dev: false
 
   /mdn-data@2.0.14:
     resolution:
@@ -19383,7 +18817,6 @@ snapshots:
       arg: 4.1.0
       content-type: 1.0.4
       raw-body: 2.4.1
-    dev: false
 
   micro@9.3.5-canary.3:
     dependencies:
@@ -19395,7 +18828,6 @@ snapshots:
     dependencies:
       braces: 3.0.3
       picomatch: 2.3.1
-    dev: true
 
   /mime-db@1.52.0:
     resolution:
@@ -19439,7 +18871,6 @@ snapshots:
     engines: { node: ">=16 || 14 >=14.17" }
     dependencies:
       brace-expansion: 2.0.1
-    dev: false
 
   /minimatch@9.0.3:
     resolution:
@@ -19447,7 +18878,6 @@ snapshots:
     engines: { node: ">=16 || 14 >=14.17" }
     dependencies:
       brace-expansion: 2.0.1
-    dev: true
 
   /minimatch@9.0.5:
     resolution:
@@ -19469,7 +18899,6 @@ snapshots:
   minipass@3.3.6:
     dependencies:
       yallist: 4.0.0
-    dev: false
 
   /minipass@5.0.0:
     resolution:
@@ -19512,7 +18941,6 @@ snapshots:
       any-promise: 1.3.0
       object-assign: 4.1.1
       thenify-all: 1.6.0
-    dev: true
 
   /nano-css@5.6.2(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -19556,14 +18984,12 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       uuid: 8.3.2
-    dev: false
 
   next-seo@6.5.0(next@14.2.8(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       next: 14.2.8(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /next-themes@0.3.0(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -19574,7 +19000,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /next@14.2.3(@babel/core@7.24.5)(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -19617,14 +19042,13 @@ snapshots:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
-    dev: false
 
   next@14.2.8(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       "@next/env": 14.2.8
       "@swc/helpers": 0.5.5
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001655
+      caniuse-lite: 1.0.30001657
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.3.1
@@ -19645,7 +19069,6 @@ snapshots:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
-    dev: false
 
   /nice-try@1.0.5:
     resolution:
@@ -19658,7 +19081,6 @@ snapshots:
     dependencies:
       lower-case: 2.0.2
       tslib: 2.7.0
-    dev: false
 
   node-addon-api@5.1.0: {}
 
@@ -19675,7 +19097,6 @@ snapshots:
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
-    dev: false
 
   node-fetch@3.3.2:
     dependencies:
@@ -19694,7 +19115,6 @@ snapshots:
     hasBin: true
     dependencies:
       abbrev: 1.1.1
-    dev: false
 
   /nopt@7.2.1:
     resolution:
@@ -19703,7 +19123,6 @@ snapshots:
     hasBin: true
     dependencies:
       abbrev: 2.0.0
-    dev: false
 
   /normalize-package-data@2.5.0:
     resolution:
@@ -19713,7 +19132,6 @@ snapshots:
       resolve: 1.22.8
       semver: 5.7.2
       validate-npm-package-license: 3.0.4
-    dev: true
 
   /normalize-path@3.0.0:
     resolution:
@@ -19740,7 +19158,6 @@ snapshots:
       read-pkg: 3.0.0
       shell-quote: 1.8.1
       string.prototype.padend: 3.1.6
-    dev: true
 
   npm-run-path@4.0.1:
     dependencies:
@@ -19749,7 +19166,6 @@ snapshots:
   npm-run-path@5.3.0:
     dependencies:
       path-key: 4.0.0
-    dev: true
 
   /npmlog@5.0.1:
     resolution:
@@ -19760,14 +19176,12 @@ snapshots:
       console-control-strings: 1.1.0
       gauge: 3.0.2
       set-blocking: 2.0.0
-    dev: false
 
   /nth-check@2.1.1:
     resolution:
       { integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w== }
     dependencies:
       boolbase: 1.0.0
-    dev: false
 
   /oauth4webapi@2.12.0:
     resolution:
@@ -19809,7 +19223,6 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-    dev: true
 
   /object-keys@1.1.1:
     resolution:
@@ -19826,7 +19239,6 @@ snapshots:
       define-properties: 1.2.1
       has-symbols: 1.0.3
       object-keys: 1.1.1
-    dev: true
 
   /object.entries@1.1.8:
     resolution:
@@ -19836,7 +19248,6 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
-    dev: true
 
   /object.fromentries@2.0.8:
     resolution:
@@ -19847,7 +19258,6 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       es-object-atoms: 1.0.0
-    dev: true
 
   /object.groupby@1.0.3:
     resolution:
@@ -19857,7 +19267,6 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.23.3
-    dev: true
 
   /object.values@1.2.0:
     resolution:
@@ -19867,7 +19276,6 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
-    dev: true
 
   /obuf@1.1.2:
     resolution:
@@ -19903,7 +19311,6 @@ snapshots:
     engines: { node: ">=6" }
     dependencies:
       mimic-fn: 2.1.0
-    dev: false
 
   /onetime@6.0.0:
     resolution:
@@ -19911,7 +19318,6 @@ snapshots:
     engines: { node: ">=12" }
     dependencies:
       mimic-fn: 4.0.0
-    dev: true
 
   open@9.1.0:
     dependencies:
@@ -19930,7 +19336,6 @@ snapshots:
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.3
-    dev: false
 
   /optionator@0.9.4:
     resolution:
@@ -19943,7 +19348,6 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.5
-    dev: true
 
   /ora@5.4.1:
     resolution:
@@ -19959,7 +19363,6 @@ snapshots:
       log-symbols: 4.1.0
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
-    dev: false
 
   ora@7.0.1:
     dependencies:
@@ -19980,7 +19383,6 @@ snapshots:
   p-limit@3.1.0:
     dependencies:
       yocto-queue: 0.1.0
-    dev: true
 
   /p-locate@5.0.0:
     resolution:
@@ -19988,7 +19390,6 @@ snapshots:
     engines: { node: ">=10" }
     dependencies:
       p-limit: 3.1.0
-    dev: true
 
   /package-json-from-dist@1.0.0:
     resolution:
@@ -20010,7 +19411,6 @@ snapshots:
     dependencies:
       error-ex: 1.3.2
       json-parse-better-errors: 1.0.2
-    dev: true
 
   /parse-json@5.2.0:
     resolution:
@@ -20021,7 +19421,6 @@ snapshots:
       error-ex: 1.3.2
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
-    dev: false
 
   parse-ms@2.1.0: {}
 
@@ -20029,7 +19428,6 @@ snapshots:
     dependencies:
       leac: 0.6.0
       peberminta: 0.9.0
-    dev: false
 
   pascal-case@3.1.2:
     dependencies:
@@ -20093,7 +19491,6 @@ snapshots:
   path-type@3.0.0:
     dependencies:
       pify: 3.0.0
-    dev: true
 
   /path-type@4.0.0:
     resolution:
@@ -20122,7 +19519,6 @@ snapshots:
       "@types/estree": 1.0.5
       estree-walker: 3.0.3
       is-reference: 3.0.2
-    dev: false
 
   /pg-int8@1.0.1:
     resolution:
@@ -20203,11 +19599,10 @@ snapshots:
 
   postcss-import@15.1.0(postcss@8.4.41):
     dependencies:
-      postcss: 8.4.41
+      postcss: 8.4.45
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
-    dev: true
 
   postcss-js@4.0.1(postcss@8.4.41):
     dependencies:
@@ -20224,9 +19619,8 @@ snapshots:
 
   postcss-nested@6.2.0(postcss@8.4.41):
     dependencies:
-      postcss: 8.4.41
+      postcss: 8.4.45
       postcss-selector-parser: 6.1.2
-    dev: true
 
   /postcss-selector-parser@6.0.10:
     resolution:
@@ -20235,7 +19629,6 @@ snapshots:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
-    dev: true
 
   /postcss-selector-parser@6.1.2:
     resolution:
@@ -20244,7 +19637,6 @@ snapshots:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
-    dev: true
 
   /postcss-value-parser@4.2.0:
     resolution:
@@ -20256,9 +19648,8 @@ snapshots:
     engines: { node: ^10 || ^12 || >=14 }
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.1
+      picocolors: 1.1.0
       source-map-js: 1.2.0
-    dev: false
 
   /postcss@8.4.41:
     resolution:
@@ -20274,7 +19665,6 @@ snapshots:
   postgres-bytea@3.0.0:
     dependencies:
       obuf: 1.1.2
-    dev: false
 
   /postgres-date@2.1.0:
     resolution:
@@ -20301,7 +19691,6 @@ snapshots:
     dependencies:
       preact: 10.11.3
       pretty-format: 3.8.0
-    dev: false
 
   /preact-render-to-string@5.2.6(preact@10.23.2):
     resolution:
@@ -20345,7 +19734,6 @@ snapshots:
     dependencies:
       prettier: 3.3.3
       typescript: 5.5.4
-    dev: true
 
   /prettier-plugin-packagejson@2.5.2(prettier@3.3.3):
     resolution:
@@ -20356,10 +19744,10 @@ snapshots:
       prettier:
         optional: true
     dependencies:
-      prettier: 3.3.3
       sort-package-json: 2.10.1
       synckit: 0.9.1
-    dev: true
+    optionalDependencies:
+      prettier: 3.3.3
 
   /prettier-plugin-prisma@5.0.0(prettier@3.3.3):
     resolution:
@@ -20370,7 +19758,6 @@ snapshots:
     dependencies:
       "@prisma/prisma-schema-wasm": 4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
       prettier: 3.3.3
-    dev: true
 
   /prettier-plugin-sort-json@4.0.0(prettier@3.3.3):
     resolution:
@@ -20380,7 +19767,6 @@ snapshots:
       prettier: ^3.0.0
     dependencies:
       prettier: 3.3.3
-    dev: true
 
   /prettier-plugin-tailwindcss@0.6.6(@ianvs/prettier-plugin-sort-imports@4.3.1)(prettier-plugin-organize-imports@4.0.0)(prettier@3.3.3):
     resolution:
@@ -20499,7 +19885,6 @@ snapshots:
       http-errors: 1.7.3
       iconv-lite: 0.4.24
       unpipe: 1.0.0
-    dev: false
 
   react-beforeunload@2.6.0(react@18.3.1):
     dependencies:
@@ -20509,7 +19894,6 @@ snapshots:
     dependencies:
       date-fns: 3.6.0
       react: 18.3.1
-    dev: false
 
   /react-dom@18.3.1(react@18.3.1):
     resolution:
@@ -20520,7 +19904,6 @@ snapshots:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
-    dev: false
 
   /react-email@3.0.1(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -20538,7 +19921,7 @@ snapshots:
       glob: 10.3.4
       log-symbols: 4.1.0
       mime-types: 2.1.35
-      next: 14.2.3(@babel/core@7.24.5)(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.3(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       normalize-path: 3.0.0
       ora: 5.4.1
       socket.io: 4.7.5
@@ -20552,7 +19935,6 @@ snapshots:
       - sass
       - supports-color
       - utf-8-validate
-    dev: false
 
   /react-highlight-words@0.20.0(react@18.3.1):
     resolution:
@@ -20564,7 +19946,6 @@ snapshots:
       memoize-one: 4.0.3
       prop-types: 15.8.1
       react: 18.3.1
-    dev: false
 
   /react-hook-form@7.53.0(react@18.3.1):
     resolution:
@@ -20574,7 +19955,6 @@ snapshots:
       react: ^16.8.0 || ^17 || ^18 || ^19
     dependencies:
       react: 18.3.1
-    dev: false
 
   /react-hotkeys-hook@4.5.0(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -20585,7 +19965,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /react-is@16.13.1:
     resolution:
@@ -20596,7 +19975,6 @@ snapshots:
       { integrity: sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ== }
     dependencies:
       fast-deep-equal: 2.0.1
-    dev: false
 
   /react-remove-scroll-bar@2.3.6(@types/react@18.3.5)(react@18.3.1):
     resolution:
@@ -20664,7 +20042,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /react-smooth@4.0.1(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -20677,8 +20054,7 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-transition-group: 4.4.5(react-dom@18.3.1)(react@18.3.1)
-    dev: false
+      react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   /react-style-singleton@2.2.1(@types/react@18.3.5)(react@18.3.1):
     resolution:
@@ -20711,7 +20087,6 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /react-universal-interface@0.6.2(react@18.3.1)(tslib@2.7.0):
     resolution:
@@ -20722,7 +20097,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       tslib: 2.7.0
-    dev: false
 
   react-use@17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -20732,7 +20106,7 @@ snapshots:
       fast-deep-equal: 3.1.3
       fast-shallow-equal: 1.0.0
       js-cookie: 2.2.1
-      nano-css: 5.6.2(react-dom@18.3.1)(react@18.3.1)
+      nano-css: 5.6.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-universal-interface: 0.6.2(react@18.3.1)(tslib@2.7.0)
@@ -20742,7 +20116,6 @@ snapshots:
       throttle-debounce: 3.0.1
       ts-easing: 0.2.0
       tslib: 2.7.0
-    dev: false
 
   /react@18.3.1:
     resolution:
@@ -20750,14 +20123,12 @@ snapshots:
     engines: { node: ">=0.10.0" }
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /read-cache@1.0.0:
     resolution:
       { integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA== }
     dependencies:
       pify: 2.3.0
-    dev: true
 
   /read-pkg@3.0.0:
     resolution:
@@ -20767,7 +20138,6 @@ snapshots:
       load-json-file: 4.0.0
       normalize-package-data: 2.5.0
       path-type: 3.0.0
-    dev: true
 
   /readable-stream@3.6.2:
     resolution:
@@ -20777,7 +20147,6 @@ snapshots:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
-    dev: false
 
   readdirp@3.3.0:
     dependencies:
@@ -20792,7 +20161,6 @@ snapshots:
       { integrity: sha512-kivNFO+0OcUNu7jQquLXAxz1FIwZj8nrj+YkOKc5694NbjCvcT6aSZiIzNzd2Kul4o4rTto8QVR9lMNtxD4G1w== }
     dependencies:
       decimal.js-light: 2.5.1
-    dev: false
 
   /recharts@2.12.7(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -20808,11 +20176,10 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-is: 16.13.1
-      react-smooth: 4.0.1(react-dom@18.3.1)(react@18.3.1)
+      react-smooth: 4.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts-scale: 0.4.5
       tiny-invariant: 1.3.3
       victory-vendor: 36.9.2
-    dev: false
 
   /reflect.getprototypeof@1.0.6:
     resolution:
@@ -20826,7 +20193,6 @@ snapshots:
       get-intrinsic: 1.2.4
       globalthis: 1.0.4
       which-builtin-type: 1.1.4
-    dev: true
 
   /regenerate-unicode-properties@10.1.1:
     resolution:
@@ -20834,7 +20200,6 @@ snapshots:
     engines: { node: ">=4" }
     dependencies:
       regenerate: 1.4.2
-    dev: false
 
   /regenerate@1.4.2:
     resolution:
@@ -20862,7 +20227,6 @@ snapshots:
       define-properties: 1.2.1
       es-errors: 1.3.0
       set-function-name: 2.0.2
-    dev: true
 
   /regexpu-core@5.3.2:
     resolution:
@@ -20875,7 +20239,6 @@ snapshots:
       regjsparser: 0.9.1
       unicode-match-property-ecmascript: 2.0.0
       unicode-match-property-value-ecmascript: 2.1.0
-    dev: false
 
   /regjsparser@0.9.1:
     resolution:
@@ -20883,7 +20246,6 @@ snapshots:
     hasBin: true
     dependencies:
       jsesc: 0.5.0
-    dev: false
 
   require-from-string@2.0.2: {}
 
@@ -20893,7 +20255,6 @@ snapshots:
     transitivePeerDependencies:
       - react
       - react-dom
-    dev: false
 
   /resize-observer-polyfill@1.5.1:
     resolution:
@@ -20926,7 +20287,6 @@ snapshots:
       is-core-module: 2.15.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    dev: true
 
   /restore-cursor@3.1.0:
     resolution:
@@ -20935,7 +20295,6 @@ snapshots:
     dependencies:
       onetime: 5.1.2
       signal-exit: 3.0.7
-    dev: false
 
   restore-cursor@4.0.0:
     dependencies:
@@ -20983,7 +20342,6 @@ snapshots:
       "@rollup/rollup-win32-ia32-msvc": 4.21.2
       "@rollup/rollup-win32-x64-msvc": 4.21.2
       fsevents: 2.3.3
-    dev: true
 
   /rtl-css-js@1.16.1:
     resolution:
@@ -20999,14 +20357,12 @@ snapshots:
   run-parallel@1.2.0:
     dependencies:
       queue-microtask: 1.2.3
-    dev: true
 
   /rxjs@7.8.1:
     resolution:
       { integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg== }
     dependencies:
       tslib: 2.7.0
-    dev: true
 
   /safe-array-concat@1.1.2:
     resolution:
@@ -21017,7 +20373,6 @@ snapshots:
       get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       isarray: 2.0.5
-    dev: true
 
   /safe-buffer@5.2.1:
     resolution:
@@ -21032,7 +20387,6 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-regex: 1.1.4
-    dev: true
 
   /safer-buffer@2.1.2:
     resolution:
@@ -21044,7 +20398,6 @@ snapshots:
       { integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ== }
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /screenfull@5.2.0:
     resolution:
@@ -21059,7 +20412,6 @@ snapshots:
     dependencies:
       extend-shallow: 2.0.1
       kind-of: 6.0.3
-    dev: false
 
   /secure-json-parse@2.7.0:
     resolution:
@@ -21071,7 +20423,6 @@ snapshots:
       { integrity: sha512-5TF+l7p4+OsnP8BCCvSyZiSPc4x4//p5uPwK8TCnVPJYRmU2aYKMpOXvw8zM5a5JvuuCGN1jmsMwuU2W02ukfA== }
     dependencies:
       parseley: 0.12.1
-    dev: false
 
   /semver@5.7.2:
     resolution:
@@ -21114,7 +20465,6 @@ snapshots:
       get-intrinsic: 1.2.4
       gopd: 1.0.1
       has-property-descriptors: 1.0.2
-    dev: true
 
   /set-function-name@2.0.2:
     resolution:
@@ -21125,7 +20475,6 @@ snapshots:
       es-errors: 1.3.0
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.2
-    dev: true
 
   /set-harmonic-interval@1.0.1:
     resolution:
@@ -21144,7 +20493,6 @@ snapshots:
     engines: { node: ">=0.10.0" }
     dependencies:
       shebang-regex: 1.0.0
-    dev: true
 
   /shebang-command@2.0.0:
     resolution:
@@ -21178,7 +20526,6 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
       object-inspect: 1.13.2
-    dev: true
 
   /siginfo@2.0.0:
     resolution:
@@ -21224,7 +20571,6 @@ snapshots:
     dependencies:
       dot-case: 3.0.4
       tslib: 2.7.0
-    dev: false
 
   /socket.io-adapter@2.5.5:
     resolution:
@@ -21236,7 +20582,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
 
   /socket.io-parser@4.2.4:
     resolution:
@@ -21247,7 +20592,6 @@ snapshots:
       debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /socket.io@4.7.5:
     resolution:
@@ -21265,7 +20609,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
 
   /sonner@1.5.0(react-dom@18.3.1)(react@18.3.1):
     resolution:
@@ -21276,7 +20619,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /sort-object-keys@1.1.3:
     resolution:
@@ -21296,7 +20638,6 @@ snapshots:
       is-plain-obj: 4.1.0
       semver: 7.6.3
       sort-object-keys: 1.1.3
-    dev: true
 
   /source-map-js@1.2.0:
     resolution:
@@ -21321,7 +20662,6 @@ snapshots:
     dependencies:
       spdx-expression-parse: 3.0.1
       spdx-license-ids: 3.0.20
-    dev: true
 
   /spdx-exceptions@2.5.0:
     resolution:
@@ -21334,7 +20674,6 @@ snapshots:
     dependencies:
       spdx-exceptions: 2.5.0
       spdx-license-ids: 3.0.20
-    dev: true
 
   /spdx-license-ids@3.0.20:
     resolution:
@@ -21354,14 +20693,12 @@ snapshots:
     dependencies:
       svelte: 4.2.19
       swrev: 4.0.0
-    dev: false
 
   /stack-generator@2.0.10:
     resolution:
       { integrity: sha512-mwnua/hkqM6pF4k8SnmZ2zfETsRUpWXREfA/goT8SLCV4iOFa4bzOX2nDipWAZFPTjLvQB82f5yaodMVhK0yJQ== }
     dependencies:
       stackframe: 1.3.4
-    dev: false
 
   /stackback@0.0.2:
     resolution:
@@ -21379,7 +20716,6 @@ snapshots:
     dependencies:
       source-map: 0.5.6
       stackframe: 1.3.4
-    dev: false
 
   /stacktrace-js@2.0.2:
     resolution:
@@ -21388,7 +20724,6 @@ snapshots:
       error-stack-parser: 2.1.4
       stack-generator: 2.0.10
       stacktrace-gps: 3.1.2
-    dev: false
 
   stat-mode@0.3.0: {}
 
@@ -21406,7 +20741,6 @@ snapshots:
   stop-iteration-iterator@1.0.0:
     dependencies:
       internal-slot: 1.0.7
-    dev: true
 
   stream-to-array@2.3.0:
     dependencies:
@@ -21448,7 +20782,6 @@ snapshots:
     dependencies:
       define-properties: 1.2.1
       es-abstract: 1.23.3
-    dev: true
 
   /string.prototype.matchall@4.0.11:
     resolution:
@@ -21467,7 +20800,6 @@ snapshots:
       regexp.prototype.flags: 1.5.2
       set-function-name: 2.0.2
       side-channel: 1.0.6
-    dev: true
 
   /string.prototype.padend@3.1.6:
     resolution:
@@ -21478,7 +20810,6 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       es-object-atoms: 1.0.0
-    dev: true
 
   /string.prototype.repeat@1.0.0:
     resolution:
@@ -21486,7 +20817,6 @@ snapshots:
     dependencies:
       define-properties: 1.2.1
       es-abstract: 1.23.3
-    dev: true
 
   /string.prototype.trim@1.2.9:
     resolution:
@@ -21497,7 +20827,6 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.3
       es-object-atoms: 1.0.0
-    dev: true
 
   /string.prototype.trimend@1.0.8:
     resolution:
@@ -21506,7 +20835,6 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
-    dev: true
 
   /string.prototype.trimstart@1.0.8:
     resolution:
@@ -21516,14 +20844,12 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
-    dev: true
 
   /string_decoder@1.3.0:
     resolution:
       { integrity: sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA== }
     dependencies:
       safe-buffer: 5.2.1
-    dev: false
 
   /strip-ansi@6.0.1:
     resolution:
@@ -21593,7 +20919,6 @@ snapshots:
       mz: 2.7.0
       pirates: 4.0.6
       ts-interface-checker: 0.1.13
-    dev: true
 
   /superjson@2.2.1:
     resolution:
@@ -21601,7 +20926,6 @@ snapshots:
     engines: { node: ">=16" }
     dependencies:
       copy-anything: 3.0.5
-    dev: false
 
   /supports-color@5.5.0:
     resolution:
@@ -21641,7 +20965,6 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.11
       periscopic: 3.1.0
-    dev: false
 
   /svg-parser@2.0.4:
     resolution:
@@ -21671,7 +20994,6 @@ snapshots:
       client-only: 0.0.1
       react: 18.3.1
       use-sync-external-store: 1.2.2(react@18.3.1)
-    dev: false
 
   /swrev@4.0.0:
     resolution:
@@ -21685,7 +21007,6 @@ snapshots:
       vue: ">=3.2.26 < 4"
     dependencies:
       vue: 3.4.38(typescript@5.5.4)
-    dev: false
 
   /synckit@0.9.1:
     resolution:
@@ -21694,7 +21015,6 @@ snapshots:
     dependencies:
       "@pkgr/core": 0.1.1
       tslib: 2.7.0
-    dev: true
 
   tailwind-merge@1.14.0: {}
 
@@ -21738,7 +21058,6 @@ snapshots:
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
-    dev: true
 
   /tapable@2.2.1:
     resolution:
@@ -21764,7 +21083,6 @@ snapshots:
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
-    dev: false
 
   /text-table@0.2.0:
     resolution:
@@ -21777,14 +21095,12 @@ snapshots:
     engines: { node: ">=0.8" }
     dependencies:
       thenify: 3.3.1
-    dev: true
 
   /thenify@3.3.1:
     resolution:
       { integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw== }
     dependencies:
       any-promise: 1.3.0
-    dev: true
 
   /throttle-debounce@3.0.1:
     resolution:
@@ -21894,7 +21210,6 @@ snapshots:
       typescript: 5.5.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   ts-toolbelt@6.15.5: {}
 
@@ -21904,7 +21219,6 @@ snapshots:
       json5: 1.0.2
       minimist: 1.2.8
       strip-bom: 3.0.0
-    dev: true
 
   /tslib@2.7.0:
     resolution:
@@ -21920,7 +21234,6 @@ snapshots:
       get-tsconfig: 4.8.0
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /turbo-darwin-64@2.1.1:
     resolution:
@@ -21987,7 +21300,6 @@ snapshots:
       turbo-linux-arm64: 2.1.1
       turbo-windows-64: 2.1.1
       turbo-windows-arm64: 2.1.1
-    dev: true
 
   /type-check@0.4.0:
     resolution:
@@ -21995,7 +21307,6 @@ snapshots:
     engines: { node: ">= 0.8.0" }
     dependencies:
       prelude-ls: 1.2.1
-    dev: true
 
   /type-fest@0.20.2:
     resolution:
@@ -22011,7 +21322,6 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-typed-array: 1.1.13
-    dev: true
 
   /typed-array-byte-length@1.0.1:
     resolution:
@@ -22023,7 +21333,6 @@ snapshots:
       gopd: 1.0.1
       has-proto: 1.0.3
       is-typed-array: 1.1.13
-    dev: true
 
   /typed-array-byte-offset@1.0.2:
     resolution:
@@ -22036,7 +21345,6 @@ snapshots:
       gopd: 1.0.1
       has-proto: 1.0.3
       is-typed-array: 1.1.13
-    dev: true
 
   /typed-array-length@1.0.6:
     resolution:
@@ -22049,7 +21357,6 @@ snapshots:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
-    dev: true
 
   typescript@4.9.5: {}
 
@@ -22065,7 +21372,6 @@ snapshots:
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
-    dev: true
 
   unc-path-regex@0.1.2: {}
 
@@ -22093,7 +21399,6 @@ snapshots:
     dependencies:
       unicode-canonical-property-names-ecmascript: 2.0.0
       unicode-property-aliases-ecmascript: 2.1.0
-    dev: false
 
   unicode-match-property-value-ecmascript@2.1.0: {}
 
@@ -22131,7 +21436,6 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
-    dev: true
 
   /use-callback-ref@1.3.2(@types/react@18.3.5)(react@18.3.1):
     resolution:
@@ -22157,7 +21461,6 @@ snapshots:
       react: "*"
     dependencies:
       react: 18.3.1
-    dev: false
 
   /use-sidecar@1.1.2(@types/react@18.3.5)(react@18.3.1):
     resolution:
@@ -22183,7 +21486,6 @@ snapshots:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.3.1
-    dev: false
 
   util-deprecate@1.0.2: {}
 
@@ -22265,7 +21567,6 @@ snapshots:
       d3-shape: 3.2.0
       d3-time: 3.1.0
       d3-timer: 3.0.1
-    dev: false
 
   vite-node@2.0.5(@types/node@22.5.4):
     dependencies:
@@ -22284,18 +21585,16 @@ snapshots:
       - sugarss
       - supports-color
       - terser
-    dev: true
 
   vite@5.4.2(@types/node@22.5.4):
     dependencies:
       "@types/node": 22.5.4
       esbuild: 0.21.5
-      postcss: 8.4.41
+      postcss: 8.4.45
       rollup: 4.21.2
     optionalDependencies:
       "@types/node": 22.5.4
       fsevents: 2.3.3
-    dev: true
 
   vitest@2.0.5(@edge-runtime/vm@3.1.7)(@types/node@22.5.4):
     dependencies:
@@ -22331,7 +21630,6 @@ snapshots:
       - sugarss
       - supports-color
       - terser
-    dev: true
 
   /vue@3.4.38(typescript@5.5.4):
     resolution:
@@ -22348,7 +21646,6 @@ snapshots:
       "@vue/server-renderer": 3.4.38(vue@3.4.38)
       "@vue/shared": 3.4.38
       typescript: 5.5.4
-    dev: false
 
   /wait-on@8.0.0:
     resolution:
@@ -22363,14 +21660,12 @@ snapshots:
       rxjs: 7.8.1
     transitivePeerDependencies:
       - debug
-    dev: true
 
   /wcwidth@1.0.1:
     resolution:
       { integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg== }
     dependencies:
       defaults: 1.0.4
-    dev: false
 
   web-streams-polyfill@3.3.3: {}
 
@@ -22394,7 +21689,7 @@ snapshots:
       html-escaper: 2.0.2
       is-plain-object: 5.0.0
       opener: 1.5.2
-      picocolors: 1.0.1
+      picocolors: 1.1.0
       sirv: 2.0.4
       ws: 7.5.10
     transitivePeerDependencies:
@@ -22407,7 +21702,6 @@ snapshots:
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
-    dev: false
 
   /which-boxed-primitive@1.0.2:
     resolution:
@@ -22418,7 +21712,6 @@ snapshots:
       is-number-object: 1.0.7
       is-string: 1.0.7
       is-symbol: 1.0.4
-    dev: true
 
   /which-builtin-type@1.1.4:
     resolution:
@@ -22437,7 +21730,6 @@ snapshots:
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.2
       which-typed-array: 1.1.15
-    dev: true
 
   /which-collection@1.0.2:
     resolution:
@@ -22448,7 +21740,6 @@ snapshots:
       is-set: 2.0.3
       is-weakmap: 2.0.2
       is-weakset: 2.0.3
-    dev: true
 
   /which-typed-array@1.1.15:
     resolution:
@@ -22460,7 +21751,6 @@ snapshots:
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.2
-    dev: true
 
   /which@1.3.1:
     resolution:
@@ -22468,7 +21758,6 @@ snapshots:
     hasBin: true
     dependencies:
       isexe: 2.0.0
-    dev: true
 
   /which@2.0.2:
     resolution:
@@ -22486,14 +21775,12 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
-    dev: true
 
   /wide-align@1.1.5:
     resolution:
       { integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg== }
     dependencies:
       string-width: 4.2.3
-    dev: false
 
   /word-wrap@1.2.5:
     resolution:
@@ -22562,7 +21849,6 @@ snapshots:
   zod-error@1.5.0:
     dependencies:
       zod: 3.23.8
-    dev: false
 
   /zod-to-json-schema@3.23.2(zod@3.23.8):
     resolution:
@@ -22571,7 +21857,6 @@ snapshots:
       zod: ^3.23.3
     dependencies:
       zod: 3.23.8
-    dev: false
 
   /zod@3.23.8:
     resolution:
@@ -22596,5 +21881,3 @@ snapshots:
     dependencies:
       "@types/react": 18.3.5
       react: 18.3.1
-      use-sync-external-store: 1.2.2(react@18.3.1)
-    dev: false

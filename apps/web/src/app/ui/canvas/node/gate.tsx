@@ -169,7 +169,6 @@ export const Gate = forwardRef<
       setHolding(true);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
-      console.log("added event listeners - gate", gateId);
     } else {
       setHolding(false);
     }

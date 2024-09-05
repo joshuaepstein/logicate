@@ -2,6 +2,7 @@
   "name": "logicate",
   "private": true,
   "scripts": {
+    "postinstall": "pnpm install --filter @logicate/database",
     "dev": "turbo dev --filter=@logicate/web",
     "dev:emails": "dotenv turbo dev --filter=@logicate/emails",
     "dev:landing": "dotenv turbo dev --filter=@logicate/landing",

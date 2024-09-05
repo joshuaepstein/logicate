@@ -241,7 +241,7 @@ export default function Canvas({
                     from: temporaryWire.fromId,
                     to: parentId,
                     active: false,
-                  });
+                  }); 
                 } else if (terminalType === "output") {
                   parent.outputs.push(temporaryWire.fromId);
                 }

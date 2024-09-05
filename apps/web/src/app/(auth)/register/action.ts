@@ -1,4 +1,3 @@
-// @ts-ignore - This needs to be fixed as we are using next-auth v4
 "use server";
 
 import { Failure, Success } from "@/types/api";
@@ -16,13 +15,9 @@ const registerSchema = z.object({
 });
 
 // Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character
-export const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-export async function registerAction(
-  _: Failure<string> | Success<string> | undefined,
-  formData: FormData,
-) {
+export async function registerAction(_: Failure<string> | Success<string> | undefined, formData: FormData) {
   const validatedFields = registerSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -74,15 +69,8 @@ export async function registerAction(
     },
   });
 
-  if (newUser) {
-    const login = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    if (login) {
-      redirect("/?newLogin=true");
-    }
+  if (!newUser) {
+    return Failure("Failed to create user");
   }
 
   try {

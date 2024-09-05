@@ -7,7 +7,8 @@
         "db:push": "prisma db push --skip-generate",
         "db:deploy": "prisma migrate deploy",
         "db:migrate": "prisma migrate dev",
-        "db:seed": "tsx prisma/seed.ts"
+        "db:seed": "tsx prisma/seed.ts",
+        "dev": "prisma studio --browser=none"
     },
     "exports": {
         "./edge": "./edge.ts",

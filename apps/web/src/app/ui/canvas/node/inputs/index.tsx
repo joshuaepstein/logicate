@@ -1,6 +1,7 @@
 import { cn } from "@logicate/ui";
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import useCanvasStore from "../../hooks/useCanvasStore";
+import { cursorInside } from "@logicate/utils/dom-cursor";
 
 export enum InputType {
   BUTTON = "BUTTON",
@@ -35,7 +36,7 @@ export const Input = forwardRef<
     y: number;
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, x, y, inputId, computedValue, ...rest }, ref) => {
-  const { isHolding, setHolding, canvas, updateItem, selectId: select, isSelected } = useCanvasStore();
+  const { isHolding, setHolding, canvas, updateItem, selectItemId: select, isSelected } = useCanvasStore();
   const [position, setPosition] = useState({ x, y });
   const [offset, setOffset] = useState({ x, y });
   const [dragging, setDragging] = useState(false);
@@ -56,17 +57,25 @@ export const Input = forwardRef<
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      setPosition({
-        x: e.clientX - offset.x,
-        y: e.clientY - offset.y,
-      });
+      if (dragging) {
+        const canvasElement = document.querySelector("[data-logicate-canvas]");
+        if (canvasElement) {
+          const bounds = canvasElement.getBoundingClientRect();
+          if (cursorInside(e, bounds)) {
+            setPosition({
+              x: e.clientX - offset.x,
+              y: e.clientY - offset.y,
+            });
+          }
+        }
+      }
     },
     [dragging, offset, canvas.zoom],
   );
 
   const handleMouseUp = useCallback(() => {
-    setDragging(false);
     updateItem(inputId, { x: position.x, y: position.y });
+    setDragging(false);
   }, [position]);
 
   const handleClickDown = useCallback(
@@ -89,28 +98,13 @@ export const Input = forwardRef<
       setHolding(true);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
-      console.log("added event listeners - inputs", inputId);
     } else {
       setHolding(false);
-      window.removeEventListener("mousemove", handleMouseMove);
-      console.log(`removed event listeners - inputs ${inputId}`);
-      window.removeEventListener("mouseup", handleMouseUp);
-      if (dragging) {
-        setDragging(false);
-        handleMouseUp();
-      }
     }
-
-    // listen to custom event: Cancel Dragging Node
-    window.addEventListener("cancelDragging", () => {
-      setDragging(false);
-    });
 
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("cancelDragging", () => {
-        setDragging(false);
-      });
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [dragging]);
 
@@ -166,9 +160,9 @@ export const Input = forwardRef<
         >
           <div
             className="pointer-events-auto w-full h-full flex items-center justify-center"
-            // onMouseDown={handleClickDown}
-            // onMouseUp={handleClickUp}
-            // onMouseLeave={handleClickUp}
+            onMouseDown={handleClickDown}
+            onMouseUp={handleClickUp}
+            onMouseLeave={handleClickUp}
             data-logicate-body
           >
             <svg

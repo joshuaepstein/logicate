@@ -1,6 +1,8 @@
 import { cn } from "@logicate/ui";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import useCanvasStore from "../hooks/useCanvasStore";
+import { useNode } from "../hooks/useNode";
+import { cursorInside } from "@logicate/utils/dom-cursor";
 
 export enum GateType {
   AND = "AND",
@@ -67,9 +69,11 @@ export const Gate = forwardRef<
     updateItem,
     temporaryWire,
     setTemporaryWire,
-    selectId: select,
+    selectItemId: select,
+    unselectItemId: unselect,
     isSelected,
   } = useCanvasStore();
+  const item = useNode(gateId);
   const isInverted = useMemo(() => {
     return inverted.includes(type);
   }, [type]);
@@ -100,10 +104,16 @@ export const Gate = forwardRef<
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       if (dragging) {
-        setPosition({
-          x: event.clientX - offset.x,
-          y: event.clientY - offset.y,
-        });
+        const canvasElement = document.querySelector("[data-logicate-canvas]");
+        if (canvasElement) {
+          const bounds = canvasElement.getBoundingClientRect();
+          if (cursorInside(event, bounds)) {
+            setPosition({
+              x: event.clientX - offset.x,
+              y: event.clientY - offset.y,
+            });
+          }
+        }
       }
     },
     [dragging, offset, canvas.zoom],
@@ -112,6 +122,7 @@ export const Gate = forwardRef<
   const handleMouseUp = useCallback(() => {
     setDragging(false);
     updateItem(gateId, { x: position.x, y: position.y });
+    select(gateId);
   }, [position]);
 
   useEffect(() => {
@@ -119,12 +130,8 @@ export const Gate = forwardRef<
       setHolding(true);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
-      console.log("added event listeners - gate", gateId);
     } else {
       setHolding(false);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-      console.log("removed event listeners - gate", gateId);
     }
 
     return () => {
@@ -211,9 +218,9 @@ export const Gate = forwardRef<
           }}
         >
           {Array.from({
-            length:
-              // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
-              Math.max(inputs, defaultInputs[type]),
+            length: inputs > defaultInputs[type] ? inputs : defaultInputs[type],
+            // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
+            // Math.min(inputs, defaultInputs[type]),
           }).map((_, index) => (
             <div
               key={index}

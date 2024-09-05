@@ -1,6 +1,13 @@
 "use client";
 
-import { CenterIcon, Eraser01Icon } from "@jfstech/icons-react/24/outline";
+import {
+  CenterIcon,
+  DashIcon,
+  Eraser01Icon,
+  Minimise01Icon,
+  Plus01Icon,
+  X01Icon,
+} from "@jfstech/icons-react/24/outline";
 import { LogicateSession, User } from "@logicate/database";
 import { Button } from "@logicate/ui/button";
 import {
@@ -22,14 +29,16 @@ import useDisableHook from "./disable-hook";
 import { DraggableItem } from "./draggable-item";
 import useCanvasStore from "./hooks/useCanvasStore";
 import { gates } from "./node";
-import { Gate, GateType } from "./node/gate";
+import { defaultInputs, Gate, GateType } from "./node/gate";
 import { Input, InputType } from "./node/inputs";
 import { TemporaryInput } from "./node/inputs/temporary";
 import { TemporaryGate } from "./node/temporary-gate";
 import { NodeType } from "./node/type";
-import { Item, Wire as WireType } from "./types";
+import { Alphabet, GateItem, InputItem, Item, OutputItem, Wire as WireType } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
+import { QuantityInput } from "@logicate/ui/input/quantity";
+import { TextInput } from "@logicate/ui/input/index";
 
 export default function Canvas({
   sessionId,
@@ -60,6 +69,8 @@ export default function Canvas({
     setTemporaryWire,
     updateTemporaryWire,
     canvasU,
+    updateItem,
+    updateSelected,
   } = useCanvasStore();
   const [simulatedItems, setSimulatedItems] = useState<Item[]>([]);
   const [simulatedWires, setSimulatedWires] = useState<WireType[]>([]);
@@ -241,7 +252,7 @@ export default function Canvas({
                     from: temporaryWire.fromId,
                     to: parentId,
                     active: false,
-                  }); 
+                  });
                 } else if (terminalType === "output") {
                   parent.outputs.push(temporaryWire.fromId);
                 }
@@ -292,6 +303,7 @@ export default function Canvas({
                 type: draggingNewElement.type.node as InputType,
                 value: false,
                 outputs: [],
+                settings: {},
               }
             : {
                 itemType: "gate" as const,
@@ -299,17 +311,27 @@ export default function Canvas({
                 computedValue: false,
                 inputs: [],
                 outputs: [],
+                settings: {
+                  inputs: defaultInputs[draggingNewElement.type.node],
+                },
               }),
         });
         setHolding(false);
       }
     };
 
+    const handleClickAnywhere = (e: MouseEvent) => {
+      if (e.target) if ((e.target as HTMLElement).getAttribute("data-logicate-canvas-items")) setSelected([]);
+    };
+
     document.addEventListener("mousemove", handleDrag);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("click", handleClickAnywhere);
+
     return () => {
       document.removeEventListener("mousemove", handleDrag);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("click", handleClickAnywhere);
     };
   });
 
@@ -372,20 +394,8 @@ export default function Canvas({
             }}
           >
             {wires.map((wire, index) => {
-              const from = items.find((item) => item.id === wire.from);
-              const to = items.find((item) => item.id === wire.to);
-              if (!from || !to) return null;
               return (
-                <Wire
-                  key={index}
-                  startX={from.x + canvas.x}
-                  startY={from.y + canvas.y}
-                  endX={to.x + canvas.x}
-                  endY={to.y + canvas.y}
-                  isActive={wire.active ?? false}
-                  canvas={canvas}
-                  canvasReference={canvasReference}
-                />
+                <Wire key={index} startId={wire.from} endId={wire.to} isActive={wire.active ?? false} type="alt" />
               );
             })}
           </svg>
@@ -394,13 +404,14 @@ export default function Canvas({
             style={{
               transform: `scale(${canvas.zoom})`,
             }}
+            data-logicate-canvas-items
           >
             {items.map((item) =>
               item.itemType === "gate" ? (
                 <Gate
                   key={item.id}
                   type={item.type}
-                  inputs={item.inputs.length}
+                  inputs={item.settings.inputs ?? 0}
                   state={item.computedValue ?? false}
                   gateId={item.id}
                   x={item.x + canvas.x}
@@ -419,49 +430,175 @@ export default function Canvas({
             )}
           </div>
         </div>
-        <div className="absolute bottom-4 right-4 flex flex-row items-center">
-          <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
-            <DialogTrigger asChild>
-              <Button className="mr-2" variant="destructive-primary" size="icon-sm">
-                <Eraser01Icon className="size-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure you want to clear the canvas?</DialogTitle>
-                <DialogDescription className="text-neutralgrey-900 text-sm">
-                  This will clear all components and wires on the canvas. You cannot undo this action.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  variant="destructive-primary"
-                  onClick={() => {
-                    setItems([]);
-                    setWires([]);
-                    setConfirmClear(false);
-                  }}
-                >
-                  Clear Canvas
+        <div className="absolute bottom-4 gap-4 right-4 flex flex-col items-end justify-end">
+          {selected && selected.length === 1 && (
+            <div className="min-w-80 bg-white rounded-md shadow-hard-xs min-h-28">
+              <div className="w-full py-2 border-b border-b-neutralgrey-400 px-4 flex justify-between items-center">
+                <h5 className="text-neutralgrey-1100 text-sm font-medium">Node Settings</h5>
+                <Button variant="no-borders" size="icon-xs">
+                  <X01Icon className="size-4" />
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <Button
-            onClick={() => {
-              setCanvas({
-                x: 0,
-                y: 0,
-                zoom: 1,
-              });
-            }}
-            className="mr-2"
-            variant="dark"
-            size="icon-sm"
-            title="Center Canvas"
-          >
-            <CenterIcon className="size-5" />
-          </Button>
+              </div>
+              <div className="flex flex-col w-full justify-between items-start p-4">
+                {selected[0].selectedType === "item" ? (
+                  <div className="flex flex-col w-full gap-4">
+                    {selected[0].itemType === "gate" ? (
+                      <div className="flex flex-row gap-4 justify-between w-full items-center">
+                        <p className="text-neutralgrey-800 text-sm">Inputs</p>
+                        <div className="flex flex-row w-max items-center">
+                          <Button
+                            variant="no-borders"
+                            size="icon-xs"
+                            onClick={() => {
+                              const inputs = (selected[0] as GateItem).settings.inputs;
+                              if (inputs - 1 < defaultInputs[(selected[0] as GateItem).type]) return;
+                              updateItem(selected[0].id, {
+                                ...selected[0],
+                                settings: {
+                                  ...(selected[0] as GateItem).settings,
+                                  // @ts-expect-error because we know that the settings are an object with an inputs property
+                                  inputs: inputs - 1,
+                                },
+                              });
+                              updateSelected();
+                            }}
+                          >
+                            <DashIcon className="size-4" />
+                          </Button>
+                          <input
+                            className="w-full max-w-20 border-none outline-none ring-0 focus:ring-0 focus:outline-none text-center"
+                            value={selected[0].settings.inputs}
+                            // type="number"
+                            id="logicate-gate-inputs-quantity-field"
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value);
+                              if (!isNaN(value)) {
+                                if (value + 1 > 10) return;
+                                if (value - 1 < defaultInputs[(selected[0] as GateItem).type]) return;
+                                updateItem(selected[0].id, {
+                                  ...selected[0],
+                                  settings: {
+                                    ...(selected[0] as GateItem).settings,
+                                    // @ts-expect-error because we know that the settings are an object with an inputs property
+                                    inputs: value,
+                                  },
+                                });
+                                updateSelected();
+                              }
+                            }}
+                          />
+                          <Button
+                            variant="no-borders"
+                            size="icon-xs"
+                            onClick={() => {
+                              const inputs = (selected[0] as GateItem).settings.inputs;
+                              if (inputs + 1 > 10) return;
+                              updateItem(selected[0].id, {
+                                ...selected[0],
+                                settings: {
+                                  ...(selected[0] as GateItem).settings,
+                                  // @ts-expect-error because we know that the settings are an object with an inputs property
+                                  inputs: inputs + 1,
+                                },
+                              });
+                              updateSelected();
+                            }}
+                          >
+                            <Plus01Icon className="size-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : null}
+                    <div className="flex flex-row gap-4 justify-between w-full items-center">
+                      <p className="text-neutralgrey-800 text-sm">Label</p>
+                      <div className="flex flex-row w-max items-center">
+                        <TextInput
+                          value={selected[0].settings.label}
+                          className="min-w-40"
+                          onChange={(e) => {
+                            updateItem(selected[0].id, {
+                              ...selected[0],
+                              settings: {
+                                ...(selected[0] as GateItem).settings,
+                                label: e.target.value,
+                              },
+                            });
+                            updateSelected();
+                          }}
+                        />
+                      </div>
+                      {selected[0].itemType === "input" || selected[0].itemType === "output" ? (
+                        <div className="flex flex-row gap-4 justify-between w-full items-center">
+                          <p className="text-neutralgrey-800 text-sm">Symbol</p>
+                          <div className="flex flex-row w-max items-center">
+                            <TextInput
+                              value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
+                              className="min-w-40"
+                              onChange={(e) => {
+                                updateItem(selected[0].id, {
+                                  ...selected[0],
+                                  settings: {
+                                    ...(selected[0] as InputItem | OutputItem).settings,
+                                    // @ts-expect-error because we know that the settings are an object with an expressionLetter property
+                                    expressionLetter: e.target.value as Alphabet,
+                                  },
+                                });
+                                updateSelected();
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          )}
+          <div className="flex flex-row">
+            <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
+              <DialogTrigger asChild>
+                <Button className="mr-2" variant="destructive-primary" size="icon-sm">
+                  <Eraser01Icon className="size-5" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure you want to clear the canvas?</DialogTitle>
+                  <DialogDescription className="text-neutralgrey-900 text-sm">
+                    This will clear all components and wires on the canvas. You cannot undo this action.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="destructive-primary"
+                    onClick={() => {
+                      setItems([]);
+                      setWires([]);
+                      setConfirmClear(false);
+                    }}
+                  >
+                    Clear Canvas
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Button
+              onClick={() => {
+                setCanvas({
+                  x: 0,
+                  y: 0,
+                  zoom: 1,
+                });
+              }}
+              className="mr-2"
+              variant="dark"
+              size="icon-sm"
+              title="Center Canvas"
+            >
+              <CenterIcon className="size-5" />
+            </Button>
+          </div>
         </div>
       </main>
       {draggingNewElement && (
@@ -493,19 +630,22 @@ export default function Canvas({
         </div>
       )}
 
-      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+      <div className="absolute inset-0 w-full h-full pointer-events-none">
         {temporaryWire && (
           <Wire
-            startX={temporaryWire.from.x}
-            startY={temporaryWire.from.y}
-            endX={temporaryWire.to.x}
-            endY={temporaryWire.to.y}
+            start={{
+              x: temporaryWire.from.x,
+              y: temporaryWire.from.y,
+            }}
+            end={{
+              x: temporaryWire.to.x,
+              y: temporaryWire.to.y,
+            }}
             isActive={false}
-            canvas={canvas}
-            canvasReference={canvasReference}
+            type="normal"
           />
         )}
-      </svg>
+      </div>
     </>
   );
 }

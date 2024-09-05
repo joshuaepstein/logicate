@@ -34,7 +34,7 @@ export default function BackgroundElement({
         backgroundImage: `url(/grid.png)`,
         backgroundRepeat: "repeat",
         backgroundSize: "50px 50px",
-        // backgroundPosition: "center",
+        backgroundPosition: "center",
         // imageResolution: "72dpi",
         // backgroundPosition: `${canvas.x || 0}px ${canvas.y || 0}px`,
         // transition for background position

@@ -45,7 +45,6 @@ export const Input = forwardRef<
       const target = e.target as HTMLDivElement;
       if (target.dataset.logicateBody || target.dataset.logicateInputContent) {
         setDragging(true);
-        setHolding(true);
         setOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
@@ -57,14 +56,10 @@ export const Input = forwardRef<
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (dragging) {
-        console.log("isHolding", isHolding);
-        // Account for the canvas zoom
-        setPosition({
-          x: e.clientX - offset.x,
-          y: e.clientY - offset.y,
-        });
-      }
+      setPosition({
+        x: e.clientX - offset.x,
+        y: e.clientY - offset.y,
+      });
     },
     [dragging, offset, canvas.zoom],
   );
@@ -83,30 +78,41 @@ export const Input = forwardRef<
     [inputId, computedValue, updateItem],
   );
 
-  const handleClickUp = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      updateItem(inputId, {
-        computedValue: false,
-      });
-    },
-    [inputId, computedValue, updateItem],
-  );
+  const handleClickUp = useCallback(() => {
+    updateItem(inputId, {
+      computedValue: false,
+    });
+  }, [inputId, computedValue, updateItem]);
 
   useEffect(() => {
     if (dragging) {
-      console.log("dragging", dragging);
+      setHolding(true);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
+      console.log("added event listeners - inputs", inputId);
     } else {
+      setHolding(false);
       window.removeEventListener("mousemove", handleMouseMove);
-      console.log("removed");
+      console.log(`removed event listeners - inputs ${inputId}`);
       window.removeEventListener("mouseup", handleMouseUp);
+      if (dragging) {
+        setDragging(false);
+        handleMouseUp();
+      }
     }
+
+    // listen to custom event: Cancel Dragging Node
+    window.addEventListener("cancelDragging", () => {
+      setDragging(false);
+    });
 
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("cancelDragging", () => {
+        setDragging(false);
+      });
     };
-  }, [handleMouseUp]);
+  }, [dragging]);
 
   return (
     <>
@@ -160,20 +166,20 @@ export const Input = forwardRef<
         >
           <div
             className="pointer-events-auto w-full h-full flex items-center justify-center"
-            onMouseDown={handleClickDown}
-            onMouseUp={handleClickUp}
-            onMouseLeave={handleClickUp}
+            // onMouseDown={handleClickDown}
+            // onMouseUp={handleClickUp}
+            // onMouseLeave={handleClickUp}
             data-logicate-body
           >
             <svg
               style={{ overflow: "visible", width: "30px", height: "30px" }}
-              className={cn("")}
+              className={cn("pointer-events-none")}
               data-logicate-input-content
             >
               <g>
                 <circle
                   //class="signalFill"
-                  className={cn({
+                  className={cn("pointer-events-auto", {
                     "text-blue-700 fill-current": computedValue === true,
                   })}
                   fill="#FFFFFF"

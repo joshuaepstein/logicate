@@ -14,22 +14,22 @@ import {
 } from "@logicate/ui/modal";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@logicate/ui/not-done-yet/accordion";
 import { Click } from "@logicate/utils/buttons";
-import { randomGateId } from "@logicate/utils/id";
+import { randomGateId, randomWireId } from "@logicate/utils/id";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import BackgroundElement from "./background-element";
 import useDisableHook from "./disable-hook";
 import { DraggableItem } from "./draggable-item";
 import useCanvasStore from "./hooks/useCanvasStore";
+import { gates } from "./node";
 import { Gate, GateType } from "./node/gate";
 import { Input, InputType } from "./node/inputs";
+import { TemporaryInput } from "./node/inputs/temporary";
 import { TemporaryGate } from "./node/temporary-gate";
 import { NodeType } from "./node/type";
+import { Item, Wire as WireType } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
-import { TemporaryInput } from "./node/inputs/temporary";
-import { Item, Wire as WireType } from "./types";
-import { gates } from "./node";
 
 export default function Canvas({
   sessionId,
@@ -48,6 +48,7 @@ export default function Canvas({
     setSelected,
     wires,
     setWires,
+    addWire,
     canvas,
     setCanvas,
     setX,
@@ -55,6 +56,10 @@ export default function Canvas({
     isHolding,
     setHolding,
     itemsUpdate,
+    temporaryWire,
+    setTemporaryWire,
+    updateTemporaryWire,
+    canvasU,
   } = useCanvasStore();
   const [simulatedItems, setSimulatedItems] = useState<Item[]>([]);
   const [simulatedWires, setSimulatedWires] = useState<WireType[]>([]);
@@ -172,6 +177,11 @@ export default function Canvas({
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
   useEffect(() => {
     const handleDrag = (e: MouseEvent) => {
+      if (temporaryWire && e.buttons === Click.Primary) {
+        // update the end position of the wire
+        updateTemporaryWire((previous) => ({ ...previous, to: { x: e.clientX, y: e.clientY } }));
+      }
+
       if (draggingNewElement && e.buttons === Click.Primary) {
         const element = document.querySelector("[data-logicate-temporary-dragging-node]");
         if (!element) return;
@@ -213,6 +223,47 @@ export default function Canvas({
     };
 
     const handleMouseUp = (e: MouseEvent) => {
+      if (temporaryWire) {
+        const cursorOn = document.elementFromPoint(e.clientX, e.clientY);
+        console.log(cursorOn);
+        if (cursorOn && cursorOn.getAttribute("data-logicate-node-parent-id")) {
+          const parentId = cursorOn.getAttribute("data-logicate-node-parent-id");
+          const terminalType = cursorOn.getAttribute("data-logicate-parent-terminal-type");
+          if (parentId && terminalType) {
+            const parent = items.find((item) => item.id === parentId);
+            if (!parent) return;
+            switch (parent.itemType) {
+              case "gate":
+                if (terminalType === "input") {
+                  parent.inputs.push(temporaryWire.fromId);
+                  addWire({
+                    id: randomWireId(),
+                    from: temporaryWire.fromId,
+                    to: parentId,
+                    active: false,
+                  });
+                } else if (terminalType === "output") {
+                  parent.outputs.push(temporaryWire.fromId);
+                }
+                setTemporaryWire(null);
+                break;
+              case "input":
+                if (terminalType === "output") {
+                  parent.outputs.push(temporaryWire.fromId);
+                }
+                setTemporaryWire(null);
+                break;
+              default:
+                break;
+            }
+          } else {
+            setTemporaryWire(null);
+          }
+        } else {
+          setTemporaryWire(null);
+        }
+      }
+
       if (draggingNewElement) {
         setDraggingNewElement(null);
         // We need to adjust the x and y to be the one relative to the canvas so that it doesnt account for the width of the sidebar
@@ -262,14 +313,14 @@ export default function Canvas({
     };
   });
 
-  const scrollCanvas = useCallback((_: React.WheelEvent) => {
+  const scrollCanvas = useCallback((e: React.WheelEvent) => {
     //! Disabled for now until can get the moving of elements within the canvas working properly when scaled.
-    // canvasU((canvas) => {
-    //   return {
-    //     ...canvas,
-    //     zoom: Math.max(0.4, Math.min(canvas.zoom * (1 - e.deltaY * 0.001), 3)),
-    //   };
-    // });
+    canvasU((canvas) => {
+      return {
+        ...canvas,
+        zoom: Math.max(0.4, Math.min(canvas.zoom * (1 - e.deltaY * 0.001), 3)),
+      };
+    });
   }, []);
 
   return (
@@ -441,6 +492,20 @@ export default function Canvas({
           ) : null}
         </div>
       )}
+
+      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+        {temporaryWire && (
+          <Wire
+            startX={temporaryWire.from.x}
+            startY={temporaryWire.from.y}
+            endX={temporaryWire.to.x}
+            endY={temporaryWire.to.y}
+            isActive={false}
+            canvas={canvas}
+            canvasReference={canvasReference}
+          />
+        )}
+      </svg>
     </>
   );
 }

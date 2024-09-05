@@ -44,6 +44,7 @@ interface TempWire {
     x: number;
     y: number;
   };
+  fromId: string;
   to: {
     x: number;
     y: number;

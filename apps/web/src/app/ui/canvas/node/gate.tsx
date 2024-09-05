@@ -61,7 +61,15 @@ export const Gate = forwardRef<
     y: number;
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, x, y, state, gateId, ...rest }, ref) => {
-  const { setHolding, canvas, updateItem, selectId: select, isSelected } = useCanvasStore();
+  const {
+    setHolding,
+    canvas,
+    updateItem,
+    temporaryWire,
+    setTemporaryWire,
+    selectId: select,
+    isSelected,
+  } = useCanvasStore();
   const isInverted = useMemo(() => {
     return inverted.includes(type);
   }, [type]);
@@ -80,8 +88,6 @@ export const Gate = forwardRef<
       const target = e.target as HTMLDivElement;
       if (target.dataset.logicateBody) {
         setDragging(true);
-        // const logicateCanvas = document.querySelector("[data-logicate-canvas]") as HTMLDivElement;
-        // const rect = logicateCanvas.getBoundingClientRect();
         setOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
@@ -94,7 +100,6 @@ export const Gate = forwardRef<
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       if (dragging) {
-        // Account for the canvas zoom
         setPosition({
           x: event.clientX - offset.x,
           y: event.clientY - offset.y,
@@ -114,17 +119,19 @@ export const Gate = forwardRef<
       setHolding(true);
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
+      console.log("added event listeners - gate", gateId);
     } else {
       setHolding(false);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      console.log("removed event listeners - gate", gateId);
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [dragging, handleMouseMove, handleMouseUp]);
+  }, [dragging]);
 
   return (
     <>
@@ -161,10 +168,34 @@ export const Gate = forwardRef<
                 }}
                 className="pointer-events-auto hover:scale-[1.2] transition-transform"
               >
-                <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+                <circle
+                  cx="6.5"
+                  cy="6.5"
+                  r="6"
+                  stroke="black"
+                  strokeWidth="1"
+                  fill="white"
+                  data-logicate-output-terminal={0}
+                  data-logicate-node-parent-id={gateId}
+                  data-logicate-parent-terminal-type="output"
+                  onMouseDown={(e) => {
+                    setTemporaryWire({
+                      from: {
+                        x: e.clientX,
+                        y: e.clientY,
+                      },
+                      fromId: gateId,
+                      to: {
+                        x: e.clientX,
+                        y: e.clientY,
+                      },
+                      active: false,
+                    });
+                  }}
+                ></circle>
               </svg>
             </div>
-            <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
+            <div className="grow order-1 h-[2px] bg-black min-w-4" />
             <div
               className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute", {
                 hidden: !isInverted,
@@ -203,10 +234,20 @@ export const Gate = forwardRef<
                   className="pointer-events-auto hover:scale-[1.2] transition-transform"
                   data-logicate-input-terminal={index}
                 >
-                  <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+                  <circle
+                    cx="6.5"
+                    cy="6.5"
+                    r="6"
+                    stroke="black"
+                    strokeWidth="1"
+                    fill="white"
+                    data-logicate-input-terminal={index}
+                    data-logicate-node-parent-id={gateId}
+                    data-logicate-parent-terminal-type="input"
+                  ></circle>
                 </svg>
               </div>
-              <div className="grow min-w-4 h-[2px] bg-black"></div>
+              <div className="grow min-w-4 h-[2px] bg-black" />
               <div className="hidden z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute"></div>
             </div>
           ))}

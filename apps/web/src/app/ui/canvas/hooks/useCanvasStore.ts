@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Item, Wire } from "../types";
+import { Item, TempWire, Wire } from "../types";
 
 export interface State {
   wires: Wire[];
@@ -11,6 +11,7 @@ export interface State {
     zoom: number;
   };
   isHolding: boolean;
+  temporaryWire: TempWire | null;
 }
 
 interface Actions {
@@ -37,6 +38,8 @@ interface Actions {
   isSelected: (itemId: Item["id"] | Wire["id"]) => boolean;
   getItem: (id: Item["id"]) => Item | undefined;
   selectId: (id: Item["id"] | Wire["id"]) => void;
+  setTemporaryWire: (wire: TempWire | null) => void;
+  updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void;
 }
 
 const useCanvasStore = create<State & Actions>((set, get) => ({
@@ -49,6 +52,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     zoom: 1,
   },
   isHolding: false,
+  temporaryWire: null,
   setWires: (wires) => set({ wires }),
   addWire: (wire) => set((state) => ({ wires: [...state.wires, wire] })),
   removeWire: (wire) => set((state) => ({ wires: state.wires.filter((w) => w.id !== wire.id) })),
@@ -67,7 +71,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   getY: () => get().canvas.y,
   updateItem: (id, item) =>
     set((state) => ({
-      items: state.items.map((i) => (i.id === id ? { ...i, ...item } : i)),
+      items: state.items.map((i) => (i.id === id ? ({ ...i, ...item } as Item) : i)),
     })),
   canvasU: (update) => set((state) => ({ canvas: update(state.canvas) })),
   itemsUpdate: (update) => set((state) => ({ items: update(state.items) })),
@@ -75,6 +79,11 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   isSelected: (itemId) => get().selected.some((i) => i.id === itemId),
   getItem: (id) => get().items.find((i) => i.id === id),
   selectId: (id) => set((state) => ({ selected: [...state.selected, ...state.items.filter((i) => i.id === id)] })),
+  setTemporaryWire: (wire) => set({ temporaryWire: wire }),
+  updateTemporaryWire: (update) =>
+    set((state) => ({
+      temporaryWire: state.temporaryWire ? update(state.temporaryWire) : null,
+    })),
 }));
 
 export default useCanvasStore;

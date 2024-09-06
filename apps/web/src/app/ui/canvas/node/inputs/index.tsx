@@ -1,6 +1,7 @@
 import { cn } from "@logicate/ui";
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import useCanvasStore from "../../hooks/useCanvasStore";
+import { cursorInside } from "@logicate/utils/dom-cursor";
 
 export enum InputType {
   BUTTON = "BUTTON",
@@ -24,8 +25,8 @@ type InputState = boolean | number | string | null;
 
 export type InputProps = {
   type: InputType;
-  state: InputState;
   inputId: string;
+  computedValue: boolean;
 };
 
 export const Input = forwardRef<
@@ -34,8 +35,8 @@ export const Input = forwardRef<
     x: number;
     y: number;
   } & React.HTMLAttributes<HTMLDivElement>
->(({ type, x, y, state, inputId, ...rest }, ref) => {
-  const { setHolding, canvas, updateItem, selectId: select, isSelected } = useCanvasStore();
+>(({ type, x, y, inputId, computedValue, ...rest }, ref) => {
+  const { isHolding, setHolding, canvas, updateItem, selectItemId: select, isSelected } = useCanvasStore();
   const [position, setPosition] = useState({ x, y });
   const [offset, setOffset] = useState({ x, y });
   const [dragging, setDragging] = useState(false);
@@ -43,10 +44,8 @@ export const Input = forwardRef<
   const handleMouseDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const target = e.target as HTMLDivElement;
-      if (target.dataset.logicateBody) {
+      if (target.dataset.logicateBody || target.dataset.logicateInputContent) {
         setDragging(true);
-        // const logicateCanvas = document.querySelector("[data-logicate-canvas]") as HTMLDivElement;
-        // const rect = logicateCanvas.getBoundingClientRect();
         setOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
@@ -57,22 +56,42 @@ export const Input = forwardRef<
   );
 
   const handleMouseMove = useCallback(
-    (event: MouseEvent) => {
+    (e: MouseEvent) => {
       if (dragging) {
-        // Account for the canvas zoom
-        setPosition({
-          x: event.clientX - offset.x,
-          y: event.clientY - offset.y,
-        });
+        const canvasElement = document.querySelector("[data-logicate-canvas]");
+        if (canvasElement) {
+          const bounds = canvasElement.getBoundingClientRect();
+          if (cursorInside(e, bounds)) {
+            setPosition({
+              x: e.clientX - offset.x,
+              y: e.clientY - offset.y,
+            });
+          }
+        }
       }
     },
     [dragging, offset, canvas.zoom],
   );
 
   const handleMouseUp = useCallback(() => {
-    setDragging(false);
     updateItem(inputId, { x: position.x, y: position.y });
+    setDragging(false);
   }, [position]);
+
+  const handleClickDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      updateItem(inputId, {
+        computedValue: true,
+      });
+    },
+    [inputId, computedValue, updateItem],
+  );
+
+  const handleClickUp = useCallback(() => {
+    updateItem(inputId, {
+      computedValue: false,
+    });
+  }, [inputId, computedValue, updateItem]);
 
   useEffect(() => {
     if (dragging) {
@@ -81,19 +100,18 @@ export const Input = forwardRef<
       window.addEventListener("mouseup", handleMouseUp);
     } else {
       setHolding(false);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [dragging, handleMouseMove, handleMouseUp]);
+  }, [dragging]);
 
   return (
     <>
       <div
+        ref={ref}
         className={cn(
           "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
         )}
@@ -101,8 +119,7 @@ export const Input = forwardRef<
         tabIndex={-1}
         data-logicate-id={inputId}
         data-logicate-type={type}
-        data-logicate-state={state}
-        ref={ref}
+        data-logicate-state={computedValue}
         {...rest}
         onMouseDown={handleMouseDown}
         data-logicate-dragging={dragging}
@@ -129,12 +146,11 @@ export const Input = forwardRef<
               </svg>
             </div>
             <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
-            <div className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute")}></div>
           </div>
         </div>
         <div
           className={cn(
-            "bg-transparent w-8 min-h-8 min-w-[30px] transition-[filter] duration-100 border-black flex justify-center items-center",
+            "bg-white w-[42px] min-h-[42px] min-w-[42px] transition-[filter] duration-100 border-black border-2 flex justify-center items-center",
           )}
           style={{
             gridColumn: "2 / span 1",
@@ -142,14 +158,44 @@ export const Input = forwardRef<
             filter: isSelected(inputId) ? "drop-shadow(0px 0px 3px #0079db)" : "none",
           }}
         >
-          <div className="pointer-events-auto w-full h-full flex items-center justify-center">
-            <span
-              className={cn("w-8 min-h-8 bg-no-repeat select-none")}
-              style={{
-                backgroundImage: `url(${inputTypeToIcon[type]})`,
-              }}
-              data-logicate-body
-            ></span>
+          <div
+            className="pointer-events-auto w-full h-full flex items-center justify-center"
+            onMouseDown={handleClickDown}
+            onMouseUp={handleClickUp}
+            onMouseLeave={handleClickUp}
+            data-logicate-body
+          >
+            <svg
+              style={{ overflow: "visible", width: "30px", height: "30px" }}
+              className={cn("pointer-events-none")}
+              data-logicate-input-content
+            >
+              <g>
+                <circle
+                  //class="signalFill"
+                  className={cn("pointer-events-auto", {
+                    "text-blue-700 fill-current": computedValue === true,
+                  })}
+                  fill="#FFFFFF"
+                  stroke="#000000"
+                  cx="15"
+                  cy="15"
+                  r="15"
+                  data-logicate-input-content
+                ></circle>
+                <circle
+                  // class="buttonSurface"
+                  className="cursor-pointer"
+                  fill="#FFFFFF"
+                  stroke="#000000"
+                  strokeWidth="1"
+                  cx="15"
+                  cy="15"
+                  r="11"
+                  data-logicate-input-content
+                />
+              </g>
+            </svg>
           </div>
         </div>
       </div>

@@ -1,17 +1,14 @@
 "use client";
 
 import { cn } from "@logicate/ui";
-import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
+import { Minimise01Icon as MinusIcon, Plus01Icon as PlusIcon } from "@jfstech/icons-react/24/outline";
 
 import React from "react";
 import { InputProps, inputVariants } from ".";
 import { Button } from "../button";
 
 const QuantityInput = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { className, variant, children, disabled, inputSize, debug, ...props },
-    ref,
-  ) => {
+  ({ className, variant, children, disabled, inputSize, debug, onChange, ...props }, ref) => {
     const inputReference = React.useRef<HTMLInputElement>(null);
 
     return (
@@ -46,10 +43,7 @@ const QuantityInput = React.forwardRef<HTMLInputElement, InputProps>(
             onClick={() => {
               var currentValue = parseInt(inputReference.current?.value || "0");
               var maxValue = parseInt(inputReference.current?.max || "-1");
-              if (
-                (currentValue < maxValue || maxValue === -1) &&
-                inputReference.current
-              ) {
+              if ((currentValue < maxValue || maxValue === -1) && inputReference.current) {
                 inputReference.current.value = (currentValue + 1).toString();
               }
             }}

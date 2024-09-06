@@ -1,6 +1,8 @@
 import { cn } from "@logicate/ui";
+import { cursorInside } from "@logicate/utils/dom-cursor";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import useCanvasStore from "../hooks/useCanvasStore";
+import { useNode } from "../hooks/useNode";
 
 export enum GateType {
   AND = "AND",
@@ -32,15 +34,54 @@ export const gateTypeToIcon: Record<GateType, `data:image/svg+xml;base64,${strin
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMS42CkwgMSAzMS4zNSAzMC41NSAxNS44IDEgMS42IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxIDMxLjM1CkwgMSAxLjYgMzAuNTUgMTUuOCAxIDMxLjM1IFoiLz4KPC9zdmc+",
 };
 
-export const defaultInputs: Record<GateType, number> = {
-  [GateType.AND]: 2,
-  [GateType.OR]: 2,
-  [GateType.NOT]: 2,
-  [GateType.XOR]: 2,
-  [GateType.NAND]: 2,
-  [GateType.NOR]: 2,
-  [GateType.XNOR]: 2,
-  [GateType.BUFFER]: 1,
+export const defaultInputs: Record<
+  GateType,
+  {
+    min: number;
+    max: number;
+    default: number;
+  }
+> = {
+  [GateType.AND]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.OR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.NOT]: {
+    default: 1,
+    min: 1,
+    max: 1,
+  },
+  [GateType.XOR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.NAND]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.NOR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.XNOR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.BUFFER]: {
+    default: 1,
+    min: 1,
+    max: 1,
+  },
 };
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
@@ -61,7 +102,17 @@ export const Gate = forwardRef<
     y: number;
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, x, y, state, gateId, ...rest }, ref) => {
-  const { setHolding, canvas, updateItem, selectId: select, isSelected } = useCanvasStore();
+  const {
+    setHolding,
+    canvas,
+    updateItem,
+    temporaryWire,
+    setTemporaryWire,
+    selectItemId: select,
+    unselectItemId: unselect,
+    isSelected,
+  } = useCanvasStore();
+  const item = useNode(gateId);
   const isInverted = useMemo(() => {
     return inverted.includes(type);
   }, [type]);
@@ -80,8 +131,6 @@ export const Gate = forwardRef<
       const target = e.target as HTMLDivElement;
       if (target.dataset.logicateBody) {
         setDragging(true);
-        // const logicateCanvas = document.querySelector("[data-logicate-canvas]") as HTMLDivElement;
-        // const rect = logicateCanvas.getBoundingClientRect();
         setOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
@@ -94,11 +143,16 @@ export const Gate = forwardRef<
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       if (dragging) {
-        // Account for the canvas zoom
-        setPosition({
-          x: event.clientX - offset.x,
-          y: event.clientY - offset.y,
-        });
+        const canvasElement = document.querySelector("[data-logicate-canvas]");
+        if (canvasElement) {
+          const bounds = canvasElement.getBoundingClientRect();
+          if (cursorInside(event, bounds)) {
+            setPosition({
+              x: event.clientX - offset.x,
+              y: event.clientY - offset.y,
+            });
+          }
+        }
       }
     },
     [dragging, offset, canvas.zoom],
@@ -107,6 +161,7 @@ export const Gate = forwardRef<
   const handleMouseUp = useCallback(() => {
     setDragging(false);
     updateItem(gateId, { x: position.x, y: position.y });
+    select(gateId);
   }, [position]);
 
   useEffect(() => {
@@ -116,15 +171,13 @@ export const Gate = forwardRef<
       window.addEventListener("mouseup", handleMouseUp);
     } else {
       setHolding(false);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [dragging, handleMouseMove, handleMouseUp]);
+  }, [dragging]);
 
   return (
     <>
@@ -161,10 +214,34 @@ export const Gate = forwardRef<
                 }}
                 className="pointer-events-auto hover:scale-[1.2] transition-transform"
               >
-                <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+                <circle
+                  cx="6.5"
+                  cy="6.5"
+                  r="6"
+                  stroke="black"
+                  strokeWidth="1"
+                  fill="white"
+                  data-logicate-output-terminal={0}
+                  data-logicate-node-parent-id={gateId}
+                  data-logicate-parent-terminal-type="output"
+                  onMouseDown={(e) => {
+                    setTemporaryWire({
+                      from: {
+                        x: e.clientX,
+                        y: e.clientY,
+                      },
+                      fromId: gateId,
+                      to: {
+                        x: e.clientX,
+                        y: e.clientY,
+                      },
+                      active: false,
+                    });
+                  }}
+                ></circle>
               </svg>
             </div>
-            <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
+            <div className="grow order-1 h-[2px] bg-black min-w-4" />
             <div
               className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute", {
                 hidden: !isInverted,
@@ -180,9 +257,13 @@ export const Gate = forwardRef<
           }}
         >
           {Array.from({
+            // length: inputs > defaultInputs[type] ? inputs : defaultInputs[type],
             length:
-              // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
-              Math.max(inputs, defaultInputs[type]),
+              inputs < defaultInputs[type].min
+                ? defaultInputs[type].min
+                : inputs > defaultInputs[type].max
+                  ? defaultInputs[type].max
+                  : inputs,
           }).map((_, index) => (
             <div
               key={index}
@@ -203,10 +284,20 @@ export const Gate = forwardRef<
                   className="pointer-events-auto hover:scale-[1.2] transition-transform"
                   data-logicate-input-terminal={index}
                 >
-                  <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+                  <circle
+                    cx="6.5"
+                    cy="6.5"
+                    r="6"
+                    stroke="black"
+                    strokeWidth="1"
+                    fill="white"
+                    data-logicate-input-terminal={index}
+                    data-logicate-node-parent-id={gateId}
+                    data-logicate-parent-terminal-type="input"
+                  ></circle>
                 </svg>
               </div>
-              <div className="grow min-w-4 h-[2px] bg-black"></div>
+              <div className="grow min-w-4 h-[2px] bg-black" />
               <div className="hidden z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute"></div>
             </div>
           ))}

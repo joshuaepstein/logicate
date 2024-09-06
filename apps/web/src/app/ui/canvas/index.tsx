@@ -1,5 +1,4 @@
 "use client";
-
 import { CenterIcon, Eraser01Icon } from "@jfstech/icons-react/24/outline";
 import { LogicateSession, User } from "@logicate/database";
 import { Button } from "@logicate/ui/button";
@@ -14,29 +13,43 @@ import {
 } from "@logicate/ui/modal";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@logicate/ui/not-done-yet/accordion";
 import { Click } from "@logicate/utils/buttons";
-import { randomGateId } from "@logicate/utils/id";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { randomGateId, randomWireId } from "@logicate/utils/id";
+import { useEffect, useOptimistic, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import SuperJSON from "superjson";
 import BackgroundElement from "./background-element";
 import useDisableHook from "./disable-hook";
 import { DraggableItem } from "./draggable-item";
 import useCanvasStore from "./hooks/useCanvasStore";
-import { Gate, GateType } from "./node/gate";
+import { defaultInputs, Gate, GateType } from "./node/gate";
 import { Input, InputType } from "./node/inputs";
+import { TemporaryInput } from "./node/inputs/temporary";
 import { TemporaryGate } from "./node/temporary-gate";
-import { NodeType } from "./node/type";
+import { NodeType, OutputType } from "./node/type";
+import SettingsPopup from "./settings-popup";
+import { Item } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
+import { useBeforeunload } from "react-beforeunload";
 
 export default function Canvas({
   sessionId,
   user,
+  logicateSession,
+  revalidateData,
 }: {
   sessionId: string;
   logicateSession: LogicateSession;
   user: User;
+  revalidateData: (canvasId: string) => Promise<void>;
 }) {
   const canvasReference = useRef<HTMLDivElement>(null);
+  const [optimisticItems, addOptimisticItem] = useOptimistic(
+    logicateSession.items as Item[],
+    (state, newItem: Item) => {
+      return [...state, newItem];
+    },
+  );
   const {
     items,
     setItems,
@@ -45,6 +58,7 @@ export default function Canvas({
     setSelected,
     wires,
     setWires,
+    addWire,
     canvas,
     setCanvas,
     setX,
@@ -52,6 +66,12 @@ export default function Canvas({
     isHolding,
     setHolding,
     itemsUpdate,
+    temporaryWire,
+    setTemporaryWire,
+    updateTemporaryWire,
+    canvasU,
+    updateItem,
+    updateSelected,
   } = useCanvasStore();
   const [confirmClear, setConfirmClear] = useState(false);
   const [draggingNewElement, setDraggingNewElement] = useState<{
@@ -60,82 +80,25 @@ export default function Canvas({
     y: number;
   } | null>(null);
 
+  const pushItem = async (item: Item) => {
+    addOptimisticItem(item);
+
+    await fetch("/api/canvas/item", {
+      method: "POST",
+      body: SuperJSON.stringify({
+        item,
+        sessionId: logicateSession.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    await revalidateData(logicateSession.id);
+  };
+
   useDisableHook(canvasReference);
   updateStore(sessionId);
-
-  const handleCanvasMove = useCallback((e: React.MouseEvent) => {
-    if (e.buttons === 3) {
-      let newX = canvas.x + e.movementX;
-      let newY = canvas.y + e.movementY;
-      if (newX > 1000) {
-        newX = 1000;
-      } else if (newX < -1000) {
-        newX = -1000;
-      }
-      if (newY > 1000) {
-        newY = 1000;
-      } else if (newY < -1000) {
-        newY = -1000;
-      }
-      setX(newX);
-      setY(newY);
-    }
-  }, []);
-
-  const simulate = useCallback(() => {
-    // setItems((prevItems) => {
-    //   const newItems = [...prevItems];
-    //   const getValue = (id: number) => {
-    //     const item = newItems.find((item) => item.id === id);
-    //     return item
-    //       ? item.type === "INPUT"
-    //         ? item.value
-    //         : item.computedValue
-    //       : false;
-    //   };
-    //   const visited = new Set<number>();
-    //   const stack: number[] = [];
-    //   const visit = (id: number) => {
-    //     if (visited.has(id)) return;
-    //     visited.add(id);
-    //     const item = newItems.find((item) => item.id === id);
-    //     if (item) {
-    //       item.outputs.forEach((outputId) => visit(outputId));
-    //       stack.push(id);
-    //     }
-    //   };
-    //   newItems.forEach((item) => {
-    //     if (!visited.has(item.id)) {
-    //       visit(item.id);
-    //     }
-    //   });
-    //   while (stack.length > 0) {
-    //     const id = stack.pop();
-    //     if (id !== undefined) {
-    //       const item = newItems.find((item) => item.id === id);
-    //       if (item) {
-    //         if (item.type !== "INPUT") {
-    //           const inputValues = item.inputs
-    //             .map(getValue)
-    //             .map((a) => a || false);
-    //           if (item.type === "OUTPUT") {
-    //             item.computedValue = inputValues[0] || false;
-    //           } else if (item.type in gates) {
-    //             item.computedValue = gates[item.type](inputValues);
-    //           }
-    //         } else {
-    //           item.computedValue = item.value || false;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return newItems;
-    // });
-  }, []);
-
-  useEffect(() => {
-    simulate();
-  }, [wires, simulate]);
+  useBeforeunload(() => "Are you sure you want to leave this page? You will lose all unsaved changes.");
 
   useHotkeys("esc", () => {
     if (draggingNewElement) {
@@ -169,8 +132,13 @@ export default function Canvas({
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
   useEffect(() => {
     const handleDrag = (e: MouseEvent) => {
+      if (temporaryWire && e.buttons === Click.Primary) {
+        // update the end position of the wire
+        updateTemporaryWire((previous) => ({ ...previous, to: { x: e.clientX, y: e.clientY } }));
+      }
+
       if (draggingNewElement && e.buttons === Click.Primary) {
-        const element = document.querySelector("[data-logicate-temporary-dragging-gate]");
+        const element = document.querySelector("[data-logicate-temporary-dragging-node]");
         if (!element) return;
         setDraggingNewElement((previous) => {
           if (previous) {
@@ -199,7 +167,7 @@ export default function Canvas({
           setDraggingNewElement({
             type: {
               type: type as NodeType["type"],
-              ...(type === "gate" ? { gateType: typeType as GateType } : { inputType: typeType as InputType }),
+              node: typeType as NodeType["node"],
             } as NodeType,
             x: mouseX - 16 / -canvas.zoom,
             y: mouseY + 16 / -canvas.zoom,
@@ -210,6 +178,47 @@ export default function Canvas({
     };
 
     const handleMouseUp = (e: MouseEvent) => {
+      if (temporaryWire) {
+        const cursorOn = document.elementFromPoint(e.clientX, e.clientY);
+        console.log(cursorOn);
+        if (cursorOn && cursorOn.getAttribute("data-logicate-node-parent-id")) {
+          const parentId = cursorOn.getAttribute("data-logicate-node-parent-id");
+          const terminalType = cursorOn.getAttribute("data-logicate-parent-terminal-type");
+          if (parentId && terminalType) {
+            const parent = items.find((item) => item.id === parentId);
+            if (!parent) return;
+            switch (parent.itemType) {
+              case "gate":
+                if (terminalType === "input") {
+                  parent.inputs.push(temporaryWire.fromId);
+                  addWire({
+                    id: randomWireId(),
+                    from: temporaryWire.fromId,
+                    to: parentId,
+                    active: false,
+                  });
+                } else if (terminalType === "output") {
+                  parent.outputs.push(temporaryWire.fromId);
+                }
+                setTemporaryWire(null);
+                break;
+              case "input":
+                if (terminalType === "output") {
+                  parent.outputs.push(temporaryWire.fromId);
+                }
+                setTemporaryWire(null);
+                break;
+              default:
+                break;
+            }
+          } else {
+            setTemporaryWire(null);
+          }
+        } else {
+          setTemporaryWire(null);
+        }
+      }
+
       if (draggingNewElement) {
         setDraggingNewElement(null);
         // We need to adjust the x and y to be the one relative to the canvas so that it doesnt account for the width of the sidebar
@@ -228,37 +237,57 @@ export default function Canvas({
         const maxMinX = Math.max(0, Math.min(xOnCanvas, 1000));
         const yOnCanvas = (draggingNewElement.y - canvasReference.current.getBoundingClientRect().top) / canvas.zoom;
         const maxMinY = Math.max(0, Math.min(yOnCanvas, 1000));
-        addItem({
+        const item = {
           id: randomGateId(),
-          type: draggingNewElement.type,
           x: maxMinX,
           y: maxMinY,
-          inputs: [],
-          outputs: [],
-          value: false,
-          computedValue: false,
-        });
+          ...(draggingNewElement.type.type === "input"
+            ? {
+                itemType: "input" as const,
+                type: draggingNewElement.type.node as InputType,
+                value: false,
+                outputs: [],
+                settings: {},
+              }
+            : draggingNewElement.type.type === "gate"
+              ? {
+                  itemType: "gate" as const,
+                  type: draggingNewElement.type.node as GateType,
+                  computedValue: false,
+                  inputs: [],
+                  outputs: [],
+                  settings: {
+                    inputs: defaultInputs[draggingNewElement.type.node].default,
+                  },
+                }
+              : {
+                  itemType: "output" as const,
+                  type: draggingNewElement.type.node as OutputType,
+                  inputs: [],
+                  settings: {},
+                  computedValue: false,
+                }),
+        } satisfies Item;
+        // @ts-expect-error i dunno
+        addItem(item);
         setHolding(false);
       }
     };
 
+    const handleClickAnywhere = (e: MouseEvent) => {
+      if (e.target) if ((e.target as HTMLElement).getAttribute("data-logicate-canvas-items")) setSelected([]);
+    };
+
     document.addEventListener("mousemove", handleDrag);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("click", handleClickAnywhere);
+
     return () => {
       document.removeEventListener("mousemove", handleDrag);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("click", handleClickAnywhere);
     };
   });
-
-  const scrollCanvas = useCallback((_: React.WheelEvent) => {
-    //! Disabled for now until can get the moving of elements within the canvas working properly when scaled.
-    // canvasU((canvas) => {
-    //   return {
-    //     ...canvas,
-    //     zoom: Math.max(0.4, Math.min(canvas.zoom * (1 - e.deltaY * 0.001), 3)),
-    //   };
-    // });
-  }, []);
 
   return (
     <>
@@ -270,7 +299,7 @@ export default function Canvas({
               <AccordionContent>
                 <div className="flex flex-wrap gap-5 p-4 justify-between items-start">
                   {Object.values(InputType).map((type) => (
-                    <DraggableItem key={type} type={{ type: "input", inputType: type }} />
+                    <DraggableItem key={type} type={{ type: "input", node: type }} />
                   ))}
                 </div>
               </AccordionContent>
@@ -280,7 +309,7 @@ export default function Canvas({
               <AccordionContent>
                 <div className="flex flex-wrap gap-5 p-4 justify-between items-start">
                   {Object.values(GateType).map((type) => (
-                    <DraggableItem key={type} type={{ type: "gate", gateType: type }} />
+                    <DraggableItem key={type} type={{ type: "gate", node: type }} />
                   ))}
                 </div>
               </AccordionContent>
@@ -291,10 +320,6 @@ export default function Canvas({
         <div
           ref={canvasReference}
           className="w-full grow overflow-hidden relative max-h-[calc(100dvh-4rem)]"
-          onMouseMove={(e) => {
-            handleCanvasMove(e);
-          }}
-          onWheel={scrollCanvas}
           onDragOver={(e) => e.preventDefault()}
           data-logicate-canvas-position={`${canvas.x}px ${canvas.y}px`}
           data-logicate-canvas-zoom={canvas.zoom}
@@ -309,20 +334,8 @@ export default function Canvas({
             }}
           >
             {wires.map((wire, index) => {
-              const from = items.find((item) => item.id === wire.from);
-              const to = items.find((item) => item.id === wire.to);
-              if (!from || !to) return null;
               return (
-                <Wire
-                  key={index}
-                  startX={from.x + canvas.x}
-                  startY={from.y + canvas.y}
-                  endX={to.x + canvas.x}
-                  endY={to.y + canvas.y}
-                  isActive={wire.active ?? false}
-                  canvas={canvas}
-                  canvasReference={canvasReference}
-                />
+                <Wire key={index} startId={wire.from} endId={wire.to} isActive={wire.active ?? false} type="alt" />
               );
             })}
           </svg>
@@ -331,23 +344,24 @@ export default function Canvas({
             style={{
               transform: `scale(${canvas.zoom})`,
             }}
+            data-logicate-canvas-items
           >
             {items.map((item) =>
-              item.type.type === "gate" ? (
+              item.itemType === "gate" ? (
                 <Gate
                   key={item.id}
-                  type={item.type.gateType}
-                  inputs={item.inputs.length}
+                  type={item.type}
+                  inputs={item.settings.inputs ?? 0}
                   state={item.computedValue ?? false}
                   gateId={item.id}
                   x={item.x + canvas.x}
                   y={item.y + canvas.y}
                 />
-              ) : item.type.type === "input" ? (
+              ) : item.itemType === "input" ? (
                 <Input
                   key={item.id}
-                  type={item.type.inputType}
-                  state={item.computedValue ?? false}
+                  type={item.type}
+                  computedValue={item.value ?? false}
                   inputId={item.id}
                   x={item.x + canvas.x}
                   y={item.y + canvas.y}
@@ -356,49 +370,52 @@ export default function Canvas({
             )}
           </div>
         </div>
-        <div className="absolute bottom-4 right-4 flex flex-row items-center">
-          <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
-            <DialogTrigger asChild>
-              <Button className="mr-2" variant="destructive-primary" size="icon-sm">
-                <Eraser01Icon className="size-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure you want to clear the canvas?</DialogTitle>
-                <DialogDescription className="text-neutralgrey-900 text-sm">
-                  This will clear all components and wires on the canvas. You cannot undo this action.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  variant="destructive-primary"
-                  onClick={() => {
-                    setItems([]);
-                    setWires([]);
-                    setConfirmClear(false);
-                  }}
-                >
-                  Clear Canvas
+        <div className="absolute bottom-4 gap-4 right-4 flex flex-col items-end justify-end">
+          <SettingsPopup />
+          <div className="flex flex-row">
+            <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
+              <DialogTrigger asChild>
+                <Button className="mr-2" variant="destructive-primary" size="icon-sm">
+                  <Eraser01Icon className="size-5" />
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <Button
-            onClick={() => {
-              setCanvas({
-                x: 0,
-                y: 0,
-                zoom: 1,
-              });
-            }}
-            className="mr-2"
-            variant="dark"
-            size="icon-sm"
-            title="Center Canvas"
-          >
-            <CenterIcon className="size-5" />
-          </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure you want to clear the canvas?</DialogTitle>
+                  <DialogDescription className="text-neutralgrey-900 text-sm">
+                    This will clear all components and wires on the canvas. You cannot undo this action.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="destructive-primary"
+                    onClick={() => {
+                      setItems([]);
+                      setWires([]);
+                      setConfirmClear(false);
+                    }}
+                  >
+                    Clear Canvas
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Button
+              onClick={() => {
+                setCanvas({
+                  x: 0,
+                  y: 0,
+                  zoom: 1,
+                });
+              }}
+              className="mr-2"
+              variant="dark"
+              size="icon-sm"
+              title="Center Canvas"
+            >
+              <CenterIcon className="size-5" />
+            </Button>
+          </div>
         </div>
       </main>
       {draggingNewElement && (
@@ -411,16 +428,41 @@ export default function Canvas({
           {draggingNewElement.type.type === "gate" ? (
             <TemporaryGate
               canvasZoom={canvas.zoom}
-              type={draggingNewElement.type.gateType}
+              type={draggingNewElement.type.node}
               inputs={0}
               state={false}
               gateId={"temporary-dragging-logicate-element"}
               x={draggingNewElement.x}
               y={draggingNewElement.y}
             />
+          ) : draggingNewElement.type.type === "input" ? (
+            <TemporaryInput
+              canvasZoom={canvas.zoom}
+              type={draggingNewElement.type.node}
+              inputId={"temporary-dragging-logicate-element"}
+              x={draggingNewElement.x}
+              y={draggingNewElement.y}
+            />
           ) : null}
         </div>
       )}
+
+      <div className="absolute inset-0 w-full h-full pointer-events-none">
+        {temporaryWire && (
+          <Wire
+            start={{
+              x: temporaryWire.from.x,
+              y: temporaryWire.from.y,
+            }}
+            end={{
+              x: temporaryWire.to.x,
+              y: temporaryWire.to.y,
+            }}
+            isActive={false}
+            type="normal"
+          />
+        )}
+      </div>
     </>
   );
 }

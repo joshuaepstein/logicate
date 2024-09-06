@@ -30,6 +30,7 @@ import SettingsPopup from "./settings-popup";
 import { Item } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
+import { useBeforeunload } from "react-beforeunload";
 
 export default function Canvas({
   sessionId,
@@ -97,6 +98,7 @@ export default function Canvas({
 
   useDisableHook(canvasReference);
   updateStore(sessionId);
+  useBeforeunload(() => "Are you sure you want to leave this page? You will lose all unsaved changes.");
 
   useHotkeys("esc", () => {
     if (draggingNewElement) {

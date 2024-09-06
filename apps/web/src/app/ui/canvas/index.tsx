@@ -1,13 +1,5 @@
 "use client";
-
-import {
-  CenterIcon,
-  DashIcon,
-  Eraser01Icon,
-  Minimise01Icon,
-  Plus01Icon,
-  X01Icon,
-} from "@jfstech/icons-react/24/outline";
+import { CenterIcon, Eraser01Icon } from "@jfstech/icons-react/24/outline";
 import { LogicateSession, User } from "@logicate/database";
 import { Button } from "@logicate/ui/button";
 import {
@@ -22,24 +14,22 @@ import {
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@logicate/ui/not-done-yet/accordion";
 import { Click } from "@logicate/utils/buttons";
 import { randomGateId, randomWireId } from "@logicate/utils/id";
-import React, { useCallback, useEffect, useOptimistic, useRef, useState } from "react";
+import { useEffect, useOptimistic, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import SuperJSON from "superjson";
 import BackgroundElement from "./background-element";
 import useDisableHook from "./disable-hook";
 import { DraggableItem } from "./draggable-item";
 import useCanvasStore from "./hooks/useCanvasStore";
-import { gates } from "./node";
 import { defaultInputs, Gate, GateType } from "./node/gate";
 import { Input, InputType } from "./node/inputs";
 import { TemporaryInput } from "./node/inputs/temporary";
 import { TemporaryGate } from "./node/temporary-gate";
 import { NodeType, OutputType } from "./node/type";
-import { Alphabet, GateItem, InputItem, Item, OutputItem, Wire as WireType } from "./types";
+import SettingsPopup from "./settings-popup";
+import { Item } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
-import { QuantityInput } from "@logicate/ui/input/quantity";
-import { TextInput } from "@logicate/ui/input/index";
-import SuperJSON from "superjson";
 
 export default function Canvas({
   sessionId,
@@ -265,7 +255,7 @@ export default function Canvas({
                   inputs: [],
                   outputs: [],
                   settings: {
-                    inputs: defaultInputs[draggingNewElement.type.node],
+                    inputs: defaultInputs[draggingNewElement.type.node].default,
                   },
                 }
               : {
@@ -276,8 +266,8 @@ export default function Canvas({
                   computedValue: false,
                 }),
         } satisfies Item;
-        // @ts-expect-error there is an unknown error here
-        pushItem(item);
+        // @ts-expect-error i dunno
+        addItem(item);
         setHolding(false);
       }
     };
@@ -354,7 +344,7 @@ export default function Canvas({
             }}
             data-logicate-canvas-items
           >
-            {optimisticItems.map((item) =>
+            {items.map((item) =>
               item.itemType === "gate" ? (
                 <Gate
                   key={item.id}
@@ -379,130 +369,7 @@ export default function Canvas({
           </div>
         </div>
         <div className="absolute bottom-4 gap-4 right-4 flex flex-col items-end justify-end">
-          {selected && selected.length === 1 && (
-            <div className="min-w-80 bg-white rounded-md shadow-hard-xs min-h-28">
-              <div className="w-full py-2 border-b border-b-neutralgrey-400 px-4 flex justify-between items-center">
-                <h5 className="text-neutralgrey-1100 text-sm font-medium">Node Settings</h5>
-                <Button variant="no-borders" size="icon-xs">
-                  <X01Icon className="size-4" />
-                </Button>
-              </div>
-              <div className="flex flex-col w-full justify-between items-start p-4">
-                {selected[0].selectedType === "item" ? (
-                  <div className="flex flex-col w-full gap-4">
-                    {selected[0].itemType === "gate" ? (
-                      <div className="flex flex-row gap-4 justify-between w-full items-center">
-                        <p className="text-neutralgrey-800 text-sm">Inputs</p>
-                        <div className="flex flex-row w-max items-center">
-                          <Button
-                            variant="no-borders"
-                            size="icon-xs"
-                            onClick={() => {
-                              const inputs = (selected[0] as GateItem).settings.inputs;
-                              if (inputs - 1 < defaultInputs[(selected[0] as GateItem).type]) return;
-                              updateItem(selected[0].id, {
-                                ...selected[0],
-                                settings: {
-                                  ...(selected[0] as GateItem).settings,
-                                  // @ts-expect-error because we know that the settings are an object with an inputs property
-                                  inputs: inputs - 1,
-                                },
-                              });
-                              updateSelected();
-                            }}
-                          >
-                            <DashIcon className="size-4" />
-                          </Button>
-                          <input
-                            className="w-full max-w-20 border-none outline-none ring-0 focus:ring-0 focus:outline-none text-center"
-                            value={selected[0].settings.inputs}
-                            // type="number"
-                            id="logicate-gate-inputs-quantity-field"
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value);
-                              if (!isNaN(value)) {
-                                if (value + 1 > 10) return;
-                                if (value - 1 < defaultInputs[(selected[0] as GateItem).type]) return;
-                                updateItem(selected[0].id, {
-                                  ...selected[0],
-                                  settings: {
-                                    ...(selected[0] as GateItem).settings,
-                                    // @ts-expect-error because we know that the settings are an object with an inputs property
-                                    inputs: value,
-                                  },
-                                });
-                                updateSelected();
-                              }
-                            }}
-                          />
-                          <Button
-                            variant="no-borders"
-                            size="icon-xs"
-                            onClick={() => {
-                              const inputs = (selected[0] as GateItem).settings.inputs;
-                              if (inputs + 1 > 10) return;
-                              updateItem(selected[0].id, {
-                                ...selected[0],
-                                settings: {
-                                  ...(selected[0] as GateItem).settings,
-                                  // @ts-expect-error because we know that the settings are an object with an inputs property
-                                  inputs: inputs + 1,
-                                },
-                              });
-                              updateSelected();
-                            }}
-                          >
-                            <Plus01Icon className="size-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ) : null}
-                    <div className="flex flex-row gap-4 justify-between w-full items-center">
-                      <p className="text-neutralgrey-800 text-sm">Label</p>
-                      <div className="flex flex-row w-max items-center">
-                        <TextInput
-                          value={selected[0].settings.label}
-                          className="min-w-40"
-                          onChange={(e) => {
-                            updateItem(selected[0].id, {
-                              ...selected[0],
-                              settings: {
-                                ...(selected[0] as GateItem).settings,
-                                label: e.target.value,
-                              },
-                            });
-                            updateSelected();
-                          }}
-                        />
-                      </div>
-                      {selected[0].itemType === "input" || selected[0].itemType === "output" ? (
-                        <div className="flex flex-row gap-4 justify-between w-full items-center">
-                          <p className="text-neutralgrey-800 text-sm">Symbol</p>
-                          <div className="flex flex-row w-max items-center">
-                            <TextInput
-                              value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
-                              className="min-w-40"
-                              onChange={(e) => {
-                                updateItem(selected[0].id, {
-                                  ...selected[0],
-                                  settings: {
-                                    ...(selected[0] as InputItem | OutputItem).settings,
-                                    // @ts-expect-error because we know that the settings are an object with an expressionLetter property
-                                    expressionLetter: e.target.value as Alphabet,
-                                  },
-                                });
-                                updateSelected();
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          )}
+          <SettingsPopup />
           <div className="flex flex-row">
             <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
               <DialogTrigger asChild>

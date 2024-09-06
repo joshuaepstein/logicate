@@ -1,8 +1,8 @@
 import { cn } from "@logicate/ui";
+import { cursorInside } from "@logicate/utils/dom-cursor";
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import useCanvasStore from "../hooks/useCanvasStore";
 import { useNode } from "../hooks/useNode";
-import { cursorInside } from "@logicate/utils/dom-cursor";
 
 export enum GateType {
   AND = "AND",
@@ -34,15 +34,54 @@ export const gateTypeToIcon: Record<GateType, `data:image/svg+xml;base64,${strin
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMS42CkwgMSAzMS4zNSAzMC41NSAxNS44IDEgMS42IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxIDMxLjM1CkwgMSAxLjYgMzAuNTUgMTUuOCAxIDMxLjM1IFoiLz4KPC9zdmc+",
 };
 
-export const defaultInputs: Record<GateType, number> = {
-  [GateType.AND]: 2,
-  [GateType.OR]: 2,
-  [GateType.NOT]: 2,
-  [GateType.XOR]: 2,
-  [GateType.NAND]: 2,
-  [GateType.NOR]: 2,
-  [GateType.XNOR]: 2,
-  [GateType.BUFFER]: 1,
+export const defaultInputs: Record<
+  GateType,
+  {
+    min: number;
+    max: number;
+    default: number;
+  }
+> = {
+  [GateType.AND]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.OR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.NOT]: {
+    default: 1,
+    min: 1,
+    max: 1,
+  },
+  [GateType.XOR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.NAND]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.NOR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.XNOR]: {
+    default: 2,
+    min: 2,
+    max: 10,
+  },
+  [GateType.BUFFER]: {
+    default: 1,
+    min: 1,
+    max: 1,
+  },
 };
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
@@ -218,9 +257,13 @@ export const Gate = forwardRef<
           }}
         >
           {Array.from({
-            length: inputs > defaultInputs[type] ? inputs : defaultInputs[type],
-            // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
-            // Math.min(inputs, defaultInputs[type]),
+            // length: inputs > defaultInputs[type] ? inputs : defaultInputs[type],
+            length:
+              inputs < defaultInputs[type].min
+                ? defaultInputs[type].min
+                : inputs > defaultInputs[type].max
+                  ? defaultInputs[type].max
+                  : inputs,
           }).map((_, index) => (
             <div
               key={index}

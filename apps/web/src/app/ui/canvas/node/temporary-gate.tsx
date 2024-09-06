@@ -81,7 +81,7 @@ export const TemporaryGate = forwardRef<
           {Array.from({
             length:
               // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
-              Math.max(inputs, defaultInputs[type]),
+              Math.max(inputs, defaultInputs[type].default),
           }).map((_, index) => (
             <div
               key={index}

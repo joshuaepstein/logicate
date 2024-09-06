@@ -1,25 +1,19 @@
 import { getSession } from "@/lib/auth/utils";
+import { prisma } from "@logicate/database";
 import { revalidateTag } from "next/cache";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import Canvas from "../../ui/canvas";
 
-const getDatabaseSession = async (canvasId: string) => {
-  ("use server");
-  // const response = await prisma.logicateSession.findUnique({
-  //   where: {
-  //     id: canvasId,
-  //   },
-  // });
-  // return response;
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/canvas/${canvasId}`, {
-    method: "GET",
-    mode: "cors",
-    credentials: "include", // This will make sure that the cookie is sent along with the request
-    cache: "no-store",
-    next: {
-      tags: [`canvas-${canvasId}`],
+const getDatabaseSession = async (canvasId: string, userId: string) => {
+  "use server";
+  const canvas = await prisma.logicateSession.findUnique({
+    where: {
+      id: canvasId,
+      ownerId: userId,
     },
   });
-  return response.json();
+  return canvas;
 };
 
 async function revalidateData(canvasId: string) {
@@ -29,25 +23,25 @@ async function revalidateData(canvasId: string) {
 
 export default async function Home({ params: { canvas } }: { params: { canvas: string } }) {
   const session = await getSession();
-  const logicateSession = await getDatabaseSession(canvas);
+  if (!session) notFound();
+  const logicateSession = await getDatabaseSession(canvas, session.user.id);
 
   if (!logicateSession) {
-    return <div>Session not found</div>;
-  }
-
-  if (logicateSession.ownerId !== session.user.id) {
-    return <div>Unauthorized</div>;
+    // TODO: Canvas not found design
+    return notFound();
   }
 
   return (
     <div className="w-full max-h-dvh overflow-hidden h-dvh flex flex-col">
       <nav className="w-full h-16 border-b border-neutralgrey-400">{session.user.name}</nav>
-      <Canvas
-        sessionId={logicateSession.id}
-        logicateSession={logicateSession}
-        user={session.user}
-        revalidateData={revalidateData}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Canvas
+          sessionId={logicateSession.id}
+          logicateSession={logicateSession}
+          user={session.user}
+          revalidateData={revalidateData}
+        />
+      </Suspense>
     </div>
   );
 }

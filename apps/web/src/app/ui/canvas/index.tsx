@@ -22,7 +22,7 @@ import {
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@logicate/ui/not-done-yet/accordion";
 import { Click } from "@logicate/utils/buttons";
 import { randomGateId, randomWireId } from "@logicate/utils/id";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useOptimistic, useRef, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import BackgroundElement from "./background-element";
 import useDisableHook from "./disable-hook";
@@ -33,22 +33,32 @@ import { defaultInputs, Gate, GateType } from "./node/gate";
 import { Input, InputType } from "./node/inputs";
 import { TemporaryInput } from "./node/inputs/temporary";
 import { TemporaryGate } from "./node/temporary-gate";
-import { NodeType } from "./node/type";
+import { NodeType, OutputType } from "./node/type";
 import { Alphabet, GateItem, InputItem, Item, OutputItem, Wire as WireType } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
 import { QuantityInput } from "@logicate/ui/input/quantity";
 import { TextInput } from "@logicate/ui/input/index";
+import SuperJSON from "superjson";
 
 export default function Canvas({
   sessionId,
   user,
+  logicateSession,
+  revalidateData,
 }: {
   sessionId: string;
   logicateSession: LogicateSession;
   user: User;
+  revalidateData: (canvasId: string) => Promise<void>;
 }) {
   const canvasReference = useRef<HTMLDivElement>(null);
+  const [optimisticItems, addOptimisticItem] = useOptimistic(
+    logicateSession.items as Item[],
+    (state, newItem: Item) => {
+      return [...state, newItem];
+    },
+  );
   const {
     items,
     setItems,
@@ -72,8 +82,6 @@ export default function Canvas({
     updateItem,
     updateSelected,
   } = useCanvasStore();
-  const [simulatedItems, setSimulatedItems] = useState<Item[]>([]);
-  const [simulatedWires, setSimulatedWires] = useState<WireType[]>([]);
   const [confirmClear, setConfirmClear] = useState(false);
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType;
@@ -81,80 +89,24 @@ export default function Canvas({
     y: number;
   } | null>(null);
 
+  const pushItem = async (item: Item) => {
+    addOptimisticItem(item);
+
+    await fetch("/api/canvas/item", {
+      method: "POST",
+      body: SuperJSON.stringify({
+        item,
+        sessionId: logicateSession.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    await revalidateData(logicateSession.id);
+  };
+
   useDisableHook(canvasReference);
   updateStore(sessionId);
-
-  const handleCanvasMove = useCallback((e: React.MouseEvent) => {
-    if (e.buttons === 3) {
-      let newX = canvas.x + e.movementX;
-      let newY = canvas.y + e.movementY;
-      if (newX > 1000) {
-        newX = 1000;
-      } else if (newX < -1000) {
-        newX = -1000;
-      }
-      if (newY > 1000) {
-        newY = 1000;
-      } else if (newY < -1000) {
-        newY = -1000;
-      }
-      setX(newX);
-      setY(newY);
-    }
-  }, []);
-
-  const simulate = useCallback(() => {
-    setSimulatedItems((prevItems) => {
-      const newItems = [...prevItems];
-      const getValue = (id: string) => {
-        const item = newItems.find((item) => item.id === id);
-        return item ? (item.itemType === "input" ? item.value : item.computedValue) : false;
-      };
-      const visited = new Set<string>();
-      const stack: string[] = [];
-      const visit = (id: string) => {
-        if (visited.has(id)) return;
-        visited.add(id);
-        const item = newItems.find((item) => item.id === id);
-        if (item) {
-          if (item.itemType === "output") {
-            stack.push(id);
-          } else {
-            item.outputs.forEach((outputId) => visit(outputId));
-            stack.push(id);
-          }
-        }
-      };
-      newItems.forEach((item) => {
-        if (!visited.has(item.id)) {
-          visit(item.id);
-        }
-      });
-      while (stack.length > 0) {
-        const id = stack.pop();
-        if (id !== undefined) {
-          const item = newItems.find((item) => item.id === id);
-          if (item) {
-            if (item.itemType !== "input") {
-              const inputValues = item.inputs.map(getValue).map((a) => a || false);
-              if (item.itemType === "output") {
-                item.computedValue = inputValues[0] || false;
-              } else if (item.itemType === "gate") {
-                item.computedValue = gates[item.type](inputValues);
-              }
-            } else {
-              item.value = item.value || false;
-            }
-          }
-        }
-      }
-      return newItems;
-    });
-  }, []);
-
-  useEffect(() => {
-    simulate();
-  }, [items, wires, simulate]);
 
   useHotkeys("esc", () => {
     if (draggingNewElement) {
@@ -293,7 +245,7 @@ export default function Canvas({
         const maxMinX = Math.max(0, Math.min(xOnCanvas, 1000));
         const yOnCanvas = (draggingNewElement.y - canvasReference.current.getBoundingClientRect().top) / canvas.zoom;
         const maxMinY = Math.max(0, Math.min(yOnCanvas, 1000));
-        addItem({
+        const item = {
           id: randomGateId(),
           x: maxMinX,
           y: maxMinY,
@@ -305,17 +257,27 @@ export default function Canvas({
                 outputs: [],
                 settings: {},
               }
-            : {
-                itemType: "gate" as const,
-                type: draggingNewElement.type.node as GateType,
-                computedValue: false,
-                inputs: [],
-                outputs: [],
-                settings: {
-                  inputs: defaultInputs[draggingNewElement.type.node],
-                },
-              }),
-        });
+            : draggingNewElement.type.type === "gate"
+              ? {
+                  itemType: "gate" as const,
+                  type: draggingNewElement.type.node as GateType,
+                  computedValue: false,
+                  inputs: [],
+                  outputs: [],
+                  settings: {
+                    inputs: defaultInputs[draggingNewElement.type.node],
+                  },
+                }
+              : {
+                  itemType: "output" as const,
+                  type: draggingNewElement.type.node as OutputType,
+                  inputs: [],
+                  settings: {},
+                  computedValue: false,
+                }),
+        } satisfies Item;
+        // @ts-expect-error there is an unknown error here
+        pushItem(item);
         setHolding(false);
       }
     };
@@ -334,16 +296,6 @@ export default function Canvas({
       document.removeEventListener("click", handleClickAnywhere);
     };
   });
-
-  const scrollCanvas = useCallback((e: React.WheelEvent) => {
-    //! Disabled for now until can get the moving of elements within the canvas working properly when scaled.
-    canvasU((canvas) => {
-      return {
-        ...canvas,
-        zoom: Math.max(0.4, Math.min(canvas.zoom * (1 - e.deltaY * 0.001), 3)),
-      };
-    });
-  }, []);
 
   return (
     <>
@@ -376,10 +328,6 @@ export default function Canvas({
         <div
           ref={canvasReference}
           className="w-full grow overflow-hidden relative max-h-[calc(100dvh-4rem)]"
-          onMouseMove={(e) => {
-            handleCanvasMove(e);
-          }}
-          onWheel={scrollCanvas}
           onDragOver={(e) => e.preventDefault()}
           data-logicate-canvas-position={`${canvas.x}px ${canvas.y}px`}
           data-logicate-canvas-zoom={canvas.zoom}
@@ -406,7 +354,7 @@ export default function Canvas({
             }}
             data-logicate-canvas-items
           >
-            {items.map((item) =>
+            {optimisticItems.map((item) =>
               item.itemType === "gate" ? (
                 <Gate
                   key={item.id}

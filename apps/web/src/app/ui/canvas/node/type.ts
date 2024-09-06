@@ -9,6 +9,10 @@ export type NodeType =
   | {
       type: "input";
       node: InputType;
+    }
+  | {
+      type: "output";
+      node: OutputType;
     };
 
 export enum OutputType {

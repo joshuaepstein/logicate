@@ -2,7 +2,6 @@ import { cn } from "@logicate/ui";
 import { cursorInside } from "@logicate/utils/dom-cursor";
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import useCanvasStore from "../../hooks/useCanvasStore";
-import { cursorInside } from "@logicate/utils/dom-cursor";
 
 export enum InputType {
   BUTTON = "BUTTON",

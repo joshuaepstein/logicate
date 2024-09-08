@@ -28,7 +28,7 @@ import { TemporaryInput } from "./node/inputs/temporary";
 import { TemporaryGate } from "./node/temporary-gate";
 import { NodeType, OutputType } from "./node/type";
 import SettingsPopup from "./settings-popup";
-import { Item } from "./types";
+import { Item, Wire as WireType } from "./types";
 import updateStore from "./update-store-hook";
 import { Wire } from "./wire";
 

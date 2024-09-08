@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { Failure, Success } from "@/types/api";
-import { prisma } from "@logicate/database";
-import { hashPassword } from "@logicate/utils/encrypt";
-import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { z } from "zod";
+import { Failure, Success } from '@/types/api';
+import { prisma } from '@logicate/database';
+import { hashPassword } from '@logicate/utils/encrypt';
+import { signIn } from 'next-auth/react';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
 const registerSchema = z.object({
   name: z.string().min(1),
@@ -19,15 +19,15 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
 
 export async function registerAction(_: Failure<string> | Success<string> | undefined, formData: FormData) {
   const validatedFields = registerSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    username: formData.get("username"),
-    password: formData.get("password"),
+    name: formData.get('name'),
+    email: formData.get('email'),
+    username: formData.get('username'),
+    password: formData.get('password'),
   });
 
   if (!validatedFields.success) {
     const error = validatedFields.error.flatten().fieldErrors;
-    return Failure("Missing fields: " + Object.keys(error).join(", "));
+    return Failure('Missing fields: ' + Object.keys(error).join(', '));
   }
 
   const { name, email, username, password } = validatedFields.data;
@@ -39,19 +39,19 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
     where: { username },
   });
   if (existingUserByEmail || existingUserByUsername) {
-    return Failure("User already exists");
+    return Failure('User already exists');
   }
 
   if (password.length < 8) {
-    return Failure("Password must be at least 8 characters long");
+    return Failure('Password must be at least 8 characters long');
   } else if (!/[A-Z]/.test(password)) {
-    return Failure("Password must contain at least one uppercase letter");
+    return Failure('Password must contain at least one uppercase letter');
   } else if (!/[a-z]/.test(password)) {
-    return Failure("Password must contain at least one lowercase letter");
+    return Failure('Password must contain at least one lowercase letter');
   } else if (!/\d/.test(password)) {
-    return Failure("Password must contain at least one number");
+    return Failure('Password must contain at least one number');
   } else if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-    return Failure("Password must contain at least one special character");
+    return Failure('Password must contain at least one special character');
   }
 
   const hashedPassword = await hashPassword(password);
@@ -62,7 +62,7 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
       email,
       name,
       password: hashedPassword,
-      accountType: "TEACHER",
+      accountType: 'TEACHER',
       publicDisplay: {
         create: {},
       },
@@ -70,21 +70,21 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
   });
 
   if (!newUser) {
-    return Failure("Failed to create user");
+    return Failure('Failed to create user');
   }
 
   try {
-    const login = await signIn("credentials", {
+    const login = await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
     if (login) {
-      redirect("/?newLogin=true");
+      redirect('/?newLogin=true');
     }
   } catch (error) {
     throw error;
   }
 
-  return Success("User created successfully");
+  return Success('User created successfully');
 }

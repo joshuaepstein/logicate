@@ -1,18 +1,18 @@
 {
-    "$schema": "https://ui.shadcn.com/schema.json",
-    "style": "new-york",
-    "rsc": true,
-    "tsx": true,
-    "tailwind": {
-        "config": "tailwind.config.ts",
-        "css": "styles/globals.css",
-        "baseColor": "neutral",
-        "cssVariables": true,
-        "prefix": ""
-    },
-    "aliases": {
-        "components": "@logicate/ui",
-        "ui": "src",
-        "utils": "@logicate/ui"
-    }
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "aliases": {
+    "components": "@logicate/ui",
+    "ui": "src",
+    "utils": "@logicate/ui"
+  },
+  "rsc": true,
+  "style": "new-york",
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "tsx": true
 }

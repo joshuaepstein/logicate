@@ -1,4 +1,4 @@
-import LogoutClient from "./client";
+import LogoutClient from './client';
 
 export default function Logout() {
   return (

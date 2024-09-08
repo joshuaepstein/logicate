@@ -1,17 +1,17 @@
 {
-    "name": "@logicate/utils",
-    "version": "0.0.0",
-    "private": true,
-    "main": "index.ts",
-    "types": "index.ts",
-    "devDependencies": {
-        "@logicate/tsconfig": "workspace:*",
-        "nanoid": "^5.0.7",
-        "bcryptjs": "^2.4.3",
-        "@types/bcryptjs": "^2.4.6"
-    },
-    "exports": {
-        ".": "./src/index.ts",
-        "./*": "./src/*.ts"
-    }
+  "name": "@logicate/utils",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "main": "index.ts",
+  "types": "index.ts",
+  "devDependencies": {
+    "@logicate/tsconfig": "workspace:*",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
+    "nanoid": "^5.0.7"
+  }
 }

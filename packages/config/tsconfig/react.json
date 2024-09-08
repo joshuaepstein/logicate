@@ -1,15 +1,9 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Next.js",
-    "extends": [
-        "./base"
-    ],
-    "compilerOptions": {
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "jsx": "react-jsx"
-    }
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx"
+  },
+  "display": "Next.js",
+  "extends": ["./base"]
 }

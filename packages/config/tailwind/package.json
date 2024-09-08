@@ -1,17 +1,17 @@
 {
-    "name": "@logicate/tailwind",
-    "version": "0.0.0",
-    "private": true,
-    "main": "tailwind.config.ts",
-    "types": "tailwind.config.d.ts",
-    "devDependencies": {
-        "autoprefixer": "^10.4.20",
-        "@tailwindcss/typography": "^0.5.14",
-        "tailwind-scrollbar": "^3.1.0",
-        "tailwindcss-animate": "^1.0.7",
-        "@igorkowalczyk/is-browser": "^5.0.4",
-        "tailwind-scrollbar-hide": "^1.1.7",
-        "tailwindcss-inner-border": "^0.2.0",
-        "@tailwindcss/forms": "^0.5.7"
-    }
+  "name": "@logicate/tailwind",
+  "version": "0.0.0",
+  "private": true,
+  "main": "tailwind.config.ts",
+  "types": "tailwind.config.d.ts",
+  "devDependencies": {
+    "@igorkowalczyk/is-browser": "^5.0.4",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.14",
+    "autoprefixer": "^10.4.20",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-inner-border": "^0.2.0"
+  }
 }

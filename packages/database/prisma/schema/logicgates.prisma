@@ -1,13 +1,13 @@
 model LogicateSession {
-    id String @id @default(uuid())
-    items Json
-    wires Json
+  id    String @id @default(uuid())
+  items Json
+  wires Json
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    ownerId String
-    owner User @relation(fields: [ownerId], references: [id])
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
 
-    @@index([ownerId])
+  @@index([ownerId])
 }

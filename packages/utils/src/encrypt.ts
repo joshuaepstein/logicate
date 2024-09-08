@@ -1,7 +1,7 @@
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 
 export async function hashPassword(password: string): Promise<string> {
-  const salt = process.env.SALT_PASSWORD || "12";
+  const salt = process.env.SALT_PASSWORD || '12';
   const saltRounds = parseInt(salt);
   return await hash(password, saltRounds);
 }
@@ -10,7 +10,7 @@ function hash(password: string, saltRounds: number): Promise<string> {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) reject(err);
-      resolve(hash || "");
+      resolve(hash || '');
     });
   });
 }

@@ -1,6 +1,6 @@
-import { cn } from "@logicate/ui";
-import { forwardRef, useMemo } from "react";
-import { defaultInputs, GateType, gateTypeToIcon } from "./gate";
+import { cn } from '@logicate/ui';
+import { forwardRef, useMemo } from 'react';
+import { defaultInputs, GateType, gateTypeToIcon } from './gate';
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
 
@@ -35,7 +35,7 @@ export const TemporaryGate = forwardRef<
     <>
       <div
         className={cn(
-          "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
+          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
         )}
         style={{ left: x, top: y, transform: `scale(${canvasZoom})` }}
         tabIndex={-1}
@@ -46,26 +46,26 @@ export const TemporaryGate = forwardRef<
         <div
           className="flex flex-col items-start justify-center"
           style={{
-            gridColumn: "3 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '3 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
-          <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
-            <div className="order-2 z-[1] pointer-events-auto" style={{ lineHeight: 0 }}>
+          <div className="relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
+            <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
               <svg
                 style={{
-                  overflow: "visible",
-                  width: "12.5px",
-                  height: "12.5px",
+                  overflow: 'visible',
+                  width: '12.5px',
+                  height: '12.5px',
                 }}
-                className="pointer-events-auto hover:scale-[1.2] transition-transform"
+                className="pointer-events-auto transition-transform hover:scale-[1.2]"
               >
                 <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
               </svg>
             </div>
-            <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
+            <div className="order-1 h-[2px] min-w-4 grow bg-black"></div>
             <div
-              className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute", {
+              className={cn('absolute z-[1] -order-1 h-2 w-2 rounded-[50%] border-2 border-black bg-white', {
                 hidden: !isInverted,
               })}
             ></div>
@@ -74,8 +74,8 @@ export const TemporaryGate = forwardRef<
         <div
           className="flex flex-col items-end justify-center"
           style={{
-            gridColumn: "1 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '1 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
           {Array.from({
@@ -83,51 +83,48 @@ export const TemporaryGate = forwardRef<
               // either the inputs or the default inputs (if inputs is less than defaultInputs[type])
               Math.max(inputs, defaultInputs[type].default),
           }).map((_, index) => (
-            <div
-              key={index}
-              className="pointer-events-none flex flex-row w-7 items-center mb-[2.5px] relative last-of-type:mb-0"
-            >
+            <div key={index} className="pointer-events-none relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
               <div
-                className="z-[1] relative"
+                className="relative z-[1]"
                 style={{
                   lineHeight: 0,
                 }}
               >
                 <svg
                   style={{
-                    overflow: "visible",
-                    width: "12.5px",
-                    height: "12.5px",
+                    overflow: 'visible',
+                    width: '12.5px',
+                    height: '12.5px',
                   }}
-                  className="pointer-events-auto hover:scale-[1.2] transition-transform"
+                  className="pointer-events-auto transition-transform hover:scale-[1.2]"
                   data-logicate-input-terminal={index}
                 >
                   <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
                 </svg>
               </div>
-              <div className="grow min-w-4 h-[2px] bg-black"></div>
-              <div className="hidden z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute"></div>
+              <div className="h-[2px] min-w-4 grow bg-black"></div>
+              <div className="absolute z-[1] hidden h-2 w-2 rounded-[50%] border-2 border-black bg-white"></div>
             </div>
           ))}
         </div>
         <div
-          className={cn("bg-transparent w-8 min-h-8 min-w-[30px] border-black flex justify-center items-center", {
-            "border-none": inputs < 4,
-            "border-l-2 my-[5.25px] self-stretch": inputs > 3,
-            "-ml-[4.5px] -mr-px w-[36px]": isOrType,
-            "-ml-[9px] -mr-px w-[40px]": isXorXnorType,
+          className={cn('flex min-h-8 w-8 min-w-[30px] items-center justify-center border-black bg-transparent', {
+            'border-none': inputs < 4,
+            'my-[5.25px] self-stretch border-l-2': inputs > 3,
+            '-ml-[4.5px] -mr-px w-[36px]': isOrType,
+            '-ml-[9px] -mr-px w-[40px]': isXorXnorType,
           })}
           style={{
-            gridColumn: "2 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '2 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
-          <div className="pointer-events-auto w-full h-full flex items-center justify-center">
+          <div className="pointer-events-auto flex h-full w-full items-center justify-center">
             <span
-              className={cn("w-8 min-h-8 bg-no-repeat", {
-                "-ml-[2px]": inputs > 3,
-                "w-[38px]": isOrType,
-                "w-[40px]": isXorXnorType,
+              className={cn('min-h-8 w-8 bg-no-repeat', {
+                '-ml-[2px]': inputs > 3,
+                'w-[38px]': isOrType,
+                'w-[40px]': isXorXnorType,
               })}
               style={{
                 backgroundImage: `url(${gateTypeToIcon[type]})`,
@@ -141,4 +138,4 @@ export const TemporaryGate = forwardRef<
   );
 });
 
-TemporaryGate.displayName = "Temporary Logicate Logic Gate";
+TemporaryGate.displayName = 'Temporary Logicate Logic Gate';

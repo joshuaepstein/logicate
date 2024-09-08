@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import useCanvasStore from "./hooks/useCanvasStore";
+import { useEffect, useRef } from 'react';
+import useCanvasStore from './hooks/useCanvasStore';
 
 export default function BackgroundElement({
   showBackground = true,
@@ -29,16 +29,16 @@ export default function BackgroundElement({
   return (
     <div
       data-logicate-canvas-background
-      className="absolute inset-0 pointer-events-none -z-10 "
+      className="pointer-events-none absolute inset-0 -z-10"
       style={{
         backgroundImage: `url(/grid.png)`,
-        backgroundRepeat: "repeat",
-        backgroundSize: "50px 50px",
-        backgroundPosition: "center",
+        backgroundRepeat: 'repeat',
+        backgroundSize: '50px 50px',
+        backgroundPosition: 'center',
         // imageResolution: "72dpi",
         // backgroundPosition: `${canvas.x || 0}px ${canvas.y || 0}px`,
         // transition for background position
-        transition: "background-position 1s ease-in-out",
+        transition: 'background-position 1s ease-in-out',
       }}
       ref={backgroundElementRef}
     />

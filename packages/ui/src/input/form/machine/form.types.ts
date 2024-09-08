@@ -1,6 +1,6 @@
+import type { ErrorMessagesKey } from '../../../../../lib/generate-password-error-text';
 import type { JFSTechElementsFieldError } from '../errors';
 import type { FieldStates } from '../types';
-import type { ErrorMessagesKey } from '../../../../../lib/generate-password-error-text';
 
 export type FormDefaultValues = Map<string, FieldDetails['value']>;
 

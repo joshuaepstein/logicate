@@ -1,12 +1,10 @@
 const port = process.env.PORT || 3000;
 
 export const getVercelUrl = () => {
-  return process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : null;
+  return process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : null;
 };
 
-function joinPath(baseUrl: string, subpath = "") {
+function joinPath(baseUrl: string, subpath = '') {
   if (subpath) {
     const url = new URL(subpath, baseUrl);
     return url.href;
@@ -21,26 +19,23 @@ export function objectToQueryString(obj: Record<string, string>) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
       if (value !== undefined) {
-        parts.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+        parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
       }
     }
   }
 
-  return parts.join("&");
+  return parts.join('&');
 }
 
-export function absoluteUrl(subpath = "", query?: Record<string, string>) {
-  const queryString = query ? `?${objectToQueryString(query)}` : "";
+export function absoluteUrl(subpath = '', query?: Record<string, string>) {
+  const queryString = query ? `?${objectToQueryString(query)}` : '';
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ??
-    getVercelUrl() ??
-    `https://localhost:${port}`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? getVercelUrl() ?? `https://localhost:${port}`;
 
   return joinPath(baseUrl, subpath) + queryString;
 }
 
-export function shortUrl(subpath = "") {
+export function shortUrl(subpath = '') {
   const baseUrl = process.env.NEXT_PUBLIC_SHORT_BASE_URL ?? absoluteUrl();
   return joinPath(baseUrl, subpath);
 }

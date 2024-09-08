@@ -1,1 +1,1 @@
-export * from "@pierre/recipes/prettier";
+export * from '@pierre/recipes/prettier';

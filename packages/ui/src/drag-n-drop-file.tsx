@@ -1,9 +1,9 @@
-"use client";
-import { cn, humanFileSize, prettifyBytes } from "@logicate/ui";
-import { UploadIcon } from "@radix-ui/react-icons";
-import { ClassValue } from "clsx";
-import React, { DragEvent, FC } from "react";
-import { toast } from "sonner";
+'use client';
+import { cn, humanFileSize } from '@logicate/ui';
+import { UploadIcon } from '@radix-ui/react-icons';
+import { ClassValue } from 'clsx';
+import React, { DragEvent, FC } from 'react';
+import { toast } from 'sonner';
 
 type AcceptProp = `${string}/${string}` | string;
 
@@ -81,11 +81,11 @@ export const DragNDropComponent: FC<
       const overLimit = fileSizes.some((size) => size > fileSizeLimit * 1024);
 
       if (overLimit) {
-        toast.error("One or more files are over the size limit of 2MB", {
+        toast.error('One or more files are over the size limit of 2MB', {
           description: `Files with the name ${dropFiles
             .filter((file) => file.size > fileSizeLimit * 1024)
             .map((file) => file.name)
-            .join(", ")} are over the size limit of 2MB`,
+            .join(', ')} are over the size limit of 2MB`,
         });
         return;
       }
@@ -93,9 +93,7 @@ export const DragNDropComponent: FC<
 
     if (acceptMultiple) {
       setFiles((prev) => {
-        const newFiles = dropFiles.filter(
-          (file) => !prev.some((prevFile) => prevFile.name === file.name),
-        );
+        const newFiles = dropFiles.filter((file) => !prev.some((prevFile) => prevFile.name === file.name));
 
         return [...prev, ...newFiles];
       });
@@ -107,11 +105,11 @@ export const DragNDropComponent: FC<
   return (
     <div
       className={cn(
-        "border-neutralgrey-700 hover:bg-neutralgrey-200 group box-border flex w-max min-w-[300px] max-w-[600px] items-center justify-center rounded-lg border border-dashed px-8 py-6 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+        'border-neutralgrey-700 hover:bg-neutralgrey-200 group box-border flex w-max min-w-[300px] max-w-[600px] items-center justify-center rounded-lg border border-dashed px-8 py-6 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
         {
-          "border-2 border-solid border-blue-900 bg-blue-200": dragOn,
+          'border-2 border-solid border-blue-900 bg-blue-200': dragOn,
         },
-        className,
+        className
       )}
       tabIndex={0}
       onDragOver={handleDragOn}
@@ -147,7 +145,7 @@ export const DragNDropComponent: FC<
           <UploadIcon className="text-neutralgrey-1000 size-5" />
         </div>
         <p className="text-sm font-[475]">
-          Drag & drop files or{" "}
+          Drag & drop files or{' '}
           <span
             className="cursor-pointer text-blue-900"
             onClick={() => {
@@ -160,11 +158,9 @@ export const DragNDropComponent: FC<
           </span>
         </p>
         <p className="text-2xs text-neutralgrey-1000">
-          {(files.length > 0 && files.map((file) => file.name).join(", ")) ||
+          {(files.length > 0 && files.map((file) => file.name).join(', ')) ||
             // 'JPG, PNG or GIF - Max file size 2MB'
-            acceptedFileTypesString +
-              " - Max file size " +
-              humanFileSize(fileSizeLimit || 2000 * 1024, true)}
+            acceptedFileTypesString + ' - Max file size ' + humanFileSize(fileSizeLimit || 2000 * 1024, true)}
         </p>
       </div>
     </div>
@@ -173,18 +169,18 @@ export const DragNDropComponent: FC<
 
 const acceptTypeToReadable = (accept: AcceptProp, limit: number = -1) => {
   const mappings: Record<AcceptProp, string> = {
-    "image/*": "PNG, JPEG, JPG, GIF, BMP, TIFF, WebP",
-    "audio/*": "MP3, WAV, FLAC, AAC, OGG",
-    "video/*": "MP4, AVI, MKV, MOV, WMV, WebM",
-    "application/pdf": "PDF",
-    "*/*": "Any file type",
+    'image/*': 'PNG, JPEG, JPG, GIF, BMP, TIFF, WebP',
+    'audio/*': 'MP3, WAV, FLAC, AAC, OGG',
+    'video/*': 'MP4, AVI, MKV, MOV, WMV, WebM',
+    'application/pdf': 'PDF',
+    '*/*': 'Any file type',
   };
 
   // return mappings[accept] || 'Unknown file type'
   if (mappings[accept] && limit === -1) {
     return mappings[accept];
   } else if (mappings[accept] && limit !== -1) {
-    return mappings[accept].split(",").slice(0, limit).join(", ") + "...";
+    return mappings[accept].split(',').slice(0, limit).join(', ') + '...';
   }
-  return "Unknown file type";
+  return 'Unknown file type';
 };

@@ -1,32 +1,32 @@
 {
-    "name": "@logicate/database",
-    "private": true,
-    "version": "0.0.1",
-    "scripts": {
-        "postinstall": "prisma generate",
-        "db:generate": "prisma generate",
-        "db:push": "prisma db push --skip-generate",
-        "db:deploy": "prisma migrate deploy",
-        "db:migrate": "prisma migrate dev",
-        "db:seed": "tsx prisma/seed.ts",
-        "dev": "prisma studio --browser=none"
-    },
-    "exports": {
-        "./edge": "./edge.ts",
-        ".": "./index.ts"
-    },
-    "devDependencies": {
-        "@faker-js/faker": "^8.4.1",
-        "@logicate/tsconfig": "workspace:*",
-        "@logicate/utils": "workspace:*",
-        "@types/ws": "^8.5.12",
-        "prisma": "^5.18.0",
-        "tsx": "^4.17.0"
-    },
-    "dependencies": {
-        "@neondatabase/serverless": "^0.9.4",
-        "@prisma/adapter-neon": "^5.19.0",
-        "@prisma/client": "5.18.0",
-        "ws": "^8.18.0"
-    }
+  "name": "@logicate/database",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./edge": "./edge.ts",
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "db:deploy": "prisma migrate deploy",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push --skip-generate",
+    "db:seed": "tsx prisma/seed.ts",
+    "dev": "prisma studio --browser=none",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.4",
+    "@prisma/adapter-neon": "^5.19.0",
+    "@prisma/client": "5.18.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@logicate/tsconfig": "workspace:*",
+    "@logicate/utils": "workspace:*",
+    "@types/ws": "^8.5.12",
+    "prisma": "^5.18.0",
+    "tsx": "^4.17.0"
+  }
 }

@@ -1,10 +1,10 @@
-import { getSession } from "@/lib/auth/utils";
-import { prisma } from "@logicate/database";
-import { generateQuestionId } from "@logicate/utils/id";
-import { notFound, redirect } from "next/navigation";
+import { getSession } from '@/lib/auth/utils';
+import { prisma } from '@logicate/database';
+import { generateQuestionId } from '@logicate/utils/id';
+import { notFound, redirect } from 'next/navigation';
 
 const createDatabaseSession = async (userId: string) => {
-  "use server";
+  'use server';
   const getLocigateSessionCount = await prisma.logicateSession.count({
     where: {
       ownerId: userId,
@@ -12,15 +12,14 @@ const createDatabaseSession = async (userId: string) => {
   });
   if (getLocigateSessionCount >= 1) {
     // find the session with the least amount of items
-    const locigateSessionWithLeastItems =
-      await prisma.logicateSession.findFirst({
-        where: {
-          ownerId: userId,
-        },
-        orderBy: {
-          items: "asc",
-        },
-      });
+    const locigateSessionWithLeastItems = await prisma.logicateSession.findFirst({
+      where: {
+        ownerId: userId,
+      },
+      orderBy: {
+        items: 'asc',
+      },
+    });
     return locigateSessionWithLeastItems;
   }
 

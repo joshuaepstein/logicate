@@ -1,4 +1,4 @@
-import useCanvasStore from "./useCanvasStore";
+import useCanvasStore from './useCanvasStore';
 
 export const useNode = (id: string) => {
   const { items } = useCanvasStore();

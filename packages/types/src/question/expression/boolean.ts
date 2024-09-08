@@ -3,53 +3,52 @@ export type BooleanExpression =
       left: BooleanExpression;
       operator?: BooleanOperator;
       right?: BooleanExpression;
-      type: "compound";
+      type: 'compound';
     }
   | {
       variable: BooleanVariable;
-      type: "variable";
+      type: 'variable';
     }
   | {
       constant: BooleanConstant;
-      type: "constant";
+      type: 'constant';
     };
 
-export type BooleanOperator = "∧" | "∨" | "¬";
+export type BooleanOperator = '∧' | '∨' | '¬';
 
-export const AndOperator: BooleanOperator = "∧";
-export const OrOperator: BooleanOperator = "∨";
-export const NotOperator: BooleanOperator = "¬";
+export const AndOperator: BooleanOperator = '∧';
+export const OrOperator: BooleanOperator = '∨';
+export const NotOperator: BooleanOperator = '¬';
 
 export type BooleanVariable =
-  | "A"
-  | "B"
-  | "C"
-  | "D"
-  | "E"
-  | "F"
-  | "G"
-  | "H"
-  | "J"
-  | "K"
-  | "L"
-  | "P"
-  | "Q"
-  | "R"
-  | "S"
-  | "T"
-  | "U"
-  | "W"
-  | "X"
-  | "Y"
-  | "Z";
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'J'
+  | 'K'
+  | 'L'
+  | 'P'
+  | 'Q'
+  | 'R'
+  | 'S'
+  | 'T'
+  | 'U'
+  | 'W'
+  | 'X'
+  | 'Y'
+  | 'Z';
 
 export enum BooleanConstant {
   TRUE = 1,
   FALSE = 0,
 }
 
-export const BooleanVariables: BooleanVariable[] =
-  "ABCDEFGHJKLMNPQRSTUWXYZ".split("") as BooleanVariable[];
+export const BooleanVariables: BooleanVariable[] = 'ABCDEFGHJKLMNPQRSTUWXYZ'.split('') as BooleanVariable[];
 
 export enum ExpressionDifficulty {
   /**

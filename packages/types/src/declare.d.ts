@@ -1,1 +1,1 @@
-declare module "@logicate/types" {}
+declare module '@logicate/types' {}

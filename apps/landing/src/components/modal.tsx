@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { cn } from "@logicate/ui";
-import { backgroundOverlayStylesTW } from "@logicate/ui/bg-overlay";
-import useMediaQuery from "@logicate/utils/hooks/use-media-query";
-import * as Dialog from "@radix-ui/react-dialog";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
-import { Drawer } from "vaul";
+import { cn } from '@logicate/ui';
+import { backgroundOverlayStylesTW } from '@logicate/ui/bg-overlay';
+import useMediaQuery from '@logicate/utils/hooks/use-media-query';
+import * as Dialog from '@radix-ui/react-dialog';
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction } from 'react';
+import { Drawer } from 'vaul';
 
 export default function Modal({
   children,
@@ -52,15 +52,10 @@ export default function Modal({
           }
         }}
       >
-        <Drawer.Overlay
-          className={backgroundOverlayStylesTW("backdrop-blur-sm")}
-        />
+        <Drawer.Overlay className={backgroundOverlayStylesTW('backdrop-blur-sm')} />
         <Drawer.Portal>
           <Drawer.Content
-            className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 mt-24 rounded-t-[10px] border-t border-gray-200 bg-white",
-              className,
-            )}
+            className={cn('fixed bottom-0 left-0 right-0 z-50 mt-24 rounded-t-[10px] border-t border-gray-200 bg-white', className)}
           >
             <div className="sticky top-0 z-20 flex w-full items-center justify-center rounded-t-[10px] bg-inherit">
               <div className="my-3 h-1 w-12 rounded-full bg-gray-300" />
@@ -82,16 +77,13 @@ export default function Modal({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay
-          id="modal-backdrop"
-          className={backgroundOverlayStylesTW("backdrop-blur-sm")}
-        />
+        <Dialog.Overlay id="modal-backdrop" className={backgroundOverlayStylesTW('backdrop-blur-sm')} />
         <Dialog.Content
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
           className={cn(
-            "fixed inset-0 z-50 m-auto hidden max-h-fit w-full max-w-md animate-slide-up-fade overflow-hidden rounded-md shadow-hard-sm bg-white p-0 shadow-xl md:block",
-            className,
+            'animate-slide-up-fade shadow-hard-sm fixed inset-0 z-50 m-auto hidden max-h-fit w-full max-w-md overflow-hidden rounded-md bg-white p-0 shadow-xl md:block',
+            className
           )}
         >
           {children}

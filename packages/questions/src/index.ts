@@ -1,1 +1,1 @@
-export const QUESTION_GENERATOR_VERSION = "0.0.1";
+export const QUESTION_GENERATOR_VERSION = '0.0.1';

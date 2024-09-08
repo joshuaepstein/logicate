@@ -1,7 +1,7 @@
-import { prismaEdge } from "@logicate/database/edge";
-import { NextRequest, NextResponse } from "next/server";
+import { prismaEdge } from '@logicate/database/edge';
+import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
   const { email } = (await req.json()) as { email: string };

@@ -1,9 +1,9 @@
-import { LogicateError } from "@/lib/api/error";
-import { parseRequestBody } from "@/lib/api/utils";
-import { withSession } from "@/lib/auth/session";
-import { prisma } from "@logicate/database";
-import { generateQuestionId } from "@logicate/utils/id";
-import { NextResponse } from "next/server";
+import { LogicateError } from '@/lib/api/error';
+import { parseRequestBody } from '@/lib/api/utils';
+import { withSession } from '@/lib/auth/session';
+import { prisma } from '@logicate/database';
+import { generateQuestionId } from '@logicate/utils/id';
+import { NextResponse } from 'next/server';
 
 export const POST = withSession(async ({ session, req }) => {
   const data = await parseRequestBody(req);
@@ -31,8 +31,8 @@ export const POST = withSession(async ({ session, req }) => {
 
   if (!question) {
     throw new LogicateError({
-      code: "bad_request",
-      message: "Failed to create question",
+      code: 'bad_request',
+      message: 'Failed to create question',
     });
   }
 
@@ -42,6 +42,6 @@ export const POST = withSession(async ({ session, req }) => {
       id: questionId,
       data: questionData,
     },
-    { status: 200 },
+    { status: 200 }
   );
 });

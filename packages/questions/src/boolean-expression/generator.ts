@@ -7,8 +7,8 @@ import {
   BooleanVariables,
   ExpressionDifficulty,
   OrOperator,
-} from "@logicate/types/question/expression/boolean";
-import { simplifyBooleanExpression } from "./simplifier";
+} from '@logicate/types/question/expression/boolean';
+import { simplifyBooleanExpression } from './simplifier';
 
 /**
  * Get a random boolean value based on the chance
@@ -41,16 +41,14 @@ export class BooleanExpressionGenerator {
     if (chance(25)) {
       return {
         variable: randomOf(this.usedVariables) ?? BooleanVariables[0],
-        type: "variable",
+        type: 'variable',
       };
     } else {
-      const unusedVariables = BooleanExpressionGenerator.variables.filter(
-        (variable) => !this.usedVariables.includes(variable),
-      );
+      const unusedVariables = BooleanExpressionGenerator.variables.filter((variable) => !this.usedVariables.includes(variable));
       this.usedVariables.push(unusedVariables[0]);
       return {
         variable: unusedVariables[0] ?? BooleanVariables[0],
-        type: "variable",
+        type: 'variable',
       };
     }
   }
@@ -58,7 +56,7 @@ export class BooleanExpressionGenerator {
   private selectConstant(): BooleanExpression {
     return {
       constant: randomOf([BooleanConstant.TRUE, BooleanConstant.FALSE]),
-      type: "constant",
+      type: 'constant',
     };
   }
 
@@ -111,7 +109,7 @@ export class BooleanExpressionGenerator {
       operator,
       left,
       right,
-      type: "compound",
+      type: 'compound',
     };
 
     this.currentDepth++;
@@ -127,7 +125,7 @@ export class BooleanExpressionGenerator {
       operator: BooleanExpressionGenerator.selectOperator(),
       left: this.selectVariable(),
       right: this.selectVariable(),
-      type: "compound",
+      type: 'compound',
     };
   }
 }
@@ -138,14 +136,14 @@ export { ExpressionDifficulty };
 
 export function createString(expression: BooleanExpression): string {
   // Check if the expression is the parent expression (e.g. the root)
-  if (expression.type === "variable") {
+  if (expression.type === 'variable') {
     return expression.variable;
-  } else if (expression.type === "constant") {
+  } else if (expression.type === 'constant') {
     return expression.constant.toString();
-  } else if (expression.type === "compound") {
-    return `(${createString(expression.left)} ${expression.operator}${expression.right ? " " + createString(expression.right) : ""})`;
+  } else if (expression.type === 'compound') {
+    return `(${createString(expression.left)} ${expression.operator}${expression.right ? ' ' + createString(expression.right) : ''})`;
   } else {
-    return "ERROR";
+    return 'ERROR';
   }
 }
 
@@ -156,4 +154,4 @@ console.log(expression);
 console.log(createString(expression));
 
 const simplified = simplifyBooleanExpression(expression);
-console.log("Simplified:", createString(simplified));
+console.log('Simplified:', createString(simplified));

@@ -1,1 +1,1 @@
-declare module "@logicate/tailwind";
+declare module '@logicate/tailwind';

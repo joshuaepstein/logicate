@@ -8,7 +8,7 @@ declare global {
       /**
        * "development" or "production"
        */
-      NODE_ENV: "development" | "production";
+      NODE_ENV: 'development' | 'production';
       /**
        * Must be 32 characters long
        */

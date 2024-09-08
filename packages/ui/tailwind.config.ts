@@ -1,5 +1,5 @@
-import sharedConfig from "@logicate/tailwind";
+import sharedConfig from '@logicate/tailwind';
 
 export default {
-    ...sharedConfig
-}
+  ...sharedConfig,
+};

@@ -1,29 +1,29 @@
 {
-    "name": "@logicate/questions",
-    "version": "0.0.1",
-    "description": "Logicate question generator",
-    "main": "./src/index.ts",
-    "exports": {
-        ".": "./src/index.ts",
-        "./*": "./src/*.ts"
-    },
-    "dependencies": {
-        "@ai-sdk/anthropic": "^0.0.48",
-        "@ai-sdk/openai": "^0.0.54",
-        "@logicate/database": "workspace:*",
-        "@logicate/types": "workspace:*",
-        "@logicate/utils": "workspace:*",
-        "ai": "^3.3.20",
-        "lodash": "^4.17.21",
-        "zod": "^3.23.8"
-    },
-    "devDependencies": {
-        "@logicate/tsconfig": "workspace:*",
-        "@logicate/types": "workspace:*",
-        "@types/lodash": "^4.17.7",
-        "ts-node": "^10.9.2"
-    },
-    "scripts": {
-        "generate:boolean-expression": "ts-node ./src/boolean-expression/generator.ts"
-    }
+  "name": "@logicate/questions",
+  "version": "0.0.1",
+  "description": "Logicate question generator",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "main": "./src/index.ts",
+  "scripts": {
+    "generate:boolean-expression": "ts-node ./src/boolean-expression/generator.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.48",
+    "@ai-sdk/openai": "^0.0.54",
+    "@logicate/database": "workspace:*",
+    "@logicate/types": "workspace:*",
+    "@logicate/utils": "workspace:*",
+    "ai": "^3.3.20",
+    "lodash": "^4.17.21",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@logicate/tsconfig": "workspace:*",
+    "@logicate/types": "workspace:*",
+    "@types/lodash": "^4.17.7",
+    "ts-node": "^10.9.2"
+  }
 }

@@ -1,1 +1,1 @@
-export { default } from "@logicate/ui/layout/loading";
+export { default } from '@logicate/ui/layout/loading';

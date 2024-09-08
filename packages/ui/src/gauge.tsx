@@ -1,26 +1,26 @@
-import { cn } from "@logicate/ui";
+import { cn } from '@logicate/ui';
 
 const sizes = {
   small: {
-    width: "36",
-    height: "36",
-    textSize: "text-xs",
+    width: '36',
+    height: '36',
+    textSize: 'text-xs',
   },
   medium: {
-    width: "72",
-    height: "72",
-    textSize: "text-lg",
+    width: '72',
+    height: '72',
+    textSize: 'text-lg',
   },
   large: {
-    width: "144",
-    height: "144",
-    textSize: "text-3xl",
+    width: '144',
+    height: '144',
+    textSize: 'text-3xl',
   },
 };
 
 export function Gauge({
   value,
-  size = "small",
+  size = 'small',
   showValue = false,
   showPercent = false,
 }: {
@@ -69,21 +69,16 @@ export function Gauge({
           cy="60"
           style={{
             strokeDashoffset,
-            transition: "stroke-dasharray 1s ease 0s, stroke 1s ease 0s",
+            transition: 'stroke-dasharray 1s ease 0s, stroke 1s ease 0s',
           }}
           strokeLinecap="round"
         />
       </svg>
       {showValue ? (
         <div className="animate-gauge_fadeIn absolute flex">
-          <p
-            className={cn(
-              "text-neutralgrey-1200 dark:text-neutralgrey-100 font-semibold",
-              sizes[size].textSize,
-            )}
-          >
+          <p className={cn('text-neutralgrey-1200 dark:text-neutralgrey-100 font-semibold', sizes[size].textSize)}>
             {value}
-            {showPercent ? "%" : ""}
+            {showPercent ? '%' : ''}
           </p>
         </div>
       ) : null}

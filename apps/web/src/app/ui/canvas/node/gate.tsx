@@ -1,37 +1,39 @@
-import { cn } from "@logicate/ui";
-import { cursorInside } from "@logicate/utils/dom-cursor";
-import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
-import useCanvasStore from "../hooks/useCanvasStore";
-import { useNode } from "../hooks/useNode";
+import { cn } from '@logicate/ui';
+import { cursorInside } from '@logicate/utils/dom-cursor';
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import useCanvasStore from '../hooks/useCanvasStore';
+import { useNode } from '../hooks/useNode';
+import AndBody from './nodes/and/body';
+import { GateItem } from '../types';
 
 export enum GateType {
-  AND = "AND",
-  OR = "OR",
-  NOT = "NOT",
-  XOR = "XOR",
-  NAND = "NAND",
-  NOR = "NOR",
-  XNOR = "XNOR",
-  BUFFER = "BUFFER",
+  AND = 'AND',
+  OR = 'OR',
+  NOT = 'NOT',
+  XOR = 'XOR',
+  NAND = 'NAND',
+  NOR = 'NOR',
+  XNOR = 'XNOR',
+  BUFFER = 'BUFFER',
 }
 
 export const gateTypeToIcon: Record<GateType, `data:image/svg+xml;base64,${string}`> = {
   [GateType.AND]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMQpMIDEgMzEgMTYgMzEKUSAyMi4yIDMxIDI2LjYgMjYuNiAzMSAyMi4yIDMxIDE2IDMxIDkuOCAyNi42IDUuNCAyMi4yIDEgMTYgMQpMIDEgMSBaIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8xX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMyIgZmlsbD0ibm9uZSIgZD0iCk0gMSAxCkwgMTYgMQpRIDIyLjIgMSAyNi42IDUuNCAzMSA5LjggMzEgMTYgMzEgMjIuMiAyNi42IDI2LjYgMjIuMiAzMSAxNiAzMQpMIDEgMzEgMSAxIFoiLz4KPC9zdmc+",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMQpMIDEgMzEgMTYgMzEKUSAyMi4yIDMxIDI2LjYgMjYuNiAzMSAyMi4yIDMxIDE2IDMxIDkuOCAyNi42IDUuNCAyMi4yIDEgMTYgMQpMIDEgMSBaIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8xX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMyIgZmlsbD0ibm9uZSIgZD0iCk0gMSAxCkwgMTYgMQpRIDIyLjIgMSAyNi42IDUuNCAzMSA5LjggMzEgMTYgMzEgMjIuMiAyNi42IDI2LjYgMjIuMiAzMSAxNiAzMQpMIDEgMzEgMSAxIFoiLz4KPC9zdmc+',
   [GateType.OR]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzZweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzYgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDMzLjU1IDE5Ljc1ClEgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxCkwgMS41IDEKUSAyLjI1IDIuNiAyLjk1IDQuMiAzLjggNi40IDQuNDUgOC41IDQuNzUgOS41IDQuOTUgMTAuNSA2LjY1IDE4LjA1IDQuNjUgMjQuNTUgNC4zIDI1LjU1IDMuOSAyNi41NSAzLjQ1IDI3LjYgMi45NSAyOC42IDIuMjUgMjkuOCAxLjUgMzEKTCAxMS43NSAzMQpRIDI2LjU1IDMxLjE1IDMzLjU1IDE5Ljc1IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjMiIGZpbGw9Im5vbmUiIGQ9IgpNIDEyLjE1IDEKTCAxLjUgMQpRIDIuMjUgMi42IDIuOTUgNC4yIDMuOCA2LjQgNC40NSA4LjUgNC43NSA5LjUgNC45NSAxMC41IDYuNjUgMTguMDUgNC42NSAyNC41NSA0LjMgMjUuNTUgMy45IDI2LjU1IDMuNDUgMjcuNiAyLjk1IDI4LjYgMi4yNSAyOS44IDEuNSAzMQpMIDExLjc1IDMxIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49ImJldmVsIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIGQ9IgpNIDExLjc1IDMxClEgMjYuNTUgMzEuMTUgMzMuNTUgMTkuNzUgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxIi8+Cjwvc3ZnPg==",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzZweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzYgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDMzLjU1IDE5Ljc1ClEgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxCkwgMS41IDEKUSAyLjI1IDIuNiAyLjk1IDQuMiAzLjggNi40IDQuNDUgOC41IDQuNzUgOS41IDQuOTUgMTAuNSA2LjY1IDE4LjA1IDQuNjUgMjQuNTUgNC4zIDI1LjU1IDMuOSAyNi41NSAzLjQ1IDI3LjYgMi45NSAyOC42IDIuMjUgMjkuOCAxLjUgMzEKTCAxMS43NSAzMQpRIDI2LjU1IDMxLjE1IDMzLjU1IDE5Ljc1IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjMiIGZpbGw9Im5vbmUiIGQ9IgpNIDEyLjE1IDEKTCAxLjUgMQpRIDIuMjUgMi42IDIuOTUgNC4yIDMuOCA2LjQgNC40NSA4LjUgNC43NSA5LjUgNC45NSAxMC41IDYuNjUgMTguMDUgNC42NSAyNC41NSA0LjMgMjUuNTUgMy45IDI2LjU1IDMuNDUgMjcuNiAyLjk1IDI4LjYgMi4yNSAyOS44IDEuNSAzMQpMIDExLjc1IDMxIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49ImJldmVsIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIGQ9IgpNIDExLjc1IDMxClEgMjYuNTUgMzEuMTUgMzMuNTUgMTkuNzUgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxIi8+Cjwvc3ZnPg==',
   [GateType.NOT]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMS42CkwgMSAzMS4zNSAzMC41NSAxNS44IDEgMS42IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxIDMxLjM1CkwgMSAxLjYgMzAuNTUgMTUuOCAxIDMxLjM1IFoiLz4KPC9zdmc+",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMS42CkwgMSAzMS4zNSAzMC41NSAxNS44IDEgMS42IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxIDMxLjM1CkwgMSAxLjYgMzAuNTUgMTUuOCAxIDMxLjM1IFoiLz4KPC9zdmc+',
   [GateType.XOR]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDBweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgNDAgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDkuMjUgOC41ClEgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NQpRIDMyLjg1IDMxLjEgMzkuNCAxNS45NSAzMS43IDEuMyAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgWiIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxLjQgMQpRIDMuMiA0LjU1IDQuMzUgOC42NQpNIDQuNjUgMTAuMDUKUSA2LjEgMTcuMDUgNC4xNSAyNC4wNQpNIDMuNyAyNS42NQpRIDIuNyAyOC41NSAxLjQgMzEiLz4KCjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NSIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzNfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0iYmV2ZWwiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIgZD0iCk0gMTYuMzUgMzAuOTUKUSAzMi44NSAzMS4xIDM5LjQgMTUuOTUgMzEuNyAxLjMgMTYuNzUgMSIvPgo8L3N2Zz4=",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDBweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgNDAgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDkuMjUgOC41ClEgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NQpRIDMyLjg1IDMxLjEgMzkuNCAxNS45NSAzMS43IDEuMyAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgWiIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxLjQgMQpRIDMuMiA0LjU1IDQuMzUgOC42NQpNIDQuNjUgMTAuMDUKUSA2LjEgMTcuMDUgNC4xNSAyNC4wNQpNIDMuNyAyNS42NQpRIDIuNyAyOC41NSAxLjQgMzEiLz4KCjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NSIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzNfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0iYmV2ZWwiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIgZD0iCk0gMTYuMzUgMzAuOTUKUSAzMi44NSAzMS4xIDM5LjQgMTUuOTUgMzEuNyAxLjMgMTYuNzUgMSIvPgo8L3N2Zz4=',
   [GateType.NAND]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMQpMIDEgMzEgMTYgMzEKUSAyMi4yIDMxIDI2LjYgMjYuNiAzMSAyMi4yIDMxIDE2IDMxIDkuOCAyNi42IDUuNCAyMi4yIDEgMTYgMQpMIDEgMSBaIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8xX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMyIgZmlsbD0ibm9uZSIgZD0iCk0gMSAxCkwgMTYgMQpRIDIyLjIgMSAyNi42IDUuNCAzMSA5LjggMzEgMTYgMzEgMjIuMiAyNi42IDI2LjYgMjIuMiAzMSAxNiAzMQpMIDEgMzEgMSAxIFoiLz4KPC9zdmc+",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMQpMIDEgMzEgMTYgMzEKUSAyMi4yIDMxIDI2LjYgMjYuNiAzMSAyMi4yIDMxIDE2IDMxIDkuOCAyNi42IDUuNCAyMi4yIDEgMTYgMQpMIDEgMSBaIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8xX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbWl0ZXJsaW1pdD0iMyIgZmlsbD0ibm9uZSIgZD0iCk0gMSAxCkwgMTYgMQpRIDIyLjIgMSAyNi42IDUuNCAzMSA5LjggMzEgMTYgMzEgMjIuMiAyNi42IDI2LjYgMjIuMiAzMSAxNiAzMQpMIDEgMzEgMSAxIFoiLz4KPC9zdmc+',
   [GateType.NOR]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzZweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzYgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDMzLjU1IDE5Ljc1ClEgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxCkwgMS41IDEKUSAyLjI1IDIuNiAyLjk1IDQuMiAzLjggNi40IDQuNDUgOC41IDQuNzUgOS41IDQuOTUgMTAuNSA2LjY1IDE4LjA1IDQuNjUgMjQuNTUgNC4zIDI1LjU1IDMuOSAyNi41NSAzLjQ1IDI3LjYgMi45NSAyOC42IDIuMjUgMjkuOCAxLjUgMzEKTCAxMS43NSAzMQpRIDI2LjU1IDMxLjE1IDMzLjU1IDE5Ljc1IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjMiIGZpbGw9Im5vbmUiIGQ9IgpNIDEyLjE1IDEKTCAxLjUgMQpRIDIuMjUgMi42IDIuOTUgNC4yIDMuOCA2LjQgNC40NSA4LjUgNC43NSA5LjUgNC45NSAxMC41IDYuNjUgMTguMDUgNC42NSAyNC41NSA0LjMgMjUuNTUgMy45IDI2LjU1IDMuNDUgMjcuNiAyLjk1IDI4LjYgMi4yNSAyOS44IDEuNSAzMQpMIDExLjc1IDMxIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49ImJldmVsIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIGQ9IgpNIDExLjc1IDMxClEgMjYuNTUgMzEuMTUgMzMuNTUgMTkuNzUgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxIi8+Cjwvc3ZnPg==",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzZweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzYgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDMzLjU1IDE5Ljc1ClEgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxCkwgMS41IDEKUSAyLjI1IDIuNiAyLjk1IDQuMiAzLjggNi40IDQuNDUgOC41IDQuNzUgOS41IDQuOTUgMTAuNSA2LjY1IDE4LjA1IDQuNjUgMjQuNTUgNC4zIDI1LjU1IDMuOSAyNi41NSAzLjQ1IDI3LjYgMi45NSAyOC42IDIuMjUgMjkuOCAxLjUgMzEKTCAxMS43NSAzMQpRIDI2LjU1IDMxLjE1IDMzLjU1IDE5Ljc1IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjMiIGZpbGw9Im5vbmUiIGQ9IgpNIDEyLjE1IDEKTCAxLjUgMQpRIDIuMjUgMi42IDIuOTUgNC4yIDMuOCA2LjQgNC40NSA4LjUgNC43NSA5LjUgNC45NSAxMC41IDYuNjUgMTguMDUgNC42NSAyNC41NSA0LjMgMjUuNTUgMy45IDI2LjU1IDMuNDUgMjcuNiAyLjk1IDI4LjYgMi4yNSAyOS44IDEuNSAzMQpMIDExLjc1IDMxIi8+CjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49ImJldmVsIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIGQ9IgpNIDExLjc1IDMxClEgMjYuNTUgMzEuMTUgMzMuNTUgMTkuNzUgMzQuNiAxOCAzNS41IDE2IDM0LjU1IDE0LjMgMzMuNTUgMTIuNzUgMjUuNzUgMS4yNSAxMi4xNSAxIi8+Cjwvc3ZnPg==',
   [GateType.XNOR]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDBweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgNDAgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDkuMjUgOC41ClEgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NQpRIDMyLjg1IDMxLjEgMzkuNCAxNS45NSAzMS43IDEuMyAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgWiIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxLjQgMQpRIDMuMiA0LjU1IDQuMzUgOC42NQpNIDQuNjUgMTAuMDUKUSA2LjEgMTcuMDUgNC4xNSAyNC4wNQpNIDMuNyAyNS42NQpRIDIuNyAyOC41NSAxLjQgMzEiLz4KCjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NSIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzNfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0iYmV2ZWwiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIgZD0iCk0gMTYuMzUgMzAuOTUKUSAzMi44NSAzMS4xIDM5LjQgMTUuOTUgMzEuNyAxLjMgMTYuNzUgMSIvPgo8L3N2Zz4=",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNDBweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgNDAgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDkuMjUgOC41ClEgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NQpRIDMyLjg1IDMxLjEgMzkuNCAxNS45NSAzMS43IDEuMyAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgWiIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxLjQgMQpRIDMuMiA0LjU1IDQuMzUgOC42NQpNIDQuNjUgMTAuMDUKUSA2LjEgMTcuMDUgNC4xNSAyNC4wNQpNIDMuNyAyNS42NQpRIDIuNyAyOC41NSAxLjQgMzEiLz4KCjxwYXRoIGlkPSJMYXllcjBfMF8yX1NUUk9LRVMiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxNi43NSAxCkwgNi40IDEKUSA4LjI1IDQuODUgOS4yNSA4LjUgOS41NSA5LjUgOS43NSAxMC41IDExLjQgMTggOS40NSAyNC41IDkuMSAyNS41IDguNzUgMjYuNSA3LjggMjguOCA2LjQgMzAuOTUKTCAxNi4zNSAzMC45NSIvPgoKPHBhdGggaWQ9IkxheWVyMF8wXzNfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0iYmV2ZWwiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIgZD0iCk0gMTYuMzUgMzAuOTUKUSAzMi44NSAzMS4xIDM5LjQgMTUuOTUgMzEuNyAxLjMgMTYuNzUgMSIvPgo8L3N2Zz4=',
   [GateType.BUFFER]:
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMS42CkwgMSAzMS4zNSAzMC41NSAxNS44IDEgMS42IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxIDMxLjM1CkwgMSAxLjYgMzAuNTUgMTUuOCAxIDMxLjM1IFoiLz4KPC9zdmc+",
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzJweCIgaGVpZ2h0PSIzMnB4IiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8cGF0aCBmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiIGQ9IgpNIDEgMS42CkwgMSAzMS4zNSAzMC41NSAxNS44IDEgMS42IFoiLz4KPHBhdGggaWQ9IkxheWVyMF8wXzFfU1RST0tFUyIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS1taXRlcmxpbWl0PSIzIiBmaWxsPSJub25lIiBkPSIKTSAxIDMxLjM1CkwgMSAxLjYgMzAuNTUgMTUuOCAxIDMxLjM1IFoiLz4KPC9zdmc+',
 };
 
 export const defaultInputs: Record<
@@ -112,7 +114,7 @@ export const Gate = forwardRef<
     unselectItemId: unselect,
     isSelected,
   } = useCanvasStore();
-  const item = useNode(gateId);
+  const item = useNode(gateId) as GateItem;
   const isInverted = useMemo(() => {
     return inverted.includes(type);
   }, [type]);
@@ -137,13 +139,13 @@ export const Gate = forwardRef<
         });
       }
     },
-    [position, canvas.zoom, offset],
+    [position, canvas.zoom, offset]
   );
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       if (dragging) {
-        const canvasElement = document.querySelector("[data-logicate-canvas]");
+        const canvasElement = document.querySelector('[data-logicate-canvas]');
         if (canvasElement) {
           const bounds = canvasElement.getBoundingClientRect();
           if (cursorInside(event, bounds)) {
@@ -155,7 +157,7 @@ export const Gate = forwardRef<
         }
       }
     },
-    [dragging, offset, canvas.zoom],
+    [dragging, offset, canvas.zoom]
   );
 
   const handleMouseUp = useCallback(() => {
@@ -167,15 +169,15 @@ export const Gate = forwardRef<
   useEffect(() => {
     if (dragging) {
       setHolding(true);
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
     } else {
       setHolding(false);
     }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [dragging]);
 
@@ -183,7 +185,7 @@ export const Gate = forwardRef<
     <>
       <div
         className={cn(
-          "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
+          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
         )}
         style={{ left: position.x, top: position.y }}
         tabIndex={-1}
@@ -200,19 +202,19 @@ export const Gate = forwardRef<
         <div
           className="flex flex-col items-start justify-center"
           style={{
-            gridColumn: "3 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '3 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
-          <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
-            <div className="order-2 z-[1] pointer-events-auto" style={{ lineHeight: 0 }}>
+          <div className="relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
+            <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
               <svg
                 style={{
-                  overflow: "visible",
-                  width: "12.5px",
-                  height: "12.5px",
+                  overflow: 'visible',
+                  width: '12.5px',
+                  height: '12.5px',
                 }}
-                className="pointer-events-auto hover:scale-[1.2] transition-transform"
+                className="pointer-events-auto transition-transform hover:scale-[1.2]"
               >
                 <circle
                   cx="6.5"
@@ -236,14 +238,15 @@ export const Gate = forwardRef<
                         y: e.clientY,
                       },
                       active: false,
+                      fromTerminal: 'output',
                     });
                   }}
                 ></circle>
               </svg>
             </div>
-            <div className="grow order-1 h-[2px] bg-black min-w-4" />
+            <div className="order-1 h-[2px] min-w-4 grow bg-black" />
             <div
-              className={cn("-order-1 z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute", {
+              className={cn('absolute z-[1] -order-1 h-2 w-2 rounded-[50%] border-2 border-black bg-white', {
                 hidden: !isInverted,
               })}
             ></div>
@@ -252,8 +255,8 @@ export const Gate = forwardRef<
         <div
           className="flex flex-col items-end justify-center"
           style={{
-            gridColumn: "1 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '1 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
           {Array.from({
@@ -265,23 +268,20 @@ export const Gate = forwardRef<
                   ? defaultInputs[type].max
                   : inputs,
           }).map((_, index) => (
-            <div
-              key={index}
-              className="pointer-events-none flex flex-row w-7 items-center mb-[2.5px] relative last-of-type:mb-0"
-            >
+            <div key={index} className="pointer-events-none relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
               <div
-                className="z-[1] relative"
+                className="relative z-[1]"
                 style={{
                   lineHeight: 0,
                 }}
               >
                 <svg
                   style={{
-                    overflow: "visible",
-                    width: "12.5px",
-                    height: "12.5px",
+                    overflow: 'visible',
+                    width: '12.5px',
+                    height: '12.5px',
                   }}
-                  className="pointer-events-auto hover:scale-[1.2] transition-transform"
+                  className="pointer-events-auto transition-transform hover:scale-[1.2]"
                   data-logicate-input-terminal={index}
                 >
                   <circle
@@ -297,40 +297,46 @@ export const Gate = forwardRef<
                   ></circle>
                 </svg>
               </div>
-              <div className="grow min-w-4 h-[2px] bg-black" />
-              <div className="hidden z-[1] h-2 w-2 border-2 border-black rounded-[50%] bg-white absolute"></div>
+              <div className="h-[2px] min-w-4 grow bg-black" />
+              <div className="absolute z-[1] hidden h-2 w-2 rounded-[50%] border-2 border-black bg-white"></div>
             </div>
           ))}
         </div>
         <div
           className={cn(
-            "bg-transparent w-8 min-h-8 min-w-[30px] transition-[filter] duration-100 border-black flex justify-center items-center",
+            'flex min-h-8 w-8 min-w-[30px] items-center justify-center border-black bg-transparent transition-[filter] duration-100',
             {
               // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
-              "border-none": inputs < 4,
-              "border-l-2 my-[5.25px] self-stretch": inputs > 3,
-              "-ml-[4.5px] -mr-px w-[36px]": isOrType,
-              "-ml-[9px] -mr-px w-[40px]": isXorXnorType,
-            },
+              'border-none': inputs < 4,
+              'my-[5.25px] self-stretch border-l-2': inputs > 3,
+              '-ml-[4.5px] -mr-px w-[36px]': isOrType,
+              '-ml-[9px] -mr-px w-[40px]': isXorXnorType,
+            }
           )}
           style={{
-            gridColumn: "2 / span 1",
-            gridRow: "2 / span 1",
-            filter: isSelected(gateId) ? "drop-shadow(0px 0px 3px #0079db)" : "none",
+            gridColumn: '2 / span 1',
+            gridRow: '2 / span 1',
+            filter: isSelected(gateId) ? 'drop-shadow(0px 0px 3px #0079db)' : 'none',
           }}
         >
-          <div className="pointer-events-auto w-full h-full flex items-center justify-center">
-            <span
-              className={cn("w-8 min-h-8 bg-no-repeat select-none", {
-                "-ml-[2px]": inputs > 3,
-                "w-[38px]": isOrType,
-                "w-[40px]": isXorXnorType,
+          <div className="pointer-events-auto flex h-full w-full items-center justify-center">
+            {/* <span
+              className={cn('min-h-8 w-8 select-none bg-no-repeat', {
+                '-ml-[2px]': inputs > 3,
+                'w-[38px]': isOrType,
+                'w-[40px]': isXorXnorType,
               })}
               style={{
                 backgroundImage: `url(${gateTypeToIcon[type]})`,
               }}
               data-logicate-body
-            ></span>
+            ></span> */}
+            {(() => {
+              switch (type) {
+                case GateType.AND:
+                  return <AndBody item={item} />;
+              }
+            })()}
           </div>
         </div>
       </div>
@@ -338,4 +344,4 @@ export const Gate = forwardRef<
   );
 });
 
-Gate.displayName = "Logicate Logic Gate";
+Gate.displayName = 'Logicate Logic Gate';

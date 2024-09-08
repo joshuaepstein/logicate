@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
-export type * from "@prisma/client";
+export type * from '@prisma/client';
 
 // Serverless prisma
 const prismaClientSingleton = () => {
@@ -21,4 +21,4 @@ const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 export { prisma };
 
-if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;

@@ -1,25 +1,25 @@
 enum QuestionType {
-    BOOLEAN_EXPRESSION
-    TRUTH_TABLE
-    LOGIC_GATE
+  BOOLEAN_EXPRESSION
+  TRUTH_TABLE
+  LOGIC_GATE
 }
 
 model Question {
-    id String @id
+  id String @id
 
-    generatedQuestionType QuestionType
-    generatedQuestion Json
+  generatedQuestionType QuestionType
+  generatedQuestion     Json
 
-    givenAnswer Json?
-    correctAnswer Boolean @default(false)
-    attemptCount Int @default(0)
-    previousAnswers Json[] @default([])
+  givenAnswer     Json?
+  correctAnswer   Boolean @default(false)
+  attemptCount    Int     @default(0)
+  previousAnswers Json[]  @default([])
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    
-    userId String
-    user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@index([userId])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }

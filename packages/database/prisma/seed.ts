@@ -1,6 +1,6 @@
-import { faker } from "@faker-js/faker";
-import { hashPassword } from "@logicate/utils/encrypt";
-import { PrismaClient, TimeFormat } from "@prisma/client";
+import { faker } from '@faker-js/faker';
+import { hashPassword } from '@logicate/utils/encrypt';
+import { PrismaClient, TimeFormat } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -22,7 +22,7 @@ async function main() {
         create: {
           profilePicture: faker.image.avatarGitHub(),
           timeFormat: TimeFormat.hours24,
-          language: "en",
+          language: 'en',
         },
       },
     },

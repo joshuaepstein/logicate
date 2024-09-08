@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { DashIcon, ExpandIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from "@jfstech/icons-react/24/outline";
-import { Button } from "@logicate/ui/button";
-import { TextInput } from "@logicate/ui/input/index";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import useCanvasStore from "./hooks/useCanvasStore";
-import { defaultInputs } from "./node/gate";
-import { GateItem, InputItem, OutputItem } from "./types";
+import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from '@jfstech/icons-react/24/outline';
+import { Button } from '@logicate/ui/button';
+import { TextInput } from '@logicate/ui/input/index';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import useCanvasStore from './hooks/useCanvasStore';
+import { defaultInputs } from './node/gate';
+import { GateItem, InputItem, OutputItem } from './types';
 
 export default function SettingsPopup() {
   const { selected, updateItem, updateSelected } = useCanvasStore();
@@ -22,21 +22,21 @@ export default function SettingsPopup() {
     <AnimatePresence>
       {visible && selected[0] && (
         <motion.div
-          className="min-w-80 bg-white overflow-y-hidden rounded-md shadow-hard-xs origin-bottom-right"
+          className="shadow-hard-xs min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white"
           initial={{
             opacity: 0,
-            x: "20%",
+            x: '20%',
           }}
           animate={{
             opacity: 1,
-            x: "0",
+            x: '0',
           }}
           exit={{
             opacity: 0,
-            x: "20%",
+            x: '20%',
           }}
         >
-          <div className="w-full py-2 border-b border-b-neutralgrey-400 px-4 flex justify-between items-center">
+          <div className="border-b-neutralgrey-400 flex w-full items-center justify-between border-b px-4 py-2">
             <h5 className="text-neutralgrey-1100 text-sm font-medium">Node Settings</h5>
             <Button variant="no-borders" size="icon-xs" onClick={() => setMinimized(!minimized)}>
               {minimized ? <Maximise01Icon className="size-4" /> : <Minimise02Icon className="size-4" />}
@@ -45,23 +45,23 @@ export default function SettingsPopup() {
 
           <motion.div
             variants={{
-              open: { height: "auto" },
+              open: { height: 'auto' },
               closed: { height: 0 },
             }}
-            animate={minimized ? "closed" : "open"}
-            className="flex flex-col w-full overflow-y-hidden justify-between items-start"
+            animate={minimized ? 'closed' : 'open'}
+            className="flex w-full flex-col items-start justify-between overflow-y-hidden"
           >
-            {selected[0].selectedType === "item" ? (
+            {selected[0].selectedType === 'item' ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.1 }}
-                className="flex flex-col w-full gap-4 p-4"
+                className="flex w-full flex-col gap-4 p-4"
               >
-                {selected[0].itemType === "gate" ? (
-                  <div className="flex flex-row gap-4 justify-between w-full items-center">
+                {selected[0].itemType === 'gate' ? (
+                  <div className="flex w-full flex-row items-center justify-between gap-4">
                     <p className="text-neutralgrey-800 text-sm">Inputs</p>
-                    <div className="flex flex-row w-max items-center">
+                    <div className="flex w-max flex-row items-center">
                       <Button
                         variant="no-borders"
                         size="icon-xs"
@@ -83,7 +83,7 @@ export default function SettingsPopup() {
                         <DashIcon className="size-4" />
                       </Button>
                       <input
-                        className="w-full max-w-20 border-none outline-none ring-0 focus:ring-0 focus:outline-none text-center"
+                        className="w-full max-w-20 border-none text-center outline-none ring-0 focus:outline-none focus:ring-0"
                         value={selected[0].settings.inputs}
                         // type="number"
                         id="logicate-gate-inputs-quantity-field"
@@ -128,9 +128,9 @@ export default function SettingsPopup() {
                     </div>
                   </div>
                 ) : null}
-                <div className="flex flex-row gap-4 justify-between w-full items-center">
+                <div className="flex w-full flex-row items-center justify-between gap-4">
                   <p className="text-neutralgrey-800 text-sm">Label</p>
-                  <div className="flex flex-row w-max items-center">
+                  <div className="flex w-max flex-row items-center">
                     <TextInput
                       value={selected[0].settings.label}
                       className="min-w-40"
@@ -146,10 +146,10 @@ export default function SettingsPopup() {
                       }}
                     />
                   </div>
-                  {selected[0].itemType === "input" || selected[0].itemType === "output" ? (
-                    <div className="flex flex-row gap-4 justify-between w-full items-center">
+                  {selected[0].itemType === 'input' || selected[0].itemType === 'output' ? (
+                    <div className="flex w-full flex-row items-center justify-between gap-4">
                       <p className="text-neutralgrey-800 text-sm">Symbol</p>
-                      <div className="flex flex-row w-max items-center">
+                      <div className="flex w-max flex-row items-center">
                         <TextInput
                           value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
                           className="min-w-40"

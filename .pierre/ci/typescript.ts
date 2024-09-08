@@ -1,1 +1,1 @@
-export * from "@pierre/recipes/typescript";
+export * from '@pierre/recipes/typescript';

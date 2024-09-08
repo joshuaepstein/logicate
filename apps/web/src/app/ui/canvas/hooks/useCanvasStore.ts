@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { Item, TempWire, Wire } from "../types";
+import { create } from 'zustand';
+import { Item, TempWire, Wire } from '../types';
 
-type SelectedItem = Item & { selectedType: "item" };
-type SelectedWire = Wire & { selectedType: "wire" };
+type SelectedItem = Item & { selectedType: 'item' };
+type SelectedWire = Wire & { selectedType: 'wire' };
 
 type Selected = SelectedItem | SelectedWire;
 
@@ -41,16 +41,16 @@ interface Actions {
   getZoom: () => number;
   getX: () => number;
   getY: () => number;
-  canvasU: (update: (canvas: State["canvas"]) => State["canvas"]) => void;
-  itemsUpdate: (update: (items: State["items"]) => State["items"]) => void;
-  updateItem: (id: Item["id"], item: Partial<Item>) => void;
+  canvasU: (update: (canvas: State['canvas']) => State['canvas']) => void;
+  itemsUpdate: (update: (items: State['items']) => State['items']) => void;
+  updateItem: (id: Item['id'], item: Partial<Item>) => void;
   setHolding: (isHolding: boolean) => void;
-  isSelected: (itemId: Item["id"] | Wire["id"]) => boolean;
-  getItem: (id: Item["id"]) => Item | undefined;
-  selectItemId: (id: Item["id"]) => void;
-  selectWireId: (id: Wire["id"]) => void;
-  unselectItemId: (id: Item["id"]) => void;
-  unselectWireId: (id: Wire["id"]) => void;
+  isSelected: (itemId: Item['id'] | Wire['id']) => boolean;
+  getItem: (id: Item['id']) => Item | undefined;
+  selectItemId: (id: Item['id']) => void;
+  selectWireId: (id: Wire['id']) => void;
+  unselectItemId: (id: Item['id']) => void;
+  unselectWireId: (id: Wire['id']) => void;
   setTemporaryWire: (wire: TempWire | null) => void;
   updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void;
   updateSelected: () => void;
@@ -101,7 +101,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
             ...state.selected,
             {
               ...item,
-              selectedType: "item",
+              selectedType: 'item',
             } as SelectedItem,
           ],
         };
@@ -113,7 +113,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
       const wire = state.wires.find((w) => w.id === id);
       if (wire) {
         return {
-          selected: [...state.selected, { ...wire, selectedType: "wire" } as SelectedWire],
+          selected: [...state.selected, { ...wire, selectedType: 'wire' } as SelectedWire],
         };
       }
       return state;
@@ -130,12 +130,12 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set((state) => ({
       selected: state.selected
         .map((i) => {
-          if (i.selectedType === "item") {
+          if (i.selectedType === 'item') {
             const item = state.items.find((item) => item.id === i.id);
-            return item ? ({ ...item, selectedType: "item" } as SelectedItem) : null;
-          } else if (i.selectedType === "wire") {
+            return item ? ({ ...item, selectedType: 'item' } as SelectedItem) : null;
+          } else if (i.selectedType === 'wire') {
             const wire = state.wires.find((wire) => wire.id === i.id);
-            return wire ? ({ ...wire, selectedType: "wire" } as SelectedWire) : null;
+            return wire ? ({ ...wire, selectedType: 'wire' } as SelectedWire) : null;
           }
           return null;
         })

@@ -1,1 +1,1 @@
-export * from "./prevent-widows";
+export * from './prevent-widows';

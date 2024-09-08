@@ -1,4 +1,4 @@
-import GenTemp from "./client";
+import GenTemp from './client';
 
 export default function TablePage() {
   return (

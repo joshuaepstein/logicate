@@ -1,8 +1,8 @@
-import { GateType } from "./node/gate";
-import { InputType } from "./node/inputs";
-import { OutputType } from "./node/type";
+import { GateType } from './node/gate';
+import { InputType } from './node/inputs';
+import { OutputType } from './node/type';
 
-type Alphabet = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J";
+type Alphabet = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J';
 
 type GateItem = {
   id: string;
@@ -13,10 +13,11 @@ type GateItem = {
   outputs: string[];
   computedValue?: boolean;
   settings: {
+    color?: string;
     inputs: number;
     label?: string;
   };
-  itemType: "gate";
+  itemType: 'gate';
 };
 
 type InputItem = {
@@ -27,11 +28,12 @@ type InputItem = {
   outputs: string[];
   value: boolean;
   settings: {
+    color?: string;
     label?: string;
     constant?: boolean;
     expressionLetter?: Alphabet;
   };
-  itemType: "input";
+  itemType: 'input';
 };
 
 type OutputItem = {
@@ -42,10 +44,11 @@ type OutputItem = {
   inputs: string[];
   computedValue?: boolean;
   settings: {
+    color?: string;
     label?: string;
     expressionLetter?: Alphabet;
   };
-  itemType: "output";
+  itemType: 'output';
 };
 
 type Item = GateItem | InputItem | OutputItem;
@@ -63,6 +66,7 @@ interface TempWire {
     y: number;
   };
   fromId: string;
+  fromTerminal: 'input' | 'output';
   to: {
     x: number;
     y: number;

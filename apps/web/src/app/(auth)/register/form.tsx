@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Input } from "@logicate/ui/input/index";
-import { Label } from "@logicate/ui/label";
-import { SubmitButton } from "@logicate/ui/submit-button";
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
-import { useFormState } from "react-dom";
-import { toast } from "sonner";
-import { registerAction } from "./action";
+import { Input } from '@logicate/ui/input/index';
+import { Label } from '@logicate/ui/label';
+import { SubmitButton } from '@logicate/ui/submit-button';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
+import { useFormState } from 'react-dom';
+import { toast } from 'sonner';
+import { registerAction } from './action';
 
 export function RegisterForm() {
   const [state, formAction] = useFormState(registerAction, undefined);
@@ -15,7 +15,7 @@ export function RegisterForm() {
   useEffect(() => {
     if (state && state.success) {
       toast.success(state.value);
-      redirect("/welcome");
+      redirect('/welcome');
     }
     if (state && !state.success) {
       toast.error(state.error);
@@ -23,8 +23,8 @@ export function RegisterForm() {
   }, [state]);
 
   return (
-    <form className="flex w-full flex-col gap-4 mt-4" action={formAction}>
-      <div className="flex flex-col w-full gap-2">
+    <form className="mt-4 flex w-full flex-col gap-4" action={formAction}>
+      <div className="flex w-full flex-col gap-2">
         <Label>Name</Label>
         <Input
           placeholder="John Smith"
@@ -36,7 +36,7 @@ export function RegisterForm() {
           id="name"
         />
       </div>
-      <div className="flex flex-col w-full gap-2">
+      <div className="flex w-full flex-col gap-2">
         <Label>Email</Label>
         <Input
           placeholder="john@smith.com"
@@ -47,7 +47,7 @@ export function RegisterForm() {
           required
         />
       </div>
-      <div className="flex flex-col w-full gap-2">
+      <div className="flex w-full flex-col gap-2">
         <Label>Username</Label>
         <Input
           placeholder="johnsmith"
@@ -59,7 +59,7 @@ export function RegisterForm() {
           required
         />
       </div>
-      <div className="flex flex-col w-full gap-2">
+      <div className="flex w-full flex-col gap-2">
         <Label>Password</Label>
         <Input
           placeholder="********"

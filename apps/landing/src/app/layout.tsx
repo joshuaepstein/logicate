@@ -1,13 +1,13 @@
-import "tailwindcss/tailwind.css";
-import "@/styles/global.css";
-import "@logicate/ui/styles";
+import '@/styles/global.css';
+import '@logicate/ui/styles';
+import 'tailwindcss/tailwind.css';
 
-import { cn } from "@logicate/ui";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import Providers from "./providers";
-import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
+import { Footer } from '@/components/footer';
+import Navbar from '@/components/navbar';
+import { cn } from '@logicate/ui';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
+import Providers from './providers';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

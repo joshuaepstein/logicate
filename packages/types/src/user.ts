@@ -14,6 +14,6 @@ export type User = {
 };
 
 export enum AccountType {
-  STUDENT = "STUDENT",
-  TEACHER = "TEACHER",
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
 }

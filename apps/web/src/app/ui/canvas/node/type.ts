@@ -1,17 +1,17 @@
-import { GateType } from "./gate";
-import { InputType } from "./inputs";
+import { GateType } from './gate';
+import { InputType } from './inputs';
 
 export type NodeType =
   | {
-      type: "gate";
+      type: 'gate';
       node: GateType;
     }
   | {
-      type: "input";
+      type: 'input';
       node: InputType;
     }
   | {
-      type: "output";
+      type: 'output';
       node: OutputType;
     };
 

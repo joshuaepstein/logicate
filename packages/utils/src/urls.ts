@@ -10,7 +10,7 @@ export const isValidUrl = (url: string) => {
 export const getUrlFromString = (str: string) => {
   if (isValidUrl(str)) return str;
   try {
-    if (str.includes(".") && !str.includes(" ")) {
+    if (str.includes('.') && !str.includes(' ')) {
       return new URL(`https://${str}`).toString();
     }
   } catch (_) {}
@@ -49,7 +49,7 @@ export const getParamsFromURL = (url: string) => {
     const params = new URL(url).searchParams;
     const paramsObj: Record<string, string> = {};
     for (const [key, value] of params.entries()) {
-      if (value && value !== "") {
+      if (value && value !== '') {
         paramsObj[key] = value;
       }
     }
@@ -59,23 +59,14 @@ export const getParamsFromURL = (url: string) => {
   }
 };
 
-export const UTMTags = [
-  "utm_source",
-  "utm_medium",
-  "utm_campaign",
-  "utm_term",
-  "utm_content",
-] as const;
+export const UTMTags = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
 
-export const constructURLFromUTMParams = (
-  url: string,
-  utmParams: Record<string, string>,
-) => {
-  if (!url) return "";
+export const constructURLFromUTMParams = (url: string, utmParams: Record<string, string>) => {
+  if (!url) return '';
   try {
     const newURL = new URL(url);
     for (const [key, value] of Object.entries(utmParams)) {
-      if (value === "") {
+      if (value === '') {
         newURL.searchParams.delete(key);
       } else {
         newURL.searchParams.set(key, value);
@@ -83,17 +74,17 @@ export const constructURLFromUTMParams = (
     }
     return newURL.toString();
   } catch (e) {
-    return "";
+    return '';
   }
 };
 
 export const paramsMetadata = [
-  { display: "Referral (ref)", key: "ref", examples: "twitter, facebook" },
-  { display: "UTM Source", key: "utm_source", examples: "twitter, facebook" },
-  { display: "UTM Medium", key: "utm_medium", examples: "social, email" },
-  { display: "UTM Campaign", key: "utm_campaign", examples: "summer_sale" },
-  { display: "UTM Term", key: "utm_term", examples: "blue_shoes" },
-  { display: "UTM Content", key: "utm_content", examples: "logolink" },
+  { display: 'Referral (ref)', key: 'ref', examples: 'twitter, facebook' },
+  { display: 'UTM Source', key: 'utm_source', examples: 'twitter, facebook' },
+  { display: 'UTM Medium', key: 'utm_medium', examples: 'social, email' },
+  { display: 'UTM Campaign', key: 'utm_campaign', examples: 'summer_sale' },
+  { display: 'UTM Term', key: 'utm_term', examples: 'blue_shoes' },
+  { display: 'UTM Content', key: 'utm_content', examples: 'logolink' },
 ];
 
 export const getUrlWithoutUTMParams = (url: string) => {
@@ -107,5 +98,5 @@ export const getUrlWithoutUTMParams = (url: string) => {
 };
 
 export const getPrettyUrl = (url: string) => {
-  return url.replace(/(^\w+:|^)\/\//, "").replace("www.", "");
+  return url.replace(/(^\w+:|^)\/\//, '').replace('www.', '');
 };

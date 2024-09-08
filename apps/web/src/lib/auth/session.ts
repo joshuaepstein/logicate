@@ -1,10 +1,10 @@
-import { prisma } from "@logicate/database";
-import { getSearchParams } from "@logicate/utils/urls";
-import { waitUntil } from "@vercel/functions";
-import { NextRequest } from "next/server";
-import { handleAndReturnErrorResponse, LogicateError } from "../api/error";
-import { hashToken } from "./hash-token";
-import { getSession, Session } from "./utils";
+import { prisma } from '@logicate/database';
+import { getSearchParams } from '@logicate/utils/urls';
+import { waitUntil } from '@vercel/functions';
+import { NextRequest } from 'next/server';
+import { handleAndReturnErrorResponse, LogicateError } from '../api/error';
+import { hashToken } from './hash-token';
+import { getSession, Session } from './utils';
 
 interface WithSessionHandler {
   ({
@@ -22,22 +22,18 @@ interface WithSessionHandler {
 
 export const withSession =
   (handler: WithSessionHandler) =>
-  async (
-    req: NextRequest,
-    { params = {} }: { params: Record<string, string> | undefined },
-  ) => {
+  async (req: NextRequest, { params = {} }: { params: Record<string, string> | undefined }) => {
     try {
       let session: Session | undefined;
-      const authorizationHeader = req.headers.get("Authorization");
+      const authorizationHeader = req.headers.get('Authorization');
       if (authorizationHeader) {
-        if (!authorizationHeader.includes("Bearer ")) {
+        if (!authorizationHeader.includes('Bearer ')) {
           throw new LogicateError({
-            code: "bad_request",
-            message:
-              "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
+            code: 'bad_request',
+            message: "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        const apiKey = authorizationHeader.replace("Bearer ", "");
+        const apiKey = authorizationHeader.replace('Bearer ', '');
 
         const hashedKey = await hashToken(apiKey);
 
@@ -53,8 +49,8 @@ export const withSession =
 
         if (!user) {
           throw new LogicateError({
-            code: "unauthorized",
-            message: "Unauthorized: Invalid API Key.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Invalid API Key.',
           });
         }
 
@@ -64,7 +60,7 @@ export const withSession =
             data: {
               lastUsed: new Date(),
             },
-          }),
+          })
         );
         session = {
           user: {
@@ -82,8 +78,8 @@ export const withSession =
         session = await getSession();
         if (!session?.user.id) {
           throw new LogicateError({
-            code: "unauthorized",
-            message: "Unauthorized: Login required.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Login required.',
           });
         }
       }

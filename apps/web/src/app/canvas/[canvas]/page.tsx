@@ -1,12 +1,12 @@
-import { getSession } from "@/lib/auth/utils";
-import { prisma } from "@logicate/database";
-import { revalidateTag } from "next/cache";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import Canvas from "../../ui/canvas";
+import { getSession } from '@/lib/auth/utils';
+import { prisma } from '@logicate/database';
+import { revalidateTag } from 'next/cache';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import Canvas from '../../ui/canvas';
 
 const getDatabaseSession = async (canvasId: string, userId: string) => {
-  "use server";
+  'use server';
   const canvas = await prisma.logicateSession.findUnique({
     where: {
       id: canvasId,
@@ -17,7 +17,7 @@ const getDatabaseSession = async (canvasId: string, userId: string) => {
 };
 
 async function revalidateData(canvasId: string) {
-  "use server";
+  'use server';
   revalidateTag(`canvas-${canvasId}`);
 }
 
@@ -32,15 +32,10 @@ export default async function Home({ params: { canvas } }: { params: { canvas: s
   }
 
   return (
-    <div className="w-full max-h-dvh overflow-hidden h-dvh flex flex-col">
-      <nav className="w-full h-16 border-b border-neutralgrey-400">{session.user.name}</nav>
+    <div className="flex h-dvh max-h-dvh w-full flex-col overflow-hidden">
+      <nav className="border-neutralgrey-400 h-16 w-full border-b">{session.user.name}</nav>
       <Suspense fallback={<div>Loading...</div>}>
-        <Canvas
-          sessionId={logicateSession.id}
-          logicateSession={logicateSession}
-          user={session.user}
-          revalidateData={revalidateData}
-        />
+        <Canvas sessionId={logicateSession.id} logicateSession={logicateSession} user={session.user} />
       </Suspense>
     </div>
   );

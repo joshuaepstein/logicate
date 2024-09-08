@@ -1,10 +1,10 @@
 {
-    "name": "@logicate/tsconfig",
-    "version": "0.0.0",
-    "private": true,
-    "extends": "./base.json",
-    "devDependencies": {
-        "@tsconfig/strictest": "^2.0.5",
-        "@tsconfig/next": "^2.0.3"
-    }
+  "name": "@logicate/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@tsconfig/next": "^2.0.3",
+    "@tsconfig/strictest": "^2.0.5"
+  },
+  "extends": "./base.json"
 }

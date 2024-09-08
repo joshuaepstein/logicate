@@ -1,5 +1,5 @@
 {
-    "extends": "@logicate/tsconfig/next.json",
-    "include": ["**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "extends": "@logicate/tsconfig/next.json",
+  "include": ["**/*.ts", "**/*.tsx"]
 }

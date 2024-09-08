@@ -1,6 +1,6 @@
-import { Job } from "@pierre/recipes/vercel";
+import { Job } from '@pierre/recipes/vercel';
 
-export const label = "Vercel";
+export const label = 'Vercel';
 
 export default Job({
   VERCEL_ORG_ID: env.VERCEL_ORG_ID,

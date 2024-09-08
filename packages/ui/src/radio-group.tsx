@@ -1,22 +1,16 @@
-"use client";
+'use client';
 
-import { CheckIcon } from "@radix-ui/react-icons";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import * as React from "react";
+import { CheckIcon } from '@radix-ui/react-icons';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import * as React from 'react';
 
-import { cn } from "@logicate/ui";
+import { cn } from '@logicate/ui';
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  return (
-    <RadioGroupPrimitive.Root
-      className={cn("grid gap-2", className)}
-      {...props}
-      ref={ref}
-    />
-  );
+  return <RadioGroupPrimitive.Root className={cn('grid gap-2', className)} {...props} ref={ref} />;
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
@@ -28,8 +22,8 @@ const RadioGroupItem = React.forwardRef<
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "border-neutralgrey-1200 border-neutralgrey-400 text-neutralgrey-1200 focus-visible:ring-neutralgrey-1300 dark:border-neutralgrey-100 dark:border-neutralgrey-1100 dark:text-neutralgrey-100 dark:focus-visible:ring-neutralgrey-500 aspect-square h-4 w-4 rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+        'border-neutralgrey-1200 border-neutralgrey-400 text-neutralgrey-1200 focus-visible:ring-neutralgrey-1300 dark:border-neutralgrey-100 dark:border-neutralgrey-1100 dark:text-neutralgrey-100 dark:focus-visible:ring-neutralgrey-500 aspect-square h-4 w-4 rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50',
+        className
       )}
       {...props}
     >

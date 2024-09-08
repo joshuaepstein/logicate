@@ -1,6 +1,6 @@
-import { cn } from "@logicate/ui";
-import { forwardRef } from "react";
-import { InputType } from ".";
+import { cn } from '@logicate/ui';
+import { forwardRef } from 'react';
+import { InputType } from '.';
 
 export type TemporaryInputProps = {
   type: InputType;
@@ -19,7 +19,7 @@ export const TemporaryInput = forwardRef<
     <>
       <div
         className={cn(
-          "grid w-auto outline-none absolute origin-top-left items-center justify-center select-none cursor-default pointer-events-none",
+          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
         )}
         style={{ left: x, top: y, transform: `scale(${canvasZoom})` }}
         tabIndex={-1}
@@ -30,37 +30,35 @@ export const TemporaryInput = forwardRef<
         <div
           className="flex flex-col items-start justify-center"
           style={{
-            gridColumn: "3 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '3 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
-          <div className="flex flex-row w-7 items-center relative mb-[2.5px] last-of-type:mb-0">
-            <div className="order-2 z-[1] pointer-events-auto" style={{ lineHeight: 0 }}>
+          <div className="relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
+            <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
               <svg
                 style={{
-                  overflow: "visible",
-                  width: "12.5px",
-                  height: "12.5px",
+                  overflow: 'visible',
+                  width: '12.5px',
+                  height: '12.5px',
                 }}
-                className="pointer-events-auto hover:scale-[1.2] transition-transform"
+                className="pointer-events-auto transition-transform hover:scale-[1.2]"
               >
                 <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
               </svg>
             </div>
-            <div className="grow order-1 h-[2px] bg-black min-w-4"></div>
+            <div className="order-1 h-[2px] min-w-4 grow bg-black"></div>
           </div>
         </div>
         <div
-          className={cn(
-            "bg-white border-2 w-[42px] min-h-[42px] min-w-[42px] border-black flex justify-center items-center",
-          )}
+          className={cn('flex min-h-[42px] w-[42px] min-w-[42px] items-center justify-center border-2 border-black bg-white')}
           style={{
-            gridColumn: "2 / span 1",
-            gridRow: "2 / span 1",
+            gridColumn: '2 / span 1',
+            gridRow: '2 / span 1',
           }}
         >
-          <div className="pointer-events-auto w-full h-full flex items-center justify-center">
-            <svg style={{ overflow: "visible", width: "30px", height: "30px" }} className={cn("")} data-logicate-body>
+          <div className="pointer-events-auto flex h-full w-full items-center justify-center">
+            <svg style={{ overflow: 'visible', width: '30px', height: '30px' }} className={cn('')} data-logicate-body>
               <g>
                 <circle
                   //class="signalFill"
@@ -92,4 +90,4 @@ export const TemporaryInput = forwardRef<
   );
 });
 
-TemporaryInput.displayName = "Temporary Logicate Logic Input";
+TemporaryInput.displayName = 'Temporary Logicate Logic Input';

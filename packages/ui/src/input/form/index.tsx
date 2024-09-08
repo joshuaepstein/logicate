@@ -20,8 +20,8 @@ import * as React from 'react';
 import type { SetRequired, Simplify } from 'type-fest';
 import type { BaseActorRef } from 'xstate';
 
+import type { ErrorMessagesKey } from '../../../../lib/generate-password-error-text';
 import { type JFSTechElementsError, JFSTechElementsFieldError } from './errors';
-import type { FieldDetails } from './machine/form.types';
 import {
   fieldFeedbackSelector,
   fieldHasValueSelector,
@@ -30,11 +30,11 @@ import {
   useFormSelector,
   useFormStore,
 } from './machine/form.context';
-import type { ErrorMessagesKey } from '../../../../lib/generate-password-error-text';
+import type { FieldDetails } from './machine/form.types';
 
 import type { OTPInputProps } from './otp';
 import { OTP_LENGTH_DEFAULT, OTPInput } from './otp';
-import { type FieldId, FIELD_STATES, FIELD_VALIDITY, type FieldStates, Autocomplete } from './types';
+import { type FieldId, type FieldStates, Autocomplete, FIELD_STATES, FIELD_VALIDITY } from './types';
 
 /** -------------------------------------------------------------------------------------------------
  * Context

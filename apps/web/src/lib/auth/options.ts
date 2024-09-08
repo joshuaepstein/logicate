@@ -1,27 +1,27 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@logicate/database";
-import { sendEmail } from "@logicate/emails";
-import { subscribe } from "@logicate/emails/resend";
-import { waitUntil } from "@vercel/functions";
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account";
-import { validatePassword } from "./password";
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import { prisma } from '@logicate/database';
+import { sendEmail } from '@logicate/emails';
+import { subscribe } from '@logicate/emails/resend';
+import { waitUntil } from '@vercel/functions';
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from './lock-account';
+import { validatePassword } from './password';
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
 export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      name: "Logicate",
-      type: "credentials",
+      id: 'credentials',
+      name: 'Logicate',
+      type: 'credentials',
       credentials: {
-        email: { type: "email" },
-        password: { type: "password" },
+        email: { type: 'email' },
+        password: { type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials) {
-          throw new Error("no-credentials");
+          throw new Error('no-credentials');
         }
 
         const { email, password } = credentials as {
@@ -30,7 +30,7 @@ export const authConfig: NextAuthOptions = {
         };
 
         if (!email || !password) {
-          throw new Error("no-credentials");
+          throw new Error('no-credentials');
         }
 
         const user = await prisma.user.findUnique({
@@ -50,11 +50,11 @@ export const authConfig: NextAuthOptions = {
         });
 
         if (!user || !user.password) {
-          throw new Error("invalid-credentials");
+          throw new Error('invalid-credentials');
         }
 
         if (exceededLoginAttemptsThreshold(user)) {
-          throw new Error("exceeded-login-attempts");
+          throw new Error('exceeded-login-attempts');
         }
 
         const passwordMatch = await validatePassword({
@@ -66,9 +66,9 @@ export const authConfig: NextAuthOptions = {
           const exceededLoginAttempts = exceededLoginAttemptsThreshold(await incrementLoginAttemps(user));
 
           if (exceededLoginAttempts) {
-            throw new Error("exceeded-login-attempts");
+            throw new Error('exceeded-login-attempts');
           } else {
-            throw new Error("invalid-credentials");
+            throw new Error('invalid-credentials');
           }
         }
 
@@ -88,15 +88,15 @@ export const authConfig: NextAuthOptions = {
   // @ts-expect-error - because
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   cookies: {
     sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+      name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
       options: {
         httpOnly: true,
-        sameSite: "lax",
-        path: "/",
+        sameSite: 'lax',
+        path: '/',
         // When working on localhost, the cookie domain must be omitted entirely
         domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
         secure: VERCEL_DEPLOYMENT,
@@ -104,13 +104,13 @@ export const authConfig: NextAuthOptions = {
     },
   },
   pages: {
-    error: "/login",
+    error: '/login',
   },
   callbacks: {
     jwt: async ({ token, user, trigger }) => {
       if (user) token.user = user;
 
-      if (trigger === "update") {
+      if (trigger === 'update') {
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
         });
@@ -169,18 +169,18 @@ export const authConfig: NextAuthOptions = {
             Promise.allSettled([
               subscribe({ email, name: user.name }),
               sendEmail({
-                subject: "Welcome to Logicate",
+                subject: 'Welcome to Logicate',
                 email,
                 // react: WelcomeEmail({
                 //   email,
                 //   name: user.name,
                 //   accountType: user.accountType,
                 // }),
-                text: "Welcome to Logicate - We are working on this email template and should be ready soon!",
+                text: 'Welcome to Logicate - We are working on this email template and should be ready soon!',
                 scheduledAt: new Date(Date.now() + 5 * 60 + 1000).toISOString(),
                 marketing: true,
               }),
-            ]),
+            ])
           );
         }
       }

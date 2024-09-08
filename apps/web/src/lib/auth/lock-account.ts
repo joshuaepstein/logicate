@@ -1,9 +1,7 @@
-import { prisma, User } from "@logicate/database";
-import { MAX_LOGIN_ATTEMPTS } from "./constants";
+import { prisma, User } from '@logicate/database';
+import { MAX_LOGIN_ATTEMPTS } from './constants';
 
-export const incrementLoginAttemps = async (
-  user: Pick<User, "id" | "email">,
-) => {
+export const incrementLoginAttemps = async (user: Pick<User, 'id' | 'email'>) => {
   const { invalidLoginAttempts, lockedAt } = await prisma.user.update({
     where: { id: user.id },
     data: {
@@ -34,8 +32,6 @@ export const incrementLoginAttemps = async (
   };
 };
 
-export const exceededLoginAttemptsThreshold = (
-  user: Pick<User, "invalidLoginAttempts">,
-) => {
+export const exceededLoginAttemptsThreshold = (user: Pick<User, 'invalidLoginAttempts'>) => {
   return user.invalidLoginAttempts >= MAX_LOGIN_ATTEMPTS;
 };

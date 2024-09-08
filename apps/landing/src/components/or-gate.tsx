@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 export default function AndGate() {
   return (
@@ -10,17 +10,17 @@ export default function AndGate() {
       viewBox="0 0 369 288"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      initial={{ opacity: 0, rotate: "20deg" }}
-      animate={{ opacity: 1, rotate: "12deg" }}
+      initial={{ opacity: 0, rotate: '20deg' }}
+      animate={{ opacity: 1, rotate: '12deg' }}
       transition={{ duration: 1, delay: 0.5 }}
       key="and-gate-animatable"
-      className="absolute right-20 size-32 top-52"
+      className="absolute right-20 top-52 size-32"
       style={{
-        rotate: "12deg",
-        userSelect: "none",
-        WebkitUserSelect: "none",
-        MozUserSelect: "none",
-        msUserSelect: "none",
+        rotate: '12deg',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        MozUserSelect: 'none',
+        msUserSelect: 'none',
       }}
       drag
       dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}

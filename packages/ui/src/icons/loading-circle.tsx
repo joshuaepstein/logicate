@@ -1,40 +1,26 @@
-import { cn } from "@logicate/ui";
-import React from "react";
+import { cn } from '@logicate/ui';
+import React from 'react';
 
-export default function LoadingCircle({
-  className,
-  strokeWidth,
-  ...props
-}: React.SVGProps<SVGSVGElement>) {
+export default function LoadingCircle({ className, strokeWidth, ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       aria-hidden="true"
-      className={cn(
-        "stroke-neutralgrey-800 text-neutralgrey-400 h-4 w-4",
-        className,
-      )}
+      className={cn('stroke-neutralgrey-800 text-neutralgrey-400 h-4 w-4', className)}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <circle
-        cx="50"
-        cy="50.5908"
-        r="40"
-        stroke="currentColor"
-        fill="none"
-        strokeWidth={strokeWidth || "10"}
-      />
+      <circle cx="50" cy="50.5908" r="40" stroke="currentColor" fill="none" strokeWidth={strokeWidth || '10'} />
       <circle
         cx="50"
         cy="50.5908"
         r="40"
         stroke="currentStroke"
         fill="none"
-        strokeWidth={strokeWidth || "10"}
+        strokeWidth={strokeWidth || '10'}
         strokeDasharray="60 180"
-        strokeDashoffset={"50"}
+        strokeDashoffset={'50'}
         strokeLinecap="round"
         className="animate-strokedashoffset"
       />

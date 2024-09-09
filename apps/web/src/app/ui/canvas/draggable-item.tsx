@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@logicate/ui/tooltip';
-import { gateTypeToIcon } from './node/gate';
+import { gateTypeToIcon } from './node';
 import { inputTypeToIcon } from './node/inputs';
 import { NodeType } from './node/type';
 

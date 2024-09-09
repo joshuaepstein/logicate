@@ -10,7 +10,9 @@ import useCanvasActions from './canvas_actions';
 import useDisableHook from './disable-hook';
 import useUpdateCanvasStore from './hooks/updateCanvasStore';
 import useCanvasStore from './hooks/useCanvasStore';
-import { defaultInputs, Gate, GateType } from './node/gate';
+import { GateType } from './node/gates/types';
+import { defaultInputs } from './node/gates/defaults';
+import { Gate } from './node/gates';
 import { Input, InputType } from './node/inputs';
 import { TemporaryInput } from './node/inputs/temporary';
 import { TemporaryGate } from './node/temporary-gate';
@@ -70,7 +72,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     const recentItem = items[items.length - 1];
     if (recentItem) {
       itemsUpdate((items) => items.slice(0, -1));
-      const wiresConnecting = wires.filter((wire) => wire.from === recentItem.id || wire.to === recentItem.id);
+      const wiresConnecting = wires.filter((wire) => wire.from.id === recentItem.id || wire.to.id === recentItem.id);
       const updatedWires = wires.filter((wire) => !wiresConnecting.includes(wire));
       setWires(updatedWires);
     }
@@ -150,7 +152,10 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
                       id: temporaryWire.fromId,
                       node_index: temporaryWire.fromNodeIndex,
                     },
-                    to: parentId,
+                    to: {
+                      id: parentId,
+                      node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                    },
                     active: false,
                   });
                 } else if (terminalType === 'output') {
@@ -220,6 +225,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
                   outputs: [],
                   settings: {
                     inputs: defaultInputs[draggingNewElement.type.node].default,
+                    color: '#000',
                   },
                 }
               : {
@@ -230,7 +236,6 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
                   computedValue: false,
                 }),
         } satisfies Item;
-        // @ts-expect-error i dunno
         addItem(item);
         setHolding(false);
       }
@@ -273,7 +278,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
             }}
           >
             {wires.map((wire, index) => {
-              return <Wire key={index} startId={wire.from} endId={wire.to} isActive={wire.active ?? false} type="alt" />;
+              return <Wire key={index} start={wire.from} end={wire.to} isActive={wire.active ?? false} type="alt" />;
             })}
           </svg>
           <div

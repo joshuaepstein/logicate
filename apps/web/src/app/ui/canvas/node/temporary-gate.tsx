@@ -1,6 +1,6 @@
 import { cn } from '@logicate/ui';
 import { forwardRef, useMemo } from 'react';
-import { defaultInputs, GateType, gateTypeToIcon } from './gate';
+import { defaultInputs, GateType, gateTypeToIcon } from '.';
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
 

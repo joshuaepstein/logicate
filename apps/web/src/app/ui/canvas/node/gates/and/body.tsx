@@ -1,6 +1,6 @@
 import { cn } from '@logicate/ui';
 import { GateItem } from '../../../types';
-import { GateType } from '../../gate';
+import { GateType } from '../types';
 
 export default function AndBody({ item }: { item: GateItem }) {
   return (

@@ -5,7 +5,7 @@
     "postinstall": "turbo db:generate --filter=@logicate/database",
     "dev": "turbo dev --filter=@logicate/web",
     "dev:emails": "dotenv turbo dev --filter=@logicate/emails",
-    "dev:landing": "dotenv turbo dev --filter=@logicate/landing",
+    "dev:landing": "turbo dev --filter=@logicate/landing --filter=@logicate/web",
     "start": "dotenv turbo start --filter=@logicate/landing",
     "build": "dotenv turbo run build --filter=@logicate/landing",
     "build:test": "turbo build:test",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
-    "framer-motion": "^11.5.3",
+    "framer-motion": "^11.5.4",
     "next": "^14.2.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

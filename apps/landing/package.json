@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@jfstech/icons-react": "^0.1.3",
+    "@logicate/database": "workspace:*",
     "@logicate/tailwind": "workspace:*",
     "@logicate/ui": "workspace:*",
     "@logicate/utils": "workspace:*",

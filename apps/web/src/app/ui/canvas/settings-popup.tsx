@@ -6,7 +6,7 @@ import { TextInput } from '@logicate/ui/input/index';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import useCanvasStore from './hooks/useCanvasStore';
-import { defaultInputs } from './node/gate';
+import { defaultInputs } from './node';
 import { GateItem, InputItem, OutputItem } from './types';
 import { HexColorPicker } from 'react-colorful';
 

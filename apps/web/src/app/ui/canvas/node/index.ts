@@ -1,4 +1,4 @@
-import { GateType } from './gate';
+import { GateType } from './gates/types';
 
 export const gates: Record<GateType, (inputs: boolean[]) => boolean> = {
   [GateType.AND]: (inputs: boolean[]) => inputs.length > 0 && inputs.every(Boolean),

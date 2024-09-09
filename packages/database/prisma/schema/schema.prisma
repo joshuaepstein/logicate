@@ -60,6 +60,7 @@ model User {
   invalidLoginAttempts  Int         @default(0)
   lockedAt              DateTime?
   client_showBackground Boolean     @default(true)
+  isAdmin               Boolean     @default(false)
 
   publicDisplay      PublicDisplay[]
   accounts           Account[]

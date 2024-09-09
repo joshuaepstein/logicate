@@ -9,8 +9,14 @@ type WireType = {
 };
 
 type WireTypeAlt = {
-  startId: string;
-  endId: string;
+  start: {
+    id: string;
+    node_index: number;
+  };
+  end: {
+    id: string;
+    node_index: number;
+  };
   isActive: boolean;
   type: 'alt';
 };
@@ -54,20 +60,20 @@ export const Wire = (props: WireProps) => {
       </svg>
     );
   } else {
-    const { startId, endId, isActive } = props;
-    const start = useNode(startId);
-    const end = useNode(endId);
+    const { start, end, isActive } = props;
+    const startNode = useNode(start.id);
+    const endNode = useNode(end.id);
 
-    if (!start || !end) return null;
+    if (!startNode || !endNode) return null;
 
     return (
       <svg className="pointer-events-none absolute left-0 top-0 overflow-visible" data-logicate-signal={isActive}>
         <path
           d={`
-              M ${start.x},${start.y}
-              C ${start.x + (end.x - start.x) / 2},${start.y}
-                ${start.x + (end.x - start.x) / 2},${end.y}
-                ${end.x},${end.y}
+              M ${startNode.x},${startNode.y}
+              C ${startNode.x + (endNode.x - startNode.x) / 2},${startNode.y}
+                ${startNode.x + (endNode.x - startNode.x) / 2},${endNode.y}
+                ${endNode.x},${endNode.y}
               `}
           // stroke={isActive ? "#4CAF50" : "#9E9E9E"}
           // strokeWidth="2"
@@ -82,10 +88,10 @@ export const Wire = (props: WireProps) => {
         />
         <path
           d={`
-              M ${start.x},${start.y}
-              C ${start.x + (end.x - start.x) / 2},${start.y}
-                ${start.x + (end.x - start.x) / 2},${end.y}
-                ${end.x},${end.y}
+              M ${startNode.x},${startNode.y}
+              C ${startNode.x + (endNode.x - startNode.x) / 2},${startNode.y}
+                ${startNode.x + (endNode.x - startNode.x) / 2},${endNode.y}
+                ${endNode.x},${endNode.y}
               `}
           strokeWidth="4"
           fill="none"

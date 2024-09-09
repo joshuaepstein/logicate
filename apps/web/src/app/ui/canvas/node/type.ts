@@ -1,4 +1,4 @@
-import { GateType } from './gate';
+import { GateType } from './gates/types';
 import { InputType } from './inputs';
 
 export type NodeType =

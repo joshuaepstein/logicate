@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import useCanvasStore from './hooks/useCanvasStore';
 import { defaultInputs } from './node/gate';
 import { GateItem, InputItem, OutputItem } from './types';
+import { HexColorPicker } from 'react-colorful';
 
 export default function SettingsPopup() {
   const { selected, updateItem, updateSelected } = useCanvasStore();
@@ -146,29 +147,60 @@ export default function SettingsPopup() {
                       }}
                     />
                   </div>
-                  {selected[0].itemType === 'input' || selected[0].itemType === 'output' ? (
-                    <div className="flex w-full flex-row items-center justify-between gap-4">
-                      <p className="text-neutralgrey-800 text-sm">Symbol</p>
-                      <div className="flex w-max flex-row items-center">
-                        <TextInput
-                          value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
-                          className="min-w-40"
-                          onChange={(e) => {
-                            updateItem(selected[0].id, {
-                              ...selected[0],
-                              settings: {
-                                ...(selected[0] as InputItem | OutputItem).settings,
-                                // @ts-expect-error because we know that the settings are an object with an expressionLetter property
-                                expressionLetter: e.target.value as Alphabet,
-                              },
-                            });
-                            updateSelected();
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ) : null}
                 </div>
+                <div className="flex w-full flex-row items-center justify-between gap-4">
+                  <p className="text-neutralgrey-800 text-sm">Colour</p>
+                  <div className="flex w-max flex-row items-center">
+                    {/* <TextInput
+                      value={selected[0].settings.color}
+                      className="min-w-40"
+                      onChange={(e) => {
+                        updateItem(selected[0].id, {
+                          ...selected[0],
+                          settings: {
+                            ...(selected[0] as GateItem).settings,
+                            color: e.target.value,
+                          },
+                        });
+                        updateSelected();
+                      }}
+                    /> */}
+                    <HexColorPicker
+                      color={selected[0].settings.color}
+                      onChange={(color) => {
+                        updateItem(selected[0].id, {
+                          ...selected[0],
+                          settings: {
+                            ...(selected[0] as GateItem).settings,
+                            color: color as `#${string}`,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                {selected[0].itemType === 'input' || selected[0].itemType === 'output' ? (
+                  <div className="flex w-full flex-row items-center justify-between gap-4">
+                    <p className="text-neutralgrey-800 text-sm">Symbol</p>
+                    <div className="flex w-max flex-row items-center">
+                      <TextInput
+                        value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
+                        className="min-w-40"
+                        onChange={(e) => {
+                          updateItem(selected[0].id, {
+                            ...selected[0],
+                            settings: {
+                              ...(selected[0] as InputItem | OutputItem).settings,
+                              // @ts-expect-error because we know that the settings are an object with an expressionLetter property
+                              expressionLetter: e.target.value as Alphabet,
+                            },
+                          });
+                          updateSelected();
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : null}
               </motion.div>
             ) : null}
           </motion.div>

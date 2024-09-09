@@ -2,7 +2,7 @@
 import { LogicateSession, User } from '@logicate/database';
 import { Click } from '@logicate/utils/buttons';
 import { randomGateId, randomWireId } from '@logicate/utils/id';
-import { useEffect, useOptimistic, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useHotkeys } from 'react-hotkeys-hook';
 import BackgroundElement from './background-element';
@@ -140,21 +140,33 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
             switch (parent.itemType) {
               case 'gate':
                 if (terminalType === 'input') {
-                  parent.inputs.push(temporaryWire.fromId);
+                  parent.inputs.push({
+                    id: temporaryWire.fromId,
+                    node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                  });
                   addWire({
                     id: randomWireId(),
-                    from: temporaryWire.fromId,
+                    from: {
+                      id: temporaryWire.fromId,
+                      node_index: temporaryWire.fromNodeIndex,
+                    },
                     to: parentId,
                     active: false,
                   });
                 } else if (terminalType === 'output') {
-                  parent.outputs.push(temporaryWire.fromId);
+                  parent.outputs.push({
+                    id: temporaryWire.fromId,
+                    node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                  });
                 }
                 setTemporaryWire(null);
                 break;
               case 'input':
                 if (terminalType === 'output') {
-                  parent.outputs.push(temporaryWire.fromId);
+                  parent.outputs.push({
+                    id: temporaryWire.fromId,
+                    node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                  });
                 }
                 setTemporaryWire(null);
                 break;
@@ -252,7 +264,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
           data-logicate-canvas-zoom={canvas.zoom}
           data-logicate-canvas
         >
-          <BackgroundElement canvasReference={canvasReference} showBackground={user.client_showBackground} />
+          <BackgroundElement canvasReference={canvasReference} showBackground={user.client_showBackground ?? true} />
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
             style={{

@@ -1,7 +1,7 @@
 import { getSession } from '@/lib/auth/utils';
 import { prisma } from '@logicate/database';
 import { generateQuestionId } from '@logicate/utils/id';
-import { notFound, redirect } from 'next/navigation';
+import Canvas from './ui/canvas';
 
 const createDatabaseSession = async (userId: string) => {
   'use server';
@@ -36,9 +36,37 @@ const createDatabaseSession = async (userId: string) => {
 
 export default async function Home() {
   const session = await getSession();
-  const logicateSession = await createDatabaseSession(session.user.id);
-  if (!logicateSession) {
-    notFound();
-  }
-  redirect(`/canvas/${logicateSession.id}`);
+  // const logicateSession = await createDatabaseSession(session.user.id);
+  // if (!logicateSession) {
+  //   notFound();
+  // }
+  // redirect(`/canvas/${logicateSession.id}`);
+  return (
+    <div className="flex h-dvh max-h-dvh w-full flex-col overflow-hidden">
+      <nav className="border-neutralgrey-400 h-16 w-full border-b">{session?.user?.name || 'Hi'}</nav>
+      <Canvas
+        sessionId={'12'}
+        logicateSession={{
+          id: '12',
+          items: [],
+          createdAt: new Date(),
+          ownerId: session?.user?.id || 'userIdHere',
+          updatedAt: new Date(),
+          wires: [],
+        }}
+        user={
+          session?.user || {
+            id: 'userIdHere',
+            name: 'Joshua Epstein',
+            accountType: 'STUDENT',
+            client_showBackground: true,
+            createdAt: new Date(),
+            email: 'josh@joshepstein.co.uk',
+            invalidLoginAttempts: 0,
+            username: 'joshepstein',
+          }
+        }
+      />
+    </div>
+  );
 }

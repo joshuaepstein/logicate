@@ -5,6 +5,8 @@ import useCanvasStore from '../hooks/useCanvasStore';
 import { useNode } from '../hooks/useNode';
 import AndBody from './nodes/and/body';
 import { GateItem } from '../types';
+import OrBody from './nodes/or/body';
+import { createSVGColouredElement } from './nodes/or/svg-left-element';
 
 export enum GateType {
   AND = 'AND',
@@ -220,11 +222,12 @@ export const Gate = forwardRef<
                   cx="6.5"
                   cy="6.5"
                   r="6"
-                  stroke="black"
+                  stroke={item.settings.color || '#000'}
                   strokeWidth="1"
                   fill="white"
                   data-logicate-output-terminal={0}
                   data-logicate-node-parent-id={gateId}
+                  data-logicate-parent-terminal-index={0}
                   data-logicate-parent-terminal-type="output"
                   onMouseDown={(e) => {
                     setTemporaryWire({
@@ -244,11 +247,19 @@ export const Gate = forwardRef<
                 ></circle>
               </svg>
             </div>
-            <div className="order-1 h-[2px] min-w-4 grow bg-black" />
             <div
-              className={cn('absolute z-[1] -order-1 h-2 w-2 rounded-[50%] border-2 border-black bg-white', {
+              className="order-1 h-[2px] min-w-4 grow"
+              style={{
+                backgroundColor: item.settings.color || '#000',
+              }}
+            />
+            <div
+              className={cn('absolute z-[1] -order-1 h-2 w-2 rounded-[50%] border-2 bg-white', {
                 hidden: !isInverted,
               })}
+              style={{
+                borderColor: item.settings.color || '#000',
+              }}
             ></div>
           </div>
         </div>
@@ -288,17 +299,30 @@ export const Gate = forwardRef<
                     cx="6.5"
                     cy="6.5"
                     r="6"
-                    stroke="black"
+                    stroke={item.settings.color || '#000'}
                     strokeWidth="1"
                     fill="white"
                     data-logicate-input-terminal={index}
                     data-logicate-node-parent-id={gateId}
+                    data-logicate-parent-terminal-index={index}
                     data-logicate-parent-terminal-type="input"
                   ></circle>
                 </svg>
               </div>
-              <div className="h-[2px] min-w-4 grow bg-black" />
-              <div className="absolute z-[1] hidden h-2 w-2 rounded-[50%] border-2 border-black bg-white"></div>
+              <div
+                className={cn('h-[2px] min-w-4 grow', {
+                  'mr-px min-w-0': isOrType,
+                })}
+                style={{
+                  backgroundColor: item.settings.color || '#000',
+                }}
+              />
+              <div
+                className="absolute z-[1] hidden h-2 w-2 rounded-[50%] border-2 bg-white"
+                style={{
+                  borderColor: item.settings.color || '#000',
+                }}
+              ></div>
             </div>
           ))}
         </div>
@@ -308,7 +332,8 @@ export const Gate = forwardRef<
             {
               // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
               'border-none': inputs < 4,
-              'my-[5.25px] self-stretch border-l-2': inputs > 3,
+              'my-[5.25px] self-stretch border-l-2': inputs > 3 && !isOrType && !isXorXnorType,
+              'my-[5.25px] self-stretch bg-repeat-y': inputs > 3 && (isOrType || isXorXnorType),
               '-ml-[4.5px] -mr-px w-[36px]': isOrType,
               '-ml-[9px] -mr-px w-[40px]': isXorXnorType,
             }
@@ -316,7 +341,12 @@ export const Gate = forwardRef<
           style={{
             gridColumn: '2 / span 1',
             gridRow: '2 / span 1',
-            filter: isSelected(gateId) ? 'drop-shadow(0px 0px 3px #0079db)' : 'none',
+            filter: isSelected(gateId) ? `drop-shadow(0px 0px 3px #0079db)` : 'none',
+            ...(inputs > 3 &&
+              isOrType && {
+                backgroundImage: `url(${createSVGColouredElement(item.settings.color || '#000')})`,
+                backgroundPosition: 'center left',
+              }),
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center">
@@ -334,7 +364,11 @@ export const Gate = forwardRef<
             {(() => {
               switch (type) {
                 case GateType.AND:
+                case GateType.NAND:
                   return <AndBody item={item} />;
+                case GateType.OR:
+                case GateType.NOR:
+                  return <OrBody item={item} />;
               }
             })()}
           </div>

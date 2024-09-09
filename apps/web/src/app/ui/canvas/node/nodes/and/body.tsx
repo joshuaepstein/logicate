@@ -14,7 +14,7 @@ export default function AndBody({ item }: { item: GateItem }) {
       style={{
         color: item.settings.color || '#000',
       }}
-      width="36"
+      width="32"
       height="32"
       fill="currentColor"
       data-logicate-body
@@ -25,7 +25,7 @@ export default function AndBody({ item }: { item: GateItem }) {
         stroke={item.settings.color || '#000'}
         strokeLinecap="round"
         strokeWidth="2"
-        d="M11.95 1c9.967.2 17.516 5.234 22.65 15-5.134 9.766-12.683 14.8-22.65 15H1.6c1.234-2.567 2.184-5.067 2.85-7.5.2-.667.367-1.333.5-2 .88-3.739.881-7.26 0-11-.133-.667-.3-1.333-.5-2C3.784 6.067 2.834 3.567 1.6 1h10.35Z"
+        d="M1 1h15c4.133 0 7.667 1.467 10.6 4.4C29.533 8.333 31 11.867 31 16s-1.467 7.667-4.4 10.6C23.667 29.533 20.133 31 16 31H1V1Z"
       />
     </svg>
   );

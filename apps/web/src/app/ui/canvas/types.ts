@@ -4,16 +4,21 @@ import { OutputType } from './node/type';
 
 type Alphabet = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J';
 
+type ConnectedNode = {
+  id: string;
+  node_index: number;
+};
+
 type GateItem = {
   id: string;
   type: GateType;
   x: number;
   y: number;
-  inputs: string[];
-  outputs: string[];
+  inputs: ConnectedNode[];
+  outputs: ConnectedNode[];
   computedValue?: boolean;
   settings: {
-    color?: string;
+    color?: `#${string}`;
     inputs: number;
     label?: string;
   };
@@ -25,7 +30,7 @@ type InputItem = {
   type: InputType;
   x: number;
   y: number;
-  outputs: string[];
+  outputs: ConnectedNode[];
   value: boolean;
   settings: {
     color?: string;
@@ -41,7 +46,7 @@ type OutputItem = {
   type: OutputType;
   x: number;
   y: number;
-  inputs: string[];
+  inputs: ConnectedNode[];
   computedValue?: boolean;
   settings: {
     color?: string;
@@ -54,8 +59,14 @@ type OutputItem = {
 type Item = GateItem | InputItem | OutputItem;
 
 interface Wire {
-  from: string;
-  to: string;
+  from: {
+    id: string;
+    node_index: number;
+  };
+  to: {
+    id: string;
+    node_index: number;
+  };
   id: string;
   active?: boolean;
 }
@@ -66,6 +77,7 @@ interface TempWire {
     y: number;
   };
   fromId: string;
+  fromNodeIndex: number;
   fromTerminal: 'input' | 'output';
   to: {
     x: number;

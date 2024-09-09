@@ -11,5 +11,5 @@ export const createSVGColouredElement = (color: `#${string}`) => {
   svg.appendChild(path);
   const svgString = new XMLSerializer().serializeToString(svg);
   const base64 = btoa(svgString);
-  return base64;
+  return `data:image/svg+xml;base64,${base64}`;
 };

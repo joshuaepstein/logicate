@@ -6,18 +6,18 @@ import { TextInput } from '@logicate/ui/input/index';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import useCanvasStore from './hooks/useCanvasStore';
-import { defaultInputs } from './node';
-import { GateItem, InputItem, OutputItem } from './types';
-import { HexColorPicker } from 'react-colorful';
+import { defaultInputs } from './node/gates/constants'
+import { GateItem, InputItem, OutputItem } from './types'
+import { HexColorPicker } from 'react-colorful'
 
 export default function SettingsPopup() {
-  const { selected, updateItem, updateSelected } = useCanvasStore();
-  const [visible, setVisible] = useState(false);
-  const [minimized, setMinimized] = useState(true);
+  const { selected, updateItem, updateSelected } = useCanvasStore()
+  const [visible, setVisible] = useState(false)
+  const [minimized, setMinimized] = useState(true)
 
   useEffect(() => {
-    setVisible(selected.length === 1);
-  }, [selected]);
+    setVisible(selected.length === 1)
+  }, [selected])
 
   return (
     <AnimatePresence>
@@ -50,7 +50,7 @@ export default function SettingsPopup() {
               closed: { height: 0 },
             }}
             animate={minimized ? 'closed' : 'open'}
-            className="flex w-full flex-col items-start justify-between overflow-y-hidden"
+            className="flex h-0 w-full flex-col items-start justify-between overflow-y-hidden"
           >
             {selected[0].selectedType === 'item' ? (
               <motion.div
@@ -67,9 +67,9 @@ export default function SettingsPopup() {
                         variant="no-borders"
                         size="icon-xs"
                         onClick={() => {
-                          const inputs = (selected[0] as GateItem).settings.inputs;
-                          const inputsOptions = defaultInputs[(selected[0] as GateItem).type];
-                          if (inputs - 1 < inputsOptions.min) return;
+                          const inputs = (selected[0] as GateItem).settings.inputs
+                          const inputsOptions = defaultInputs[(selected[0] as GateItem).type]
+                          if (inputs - 1 < inputsOptions.min) return
                           updateItem(selected[0].id, {
                             ...selected[0],
                             settings: {
@@ -77,8 +77,8 @@ export default function SettingsPopup() {
                               // @ts-expect-error because we know that the settings are an object with an inputs property
                               inputs: inputs - 1,
                             },
-                          });
-                          updateSelected();
+                          })
+                          updateSelected()
                         }}
                       >
                         <DashIcon className="size-4" />
@@ -89,11 +89,11 @@ export default function SettingsPopup() {
                         // type="number"
                         id="logicate-gate-inputs-quantity-field"
                         onChange={(e) => {
-                          const value = parseInt(e.target.value);
+                          const value = parseInt(e.target.value)
                           if (!isNaN(value)) {
-                            const inputsOptions = defaultInputs[(selected[0] as GateItem).type];
-                            if (value + 1 > inputsOptions.max) return;
-                            if (value - 1 < inputsOptions.min) return;
+                            const inputsOptions = defaultInputs[(selected[0] as GateItem).type]
+                            if (value + 1 > inputsOptions.max) return
+                            if (value - 1 < inputsOptions.min) return
                             updateItem(selected[0].id, {
                               ...selected[0],
                               settings: {
@@ -101,8 +101,8 @@ export default function SettingsPopup() {
                                 // @ts-expect-error because we know that the settings are an object with an inputs property
                                 inputs: value,
                               },
-                            });
-                            updateSelected();
+                            })
+                            updateSelected()
                           }
                         }}
                       />
@@ -110,9 +110,9 @@ export default function SettingsPopup() {
                         variant="no-borders"
                         size="icon-xs"
                         onClick={() => {
-                          const inputs = (selected[0] as GateItem).settings.inputs;
-                          const inputsOptions = defaultInputs[(selected[0] as GateItem).type];
-                          if (inputs + 1 > inputsOptions.max) return;
+                          const inputs = (selected[0] as GateItem).settings.inputs
+                          const inputsOptions = defaultInputs[(selected[0] as GateItem).type]
+                          if (inputs + 1 > inputsOptions.max) return
                           updateItem(selected[0].id, {
                             ...selected[0],
                             settings: {
@@ -120,8 +120,8 @@ export default function SettingsPopup() {
                               // @ts-expect-error because we know that the settings are an object with an inputs property
                               inputs: inputs + 1,
                             },
-                          });
-                          updateSelected();
+                          })
+                          updateSelected()
                         }}
                       >
                         <Plus01Icon className="size-4" />
@@ -129,7 +129,7 @@ export default function SettingsPopup() {
                     </div>
                   </div>
                 ) : null}
-                <div className="flex w-full flex-row items-center justify-between gap-4">
+                ;<div className="flex w-full flex-row items-center justify-between gap-4">
                   <p className="text-neutralgrey-800 text-sm">Label</p>
                   <div className="flex w-max flex-row items-center">
                     <TextInput
@@ -142,29 +142,15 @@ export default function SettingsPopup() {
                             ...(selected[0] as GateItem).settings,
                             label: e.target.value,
                           },
-                        });
-                        updateSelected();
+                        })
+                        updateSelected()
                       }}
                     />
                   </div>
                 </div>
-                <div className="flex w-full flex-row items-center justify-between gap-4">
+                ;<div className="flex w-full flex-row items-center justify-between gap-4">
                   <p className="text-neutralgrey-800 text-sm">Colour</p>
                   <div className="flex w-max flex-row items-center">
-                    {/* <TextInput
-                      value={selected[0].settings.color}
-                      className="min-w-40"
-                      onChange={(e) => {
-                        updateItem(selected[0].id, {
-                          ...selected[0],
-                          settings: {
-                            ...(selected[0] as GateItem).settings,
-                            color: e.target.value,
-                          },
-                        });
-                        updateSelected();
-                      }}
-                    /> */}
                     <HexColorPicker
                       color={selected[0].settings.color}
                       onChange={(color) => {
@@ -174,38 +160,41 @@ export default function SettingsPopup() {
                             ...(selected[0] as GateItem).settings,
                             color: color as `#${string}`,
                           },
-                        });
+                        })
+                        updateSelected()
                       }}
                     />
                   </div>
                 </div>
-                {selected[0].itemType === 'input' || selected[0].itemType === 'output' ? (
-                  <div className="flex w-full flex-row items-center justify-between gap-4">
-                    <p className="text-neutralgrey-800 text-sm">Symbol</p>
-                    <div className="flex w-max flex-row items-center">
-                      <TextInput
-                        value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
-                        className="min-w-40"
-                        onChange={(e) => {
-                          updateItem(selected[0].id, {
-                            ...selected[0],
-                            settings: {
-                              ...(selected[0] as InputItem | OutputItem).settings,
-                              // @ts-expect-error because we know that the settings are an object with an expressionLetter property
-                              expressionLetter: e.target.value as Alphabet,
-                            },
-                          });
-                          updateSelected();
-                        }}
-                      />
+                {
+                  selected[0].itemType === 'input' || selected[0].itemType === 'output' ? (
+                    <div className="flex w-full flex-row items-center justify-between gap-4">
+                      <p className="text-neutralgrey-800 text-sm">Symbol</p>
+                      <div className="flex w-max flex-row items-center">
+                        <TextInput
+                          value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
+                          className="min-w-40"
+                          onChange={(e) => {
+                            updateItem(selected[0].id, {
+                              ...selected[0],
+                              settings: {
+                                ...(selected[0] as InputItem | OutputItem).settings,
+                                // @ts-expect-error because we know that the settings are an object with an expressionLetter property
+                                expressionLetter: e.target.value as Alphabet,
+                              },
+                            })
+                            updateSelected()
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ) : null}
+                  ) : null
+                }
               </motion.div>
             ) : null}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }

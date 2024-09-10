@@ -49,3 +49,5 @@ export const defaultInputs: Record<
     max: 1,
   },
 };
+
+export const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];

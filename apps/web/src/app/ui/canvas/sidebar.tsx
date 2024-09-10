@@ -1,6 +1,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@logicate/ui/not-done-yet/accordion';
 import { DraggableItem } from './draggable-item';
-import { GateType } from './node';
+import { GateType } from './node/gates/types';
 import { InputType } from './node/inputs';
 
 export default function Sidebar() {

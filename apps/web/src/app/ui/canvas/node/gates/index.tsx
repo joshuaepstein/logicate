@@ -8,24 +8,24 @@ import { GateItem } from '../../types';
 import OrBody from './or/body';
 import { createSVGColouredElement } from './or/svg-left-element';
 import { GateType } from './types';
-import { defaultInputs } from './defaults';
+import { defaultInputs } from './constants'
 
-const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
+const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR]
 
-type GateState = boolean | number | string | null;
+type GateState = boolean | number | string | null
 
 export type GateProps = {
-  type: GateType;
-  inputs: number;
-  state: GateState;
-  gateId: string;
-};
+  type: GateType
+  inputs: number
+  state: GateState
+  gateId: string
+}
 
 export const Gate = forwardRef<
   HTMLDivElement,
   GateProps & {
-    x: number;
-    y: number;
+    x: number
+    y: number
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, x, y, state, gateId, ...rest }, ref) => {
   const {
@@ -37,73 +37,75 @@ export const Gate = forwardRef<
     selectItemId: select,
     unselectItemId: unselect,
     isSelected,
-  } = useCanvasStore();
-  const item = useNode(gateId) as GateItem;
+  } = useCanvasStore()
+  const item = useNode(gateId) as GateItem
   const isInverted = useMemo(() => {
-    return inverted.includes(type);
-  }, [type]);
+    return inverted.includes(type)
+  }, [type])
   const isOrType = useMemo(() => {
-    return type === GateType.OR || type === GateType.NOR;
-  }, [type]);
+    return type === GateType.OR || type === GateType.NOR
+  }, [type])
   const isXorXnorType = useMemo(() => {
-    return type === GateType.XOR || type === GateType.XNOR;
-  }, [type]);
-  const [position, setPosition] = useState({ x, y });
-  const [offset, setOffset] = useState({ x, y });
-  const [dragging, setDragging] = useState(false);
+    return type === GateType.XOR || type === GateType.XNOR
+  }, [type])
+  const [position, setPosition] = useState({ x, y })
+  const [offset, setOffset] = useState({ x, y })
+  const [dragging, setDragging] = useState(false)
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      const target = e.target as HTMLDivElement;
+      const target = e.target as HTMLDivElement
       if (target.dataset.logicateBody) {
-        setDragging(true);
+        setDragging(true)
         setOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
-        });
+        })
       }
     },
     [position, canvas.zoom, offset]
-  );
+  )
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       if (dragging) {
-        const canvasElement = document.querySelector('[data-logicate-canvas]');
+        const canvasElement = document.querySelector('[data-logicate-canvas]')
         if (canvasElement) {
-          const bounds = canvasElement.getBoundingClientRect();
+          const bounds = canvasElement.getBoundingClientRect()
           if (cursorInside(event, bounds)) {
             setPosition({
               x: event.clientX - offset.x,
               y: event.clientY - offset.y,
-            });
+            })
           }
         }
       }
     },
     [dragging, offset, canvas.zoom]
-  );
+  )
 
   const handleMouseUp = useCallback(() => {
-    setDragging(false);
-    updateItem(gateId, { x: position.x, y: position.y });
-    select(gateId);
-  }, [position]);
+    setDragging(false)
+    updateItem(gateId, { x: position.x, y: position.y })
+    if (!isSelected(gateId)) {
+      select(gateId)
+    }
+  }, [position])
 
   useEffect(() => {
     if (dragging) {
-      setHolding(true);
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      setHolding(true)
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
     } else {
-      setHolding(false);
+      setHolding(false)
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [dragging]);
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [dragging])
 
   return (
     <>
@@ -165,7 +167,7 @@ export const Gate = forwardRef<
                       },
                       active: false,
                       fromTerminal: 'output',
-                    });
+                    })
                   }}
                 ></circle>
               </svg>
@@ -250,17 +252,14 @@ export const Gate = forwardRef<
           ))}
         </div>
         <div
-          className={cn(
-            'flex min-h-8 w-8 min-w-[30px] items-center justify-center border-black bg-transparent transition-[filter] duration-100',
-            {
-              // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
-              'border-none': inputs < 4,
-              'my-[5.25px] self-stretch border-l-2': inputs > 3 && !isOrType && !isXorXnorType,
-              'my-[5.25px] self-stretch bg-repeat-y': inputs > 3 && (isOrType || isXorXnorType),
-              '-ml-[4.5px] -mr-px w-[36px]': isOrType,
-              '-ml-[9px] -mr-px w-[40px]': isXorXnorType,
-            }
-          )}
+          className={cn('flex min-h-8 w-8 min-w-[30px] items-center justify-center bg-transparent transition-[filter] duration-100', {
+            // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
+            'border-none': inputs < 4,
+            'my-[5.25px] self-stretch border-l-2': inputs > 3 && !isOrType && !isXorXnorType,
+            'my-[5.25px] self-stretch bg-repeat-y': inputs > 3 && (isOrType || isXorXnorType),
+            '-ml-[4.5px] -mr-px w-[36px]': isOrType,
+            '-ml-[9px] -mr-px w-[40px]': isXorXnorType,
+          })}
           style={{
             gridColumn: '2 / span 1',
             gridRow: '2 / span 1',
@@ -270,6 +269,7 @@ export const Gate = forwardRef<
                 backgroundImage: `url(${createSVGColouredElement(item.settings.color || '#000')})`,
                 backgroundPosition: 'center left',
               }),
+            borderColor: item.settings.color || '#000',
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center">
@@ -288,17 +288,17 @@ export const Gate = forwardRef<
               switch (type) {
                 case GateType.AND:
                 case GateType.NAND:
-                  return <AndBody item={item} />;
+                  return <AndBody item={item} />
                 case GateType.OR:
                 case GateType.NOR:
-                  return <OrBody item={item} />;
+                  return <OrBody item={item} />
               }
             })()}
           </div>
         </div>
       </div>
     </>
-  );
-});
+  )
+})
 
 Gate.displayName = 'Logicate Logic Gate';

@@ -1,8 +1,10 @@
 import { cn } from '@logicate/ui';
 import { forwardRef, useMemo } from 'react';
-import { defaultInputs, GateType, gateTypeToIcon } from '.';
-
-const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
+import { GateType, gateTypeToIcon } from './types';
+import { defaultInputs, inverted } from './constants';
+import AndBody from './and/body';
+import OrBody from './or/body';
+import { GateItem } from '../../types';
 
 type GateState = boolean | number | string | null;
 
@@ -30,6 +32,18 @@ export const TemporaryGate = forwardRef<
   const isXorXnorType = useMemo(() => {
     return type === GateType.XOR || type === GateType.XNOR;
   }, [type]);
+  const temporaryItem: GateItem = {
+    id: 'temporary_item-' + gateId,
+    inputs: [],
+    itemType: 'gate',
+    outputs: [],
+    settings: {
+      inputs,
+    },
+    type,
+    x,
+    y,
+  };
 
   return (
     <>
@@ -120,7 +134,7 @@ export const TemporaryGate = forwardRef<
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center">
-            <span
+            {/* <span
               className={cn('min-h-8 w-8 bg-no-repeat', {
                 '-ml-[2px]': inputs > 3,
                 'w-[38px]': isOrType,
@@ -130,7 +144,17 @@ export const TemporaryGate = forwardRef<
                 backgroundImage: `url(${gateTypeToIcon[type]})`,
               }}
               data-logicate-body
-            />
+            /> */}
+            {(() => {
+              switch (type) {
+                case GateType.AND:
+                case GateType.NAND:
+                  return <AndBody item={temporaryItem} />;
+                case GateType.OR:
+                case GateType.NOR:
+                  return <OrBody item={temporaryItem} />;
+              }
+            })()}
           </div>
         </div>
       </div>

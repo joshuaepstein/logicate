@@ -1,4 +1,4 @@
-import { GateType } from './node';
+import { GateType } from './node/gates/types';
 import { InputType } from './node/inputs';
 import { OutputType } from './node/type';
 

@@ -6,9 +6,12 @@ import { useNode } from '../../hooks/useNode';
 import AndBody from './and/body';
 import { GateItem } from '../../types';
 import OrBody from './or/body';
-import { createSVGColouredElement } from './or/svg-left-element';
+import { createSVGColouredElement as createSVGColouredElementOr } from './or/svg-left-element';
+import { createSVGColouredElement as createSVGColouredElementXor } from './xor/svg-left-element';
 import { GateType } from './types';
 import { defaultInputs } from './constants'
+import BufferBody from './buffer/body';
+import XorBody from './xor/body';
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR]
 
@@ -236,7 +239,7 @@ export const Gate = forwardRef<
               </div>
               <div
                 className={cn('h-[2px] min-w-4 grow', {
-                  'mr-px min-w-0': isOrType,
+                  'mr-px min-w-0': isOrType || isXorXnorType,
                 })}
                 style={{
                   backgroundColor: item.settings.color || '#000',
@@ -266,7 +269,12 @@ export const Gate = forwardRef<
             filter: isSelected(gateId) ? `drop-shadow(0px 0px 3px #0079db)` : 'none',
             ...(inputs > 3 &&
               isOrType && {
-                backgroundImage: `url(${createSVGColouredElement(item.settings.color || '#000')})`,
+                backgroundImage: `url(${createSVGColouredElementOr(item.settings.color || '#000')})`,
+                backgroundPosition: 'center left',
+              }),
+            ...(inputs > 3 &&
+              isXorXnorType && {
+                backgroundImage: `url(${createSVGColouredElementXor(item.settings.color || '#000')})`,
                 backgroundPosition: 'center left',
               }),
             borderColor: item.settings.color || '#000',
@@ -292,6 +300,12 @@ export const Gate = forwardRef<
                 case GateType.OR:
                 case GateType.NOR:
                   return <OrBody item={item} />
+                case GateType.BUFFER:
+                case GateType.NOT:
+                  return <BufferBody item={item} />
+                case GateType.XOR:
+                case GateType.XNOR:
+                  return <XorBody item={item} />
               }
             })()}
           </div>

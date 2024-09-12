@@ -30,6 +30,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     setSelected,
     wires,
     setWires,
+    setItems,
     addWire,
     canvas,
     isHolding,
@@ -77,6 +78,26 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
       setWires(updatedWires);
     }
   });
+
+  useHotkeys("Delete", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // we need to check if the ids of items and wires match any in selected and delete them from the arrays
+    const selectedItemIds = selected.map((item) => {
+      if (item.selectedType === "item") return item.id;
+      return null;
+    }).filter((a) => a !== null);
+    const selectedWires = selected.map((item) => {
+      if (item.selectedType=== "wire") return item.id;
+      return null;
+    }).filter((a) => a !== null)
+    const newItems = items.filter((items) => !selectedItemIds.includes(items.id));
+    const newWires = wires.filter((items) => !selectedWires.includes(items.id));
+
+    setWires(newWires);
+    setItems(newItems);
+  })
 
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
   useEffect(() => {

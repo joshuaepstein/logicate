@@ -1,17 +1,17 @@
-import { cn } from '@logicate/ui';
-import { cursorInside } from '@logicate/utils/dom-cursor';
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
-import useCanvasStore from '../../hooks/useCanvasStore';
-import { useNode } from '../../hooks/useNode';
-import AndBody from './and/body';
-import { GateItem } from '../../types';
-import OrBody from './or/body';
-import { createSVGColouredElement as createSVGColouredElementOr } from './or/svg-left-element';
-import { createSVGColouredElement as createSVGColouredElementXor } from './xor/svg-left-element';
-import { GateType } from './types';
+import { cn } from '@logicate/ui'
+import { cursorInside } from '@logicate/utils/dom-cursor'
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
+import useCanvasStore from '../../hooks/useCanvasStore'
+import { useNode } from '../../hooks/useNode'
+import AndBody from './and/body'
+import { GateItem } from '../../types'
+import OrBody from './or/body'
+import { createSVGColouredElement as createSVGColouredElementOr } from './or/svg-left-element'
+import { createSVGColouredElement as createSVGColouredElementXor } from './xor/svg-left-element'
+import { GateType } from './types'
 import { defaultInputs } from './constants'
-import BufferBody from './buffer/body';
-import XorBody from './xor/body';
+import BufferBody from './buffer/body'
+import XorBody from './xor/body'
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR]
 
@@ -29,6 +29,10 @@ export const Gate = forwardRef<
   GateProps & {
     x: number
     y: number
+    simulated: {
+      id: string
+      state: boolean
+    }
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, x, y, state, gateId, ...rest }, ref) => {
   const {
@@ -80,6 +84,7 @@ export const Gate = forwardRef<
               x: event.clientX - offset.x,
               y: event.clientY - offset.y,
             })
+            updateItem(gateId, { x: position.x, y: position.y })
           }
         }
       }
@@ -118,6 +123,7 @@ export const Gate = forwardRef<
         )}
         style={{ left: position.x, top: position.y }}
         tabIndex={-1}
+        data-logicate-item={gateId}
         data-logicate-id={gateId}
         data-logicate-type={type}
         data-logicate-inputs={inputs}
@@ -315,4 +321,4 @@ export const Gate = forwardRef<
   )
 })
 
-Gate.displayName = 'Logicate Logic Gate';
+Gate.displayName = 'Logicate Logic Gate'

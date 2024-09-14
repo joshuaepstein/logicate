@@ -1,19 +1,25 @@
-import { CenterIcon, Eraser01Icon } from '@jfstech/icons-react/24/outline';
-import { Button } from '@logicate/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@logicate/ui/modal';
-import { useState } from 'react';
-import useCanvasStore from './hooks/useCanvasStore';
-import SettingsPopup from './settings-popup';
+import { CenterIcon, Eraser01Icon } from '@jfstech/icons-react/24/outline'
+import { Button } from '@logicate/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@logicate/ui/modal'
+import { useState } from 'react'
+import useCanvasStore from './hooks/useCanvasStore'
+import SettingsPopup from './settings-popup'
+import LoadingCircle from '@logicate/ui/icons/loading-circle'
 
 export default function useCanvasActions() {
-  const [confirmClear, setConfirmClear] = useState(false);
-  const { setItems, setWires, setCanvas } = useCanvasStore();
+  const [confirmClear, setConfirmClear] = useState(false)
+  const { setItems, setWires, setCanvas, updatingDatabase } = useCanvasStore()
 
   return {
     CanvasActions: (
       <div className="absolute bottom-4 right-4 flex flex-col items-end justify-end gap-4">
         <SettingsPopup />
         <div className="flex flex-row">
+          {updatingDatabase.is && (
+            <div className="flex flex-row">
+              <LoadingCircle className="size-4" />
+            </div>
+          )}
           <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
             <DialogTrigger asChild>
               <Button className="mr-2" variant="destructive-primary" size="icon-sm">
@@ -31,9 +37,9 @@ export default function useCanvasActions() {
                 <Button
                   variant="destructive-primary"
                   onClick={() => {
-                    setItems([]);
-                    setWires([]);
-                    setConfirmClear(false);
+                    setItems([])
+                    setWires([])
+                    setConfirmClear(false)
                   }}
                 >
                   Clear Canvas
@@ -47,7 +53,7 @@ export default function useCanvasActions() {
                 x: 0,
                 y: 0,
                 zoom: 1,
-              });
+              })
             }}
             className="mr-2"
             variant="dark"
@@ -61,5 +67,5 @@ export default function useCanvasActions() {
     ),
     confirmClear,
     setConfirmClear,
-  };
+  }
 }

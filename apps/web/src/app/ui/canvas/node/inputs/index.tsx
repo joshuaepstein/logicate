@@ -1,7 +1,9 @@
-import { cn } from '@logicate/ui';
-import { cursorInside } from '@logicate/utils/dom-cursor';
-import { forwardRef, useCallback, useEffect, useState } from 'react';
-import useCanvasStore from '../../hooks/useCanvasStore';
+import { cn } from '@logicate/ui'
+import { cursorInside } from '@logicate/utils/dom-cursor'
+import { forwardRef, useCallback, useEffect, useState } from 'react'
+import useCanvasStore from '../../hooks/useCanvasStore'
+import { InputItem } from '../../types'
+import { darkerColour, lighterColour } from '@logicate/utils/color'
 
 export enum InputType {
   BUTTON = 'BUTTON',
@@ -19,94 +21,101 @@ export const inputTypeToIcon: Record<InputType, `data:image/${string}` | ''> = {
   [InputType.HIGH_CONSTANT]: '',
   [InputType.LOW_CONSTANT]: '',
   [InputType.CLOCK]: '',
-};
-
-type InputState = boolean | number | string | null;
+}
 
 export type InputProps = {
-  type: InputType;
-  inputId: string;
-  computedValue: boolean;
-};
+  type: InputType
+  inputId: string
+  value: boolean
+}
 
 export const Input = forwardRef<
   HTMLDivElement,
   InputProps & {
-    x: number;
-    y: number;
+    x: number
+    y: number
+    simulated: {
+      id: string
+      state: boolean
+    }
+    input: InputItem
   } & React.HTMLAttributes<HTMLDivElement>
->(({ type, x, y, inputId, computedValue, ...rest }, ref) => {
-  const { isHolding, setHolding, canvas, updateItem, selectItemId: select, isSelected } = useCanvasStore();
-  const [position, setPosition] = useState({ x, y });
-  const [offset, setOffset] = useState({ x, y });
-  const [dragging, setDragging] = useState(false);
+>(({ type, x, y, input, inputId, value, simulated, ...rest }, ref) => {
+  const { isHolding, setHolding, setTemporaryWire, canvas, updateItem, selectItemId: select, isSelected } = useCanvasStore()
+  const [position, setPosition] = useState({ x, y })
+  const [offset, setOffset] = useState({ x, y })
+  const [dragging, setDragging] = useState(false)
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      const target = e.target as HTMLDivElement;
+      const target = e.target as HTMLDivElement
       if (target.dataset.logicateBody || target.dataset.logicateInputContent) {
-        setDragging(true);
+        setDragging(true)
         setOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
-        });
+        })
       }
     },
     [position, canvas.zoom, offset]
-  );
+  )
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (dragging) {
-        const canvasElement = document.querySelector('[data-logicate-canvas]');
+        const canvasElement = document.querySelector('[data-logicate-canvas]')
         if (canvasElement) {
-          const bounds = canvasElement.getBoundingClientRect();
+          const bounds = canvasElement.getBoundingClientRect()
           if (cursorInside(e, bounds)) {
             setPosition({
               x: e.clientX - offset.x,
               y: e.clientY - offset.y,
-            });
+            })
+            updateItem(inputId, { x: position.x, y: position.y })
           }
         }
       }
     },
     [dragging, offset, canvas.zoom]
-  );
+  )
 
   const handleMouseUp = useCallback(() => {
-    updateItem(inputId, { x: position.x, y: position.y });
-    setDragging(false);
-  }, [position]);
+    updateItem(inputId, { x: position.x, y: position.y })
+    setDragging(false)
+    if (!isSelected(inputId)) {
+      select(inputId)
+    }
+  }, [position])
 
   const handleClickDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       updateItem(inputId, {
-        computedValue: true,
-      });
+        value: true,
+      })
     },
-    [inputId, computedValue, updateItem]
-  );
+    [inputId, value, updateItem]
+  )
 
   const handleClickUp = useCallback(() => {
     updateItem(inputId, {
-      computedValue: false,
-    });
-  }, [inputId, computedValue, updateItem]);
+      value: false,
+    })
+  }, [inputId, value, updateItem])
 
   useEffect(() => {
     if (dragging) {
-      setHolding(true);
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      setHolding(true)
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
     } else {
-      setHolding(false);
+      setHolding(false)
     }
 
     return () => {
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [dragging]);
+      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [dragging])
 
   return (
     <>
@@ -117,9 +126,10 @@ export const Input = forwardRef<
         )}
         style={{ left: position.x, top: position.y }}
         tabIndex={-1}
+        data-logicate-item={inputId}
         data-logicate-id={inputId}
         data-logicate-type={type}
-        data-logicate-state={computedValue}
+        data-logicate-state={value}
         {...rest}
         onMouseDown={handleMouseDown}
         data-logicate-dragging={dragging}
@@ -140,22 +150,56 @@ export const Input = forwardRef<
                   width: '12.5px',
                   height: '12.5px',
                 }}
-                className="pointer-events-auto transition-transform hover:scale-[1.2]"
+                className="pointer-events-none transition-transform hover:scale-[1.2]"
               >
-                <circle cx="6.5" cy="6.5" r="6" stroke="black" strokeWidth="1" fill="white"></circle>
+                <circle
+                  className="pointer-events-auto"
+                  cx="6.5"
+                  cy="6.5"
+                  r="6"
+                  stroke={input.settings.color || '#000'}
+                  strokeWidth="1"
+                  fill="white"
+                  data-logicate-output-terminal={0}
+                  data-logicate-node-parent-id={inputId}
+                  data-logicate-parent-terminal-index={0}
+                  data-logicate-parent-terminal-type="output"
+                  onMouseDown={(e) => {
+                    setTemporaryWire({
+                      from: {
+                        x: e.clientX,
+                        y: e.clientY,
+                      },
+                      fromId: inputId,
+                      fromNodeIndex: 0,
+                      to: {
+                        x: e.clientX,
+                        y: e.clientY,
+                      },
+                      active: false,
+                      fromTerminal: 'output',
+                    })
+                  }}
+                ></circle>
               </svg>
             </div>
-            <div className="order-1 h-[2px] min-w-4 grow bg-black"></div>
+            <div
+              className="order-1 h-[2px] min-w-4 grow"
+              style={{
+                backgroundColor: input.settings.color || '#000',
+              }}
+            ></div>
           </div>
         </div>
         <div
           className={cn(
-            'flex min-h-[42px] w-[42px] min-w-[42px] items-center justify-center border-2 border-black bg-white transition-[filter] duration-100'
+            'flex min-h-[42px] w-[42px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100'
           )}
           style={{
             gridColumn: '2 / span 1',
             gridRow: '2 / span 1',
             filter: isSelected(inputId) ? 'drop-shadow(0px 0px 3px #0079db)' : 'none',
+            borderColor: input.settings.color || '#000',
           }}
         >
           <div
@@ -172,22 +216,25 @@ export const Input = forwardRef<
             >
               <g>
                 <circle
-                  //class="signalFill"
                   className={cn('pointer-events-auto', {
-                    'fill-current text-blue-700': computedValue === true,
+                    'fill-current': value === true,
                   })}
+                  style={{
+                    color: (input.settings.color || '#000').startsWith('#000')
+                      ? '#6c92e4'
+                      : lighterColour(input.settings.color || '#6c92e4', 10) || '#6c92e4',
+                  }}
                   fill="#FFFFFF"
-                  stroke="#000000"
+                  stroke={darkerColour(input.settings.color || '#000', 70) || '#000'}
                   cx="15"
                   cy="15"
                   r="15"
                   data-logicate-input-content
                 ></circle>
                 <circle
-                  // class="buttonSurface"
                   className="cursor-pointer"
                   fill="#FFFFFF"
-                  stroke="#000000"
+                  stroke={darkerColour(input.settings.color || '#000', 70) || '#000'}
                   strokeWidth="1"
                   cx="15"
                   cy="15"
@@ -200,5 +247,5 @@ export const Input = forwardRef<
         </div>
       </div>
     </>
-  );
-});
+  )
+})

@@ -1,59 +1,60 @@
-import { create } from 'zustand';
-import { Item, TempWire, Wire } from '../types';
-
-type SelectedItem = Item & { selectedType: 'item' };
-type SelectedWire = Wire & { selectedType: 'wire' };
-
-type Selected = SelectedItem | SelectedWire;
+import { create } from 'zustand'
+import { Item, Selected, SelectedItem, SelectedWire, TempWire, Wire } from '../types'
 
 export interface State {
-  wires: Wire[];
-  items: Item[];
+  wires: Wire[]
+  items: Item[]
   // selected: (Item & {
   //       type: "item";
   //     }) | (Wire & {
   //       type: "wire";
   //     })[];
-  selected: Selected[];
+  selected: Selected[]
   canvas: {
-    x: number;
-    y: number;
-    zoom: number;
-  };
-  isHolding: boolean;
-  temporaryWire: TempWire | null;
+    x: number
+    y: number
+    zoom: number
+  }
+  isHolding: boolean
+  temporaryWire: TempWire | null
+  updatingDatabase: {
+    is: boolean
+    lastUpdated: number
+    progress?: number
+  }
 }
 
 interface Actions {
-  setWires: (wires: Wire[]) => void;
-  addWire: (wire: Wire) => void;
-  removeWire: (wire: Wire) => void;
-  setItems: (items: Item[]) => void;
-  addItem: (item: Item) => void;
-  removeItem: (item: Item) => void;
-  setSelected: (selected: Selected[]) => void;
-  select: (item: Selected) => void;
-  unselect: (item: Selected) => void;
-  setCanvas: (canvas: { x: number; y: number; zoom: number }) => void;
-  setZoom: (zoom: number) => void;
-  setX: (x: number) => void;
-  setY: (y: number) => void;
-  getZoom: () => number;
-  getX: () => number;
-  getY: () => number;
-  canvasU: (update: (canvas: State['canvas']) => State['canvas']) => void;
-  itemsUpdate: (update: (items: State['items']) => State['items']) => void;
-  updateItem: (id: Item['id'], item: Partial<Item>) => void;
-  setHolding: (isHolding: boolean) => void;
-  isSelected: (itemId: Item['id'] | Wire['id']) => boolean;
-  getItem: (id: Item['id']) => Item | undefined;
-  selectItemId: (id: Item['id']) => void;
-  selectWireId: (id: Wire['id']) => void;
-  unselectItemId: (id: Item['id']) => void;
-  unselectWireId: (id: Wire['id']) => void;
-  setTemporaryWire: (wire: TempWire | null) => void;
-  updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void;
-  updateSelected: () => void;
+  setWires: (wires: Wire[]) => void
+  addWire: (wire: Wire) => void
+  removeWire: (wire: Wire) => void
+  setItems: (items: Item[]) => void
+  addItem: (item: Item) => void
+  removeItem: (item: Item) => void
+  setSelected: (selected: Selected[]) => void
+  select: (item: Selected) => void
+  unselect: (item: Selected) => void
+  setCanvas: (canvas: { x: number; y: number; zoom: number }) => void
+  setZoom: (zoom: number) => void
+  setX: (x: number) => void
+  setY: (y: number) => void
+  getZoom: () => number
+  getX: () => number
+  getY: () => number
+  canvasU: (update: (canvas: State['canvas']) => State['canvas']) => void
+  itemsUpdate: (update: (items: State['items']) => State['items']) => void
+  updateItem: (id: Item['id'], item: Partial<Item>) => void
+  setHolding: (isHolding: boolean) => void
+  isSelected: (itemId: Item['id'] | Wire['id']) => boolean
+  getItem: (id: Item['id']) => Item | undefined
+  selectItemId: (id: Item['id']) => void
+  selectWireId: (id: Wire['id']) => void
+  unselectItemId: (id: Item['id']) => void
+  unselectWireId: (id: Wire['id']) => void
+  setTemporaryWire: (wire: TempWire | null) => void
+  updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void
+  updateSelected: () => void
+  setUpdatingDatabase: ({ is, lastUpdated, progress }: { is: boolean; lastUpdated: number; progress?: number }) => void
 }
 
 const useCanvasStore = create<State & Actions>((set, get) => ({
@@ -67,6 +68,10 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   },
   isHolding: false,
   temporaryWire: null,
+  updatingDatabase: {
+    is: false,
+    lastUpdated: 0,
+  },
   setWires: (wires) => set({ wires }),
   addWire: (wire) => set((state) => ({ wires: [...state.wires, wire] })),
   removeWire: (wire) => set((state) => ({ wires: state.wires.filter((w) => w.id !== wire.id) })),
@@ -94,7 +99,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   getItem: (id) => get().items.find((i) => i.id === id),
   selectItemId: (id) =>
     set((state) => {
-      const item = state.items.find((i) => i.id === id);
+      const item = state.items.find((i) => i.id === id)
       if (item) {
         return {
           selected: [
@@ -104,19 +109,19 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
               selectedType: 'item',
             } as SelectedItem,
           ],
-        };
+        }
       }
-      return state;
+      return state
     }),
   selectWireId: (id) =>
     set((state) => {
-      const wire = state.wires.find((w) => w.id === id);
+      const wire = state.wires.find((w) => w.id === id)
       if (wire) {
         return {
           selected: [...state.selected, { ...wire, selectedType: 'wire' } as SelectedWire],
-        };
+        }
       }
-      return state;
+      return state
     }),
   unselectItemId: (id) => set((state) => ({ selected: state.selected.filter((i) => i.id !== id) })),
   unselectWireId: (id) => set((state) => ({ selected: state.selected.filter((i) => i.id !== id) })),
@@ -131,16 +136,17 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
       selected: state.selected
         .map((i) => {
           if (i.selectedType === 'item') {
-            const item = state.items.find((item) => item.id === i.id);
-            return item ? ({ ...item, selectedType: 'item' } as SelectedItem) : null;
+            const item = state.items.find((item) => item.id === i.id)
+            return item ? ({ ...item, selectedType: 'item' } as SelectedItem) : null
           } else if (i.selectedType === 'wire') {
-            const wire = state.wires.find((wire) => wire.id === i.id);
-            return wire ? ({ ...wire, selectedType: 'wire' } as SelectedWire) : null;
+            const wire = state.wires.find((wire) => wire.id === i.id)
+            return wire ? ({ ...wire, selectedType: 'wire' } as SelectedWire) : null
           }
-          return null;
+          return null
         })
         .filter((item): item is Selected => item !== null),
     })),
-}));
+  setUpdatingDatabase: ({ is, lastUpdated, progress }) => set({ updatingDatabase: { is, lastUpdated, progress } }),
+}))
 
-export default useCanvasStore;
+export default useCanvasStore

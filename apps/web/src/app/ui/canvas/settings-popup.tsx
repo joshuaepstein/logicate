@@ -1,27 +1,35 @@
-'use client';
+'use client'
 
-import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from '@jfstech/icons-react/24/outline';
-import { Button } from '@logicate/ui/button';
-import { TextInput } from '@logicate/ui/input/index';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import useCanvasStore from './hooks/useCanvasStore';
+import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from '@jfstech/icons-react/24/outline'
+import { Button } from '@logicate/ui/button'
+import { TextInput } from '@logicate/ui/input/index'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import useCanvasStore from './hooks/useCanvasStore'
 import { defaultInputs } from './node/gates/constants'
-import { GateItem, InputItem, OutputItem } from './types'
+import { GateItem, InputItem, OutputItem, Selected } from './types'
 import { HexColorPicker } from 'react-colorful'
+import { cn } from '@logicate/ui'
 
 export default function SettingsPopup() {
   const { selected, updateItem, updateSelected } = useCanvasStore()
-  const [visible, setVisible] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<Selected | null>(null)
   const [minimized, setMinimized] = useState(true)
 
   useEffect(() => {
-    setVisible(selected.length === 1)
+    if (selected.length === 1) {
+      if (selected[0]) {
+        if (selectedItem?.id !== selected[0].id) {
+          setMinimized(true)
+        }
+        setSelectedItem(selected[0])
+      }
+    }
   }, [selected])
 
   return (
     <AnimatePresence>
-      {visible && selected[0] && (
+      {selected[0] && selectedItem && (
         <motion.div
           className="shadow-hard-xs min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white"
           initial={{
@@ -50,16 +58,19 @@ export default function SettingsPopup() {
               closed: { height: 0 },
             }}
             animate={minimized ? 'closed' : 'open'}
-            className="flex h-0 w-full flex-col items-start justify-between overflow-y-hidden"
+            className={cn('flex w-full flex-col items-start justify-between overflow-y-hidden', {
+              'h-0': minimized,
+              'h-auto': !minimized,
+            })}
           >
-            {selected[0].selectedType === 'item' ? (
+            {selectedItem.selectedType === 'item' ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.1 }}
                 className="flex w-full flex-col gap-4 p-4"
               >
-                {selected[0].itemType === 'gate' ? (
+                {selectedItem.itemType === 'gate' ? (
                   <div className="flex w-full flex-row items-center justify-between gap-4">
                     <p className="text-neutralgrey-800 text-sm">Inputs</p>
                     <div className="flex w-max flex-row items-center">
@@ -85,20 +96,19 @@ export default function SettingsPopup() {
                       </Button>
                       <input
                         className="w-full max-w-20 border-none text-center outline-none ring-0 focus:outline-none focus:ring-0"
-                        value={selected[0].settings.inputs}
+                        value={selectedItem.settings.inputs}
                         // type="number"
                         id="logicate-gate-inputs-quantity-field"
                         onChange={(e) => {
                           const value = parseInt(e.target.value)
                           if (!isNaN(value)) {
-                            const inputsOptions = defaultInputs[(selected[0] as GateItem).type]
+                            const inputsOptions = defaultInputs[(selectedItem as GateItem).type]
                             if (value + 1 > inputsOptions.max) return
                             if (value - 1 < inputsOptions.min) return
-                            updateItem(selected[0].id, {
-                              ...selected[0],
+                            updateItem(selectedItem.id, {
+                              ...selectedItem,
                               settings: {
-                                ...(selected[0] as GateItem).settings,
-                                // @ts-expect-error because we know that the settings are an object with an inputs property
+                                ...(selectedItem as GateItem).settings,
                                 inputs: value,
                               },
                             })
@@ -110,14 +120,13 @@ export default function SettingsPopup() {
                         variant="no-borders"
                         size="icon-xs"
                         onClick={() => {
-                          const inputs = (selected[0] as GateItem).settings.inputs
-                          const inputsOptions = defaultInputs[(selected[0] as GateItem).type]
+                          const inputs = (selectedItem as GateItem).settings.inputs
+                          const inputsOptions = defaultInputs[(selectedItem as GateItem).type]
                           if (inputs + 1 > inputsOptions.max) return
-                          updateItem(selected[0].id, {
-                            ...selected[0],
+                          updateItem(selectedItem.id, {
+                            ...selectedItem,
                             settings: {
-                              ...(selected[0] as GateItem).settings,
-                              // @ts-expect-error because we know that the settings are an object with an inputs property
+                              ...(selectedItem as GateItem).settings,
                               inputs: inputs + 1,
                             },
                           })
@@ -129,17 +138,17 @@ export default function SettingsPopup() {
                     </div>
                   </div>
                 ) : null}
-                ;<div className="flex w-full flex-row items-center justify-between gap-4">
+                <div className="flex w-full flex-row items-center justify-between gap-4">
                   <p className="text-neutralgrey-800 text-sm">Label</p>
                   <div className="flex w-max flex-row items-center">
                     <TextInput
-                      value={selected[0].settings.label}
+                      value={selectedItem.settings.label}
                       className="min-w-40"
                       onChange={(e) => {
-                        updateItem(selected[0].id, {
-                          ...selected[0],
+                        updateItem(selectedItem.id, {
+                          ...selectedItem,
                           settings: {
-                            ...(selected[0] as GateItem).settings,
+                            ...(selectedItem as GateItem).settings,
                             label: e.target.value,
                           },
                         })
@@ -148,16 +157,16 @@ export default function SettingsPopup() {
                     />
                   </div>
                 </div>
-                ;<div className="flex w-full flex-row items-center justify-between gap-4">
+                <div className="flex w-full flex-row items-center justify-between gap-4">
                   <p className="text-neutralgrey-800 text-sm">Colour</p>
                   <div className="flex w-max flex-row items-center">
                     <HexColorPicker
-                      color={selected[0].settings.color}
+                      color={selectedItem.settings.color}
                       onChange={(color) => {
-                        updateItem(selected[0].id, {
-                          ...selected[0],
+                        updateItem(selectedItem.id, {
+                          ...selectedItem,
                           settings: {
-                            ...(selected[0] as GateItem).settings,
+                            ...(selectedItem as GateItem).settings,
                             color: color as `#${string}`,
                           },
                         })
@@ -166,30 +175,28 @@ export default function SettingsPopup() {
                     />
                   </div>
                 </div>
-                {
-                  selected[0].itemType === 'input' || selected[0].itemType === 'output' ? (
-                    <div className="flex w-full flex-row items-center justify-between gap-4">
-                      <p className="text-neutralgrey-800 text-sm">Symbol</p>
-                      <div className="flex w-max flex-row items-center">
-                        <TextInput
-                          value={(selected[0] as InputItem | OutputItem).settings.expressionLetter}
-                          className="min-w-40"
-                          onChange={(e) => {
-                            updateItem(selected[0].id, {
-                              ...selected[0],
-                              settings: {
-                                ...(selected[0] as InputItem | OutputItem).settings,
-                                // @ts-expect-error because we know that the settings are an object with an expressionLetter property
-                                expressionLetter: e.target.value as Alphabet,
-                              },
-                            })
-                            updateSelected()
-                          }}
-                        />
-                      </div>
+                {selectedItem.itemType === 'input' || selectedItem.itemType === 'output' ? (
+                  <div className="flex w-full flex-row items-center justify-between gap-4">
+                    <p className="text-neutralgrey-800 text-sm">Symbol</p>
+                    <div className="flex w-max flex-row items-center">
+                      <TextInput
+                        value={(selectedItem as InputItem | OutputItem).settings.expressionLetter}
+                        className="min-w-40"
+                        onChange={(e) => {
+                          updateItem(selectedItem.id, {
+                            ...selectedItem,
+                            settings: {
+                              ...(selectedItem as InputItem | OutputItem).settings,
+                              // @ts-expect-error because we know that the settings are an object with an expressionLetter property
+                              expressionLetter: e.target.value as Alphabet,
+                            },
+                          })
+                          updateSelected()
+                        }}
+                      />
                     </div>
-                  ) : null
-                }
+                  </div>
+                ) : null}
               </motion.div>
             ) : null}
           </motion.div>

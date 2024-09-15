@@ -1,29 +1,29 @@
-import { useEffect, useRef } from 'react';
-import useCanvasStore from './hooks/useCanvasStore';
+import { useEffect, useRef } from 'react'
+import useCanvasStore from './hooks/useCanvasStore'
 
 export default function BackgroundElement({
   showBackground = true,
   canvasReference,
 }: {
-  showBackground: boolean;
-  canvasReference: React.RefObject<HTMLDivElement>;
+  showBackground: boolean
+  canvasReference: React.RefObject<HTMLDivElement>
 }) {
-  const { canvas } = useCanvasStore();
-  const backgroundElementRef = useRef<HTMLDivElement>(null);
+  const { canvas } = useCanvasStore()
+  const backgroundElementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!backgroundElementRef.current) return;
-    if (!canvasReference.current) return;
-    const { zoom } = canvas;
+    if (!backgroundElementRef.current) return
+    if (!canvasReference.current) return
+    const { zoom } = canvas
     // const { width, height } = canvasReference.current.getBoundingClientRect();
 
     // Update the background size style property on the background element - HOWEVer, we want it to zoom around the center of the canvas
-    const newBackgroundSize = `${50 * zoom}px ${50 * zoom}px`;
-    backgroundElementRef.current.style.backgroundSize = newBackgroundSize;
+    const newBackgroundSize = `${50 * zoom}px ${50 * zoom}px`
+    backgroundElementRef.current.style.backgroundSize = newBackgroundSize
     // backgroundElementRef.current.style.backgroundPosition = `${width / 2}px ${height / 2}px`;
-  }, [canvasReference, canvas]);
+  }, [canvasReference, canvas])
 
-  if (!showBackground) return null;
+  if (!showBackground) return null
   // if (!canvasReference.current) return null;
 
   return (
@@ -42,5 +42,5 @@ export default function BackgroundElement({
       }}
       ref={backgroundElementRef}
     />
-  );
+  )
 }

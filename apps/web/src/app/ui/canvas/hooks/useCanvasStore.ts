@@ -19,8 +19,8 @@ export interface State {
   temporaryWire: TempWire | null
   updatingDatabase: {
     is: boolean
-    lastUpdated: number
-    progress?: number
+    lastUpdated: number | null
+    progress?: number 
   }
 }
 
@@ -54,7 +54,7 @@ interface Actions {
   setTemporaryWire: (wire: TempWire | null) => void
   updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void
   updateSelected: () => void
-  setUpdatingDatabase: ({ is, lastUpdated, progress }: { is: boolean; lastUpdated: number; progress?: number }) => void
+  setUpdatingDatabase: ({ is, lastUpdated, progress }: { is: boolean; lastUpdated: number | null; progress?: number }) => void
 }
 
 const useCanvasStore = create<State & Actions>((set, get) => ({

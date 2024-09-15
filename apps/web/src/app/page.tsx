@@ -1,6 +1,6 @@
 import { getSession } from '@/lib/auth/utils'
 import { prisma } from '@logicate/database'
-import { generateQuestionId } from '@logicate/utils/id'
+import { generateLogicateSessionId } from '@logicate/utils/id'
 import { notFound, redirect } from 'next/navigation'
 
 const createDatabaseSession = async (userId: string) => {
@@ -25,7 +25,7 @@ const createDatabaseSession = async (userId: string) => {
 
   const response = await prisma.logicateSession.create({
     data: {
-      id: generateQuestionId(),
+      id: generateLogicateSessionId(),
       items: [],
       wires: [],
       ownerId: userId,

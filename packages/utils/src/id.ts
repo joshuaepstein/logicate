@@ -32,3 +32,12 @@ export const generateQuestionId = () => {
   }
   return result.slice(0, -1); // Remove the last '-'
 };
+
+export const generateLogicateSessionId = () => {
+  var result = 'lc-';
+  for (let i = 0; i < 2; i++) {
+    result += nanoid(5);
+    result += '-';
+  }
+  return result.slice(0, -1); // Remove the last '-'
+}

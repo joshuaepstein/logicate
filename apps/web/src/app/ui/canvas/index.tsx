@@ -60,31 +60,20 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
       active: boolean
     }[]
   >([])
-  const { CanvasActions, confirmClear, setConfirmClear } = useCanvasActions()
+  const [usingDatabase, setUsedDatabase] = useState(false)
+  const { CanvasActions, confirmClear, setConfirmClear } = useCanvasActions(sessionId)
   useDisableHook(canvasReference)
   useUpdateCanvasStore(logicateSession.id)
   useBeforeunload(() => 'Are you sure you want to leave this page? You will lose all unsaved changes......')
 
   useEffect(() => {
+    if (usingDatabase) return
     // use cookies to store if it has been initialized when default values for this update
     if (logicateSession.id) {
       // TODO: Refactor this so that the server generates a new "ticket" when the canvas is updated when the client should check if is the most recent one. (e.g. the logicateSession stores the currentSession and cookies stores the current one and if they dont match then update.)
-      const cookie = Cookies.get(`logicate-canvas-initialized-${logicateSession.id}`)
-      if (!cookie) {
-        setItems(logicateSession.items as Item[])
-        setWires(logicateSession.wires as unknown as TypeWire[])
-        Cookies.set(`logicate-canvas-initialized-${logicateSession.id}-items`, JSON.stringify(logicateSession.items))
-        Cookies.set(`logicate-canvas-initialized-${logicateSession.id}-wires`, JSON.stringify(logicateSession.wires))
-        console.info('Loaded session items and wires', logicateSession.id)
-      } else {
-        const items = JSON.parse(Cookies.get(`logicate-canvas-initialized-${logicateSession.id}-items`) ?? '[]')
-        const wires = JSON.parse(Cookies.get(`logicate-canvas-initialized-${logicateSession.id}-wires`) ?? '[]')
-        if (items === logicateSession.items && wires === logicateSession.wires) {
-          setItems(logicateSession.items as Item[])
-          setWires(logicateSession.wires as unknown as TypeWire[])
-          console.info('Loaded session', logicateSession.id, logicateSession.items, logicateSession.wires)
-        }
-      }
+      setItems(logicateSession.items as Item[])
+      setWires(logicateSession.wires as unknown as TypeWire[])
+      setUsedDatabase(true)
     }
   }, [logicateSession])
 
@@ -117,7 +106,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     }
   })
 
-  useHotkeys('Delete', (e) => {
+  useHotkeys('Delete,Backspace', (e) => {
     e.preventDefault()
     e.stopPropagation()
 
@@ -135,7 +124,13 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
       })
       .filter((a) => a !== null)
     const newItems = items.filter((items) => !selectedItemIds.includes(items.id))
-    const newWires = wires.filter((items) => !selectedWires.includes(items.id))
+    let newWires = wires.filter((items) => !selectedWires.includes(items.id))
+
+    if (selectedItemIds.length > 0) {
+      newWires = newWires.filter((wire) => {
+        return wire.from.id !== selectedItemIds[0] && wire.to.id !== selectedItemIds[0]
+      })
+    }
 
     setWires(newWires)
     setItems(newItems)
@@ -418,17 +413,6 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
           data-logicate-canvas
         >
           <BackgroundElement canvasReference={canvasReference} showBackground={user.client_showBackground ?? true} />
-          <svg
-            className="pointer-events-none absolute inset-0 h-full w-full"
-            style={{
-              transform: `scale(${canvas.zoom})`,
-              transformOrigin: 'center',
-            }}
-          >
-            {wires.map((wire, index) => {
-              return <ConnectionWire key={index} wire={wire} simulatedWires={simulatedWires} />
-            })}
-          </svg>
           <div
             className="absolute inset-0 h-full w-full"
             style={{
@@ -436,6 +420,17 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
             }}
             data-logicate-canvas-items
           >
+            <svg
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              style={{
+                transform: `scale(${canvas.zoom})`,
+                transformOrigin: 'center',
+              }}
+            >
+              {wires.map((wire, index) => {
+                return <ConnectionWire key={index} wire={wire} simulatedWires={simulatedWires} />
+              })}
+            </svg>
             {items.map((item) =>
               item.itemType === 'gate' ? (
                 <Gate

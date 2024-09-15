@@ -1,12 +1,14 @@
-import { CenterIcon, Eraser01Icon } from '@jfstech/icons-react/24/outline'
+import { CenterIcon, Eraser01Icon, File01Icon, FileCheck01Icon, FileCheck02Icon, FileIcon } from '@jfstech/icons-react/24/outline'
 import { Button } from '@logicate/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@logicate/ui/modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useCanvasStore from './hooks/useCanvasStore'
 import SettingsPopup from './settings-popup'
 import LoadingCircle from '@logicate/ui/icons/loading-circle'
+import { updateDatabase } from './hooks/updateCanvasStore'
+import SuperJSON from 'superjson'
 
-export default function useCanvasActions() {
+export default function useCanvasActions(canvasId: string) {
   const [confirmClear, setConfirmClear] = useState(false)
   const { setItems, setWires, setCanvas, updatingDatabase } = useCanvasStore()
 
@@ -15,11 +17,11 @@ export default function useCanvasActions() {
       <div className="absolute bottom-4 right-4 flex flex-col items-end justify-end gap-4">
         <SettingsPopup />
         <div className="flex flex-row">
-          {updatingDatabase.is && (
-            <div className="flex flex-row">
-              <LoadingCircle className="size-4" />
-            </div>
-          )}
+          <Button className="mr-2" variant="green" size="icon-sm" onClick={() => {
+            updateDatabase(SuperJSON.stringify(useCanvasStore.getState()), canvasId)
+          }}>
+              <FileCheck02Icon className="size-5" />
+          </Button>
           <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
             <DialogTrigger asChild>
               <Button className="mr-2" variant="destructive-primary" size="icon-sm">

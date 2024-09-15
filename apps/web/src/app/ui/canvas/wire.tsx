@@ -87,7 +87,6 @@ export const Wire = (props: WireProps) => {
           style={{
             pointerEvents: 'visible',
           }}
-          // TODO: Onclick should select the wire
         />
         <path
           d={`
@@ -185,7 +184,7 @@ export const ConnectionWire = ({
 
   return (
     <svg
-      className="pointer-events-none absolute left-0 top-0 overflow-visible"
+      className="pointer-events-auto absolute left-0 top-0 overflow-visible"
       key={id}
       data-logicate-wire={id}
       data-logicate-signal={active}
@@ -200,9 +199,11 @@ export const ConnectionWire = ({
         stroke="black"
         fill="none"
         strokeWidth="6"
-        className={cn({
-          'filter-[drop-shadow(0px_0px_3px_#0079db)]': isSelected(id),
-        })}
+        style={{
+          ...(isSelected(id) && {
+            filter: 'drop-shadow(0px 0px 3px #0079db)',
+          }),
+        }}
       />
       <path
         d={`
@@ -217,6 +218,13 @@ export const ConnectionWire = ({
           'text-white': !simulatedWires.find((wire) => wire.id === id)?.active,
           'text-[#1b88e7]': simulatedWires.find((wire) => wire.id === id)?.active,
         })}
+        onClick={() => {
+          if (isSelected(id)) {
+            unselectWireId(id)
+          } else {
+            selectWireId(id)
+          }
+        }}
       />
     </svg>
   )

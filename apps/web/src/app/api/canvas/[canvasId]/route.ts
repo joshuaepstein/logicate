@@ -54,6 +54,20 @@ export const POST = withSession(async ({ session, params, req }) => {
     })
   }
 
+  const existingCanvas = await prisma.logicateSession.findUnique({
+    where: {
+      id: canvasId,
+      ownerId: session.user.id,
+    },
+  })
+
+  if (!existingCanvas) {
+    throw new LogicateError({
+      code: 'not_found',
+      message: 'Canvas not found',
+    })
+  }
+
   const databaseObject = SuperJSON.parse<{
     items: Item[]
     wires: {
@@ -84,12 +98,14 @@ export const POST = withSession(async ({ session, params, req }) => {
   })
 
   if (!canvas) {
+    console.error('Unable to update canvas')
     throw new LogicateError({
       code: 'internal_server_error',
       message: 'Failed to update canvas',
     })
   }
 
+  console.info('Canvas updated successfully')
   return new Response(JSON.stringify(canvas), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },

@@ -2,6 +2,7 @@ import { getSession } from '@/lib/auth/utils'
 import { prisma } from '@logicate/database'
 import { generateLogicateSessionId } from '@logicate/utils/id'
 import { notFound, redirect } from 'next/navigation'
+import { Item } from './ui/canvas/types'
 
 const createDatabaseSession = async (userId: string) => {
   'use server'
@@ -20,7 +21,15 @@ const createDatabaseSession = async (userId: string) => {
         items: 'asc',
       },
     })
-    return locigateSessionWithLeastItems
+    if (locigateSessionWithLeastItems) {
+      const items = locigateSessionWithLeastItems.items as Item[]
+      if (items.length === 0) {
+        return {
+          ...locigateSessionWithLeastItems,
+          isNew: false,
+        }
+      }
+    }
   }
 
   const response = await prisma.logicateSession.create({
@@ -31,7 +40,10 @@ const createDatabaseSession = async (userId: string) => {
       ownerId: userId,
     },
   })
-  return response
+  return {
+    ...response,
+    isNew: true,
+  }
 }
 
 export default async function Home() {
@@ -40,5 +52,5 @@ export default async function Home() {
   if (!logicateSession) {
     notFound()
   }
-  redirect(`/canvas/${logicateSession.id}`)
+  redirect(`/canvas/${logicateSession.id}?isNew=${logicateSession.isNew ? 'true' : 'false'}`)
 }

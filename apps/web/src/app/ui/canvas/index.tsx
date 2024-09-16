@@ -18,12 +18,24 @@ import { TemporaryInput } from './node/inputs/temporary'
 import { TemporaryGate } from './node/gates/temporary'
 import { NodeType, OutputType } from './node/type'
 import Sidebar from './sidebar'
-import { Item, TypeWire, Wire as WireType } from './types'
+import { Item, Selected, SelectedItem, TypeWire, Wire as WireType } from './types'
 import { ConnectionWire, Wire } from './wire'
 import { gates } from './node'
 import Cookies from 'js-cookie'
+import LoadingCircle from '@logicate/ui/icons/loading-circle'
+import { AnimatePresence, motion } from 'framer-motion'
 
-export default function Canvas({ sessionId, user, logicateSession }: { sessionId: string; logicateSession: LogicateSession; user: User }) {
+export default function Canvas({
+  sessionId,
+  user,
+  logicateSession,
+  isNew,
+}: {
+  sessionId: string
+  logicateSession: LogicateSession
+  user: User
+  isNew: boolean
+}) {
   const canvasReference = useRef<HTMLDivElement>(null)
   const {
     items,
@@ -33,8 +45,10 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     wires,
     setWires,
     setItems,
+    select,
     addWire,
     canvas,
+    selectItemId,
     isHolding,
     setHolding,
     itemsUpdate,
@@ -42,6 +56,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     setTemporaryWire,
     updateTemporaryWire,
     updatingDatabase,
+    updateSelected,
   } = useCanvasStore()
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType
@@ -61,18 +76,30 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     }[]
   >([])
   const [usingDatabase, setUsedDatabase] = useState(false)
+  const [isMassSelecting, setMassSelecting] = useState<{
+    start: {
+      x: number
+      y: number
+    }
+    end: {
+      x: number
+      y: number
+    }
+  } | null>()
   const { CanvasActions, confirmClear, setConfirmClear } = useCanvasActions(sessionId)
   useDisableHook(canvasReference)
   useUpdateCanvasStore(logicateSession.id)
   useBeforeunload(() => 'Are you sure you want to leave this page? You will lose all unsaved changes......')
+  const [preinstalled_opacity, setPreinstalledOpacity] = useState<Item[]>([])
 
   useEffect(() => {
-    if (usingDatabase) return
+    if (usingDatabase && !isNew) return
     // use cookies to store if it has been initialized when default values for this update
     if (logicateSession.id) {
       // TODO: Refactor this so that the server generates a new "ticket" when the canvas is updated when the client should check if is the most recent one. (e.g. the logicateSession stores the currentSession and cookies stores the current one and if they dont match then update.)
       setItems(logicateSession.items as Item[])
       setWires(logicateSession.wires as unknown as TypeWire[])
+      setPreinstalledOpacity(logicateSession.items as Item[])
       setUsedDatabase(true)
     }
   }, [logicateSession])
@@ -136,9 +163,31 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
     setItems(newItems)
   })
 
+  const selectItem = (id: string) => {
+    selectItemId(id)
+    updateSelected()
+  }
+
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
   useEffect(() => {
     const handleDrag = (e: MouseEvent) => {
+      if (isMassSelecting && e.buttons === Click.Primary) {
+        const canvasElement = document.querySelector('[data-logicate-canvas]')
+        if (!canvasElement) return
+        setMassSelecting((previous) => {
+          if (previous) {
+            return {
+              ...previous,
+              end: {
+                x: e.clientX - canvasElement.getBoundingClientRect().left,
+                y: e.clientY - canvasElement.getBoundingClientRect().top,
+              },
+            }
+          }
+          return null
+        })
+      }
+
       if (temporaryWire && e.buttons === Click.Primary) {
         // update the end position of the wire
         updateTemporaryWire((previous) => ({
@@ -312,19 +361,59 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
         addItem(item)
         setHolding(false)
       }
+
+      if (isMassSelecting) {
+        const canvasElement = document.querySelector('[data-logicate-canvas]')
+        if (!canvasElement) return
+        setSelected([])
+        items.forEach((item) => {
+          // isMassSelecting contains x and y for start and end
+          if (
+            item.x < Math.max(isMassSelecting.start.x, isMassSelecting.end.x) &&
+            item.x > Math.min(isMassSelecting.start.x, isMassSelecting.end.x) &&
+            item.y < Math.max(isMassSelecting.start.y, isMassSelecting.end.y) &&
+            item.y > Math.min(isMassSelecting.start.y, isMassSelecting.end.y)
+          ) {
+            selectItem(item.id)
+          }
+        })
+        setMassSelecting(null)
+      }
     }
 
     const handleClickAnywhere = (e: MouseEvent) => {
       if (e.target) if ((e.target as HTMLElement).getAttribute('data-logicate-canvas-items')) setSelected([])
     }
 
+    const mouseDown = (e: MouseEvent) => {
+      // if the user doesnt click on any element and they arent already in a mass selection, then start a mass selection
+      const mouseOverElement = document.elementFromPoint(e.clientX, e.clientY)
+      if (mouseOverElement && mouseOverElement.getAttribute('data-logicate-canvas-items') && !isMassSelecting) {
+        const canvasElement = document.querySelector('[data-logicate-canvas]')
+        if (!canvasElement) return
+        setMassSelecting({
+          start: {
+            x: e.clientX - canvasElement.getBoundingClientRect().left,
+            y: e.clientY - canvasElement.getBoundingClientRect().top,
+          },
+          end: {
+            x: e.clientX - canvasElement.getBoundingClientRect().left,
+            y: e.clientY - canvasElement.getBoundingClientRect().top,
+          },
+        })
+        setHolding(true)
+      }
+    }
+
     document.addEventListener('mousemove', handleDrag)
     document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('mousedown', mouseDown)
     document.addEventListener('click', handleClickAnywhere)
 
     return () => {
       document.removeEventListener('mousemove', handleDrag)
       document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('mousedown', mouseDown)
       document.removeEventListener('click', handleClickAnywhere)
     }
   })
@@ -402,6 +491,29 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
   return (
     <>
       <main className="flex h-full w-full grow flex-row">
+        <AnimatePresence mode="wait">
+          {(!isNew && !usingDatabase && (
+            <motion.div
+              initial={{
+                opacity: 1,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              className="pointer-events-auto absolute inset-0 z-50 flex cursor-none flex-col items-center justify-center gap-2 bg-black/30"
+            >
+              <LoadingCircle className="size-5" />
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-neutralgrey-100 text-sm font-medium">Loading...</p>
+                <p className="text-neutralgrey-100/50 text-xs">We are loading your data so you can use this canvas.</p>
+              </div>
+            </motion.div>
+          )) ||
+            null}
+        </AnimatePresence>
         <Sidebar />
 
         <div
@@ -412,6 +524,20 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
           data-logicate-canvas-zoom={canvas.zoom}
           data-logicate-canvas
         >
+          {isMassSelecting && (
+            <div
+              data-logicate-mass-selector
+              className="z-50 border border-blue-800 bg-blue-800/30"
+              style={{
+                position: 'absolute',
+                top: Math.min(isMassSelecting.start.y, isMassSelecting.end.y),
+                left: Math.min(isMassSelecting.start.x, isMassSelecting.end.x),
+                width: Math.abs(isMassSelecting.end.x - isMassSelecting.start.x),
+                height: Math.abs(isMassSelecting.end.y - isMassSelecting.start.y),
+                pointerEvents: 'none',
+              }}
+            />
+          )}
           <BackgroundElement canvasReference={canvasReference} showBackground={user.client_showBackground ?? true} />
           <div
             className="absolute inset-0 h-full w-full"
@@ -428,7 +554,14 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
               }}
             >
               {wires.map((wire, index) => {
-                return <ConnectionWire key={index} wire={wire} simulatedWires={simulatedWires} />
+                return (
+                  <ConnectionWire
+                    key={index}
+                    wire={wire}
+                    simulatedWires={simulatedWires}
+                    className={!usingDatabase && !isNew ? 'opacity-0' : 'opacity-100'}
+                  />
+                )
               })}
             </svg>
             {items.map((item) =>
@@ -447,6 +580,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
                       state: false,
                     }
                   }
+                  className={!usingDatabase && !isNew ? 'opacity-0' : 'opacity-100'}
                 />
               ) : item.itemType === 'input' ? (
                 <Input
@@ -463,6 +597,7 @@ export default function Canvas({ sessionId, user, logicateSession }: { sessionId
                     }
                   }
                   input={item}
+                  className={!usingDatabase && !isNew ? 'opacity-0' : 'opacity-100'}
                 />
               ) : null
             )}

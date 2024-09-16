@@ -40,8 +40,17 @@ export const Input = forwardRef<
     }
     input: InputItem
   } & React.HTMLAttributes<HTMLDivElement>
->(({ type, x, y, input, inputId, value, simulated, ...rest }, ref) => {
-  const { isHolding, setHolding, setTemporaryWire, canvas, updateItem, selectItemId: select, isSelected } = useCanvasStore()
+>(({ type, x, y, input, inputId, className, value, simulated, ...rest }, ref) => {
+  const {
+    isHolding,
+    setHolding,
+    updateItemPosition,
+    setTemporaryWire,
+    canvas,
+    updateItem,
+    selectItemId: select,
+    isSelected,
+  } = useCanvasStore()
   const [position, setPosition] = useState({ x, y })
   const [offset, setOffset] = useState({ x, y })
   const [dragging, setDragging] = useState(false)
@@ -71,7 +80,7 @@ export const Input = forwardRef<
               x: e.clientX - offset.x,
               y: e.clientY - offset.y,
             })
-            updateItem(inputId, { x: position.x, y: position.y })
+            updateItemPosition(inputId, { x: e.clientX - offset.x, y: e.clientY - offset.y })
           }
         }
       }
@@ -80,7 +89,6 @@ export const Input = forwardRef<
   )
 
   const handleMouseUp = useCallback(() => {
-    updateItem(inputId, { x: position.x, y: position.y })
     setDragging(false)
     if (!isSelected(inputId)) {
       select(inputId)
@@ -122,7 +130,8 @@ export const Input = forwardRef<
       <div
         ref={ref}
         className={cn(
-          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
+          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none',
+          className
         )}
         style={{ left: position.x, top: position.y }}
         tabIndex={-1}

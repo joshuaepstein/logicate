@@ -110,12 +110,14 @@ export const Wire = (props: WireProps) => {
 export const ConnectionWire = ({
   wire,
   simulatedWires = [],
+  className = '',
 }: {
   wire: WireItemType
   simulatedWires: {
     id: string
     active: boolean
   }[]
+  className?: string
 }) => {
   const { items, wires, isSelected, selectWireId, unselectWireId } = useCanvasStore()
   const { from, to, active, id } = wire
@@ -184,7 +186,7 @@ export const ConnectionWire = ({
 
   return (
     <svg
-      className="pointer-events-auto absolute left-0 top-0 overflow-visible"
+      className={cn('pointer-events-auto absolute left-0 top-0 overflow-visible transition-colors duration-100', className)}
       key={id}
       data-logicate-wire={id}
       data-logicate-signal={active}

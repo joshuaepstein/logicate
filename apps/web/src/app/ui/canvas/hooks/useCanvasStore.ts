@@ -20,7 +20,7 @@ export interface State {
   updatingDatabase: {
     is: boolean
     lastUpdated: number | null
-    progress?: number 
+    progress?: number
   }
 }
 
@@ -44,6 +44,7 @@ interface Actions {
   canvasU: (update: (canvas: State['canvas']) => State['canvas']) => void
   itemsUpdate: (update: (items: State['items']) => State['items']) => void
   updateItem: (id: Item['id'], item: Partial<Item>) => void
+  updateItemPosition: (id: Item['id'], position: { x: number; y: number }) => void
   setHolding: (isHolding: boolean) => void
   isSelected: (itemId: Item['id'] | Wire['id']) => boolean
   getItem: (id: Item['id']) => Item | undefined
@@ -89,9 +90,15 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   getX: () => get().canvas.x,
   getY: () => get().canvas.y,
   updateItem: (id, item) =>
-    set((state) => ({
-      items: state.items.map((i) => (i.id === id ? ({ ...i, ...item } as Item) : i)),
-    })),
+    set((state) => {
+      return {
+        items: state.items.map((i) => (i.id === id ? ({ ...i, ...item } as Item) : i)),
+      }
+    }),
+  updateItemPosition: (id, position) =>
+    set((state) => {
+      return { items: state.items.map((i) => (i.id === id ? ({ ...i, ...position } as Item) : i)) }
+    }),
   canvasU: (update) => set((state) => ({ canvas: update(state.canvas) })),
   itemsUpdate: (update) => set((state) => ({ items: update(state.items) })),
   setHolding: (isHolding) => set({ isHolding }),
@@ -101,14 +108,16 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set((state) => {
       const item = state.items.find((i) => i.id === id)
       if (item) {
+        const newSelected: Selected[] = [
+          ...state.selected,
+          {
+            ...item,
+            selectedType: 'item',
+          },
+        ]
         return {
-          selected: [
-            ...state.selected,
-            {
-              ...item,
-              selectedType: 'item',
-            } as SelectedItem,
-          ],
+          ...state,
+          selected: newSelected,
         }
       }
       return state

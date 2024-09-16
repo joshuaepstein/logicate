@@ -34,11 +34,12 @@ export const Gate = forwardRef<
       state: boolean
     }
   } & React.HTMLAttributes<HTMLDivElement>
->(({ type, inputs, x, y, state, gateId, ...rest }, ref) => {
+>(({ type, inputs, className, x, y, state, gateId, ...rest }, ref) => {
   const {
     setHolding,
     canvas,
     updateItem,
+    updateItemPosition,
     temporaryWire,
     setTemporaryWire,
     selectItemId: select,
@@ -84,7 +85,7 @@ export const Gate = forwardRef<
               x: event.clientX - offset.x,
               y: event.clientY - offset.y,
             })
-            updateItem(gateId, { x: position.x, y: position.y })
+            updateItemPosition(gateId, { x: event.clientX - offset.x, y: event.clientY - offset.y })
           }
         }
       }
@@ -94,7 +95,7 @@ export const Gate = forwardRef<
 
   const handleMouseUp = useCallback(() => {
     setDragging(false)
-    updateItem(gateId, { x: position.x, y: position.y })
+
     if (!isSelected(gateId)) {
       select(gateId)
     }
@@ -119,7 +120,8 @@ export const Gate = forwardRef<
     <>
       <div
         className={cn(
-          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
+          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none transition-opacity duration-100',
+          className
         )}
         style={{ left: position.x, top: position.y }}
         tabIndex={-1}

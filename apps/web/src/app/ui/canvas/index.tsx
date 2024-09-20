@@ -13,7 +13,8 @@ import useCanvasStore from './hooks/useCanvasStore'
 import { GateType } from './node/gates/types'
 import { defaultInputs } from './node/gates/constants'
 import { Gate } from './node/gates'
-import { Input, InputType } from './node/inputs'
+import { Input } from './node/inputs'
+import { InputType } from './node/inputs/types'
 import { TemporaryInput } from './node/inputs/temporary'
 import { TemporaryGate } from './node/gates/temporary'
 import { NodeType, OutputType } from './node/type'
@@ -24,6 +25,7 @@ import { gates } from './node'
 import Cookies from 'js-cookie'
 import LoadingCircle from '@logicate/ui/icons/loading-circle'
 import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@logicate/ui'
 
 export default function Canvas({
   sessionId,
@@ -42,6 +44,7 @@ export default function Canvas({
     addItem,
     selected,
     setSelected,
+    setItemsSelected,
     wires,
     setWires,
     setItems,
@@ -133,6 +136,25 @@ export default function Canvas({
     }
   })
 
+  useHotkeys('down', (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (selected.length > 0) {
+      // move them all down by 1
+      const updatedItems = items.map((item) => {
+        if (selected.find((selectedItem) => selectedItem.id === item.id)) {
+          return {
+            ...item,
+            y: item.y + 10,
+          }
+        }
+        return item
+      })
+      setItems(updatedItems)
+    }
+  })
+
   useHotkeys('Delete,Backspace', (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -162,11 +184,6 @@ export default function Canvas({
     setWires(newWires)
     setItems(newItems)
   })
-
-  const selectItem = (id: string) => {
-    selectItemId(id)
-    updateSelected()
-  }
 
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
   useEffect(() => {
@@ -272,9 +289,9 @@ export default function Canvas({
                   })
                 }
                 setTemporaryWire(null)
+                setHolding(false)
                 break
               case 'input':
-                console.info('input')
                 if (terminalType === 'output') {
                   parent.outputs.push({
                     id: temporaryWire.fromId,
@@ -293,18 +310,20 @@ export default function Canvas({
                     active: false,
                   } satisfies WireType
                   addWire(wire)
-                  console.info('new wire', wire)
                 }
                 setTemporaryWire(null)
+                setHolding(false)
                 break
               default:
                 break
             }
           } else {
             setTemporaryWire(null)
+            setHolding(false)
           }
         } else {
           setTemporaryWire(null)
+          setHolding(false)
         }
       }
 
@@ -334,7 +353,7 @@ export default function Canvas({
             ? {
                 itemType: 'input' as const,
                 type: draggingNewElement.type.node as InputType,
-                value: false,
+                value: (draggingNewElement.type.node as InputType) === InputType.HIGH_CONSTANT ? true : false,
                 outputs: [],
                 settings: {},
               }
@@ -374,15 +393,12 @@ export default function Canvas({
             item.y < Math.max(isMassSelecting.start.y, isMassSelecting.end.y) &&
             item.y > Math.min(isMassSelecting.start.y, isMassSelecting.end.y)
           ) {
-            selectItem(item.id)
+            selectItemId(item.id)
           }
         })
         setMassSelecting(null)
+        setHolding(false)
       }
-    }
-
-    const handleClickAnywhere = (e: MouseEvent) => {
-      if (e.target) if ((e.target as HTMLElement).getAttribute('data-logicate-canvas-items')) setSelected([])
     }
 
     const mouseDown = (e: MouseEvent) => {
@@ -408,13 +424,11 @@ export default function Canvas({
     document.addEventListener('mousemove', handleDrag)
     document.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('mousedown', mouseDown)
-    document.addEventListener('click', handleClickAnywhere)
 
     return () => {
       document.removeEventListener('mousemove', handleDrag)
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('mousedown', mouseDown)
-      document.removeEventListener('click', handleClickAnywhere)
     }
   })
 
@@ -540,7 +554,9 @@ export default function Canvas({
           )}
           <BackgroundElement canvasReference={canvasReference} showBackground={user.client_showBackground ?? true} />
           <div
-            className="absolute inset-0 h-full w-full"
+            className={cn('absolute inset-0 h-full w-full opacity-100 transition-opacity duration-300', {
+              'opacity-0': !usingDatabase && !isNew,
+            })}
             style={{
               transform: `scale(${canvas.zoom})`,
             }}
@@ -634,12 +650,15 @@ export default function Canvas({
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-0 h-full w-full">
+      <div className="pointer-events-none absolute inset-0 -z-10 h-full w-full">
         {temporaryWire && (
           <Wire
             start={{
               x: temporaryWire.from.x,
               y: temporaryWire.from.y,
+              fromId: temporaryWire.fromId,
+              fromIndex: temporaryWire.fromNodeIndex,
+              fromTerminal: temporaryWire.fromTerminal,
             }}
             end={{
               x: temporaryWire.to.x,

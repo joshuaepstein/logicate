@@ -1,19 +1,19 @@
-import { GateType } from './gates/types';
-import { InputType } from './inputs';
+import { GateType } from './gates/types'
+import { InputType } from './inputs/types'
 
 export type NodeType =
   | {
-      type: 'gate';
-      node: GateType;
+      type: 'gate'
+      node: GateType
     }
   | {
-      type: 'input';
-      node: InputType;
+      type: 'input'
+      node: InputType
     }
   | {
-      type: 'output';
-      node: OutputType;
-    };
+      type: 'output'
+      node: OutputType
+    }
 
 export enum OutputType {
   LIGHT,

@@ -9,7 +9,7 @@ export default function Providers({ children }: { children: ReactNode }) {
     <>
       <TooltipProvider>
         {children}
-        <Toaster richColors />
+        <Toaster richColors position="top-right" />
       </TooltipProvider>
     </>
   )

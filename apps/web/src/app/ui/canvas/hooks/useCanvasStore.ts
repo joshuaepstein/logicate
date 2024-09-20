@@ -4,11 +4,6 @@ import { Item, Selected, SelectedItem, SelectedWire, TempWire, Wire } from '../t
 export interface State {
   wires: Wire[]
   items: Item[]
-  // selected: (Item & {
-  //       type: "item";
-  //     }) | (Wire & {
-  //       type: "wire";
-  //     })[];
   selected: Selected[]
   canvas: {
     x: number
@@ -22,6 +17,7 @@ export interface State {
     lastUpdated: number | null
     progress?: number
   }
+  recentActions: []
 }
 
 interface Actions {
@@ -32,6 +28,8 @@ interface Actions {
   addItem: (item: Item) => void
   removeItem: (item: Item) => void
   setSelected: (selected: Selected[]) => void
+  setSelectedIds: (selected: Selected['id'][]) => void
+  setItemsSelected: (selected: Item[]) => void
   select: (item: Selected) => void
   unselect: (item: Selected) => void
   setCanvas: (canvas: { x: number; y: number; zoom: number }) => void
@@ -73,13 +71,20 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     is: false,
     lastUpdated: 0,
   },
+  recentActions: [],
   setWires: (wires) => set({ wires }),
   addWire: (wire) => set((state) => ({ wires: [...state.wires, wire] })),
   removeWire: (wire) => set((state) => ({ wires: state.wires.filter((w) => w.id !== wire.id) })),
   setItems: (items) => set({ items }),
   addItem: (item) => set((state) => ({ items: [...state.items, item] })),
   removeItem: (item) => set((state) => ({ items: state.items.filter((i) => i.id !== item.id) })),
-  setSelected: (selected) => set({ selected }),
+  setSelected: (selected) => {
+    set({ selected })
+  },
+  setItemsSelected: (items) => {
+    const itemsSelected = items.map((item) => ({ ...item, selectedType: 'item' }) as SelectedItem)
+    set({ selected: itemsSelected })
+  },
   select: (item) => set((state) => ({ selected: [...state.selected, item] })),
   unselect: (item) => set((state) => ({ selected: state.selected.filter((i) => i !== item) })),
   setCanvas: (canvas) => set({ canvas }),
@@ -104,6 +109,14 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   setHolding: (isHolding) => set({ isHolding }),
   isSelected: (itemId) => get().selected.some((i) => i.id === itemId),
   getItem: (id) => get().items.find((i) => i.id === id),
+  setSelectedIds(selected) {
+    set((state) => {
+      const itemsSelected = state.items
+        .filter((item) => selected.includes(item.id))
+        .map((item) => ({ ...item, selectedType: 'item' }) as SelectedItem)
+      return { selected: itemsSelected }
+    })
+  },
   selectItemId: (id) =>
     set((state) => {
       const item = state.items.find((i) => i.id === id)

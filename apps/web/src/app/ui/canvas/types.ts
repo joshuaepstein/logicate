@@ -1,5 +1,5 @@
 import { GateType } from './node/gates/types'
-import { InputType } from './node/inputs'
+import { InputType } from './node/inputs/types'
 import { OutputType } from './node/type'
 
 type Alphabet = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J'
@@ -92,4 +92,23 @@ type SelectedItem = Item & { selectedType: 'item' }
 type SelectedWire = Wire & { selectedType: 'wire' }
 
 type Selected = SelectedItem | SelectedWire
+
+export type RecentAction =
+  | {
+      action: 'add' | 'remove' | 'update'
+      type: 'item'
+      id: string
+      oldState: Item
+      newState: Item
+      datetime: number
+    }
+  | {
+      action: 'add' | 'remove' | 'update'
+      type: 'wire'
+      id: string
+      oldState: Wire
+      newState: Wire
+      datetime: number
+    }
+
 export type { Alphabet, GateItem, InputItem, Item, OutputItem, TempWire, Wire, Selected, SelectedItem, SelectedWire }

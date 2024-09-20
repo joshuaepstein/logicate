@@ -29,7 +29,7 @@ export default function SettingsPopup() {
 
   return (
     <AnimatePresence>
-      {selected[0] && selectedItem && (
+      {selected.length === 1 && selected[0] && selectedItem && (
         <motion.div
           className="shadow-hard-xs min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white"
           initial={{

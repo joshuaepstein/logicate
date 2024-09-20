@@ -44,6 +44,8 @@ export const Gate = forwardRef<
     setTemporaryWire,
     selectItemId: select,
     unselectItemId: unselect,
+    setSelected,
+    setSelectedIds,
     isSelected,
   } = useCanvasStore()
   const item = useNode(gateId) as GateItem
@@ -96,9 +98,7 @@ export const Gate = forwardRef<
   const handleMouseUp = useCallback(() => {
     setDragging(false)
 
-    if (!isSelected(gateId)) {
-      select(gateId)
-    }
+    setSelectedIds([gateId])
   }, [position])
 
   useEffect(() => {
@@ -179,6 +179,7 @@ export const Gate = forwardRef<
                       active: false,
                       fromTerminal: 'output',
                     })
+                    setHolding(true)
                   }}
                 ></circle>
               </svg>

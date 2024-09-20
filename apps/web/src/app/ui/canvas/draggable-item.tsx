@@ -1,12 +1,12 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from '@logicate/ui/tooltip';
-import { GateType, gateTypeToIcon } from './node/gates/types';
-import { inputTypeToIcon } from './node/inputs';
-import { NodeType } from './node/type';
-import AndBody from './node/gates/and/body';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@logicate/ui/tooltip'
+import { GateType, gateTypeToIcon } from './node/gates/types'
+import { inputTypeToIcon } from './node/inputs/types'
+import { NodeType } from './node/type'
+import AndBody from './node/gates/and/body'
 
 export const DraggableItem = ({ type }: { type: NodeType }) => {
   return (
-    <Tooltip key={type.type === 'gate' ? type.node : type.node}>
+    <Tooltip key={type.node}>
       <TooltipTrigger asChild>
         <div
           key={type.node}
@@ -31,5 +31,5 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
         <p>{type.node}</p>
       </TooltipContent>
     </Tooltip>
-  );
-};
+  )
+}

@@ -105,7 +105,6 @@ export const POST = withSession(async ({ session, params, req }) => {
     })
   }
 
-  console.info('Canvas updated successfully')
   return new Response(JSON.stringify(canvas), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },

@@ -1,9 +1,9 @@
-import tailwindTypography from '@tailwindcss/typography';
-import tailwindScrollbar from 'tailwind-scrollbar';
-import { Config } from 'tailwindcss';
-import tailwindAnimate from 'tailwindcss-animate';
-import defaultTheme from 'tailwindcss/defaultTheme';
-const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
+import tailwindTypography from '@tailwindcss/typography'
+import tailwindScrollbar from 'tailwind-scrollbar'
+import { Config } from 'tailwindcss'
+import tailwindAnimate from 'tailwindcss-animate'
+import defaultTheme from 'tailwindcss/defaultTheme'
+const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette')
 const config: Config = {
   darkMode: ['class'],
   content: ['./src/**/*.{ts,tsx}', '../../packages/ui/src/**/*.{ts,tsx}', '../../packages/config/tailwind/tailwind.config.ts'],
@@ -454,6 +454,103 @@ const config: Config = {
         DEFAULT: 'var(--card)',
         foreground: 'var(--card-foreground)',
       },
+
+      celeste: {
+        DEFAULT: '#aeecef',
+        100: '#0e4245',
+        200: '#1b848a',
+        300: '#29c7cf',
+        400: '#69dbe1',
+        500: '#aeecef',
+        600: '#bef0f2',
+        700: '#cef3f5',
+        800: '#dff7f9',
+        900: '#effbfc',
+      },
+      non_photo_blue: {
+        DEFAULT: '#86ced6',
+        100: '#123034',
+        200: '#236167',
+        300: '#35919b',
+        400: '#52b8c4',
+        500: '#86ced6',
+        600: '#9ed7de',
+        700: '#b6e1e6',
+        800: '#ceebee',
+        900: '#e7f5f7',
+      },
+      moonstone: {
+        DEFAULT: '#5db0bc',
+        100: '#112428',
+        200: '#21494f',
+        300: '#326d77',
+        400: '#42929e',
+        500: '#5db0bc',
+        600: '#7ebfc9',
+        700: '#9ecfd6',
+        800: '#bedfe4',
+        900: '#dfeff1',
+      },
+      'blue_(munsell)': {
+        DEFAULT: '#3592a3',
+        100: '#0a1d20',
+        200: '#153a41',
+        300: '#1f5761',
+        400: '#2a7481',
+        500: '#3592a3',
+        600: '#4cb3c5',
+        700: '#79c6d4',
+        800: '#a6d9e2',
+        900: '#d2ecf1',
+      },
+      cerulean: {
+        DEFAULT: '#0c7489',
+        100: '#02171b',
+        200: '#052e36',
+        300: '#074552',
+        400: '#095c6d',
+        500: '#0c7489',
+        600: '#12accb',
+        700: '#37cfee',
+        800: '#7adff3',
+        900: '#bceff9',
+      },
+      midnight_green: {
+        DEFAULT: '#095b69',
+        100: '#021215',
+        200: '#042429',
+        300: '#05353e',
+        400: '#074753',
+        500: '#095b69',
+        600: '#0f98b0',
+        700: '#23ceec',
+        800: '#6ddef2',
+        900: '#b6eff9',
+      },
+      midnight_green2: {
+        DEFAULT: '#064249',
+        100: '#010d0e',
+        200: '#021a1c',
+        300: '#03272a',
+        400: '#053339',
+        500: '#064249',
+        600: '#0c8997',
+        700: '#13d2e7',
+        800: '#5fe3f2',
+        900: '#aff1f8',
+      },
+      night: {
+        DEFAULT: '#000f08',
+        100: '#000302',
+        200: '#000603',
+        300: '#000905',
+        400: '#000c07',
+        500: '#000f08',
+        600: '#00723d',
+        700: '#00d572',
+        800: '#39ffa3',
+        900: '#9cffd1',
+      },
     },
     extend: {
       fontFamily: {
@@ -736,16 +833,16 @@ const config: Config = {
       }),
     },
   },
-};
+}
 
 // This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
 function addVariablesForColors({ addBase, theme }: any) {
-  let allColors = flattenColorPalette(theme('colors'));
-  let newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]));
+  let allColors = flattenColorPalette(theme('colors'))
+  let newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]))
 
   addBase({
     ':root': newVars,
-  });
+  })
 }
 
-export default config;
+export default config

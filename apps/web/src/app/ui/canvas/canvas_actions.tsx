@@ -15,6 +15,11 @@ export default function useCanvasActions(canvasId: string) {
   const [confirmClear, setConfirmClear] = useState(false)
   const { setItems, setWires, setCanvas, updatingDatabase, setUpdatingDatabase } = useCanvasStore()
   const [updating, setUpdating] = useTransition()
+  const [loadingSave, setLoadingSave] = useState(false)
+
+  useEffect(() => {
+    setLoadingSave(updatingDatabase.is)
+  }, [updatingDatabase.is])
 
   return {
     CanvasActions: (
@@ -25,9 +30,15 @@ export default function useCanvasActions(canvasId: string) {
             className="mr-2"
             variant="green"
             size="icon-sm"
+            disabled={updating || loadingSave}
             onClick={() => {
               setUpdating(async () => {
+                if (updatingDatabase.is) {
+                  toast.info('Updating canvas already.')
+                }
+                const toastLoading = toast.loading('Saving canvas...')
                 const database = await updateDatabase(SuperJSON.stringify(useCanvasStore.getState()), canvasId)
+                toast.dismiss(toastLoading)
                 if (database) {
                   setUpdatingDatabase({ is: false, lastUpdated: Date.now(), progress: 0 })
                   toast.success('Canvas saved successfully.')
@@ -38,7 +49,7 @@ export default function useCanvasActions(canvasId: string) {
               })
             }}
           >
-            {updating ? <LoadingCircle className="size-5" /> : <FileCheck02Icon className="size-5" />}
+            {updating || loadingSave ? <LoadingCircle className="size-5" /> : <FileCheck02Icon className="size-5" />}
           </Button>
           <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
             <DialogTrigger asChild>

@@ -517,6 +517,11 @@ export default function Canvas({
               exit={{
                 opacity: 0,
               }}
+              transition={{
+                delay: 0.3,
+                duration: 1,
+                ease: 'easeInOut',
+              }}
               className="pointer-events-auto absolute inset-0 z-50 flex cursor-none flex-col items-center justify-center gap-2 bg-black/30"
             >
               <LoadingCircle className="size-5" />

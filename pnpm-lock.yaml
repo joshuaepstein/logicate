@@ -289,6 +289,9 @@ importers:
       react-use:
         specifier: ^17.5.1
         version: 17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-use-cookie:
+        specifier: ^1.6.1
+        version: 1.6.1(react@18.3.1)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -7057,6 +7060,12 @@ packages:
     peerDependencies:
       react: '*'
       tslib: '*'
+
+  react-use-cookie@1.6.1:
+    resolution: {integrity: sha512-77bENFpc+pi1roLJIrRvekprB4IjwG1Mowir0QdbwA0pDjgMtp3Ya9E1H9dJAisCxBvTZih6k5+2SSVo9BR2qw==}
+    engines: {node: '>=8', npm: '>=5'}
+    peerDependencies:
+      react: '>=16.8'
 
   react-use@17.5.1:
     resolution: {integrity: sha512-LG/uPEVRflLWMwi3j/sZqR00nF6JGqTTDblkXK2nzXsIvij06hXl1V/MZIlwj1OKIQUtlh1l9jK8gLsRyCQxMg==}
@@ -14998,6 +15007,10 @@ snapshots:
     dependencies:
       react: 18.3.1
       tslib: 2.7.0
+
+  react-use-cookie@1.6.1(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-use@17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

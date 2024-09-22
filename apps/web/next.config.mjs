@@ -18,7 +18,7 @@ const config = {
     });
 
     if (isServer) {
-      config.plugins = [...config.plugins, PrismaPlugin()]
+      config.plugins = [...config.plugins, new PrismaPlugin()]
     }
 
 

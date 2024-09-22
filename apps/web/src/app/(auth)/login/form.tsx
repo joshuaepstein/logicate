@@ -68,7 +68,9 @@ export default function LoginForm() {
 
               return
             }
-
+            toast.success('Logged in successfully', {
+              description: `Welcome back, ${email}. Redirecting you to your dashboard...`,
+            })
             router.push(next ?? '/')
           } else {
             toast.error('No account found with that email address.')

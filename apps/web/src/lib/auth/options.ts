@@ -1,13 +1,13 @@
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from '@logicate/database';
-import { sendEmail } from '@logicate/emails';
-import { subscribe } from '@logicate/emails/resend';
-import { waitUntil } from '@vercel/functions';
-import { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from './lock-account';
-import { validatePassword } from './password';
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { prisma } from '@logicate/database'
+import { sendEmail } from '@logicate/emails'
+import { subscribe } from '@logicate/emails/resend'
+import { waitUntil } from '@vercel/functions'
+import { NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from './lock-account'
+import { validatePassword } from './password'
+const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -21,16 +21,16 @@ export const authConfig: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials) {
-          throw new Error('no-credentials');
+          throw new Error('no-credentials')
         }
 
         const { email, password } = credentials as {
-          email?: string;
-          password?: string;
-        };
+          email?: string
+          password?: string
+        }
 
         if (!email || !password) {
-          throw new Error('no-credentials');
+          throw new Error('no-credentials')
         }
 
         const user = await prisma.user.findUnique({
@@ -47,28 +47,28 @@ export const authConfig: NextAuthOptions = {
               },
             },
           },
-        });
+        })
 
         if (!user || !user.password) {
-          throw new Error('invalid-credentials');
+          throw new Error('invalid-credentials')
         }
 
         if (exceededLoginAttemptsThreshold(user)) {
-          throw new Error('exceeded-login-attempts');
+          throw new Error('exceeded-login-attempts')
         }
 
         const passwordMatch = await validatePassword({
           password,
           passwordHash: user.password,
-        });
+        })
 
         if (!passwordMatch) {
-          const exceededLoginAttempts = exceededLoginAttemptsThreshold(await incrementLoginAttemps(user));
+          const exceededLoginAttempts = exceededLoginAttemptsThreshold(await incrementLoginAttemps(user))
 
           if (exceededLoginAttempts) {
-            throw new Error('exceeded-login-attempts');
+            throw new Error('exceeded-login-attempts')
           } else {
-            throw new Error('invalid-credentials');
+            throw new Error('invalid-credentials')
           }
         }
 
@@ -77,11 +77,11 @@ export const authConfig: NextAuthOptions = {
           data: {
             invalidLoginAttempts: 0,
           },
-        });
+        })
 
         return {
           ...updatedUser,
-        };
+        }
       },
     }),
   ],
@@ -90,63 +90,63 @@ export const authConfig: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  cookies: {
-    sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        // When working on localhost, the cookie domain must be omitted entirely
-        domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
-        secure: VERCEL_DEPLOYMENT,
-      },
-    },
-  },
+  // cookies: {
+  //   sessionToken: {
+  //     name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
+  //     options: {
+  //       httpOnly: true,
+  //       sameSite: 'lax',
+  //       path: '/',
+  //       // When working on localhost, the cookie domain must be omitted entirely
+  //       domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
+  //       secure: VERCEL_DEPLOYMENT,
+  //     },
+  //   },
+  // },
   pages: {
     error: '/login',
   },
   callbacks: {
     jwt: async ({ token, user, trigger }) => {
-      if (user) token.user = user;
+      if (user) token.user = user
 
       if (trigger === 'update') {
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
-        });
+        })
 
         if (refreshedUser) {
-          token.user = refreshedUser;
+          token.user = refreshedUser
         } else {
-          return {};
+          return {}
         }
       } else if (trigger === undefined) {
         // refresh the user because we want to make sure we have the latest data
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
-        });
+        })
 
         if (refreshedUser) {
-          token.user = refreshedUser;
+          token.user = refreshedUser
         }
       }
 
-      return token;
+      return token
     },
     session: async ({ session, token }) => {
       session.user = {
         id: token.sub,
         // @ts-expect-error - token.user is not always defined
         ...(token || session).user,
-      };
+      }
 
-      return session;
+      return session
     },
   },
   events: {
     async signIn(message) {
       if (message.isNewUser) {
-        const email = message.user.email as string;
+        const email = message.user.email as string
         const user = await prisma.user.findUnique({
           where: { email },
           select: {
@@ -161,8 +161,8 @@ export const authConfig: NextAuthOptions = {
             createdAt: true,
             accountType: true,
           },
-        });
-        if (!user) return;
+        })
+        if (!user) return
 
         if (user.createdAt && new Date(user.createdAt).getTime() > Date.now() - 10000) {
           waitUntil(
@@ -181,10 +181,10 @@ export const authConfig: NextAuthOptions = {
                 marketing: true,
               }),
             ])
-          );
+          )
         }
       }
     },
   },
   secret: process.env.SECRET_PASSWORD,
-};
+}

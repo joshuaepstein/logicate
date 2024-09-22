@@ -16,7 +16,7 @@
         ".next/**",
         "!.next/cache/**",
         "dist/**"
-      ],
+      ]
     },
     "@logicate/web#build": {
       "dependsOn": [

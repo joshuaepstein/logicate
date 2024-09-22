@@ -16,5 +16,6 @@ export type NodeType =
     }
 
 export enum OutputType {
-  LIGHT,
+  LIGHT = 'LIGHT',
+  VARIABLE = 'VARIABLE',
 }

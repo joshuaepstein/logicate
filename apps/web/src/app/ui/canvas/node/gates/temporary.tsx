@@ -1,37 +1,39 @@
-import { cn } from '@logicate/ui';
-import { forwardRef, useMemo } from 'react';
-import { GateType, gateTypeToIcon } from './types';
-import { defaultInputs, inverted } from './constants';
-import AndBody from './and/body';
-import OrBody from './or/body';
-import { GateItem } from '../../types';
+import { cn } from '@logicate/ui'
+import { forwardRef, useMemo } from 'react'
+import { GateType, gateTypeToIcon } from './types'
+import { defaultInputs, inverted } from './constants'
+import AndBody from './and/body'
+import OrBody from './or/body'
+import { GateItem } from '../../types'
+import BufferBody from './buffer/body'
+import XorBody from './xor/body'
 
-type GateState = boolean | number | string | null;
+type GateState = boolean | number | string | null
 
 export type TemporaryGateProps = {
-  type: GateType;
-  inputs: number;
-  state: GateState;
-  gateId: string;
-};
+  type: GateType
+  inputs: number
+  state: GateState
+  gateId: string
+}
 
 export const TemporaryGate = forwardRef<
   HTMLDivElement,
   TemporaryGateProps & {
-    x: number;
-    y: number;
-    canvasZoom: number;
+    x: number
+    y: number
+    canvasZoom: number
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, x, y, state, gateId, canvasZoom, ...rest }, ref) => {
   const isInverted = useMemo(() => {
-    return inverted.includes(type);
-  }, [type]);
+    return inverted.includes(type)
+  }, [type])
   const isOrType = useMemo(() => {
-    return type === GateType.OR || type === GateType.NOR;
-  }, [type]);
+    return type === GateType.OR || type === GateType.NOR
+  }, [type])
   const isXorXnorType = useMemo(() => {
-    return type === GateType.XOR || type === GateType.XNOR;
-  }, [type]);
+    return type === GateType.XOR || type === GateType.XNOR
+  }, [type])
   const temporaryItem: GateItem = {
     id: 'temporary_item-' + gateId,
     inputs: [],
@@ -43,7 +45,7 @@ export const TemporaryGate = forwardRef<
     type,
     x,
     y,
-  };
+  }
 
   return (
     <>
@@ -55,6 +57,7 @@ export const TemporaryGate = forwardRef<
         tabIndex={-1}
         ref={ref}
         data-logicate-temporary-dragging-node
+        data-logicate-temporary_node_id={gateId}
         {...rest}
       >
         <div
@@ -122,9 +125,11 @@ export const TemporaryGate = forwardRef<
           ))}
         </div>
         <div
-          className={cn('flex min-h-8 w-8 min-w-[30px] items-center justify-center border-black bg-transparent', {
+          className={cn('flex min-h-8 w-8 min-w-[30px] items-center justify-center bg-transparent transition-[filter] duration-100', {
+            // "filter-[drop-shadow(0px_0px_3px_#0079db)]": isSelected,
             'border-none': inputs < 4,
-            'my-[5.25px] self-stretch border-l-2': inputs > 3,
+            'my-[5.25px] self-stretch border-l-2': inputs > 3 && !isOrType && !isXorXnorType,
+            'my-[5.25px] self-stretch bg-repeat-y': inputs > 3 && (isOrType || isXorXnorType),
             '-ml-[4.5px] -mr-px w-[36px]': isOrType,
             '-ml-[9px] -mr-px w-[40px]': isXorXnorType,
           })}
@@ -149,17 +154,23 @@ export const TemporaryGate = forwardRef<
               switch (type) {
                 case GateType.AND:
                 case GateType.NAND:
-                  return <AndBody item={temporaryItem} />;
+                  return <AndBody item={temporaryItem} />
                 case GateType.OR:
                 case GateType.NOR:
-                  return <OrBody item={temporaryItem} />;
+                  return <OrBody item={temporaryItem} />
+                case GateType.BUFFER:
+                case GateType.NOT:
+                  return <BufferBody item={temporaryItem} />
+                case GateType.XOR:
+                case GateType.XNOR:
+                  return <XorBody item={temporaryItem} />
               }
             })()}
           </div>
         </div>
       </div>
     </>
-  );
-});
+  )
+})
 
-TemporaryGate.displayName = 'Temporary Logicate Logic Gate';
+TemporaryGate.displayName = 'Temporary Logicate Logic Gate'

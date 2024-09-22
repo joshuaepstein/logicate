@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
-import { AppContext } from '@/app/providers';
-import Kbd from '@logicate/ui/kbd';
-import { useContext } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
+import { AppContext } from '@/app/providers'
+import Kbd from '@logicate/ui/kbd'
+import { useContext } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 export default function Navbar() {
-  const { setShowCMDK } = useContext(AppContext);
+  const { setShowCMDK } = useContext(AppContext)
   useHotkeys('l', () => {
-    window.location.href = 'https://app.logicate.io/login';
+    window.location.href = 'https://app.logicate.io/login'
     // TODO: ^^ Fix the above as its not the correct URL
-  });
+  })
 
   return (
     <>
@@ -24,7 +24,7 @@ export default function Navbar() {
             <div
               className="bg-neutralgrey-200 flex w-36 cursor-pointer select-none items-center justify-between rounded-md px-2"
               onClick={() => {
-                setShowCMDK(true);
+                setShowCMDK(true)
               }}
             >
               <p className="text-neutralgrey-1000 text-sm">Search</p>
@@ -39,7 +39,7 @@ export default function Navbar() {
             </div>
             <button
               onClick={() => {
-                window.location.href = 'https://app.logicate.io/login';
+                window.location.href = 'https://app.logicate.io/login'
                 // TODO: ^^ Fix the above as its not the correct URL
               }}
               className="bg-neutralgrey-200 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
@@ -51,7 +51,7 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => {
-                window.location.href = 'https://app.logicate.io/register';
+                window.location.href = 'https://app.logicate.io/register'
                 // TODO: ^^ Fix the above as its not the correct URL
               }}
               className="bg-neutralgrey-1100 hover:bg-neutralgrey-1300 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
@@ -62,5 +62,5 @@ export default function Navbar() {
         </div>
       </nav>
     </>
-  );
+  )
 }

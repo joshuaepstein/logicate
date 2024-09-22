@@ -1,18 +1,22 @@
-import { cn } from '@logicate/ui';
-import { forwardRef } from 'react';
-import { InputType } from '.';
+import { cn } from '@logicate/ui'
+import { forwardRef } from 'react'
+import { InputType } from '../types'
+import ButtonBody from './button/body'
+import SwitchBody from './switch/body'
+import ClockBody from './clock/body'
+import HighConstantBody from './constant/high/body'
 
 export type TemporaryInputProps = {
-  type: InputType;
-  inputId: string;
-};
+  type: InputType
+  inputId: string
+}
 
 export const TemporaryInput = forwardRef<
   HTMLDivElement,
   TemporaryInputProps & {
-    x: number;
-    y: number;
-    canvasZoom: number;
+    x: number
+    y: number
+    canvasZoom: number
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, x, y, inputId, canvasZoom, ...rest }, ref) => {
   return (
@@ -51,43 +55,40 @@ export const TemporaryInput = forwardRef<
           </div>
         </div>
         <div
-          className={cn('flex min-h-[42px] w-[42px] min-w-[42px] items-center justify-center border-2 border-black bg-white')}
+          className={cn(
+            'flex min-h-[30px] w-[30px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100',
+            {
+              'size-[42px]': type === InputType.BUTTON || type === InputType.HIGH_CONSTANT,
+              'h-[52px] w-[42px]': type === InputType.SWITCH,
+              'h-[36px] w-[44px]': type === InputType.CLOCK,
+            }
+          )}
           style={{
             gridColumn: '2 / span 1',
             gridRow: '2 / span 1',
+            borderColor: '#000',
           }}
         >
-          <div className="pointer-events-auto flex h-full w-full items-center justify-center">
-            <svg style={{ overflow: 'visible', width: '30px', height: '30px' }} className={cn('')} data-logicate-body>
-              <g>
-                <circle
-                  //class="signalFill"
-                  className={cn({
-                    // "text-blue-700 fill-current": computedValue === true,
-                  })}
-                  fill="#FFFFFF"
-                  stroke="#000000"
-                  cx="15"
-                  cy="15"
-                  r="15"
-                ></circle>
-                <circle
-                  // class="buttonSurface"
-                  className="cursor-pointer"
-                  fill="#FFFFFF"
-                  stroke="#000000"
-                  strokeWidth="1"
-                  cx="15"
-                  cy="15"
-                  r="11"
-                />
-              </g>
-            </svg>
+          <div className="pointer-events-auto flex h-full w-full items-center justify-center" data-logicate-body>
+            {(() => {
+              switch (type) {
+                case InputType.BUTTON:
+                  return <ButtonBody />
+                case InputType.SWITCH:
+                  return <SwitchBody />
+                case InputType.CLOCK:
+                  return <ClockBody />
+                case InputType.HIGH_CONSTANT:
+                  return <HighConstantBody />
+                default:
+                  return null
+              }
+            })()}
           </div>
         </div>
       </div>
     </>
-  );
-});
+  )
+})
 
-TemporaryInput.displayName = 'Temporary Logicate Logic Input';
+TemporaryInput.displayName = 'Temporary Logicate Logic Input'

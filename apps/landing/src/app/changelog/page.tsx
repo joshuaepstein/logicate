@@ -1,10 +1,10 @@
-import { getChangelogs } from './actions';
-import { TextInput } from '@logicate/ui/input/index';
-import { Button } from '@logicate/ui/button';
-import { Changelog } from '@logicate/database';
+import { getChangelogs } from './actions'
+import { TextInput } from '@logicate/ui/input/index'
+import { Button } from '@logicate/ui/button'
+import { Changelog } from '@logicate/database'
 
 export default async function ChangelogPage() {
-  const changelogs: Changelog[] = await getChangelogs();
+  const changelogs: Changelog[] = await getChangelogs()
 
   return (
     <>
@@ -21,7 +21,7 @@ export default async function ChangelogPage() {
               <label htmlFor="subscribe-email" className="sr-only">
                 Email address
               </label>
-              <TextInput
+              {/* <TextInput
                 placeholder="Subscribe via email"
                 id="subscribe-email"
                 name="email_address"
@@ -29,7 +29,7 @@ export default async function ChangelogPage() {
                 required
                 className="block w-full min-w-0 max-w-none pl-12 pr-3 sm:leading-6"
                 displayError={false}
-              />
+              /> */}
               <svg
                 className="stroke-neutralgrey-600 pointer-events-none absolute left-3 top-2 h-6 w-6"
                 fill="none"
@@ -59,10 +59,10 @@ export default async function ChangelogPage() {
         ))}
       </div>
     </>
-  );
+  )
 }
 
-export function ChangelogItem({ changelog }: { changelog: Changelog }) {
+function ChangelogItem({ changelog }: { changelog: Changelog }) {
   return (
     <section id="2024-07-04" aria-labelledby="2024-07-04-heading" className="md:flex">
       <h2 id="2024-07-04-heading" className="text-neutralgrey-700 pl-7 text-sm leading-6 md:w-1/4 md:pl-0 md:pr-12 md:text-right">
@@ -96,5 +96,5 @@ export function ChangelogItem({ changelog }: { changelog: Changelog }) {
         </div>
       </div>
     </section>
-  );
+  )
 }

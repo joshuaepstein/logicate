@@ -181,7 +181,7 @@ export const Gate = forwardRef<
                     })
                     setHolding(true)
                   }}
-                ></circle>
+                />
               </svg>
             </div>
             <div

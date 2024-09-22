@@ -26,6 +26,7 @@ import Cookies from 'js-cookie'
 import LoadingCircle from '@logicate/ui/icons/loading-circle'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@logicate/ui'
+import FloatingToolbar from './toolbar'
 
 export default function Canvas({
   sessionId,
@@ -533,11 +534,11 @@ export default function Canvas({
           )) ||
             null}
         </AnimatePresence>
-        <Sidebar />
-
+        <Sidebar canvas={logicateSession} />
+        <FloatingToolbar session={logicateSession} />
         <div
           ref={canvasReference}
-          className="relative max-h-[calc(100dvh-4rem)] w-full grow overflow-hidden"
+          className="relative max-h-full w-full grow overflow-hidden"
           onDragOver={(e) => e.preventDefault()}
           data-logicate-canvas-position={`${canvas.x}px ${canvas.y}px`}
           data-logicate-canvas-zoom={canvas.zoom}
@@ -628,7 +629,7 @@ export default function Canvas({
       </main>
       {draggingNewElement && (
         <div
-          className="pointer-events-none absolute origin-top-left"
+          className="pointer-events-none absolute z-[123456] origin-top-left"
           style={{
             width: '1000000px',
           }}

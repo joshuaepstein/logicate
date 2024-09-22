@@ -16,7 +16,7 @@ export const Wire = (props: WireType) => {
 
   const startWireTerminal = getWireTerminalLocation(start.fromId, start.fromIndex, start.fromTerminal)
   if (!startWireTerminal) return
-  const start_update = {
+  const startnode = {
     x: startWireTerminal.getBoundingClientRect().x + startWireTerminal.getBoundingClientRect().width / 2,
     y: startWireTerminal.getBoundingClientRect().y + startWireTerminal.getBoundingClientRect().height / 2,
   }
@@ -25,9 +25,9 @@ export const Wire = (props: WireType) => {
     <svg className="pointer-events-none absolute left-0 top-0 overflow-visible" data-logicate-signal={isActive}>
       <path
         d={`
-              M ${start_update.x},${start_update.y}
-              C ${start_update.x + (end.x - start_update.x) / 2},${start_update.y}
-                ${start_update.x + (end.x - start_update.x) / 2},${end.y}
+              M ${startnode.x},${startnode.y}
+              C ${startnode.x + (end.x - startnode.x) / 2},${startnode.y}
+                ${startnode.x + (end.x - startnode.x) / 2},${end.y}
                 ${end.x},${end.y}
               `}
         stroke="black"
@@ -36,9 +36,9 @@ export const Wire = (props: WireType) => {
       />
       <path
         d={`
-              M ${start_update.x},${start_update.y}
-              C ${start_update.x + (end.x - start_update.x) / 2},${start_update.y}
-                ${start_update.x + (end.x - start_update.x) / 2},${end.y}
+              M ${startnode.x},${startnode.y}
+              C ${startnode.x + (end.x - startnode.x) / 2},${startnode.y}
+                ${startnode.x + (end.x - startnode.x) / 2},${end.y}
                 ${end.x},${end.y}
               `}
         strokeWidth="4"

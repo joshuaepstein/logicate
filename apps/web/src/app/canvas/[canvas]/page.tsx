@@ -39,7 +39,7 @@ export default async function Home({
 
   return (
     <div className="flex h-dvh max-h-dvh w-full flex-col overflow-hidden">
-      <nav className="border-neutralgrey-400 h-16 w-full border-b">{session.user.name}</nav>
+      {/* <nav className="border-neutralgrey-400 h-16 w-full border-b">{session.user.name}</nav> */}
       <Suspense fallback={<div>Loading...</div>}>
         <Canvas sessionId={logicateSession.id} isNew={isNew === 'true'} logicateSession={logicateSession} user={session.user} />
       </Suspense>

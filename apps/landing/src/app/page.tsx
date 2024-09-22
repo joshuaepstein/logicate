@@ -1,10 +1,12 @@
-import Image from 'next/image';
+'use client'
 
-import AndGate from '@/components/and-gate';
-import OrGate from '@/components/or-gate';
-import Features from '@/components/sections/features';
-import landingDemo from '~/landing_demo.png';
-import landingGradient from '~/landing_gradient.png';
+import Image from 'next/image'
+
+import AndGate from '@/components/and-gate'
+import OrGate from '@/components/or-gate'
+import Features from '@/components/sections/features'
+import landingDemo from '~/landing_demo.png'
+import landingGradient from '~/landing_gradient.png'
 
 export default function Page() {
   return (
@@ -34,5 +36,5 @@ export default function Page() {
         </div>
       </div>
     </>
-  );
+  )
 }

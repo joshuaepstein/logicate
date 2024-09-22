@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import { MagicIcon } from '@jfstech/icons-react/24/outline';
-import ExpandingArrow from '@logicate/ui/icons/expanding-error';
-import cmdkPages from '@logicate/utils/cmdk-pages';
-import va from '@vercel/analytics';
-import { Command, useCommandState } from 'cmdk';
-import Fuse from 'fuse.js';
-import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useDebouncedCallback } from 'use-debounce';
-import Modal from './modal';
+import { MagicIcon } from '@jfstech/icons-react/24/outline'
+import ExpandingArrow from '@logicate/ui/icons/expanding-error'
+import cmdkPages from '@logicate/utils/cmdk-pages'
+import va from '@vercel/analytics'
+import { Command, useCommandState } from 'cmdk'
+import Fuse from 'fuse.js'
+import { useRouter } from 'next/navigation'
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Highlighter from 'react-highlight-words'
+import { useDebouncedCallback } from 'use-debounce'
+import Modal from './modal'
 
 function CMDKHelper({ showCMDK, setShowCMDK }: { showCMDK: boolean; setShowCMDK: Dispatch<SetStateAction<boolean>> }) {
-  const commandListRef = useRef<HTMLDivElement>(null);
+  const commandListRef = useRef<HTMLDivElement>(null)
   const debounceTrackSearch = useDebouncedCallback((query: string) => {
     va.track('CMDK Search', {
       query,
-    });
-  }, 1000);
+    })
+  }, 1000)
 
   return (
     <Modal showModal={showCMDK} setShowModal={setShowCMDK} className="sm:max-w-xl">
@@ -28,9 +28,9 @@ function CMDKHelper({ showCMDK, setShowCMDK }: { showCMDK: boolean; setShowCMDK:
           onInput={(e) => {
             // hack to scroll to top of list when input changes (for some reason beyond my comprehension, setTimeout is needed)
             setTimeout(() => {
-              commandListRef.current?.scrollTo(0, 0);
-            }, 0);
-            debounceTrackSearch(e.currentTarget.value);
+              commandListRef.current?.scrollTo(0, 0)
+            }, 0)
+            debounceTrackSearch(e.currentTarget.value)
           }}
           placeholder="Search..."
           className="placeholder-neutralgrey-600 w-full border-none p-4 font-normal focus:outline-none focus:ring-0"
@@ -50,11 +50,11 @@ function CMDKHelper({ showCMDK, setShowCMDK }: { showCMDK: boolean; setShowCMDK:
         </Command.List>
       </Command>
     </Modal>
-  );
+  )
 }
 
 const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<boolean>> }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const fuse = useMemo(
     () =>
@@ -62,23 +62,22 @@ const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<
         keys: ['title', 'description'],
       }),
     []
-  );
+  )
 
-  const search = useCommandState((state) => state.search);
+  const search = useCommandState((state) => state.search)
 
   const results = useMemo(() => {
-    if (search.length === 0) return cmdkPages;
-    return fuse.search(search).map((r) => r.item);
-  }, [search, fuse]);
+    if (search.length === 0) return cmdkPages
+    return fuse.search(search).map((r) => r.item)
+  }, [search, fuse])
 
   return results.map(({ title, description, slug }) => (
     <Command.Item
       key={slug}
       value={title}
       onSelect={() => {
-        // @ts-expect-error - Slug should exist
-        router.push(`${slug}`);
-        setShowCMDK(false);
+        // router.push(`${slug}`)
+        setShowCMDK(false)
       }}
       className="hover:bg-neutralgrey-300 active:bg-neutralgrey-400 aria-selected:bg-neutralgrey-300 group flex cursor-pointer items-center justify-between space-x-2 rounded-md px-4 py-2"
     >
@@ -100,29 +99,29 @@ const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<
       </div>
       <ExpandingArrow className="invisible -ml-4 h-4 w-4 text-purple-600 transition group-aria-selected:visible sm:group-hover:visible" />
     </Command.Item>
-  ));
-};
+  ))
+}
 
 export default function useCMDK() {
-  const [showCMDK, setShowCMDK] = useState(false);
+  const [showCMDK, setShowCMDK] = useState(false)
 
   // Toggle the menu when ⌘K is pressed
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      const existingModalBackdrop = document.getElementById('modal-backdrop');
+      const existingModalBackdrop = document.getElementById('modal-backdrop')
       if (e.key === 'k' && (e.metaKey || e.ctrlKey) && !existingModalBackdrop) {
-        e.preventDefault();
-        setShowCMDK((showCMDK) => !showCMDK);
+        e.preventDefault()
+        setShowCMDK((showCMDK) => !showCMDK)
       }
-    };
+    }
 
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, []);
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [])
 
   const CMDK = useCallback(() => {
-    return <CMDKHelper showCMDK={showCMDK} setShowCMDK={setShowCMDK} />;
-  }, [showCMDK, setShowCMDK]);
+    return <CMDKHelper showCMDK={showCMDK} setShowCMDK={setShowCMDK} />
+  }, [showCMDK, setShowCMDK])
 
-  return useMemo(() => ({ showCMDK, setShowCMDK, CMDK }), [showCMDK, setShowCMDK, CMDK]);
+  return useMemo(() => ({ showCMDK, setShowCMDK, CMDK }), [showCMDK, setShowCMDK, CMDK])
 }

@@ -17,14 +17,14 @@
         "!.next/cache/**",
         "dist/**"
       ],
-      "cache": false
     },
     "@logicate/web#build": {
       "dependsOn": [
         "^build"
       ],
       "outputs": [
-        ".next/**"
+        ".next/**",
+        "!.next/cache/**"
       ]
     },
     "@logicate/landing#build": {
@@ -32,7 +32,8 @@
         "^build"
       ],
       "outputs": [
-        ".next/**"
+        ".next/**",
+        "!.next/cache/**"
       ]
     },
     "test:unit": {

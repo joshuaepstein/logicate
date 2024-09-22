@@ -18,7 +18,6 @@ export default function GenTemp() {
           const booleanExpression = new BooleanExpressionGenerator(ExpressionDifficulty.EASY);
           const expression = booleanExpression.generateExpression();
           setExpression(expression);
-          console.log(expression);
           setString(createString(expression));
           setSimplified(createString(simplifyBooleanExpression(expression)));
         }}

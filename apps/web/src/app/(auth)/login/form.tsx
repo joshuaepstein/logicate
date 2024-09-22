@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { cn } from '@logicate/ui';
-import { Button } from '@logicate/ui/button';
-import LoadingCircle from '@logicate/ui/icons/loading-circle';
-import { Input } from '@logicate/ui/input/index';
-import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
-import { toast } from 'sonner';
+import { cn } from '@logicate/ui'
+import { Button } from '@logicate/ui/button'
+import LoadingCircle from '@logicate/ui/icons/loading-circle'
+import { Input } from '@logicate/ui/input/index'
+import { signIn } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
 const errorCodes = {
   'no-credentials': 'Invalid email or password',
@@ -15,65 +15,65 @@ const errorCodes = {
   'invalid-credentials': 'Invalid email or password',
   'exceeded-login-attempts': 'Account has been locked due to too many login attempts. Please contact support to unlock your account.',
   'too-many-login-attempts': 'Too many login attempts. Please try again later.',
-};
+}
 
 export default function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const next = searchParams?.get('next');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, login] = useTransition();
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = searchParams?.get('next')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, login] = useTransition()
 
   useEffect(() => {
-    const error = searchParams?.get('error');
-    error && toast.error(error);
-  }, [searchParams]);
+    const error = searchParams?.get('error')
+    error && toast.error(error)
+  }, [searchParams])
 
   return (
     <form
       className="flex h-full w-full flex-col items-center justify-center"
       onSubmit={async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         login(async () => {
           const res = await fetch('/api/auth/account-exists', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
-          });
+          })
 
           if (!res.ok) {
-            const error = await res.text();
-            toast.error(error);
-            return;
+            const error = await res.text()
+            toast.error(error)
+            return
           }
 
-          const { accountExists } = await res.json();
+          const { accountExists } = await res.json()
           if (accountExists) {
             const signInRes = await signIn('credentials', {
               email,
               password,
               redirect: false,
               ...(next ? { callbackUrl: next } : {}),
-            });
-            if (!signInRes) return;
+            })
+            if (!signInRes) return
 
             if (!signInRes.ok && signInRes.error) {
               if (errorCodes[signInRes.error as keyof typeof errorCodes]) {
-                toast.error(errorCodes[signInRes.error as keyof typeof errorCodes]);
+                toast.error(errorCodes[signInRes.error as keyof typeof errorCodes])
               } else {
-                toast.error(signInRes.error);
+                toast.error(signInRes.error)
               }
 
-              return;
+              return
             }
 
-            router.push(next ?? '/');
+            router.push(next ?? '/')
           } else {
-            toast.error('No account found with that email address.');
+            toast.error('No account found with that email address.')
           }
-        });
+        })
       }}
     >
       <div className="relative flex flex-col items-start justify-start">
@@ -122,5 +122,5 @@ export default function LoginForm() {
         </div>
       </div>
     </form>
-  );
+  )
 }

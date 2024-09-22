@@ -66,6 +66,7 @@
     "@logicate/types": "workspace:*",
     "@next/env": "^14.2.7",
     "@playwright/test": "^1.46.1",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^5.19.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/js-cookie": "^3.0.6",
     "@types/react-beforeunload": "^2.1.5",

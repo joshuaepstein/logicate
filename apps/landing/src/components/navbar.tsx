@@ -4,12 +4,12 @@ import { AppContext } from '@/app/providers'
 import Kbd from '@logicate/ui/kbd'
 import { useContext } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
+import Link from 'next/link'
 
 export default function Navbar() {
   const { setShowCMDK } = useContext(AppContext)
   useHotkeys('l', () => {
-    window.location.href = 'https://app.logicate.io/login'
-    // TODO: ^^ Fix the above as its not the correct URL
+    window.location.href = 'https://app.logicate.joshepstein.co.uk/login'
   })
 
   return (
@@ -37,27 +37,21 @@ export default function Navbar() {
                 </Kbd>
               </div>
             </div>
-            <button
-              onClick={() => {
-                window.location.href = 'https://app.logicate.io/login'
-                // TODO: ^^ Fix the above as its not the correct URL
-              }}
+            <Link
+              href={'https://app.logicate.joshepstein.co.uk/login'}
               className="bg-neutralgrey-200 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
             >
               <span className="text-neutralgrey-1000 group-hover:text-neutralgrey-1200 text-sm transition">Log in</span>{' '}
               <Kbd variant="ghost" className="bg-neutralgrey-100">
                 L
               </Kbd>
-            </button>
-            <button
-              onClick={() => {
-                window.location.href = 'https://app.logicate.io/register'
-                // TODO: ^^ Fix the above as its not the correct URL
-              }}
+            </Link>
+            <Link
+              href={'https://app.logicate.joshepstein.co.uk/register'}
               className="bg-neutralgrey-1100 hover:bg-neutralgrey-1300 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
             >
               <span className="text-neutralgrey-100 text-sm transition">Sign up</span>
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

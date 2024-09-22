@@ -1,6 +1,5 @@
 import '@/styles/global.css'
 import '@logicate/ui/styles'
-import 'tailwindcss/tailwind.css'
 
 import { Footer } from '@/components/footer'
 import Navbar from '@/components/navbar'

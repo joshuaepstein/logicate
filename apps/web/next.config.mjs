@@ -8,7 +8,7 @@ dotenv.config({
 
 /** @type {import('next').NextConfig} */
 const config = {
-  transpilePackages: ['@logicate/database', '@logicate/ui', '@logicate/tailwind'],
+  transpilePackages: ['@logicate/database', '@logicate/ui', '@logicate/tailwind', '@logicate/utils', '@logicate/emails', '@logicate/questions', '@logicate/types'],
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

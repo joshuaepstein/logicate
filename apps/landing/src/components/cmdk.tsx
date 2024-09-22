@@ -76,7 +76,7 @@ const CommandResults = ({ setShowCMDK }: { setShowCMDK: Dispatch<SetStateAction<
       key={slug}
       value={title}
       onSelect={() => {
-        // router.push(`${slug}`)
+        router.push(`${slug}`)
         setShowCMDK(false)
       }}
       className="hover:bg-neutralgrey-300 active:bg-neutralgrey-400 aria-selected:bg-neutralgrey-300 group flex cursor-pointer items-center justify-between space-x-2 rounded-md px-4 py-2"

@@ -7,7 +7,7 @@
     "dev:emails": "dotenv turbo dev --filter=@logicate/emails",
     "dev:landing": "turbo dev --filter=@logicate/landing --filter=@logicate/web",
     "start": "dotenv turbo start --filter=@logicate/landing",
-    "build": "dotenv turbo run build --filter=@logicate/landing",
+    "build": "dotenv turbo run build",
     "build:test": "turbo build:test",
     "db:deploy": "turbo db:deploy",
     "db:generate": "turbo db:generate",
@@ -25,7 +25,7 @@
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "framer-motion": "^11.5.4",
-    "next": "^14.2.11",
+    "next": "^14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.5.4",

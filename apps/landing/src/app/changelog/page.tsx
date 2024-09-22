@@ -21,7 +21,7 @@ export default async function ChangelogPage() {
               <label htmlFor="subscribe-email" className="sr-only">
                 Email address
               </label>
-              {/* <TextInput
+              <TextInput
                 placeholder="Subscribe via email"
                 id="subscribe-email"
                 name="email_address"
@@ -29,7 +29,7 @@ export default async function ChangelogPage() {
                 required
                 className="block w-full min-w-0 max-w-none pl-12 pr-3 sm:leading-6"
                 displayError={false}
-              /> */}
+              />
               <svg
                 className="stroke-neutralgrey-600 pointer-events-none absolute left-3 top-2 h-6 w-6"
                 fill="none"

@@ -56,7 +56,26 @@ export default function useCanvasActions(canvasId: string) {
           >
             <FavouriteIcon className="size-5" />
           </Button>
-          <Button className="mr-2" variant="green" size="icon-sm" disabled={updating || loadingSave} onClick={() => {}}>
+          <Button
+            className="mr-2"
+            variant="green"
+            size="icon-sm"
+            disabled={updating || loadingSave}
+            onClick={() => {
+              const stringified = SuperJSON.stringify(useCanvasStore.getState())
+              if (updatingDatabase.is) return
+              setUpdating(async () => {
+                const db = await updateDatabase(stringified, canvasId)
+                if (db) {
+                  setUpdatingDatabase({ is: false, lastUpdated: Date.now(), progress: 0 })
+                  toast.success('Canvas Saved')
+                } else {
+                  setUpdatingDatabase({ is: false, lastUpdated: null, progress: 0 })
+                  toast.error('Failed to save canvas')
+                }
+              })
+            }}
+          >
             {updating || loadingSave ? <LoadingCircle className="size-5" /> : <FileCheck02Icon className="size-5" />}
           </Button>
           <Dialog open={confirmClear} onOpenChange={setConfirmClear}>

@@ -2,7 +2,7 @@
 import { LogicateSession, User } from '@logicate/database'
 import { Click } from '@logicate/utils/buttons'
 import { randomGateId, randomWireId } from '@logicate/utils/id'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useRef, useState } from 'react'
 import { useBeforeunload } from 'react-beforeunload'
 import { useHotkeys } from 'react-hotkeys-hook'
 import BackgroundElement from './background-element'
@@ -62,6 +62,8 @@ export default function Canvas({
     updatingDatabase,
     updateSelected,
   } = useCanvasStore()
+  const [clockInterval, setClockInterval] = useState<NodeJS.Timeout | null>(null)
+  const [clockValue, setClockValue] = useState(false)
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType
     x: number
@@ -433,6 +435,16 @@ export default function Canvas({
     }
   })
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setClockValue((previous) => !previous)
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [items])
+
   const simulate = useCallback(() => {
     const { items, wires } = useCanvasStore.getState()
     const newSimulatedItems: { id: string; state: boolean }[] = []
@@ -441,7 +453,12 @@ export default function Canvas({
     const getValue = (id: string) => {
       const item = items.find((item) => item.id === id)
       if (!item) return false
-      if (item.itemType === 'input') return item.value
+      if (item.itemType === 'input') {
+        if (item.type === InputType.CLOCK) {
+          return clockValue
+        }
+        return item.value
+      }
       return item.computedValue || false
     }
 
@@ -471,7 +488,11 @@ export default function Canvas({
         const item = items.find((item) => item.id === id)
         if (item) {
           if (item.itemType === 'input') {
-            newSimulatedItems.push({ id: item.id, state: item.value })
+            if (item.type === InputType.CLOCK) {
+              newSimulatedItems.push({ id: item.id, state: clockValue })
+            } else {
+              newSimulatedItems.push({ id: item.id, state: item.value })
+            }
           } else if (item.itemType === 'gate' || item.itemType === 'output') {
             const inputWires = wires.filter((wire) => wire.to.id === item.id)
             const inputValues = inputWires.map((wire) => getValue(wire.from.id))
@@ -497,11 +518,11 @@ export default function Canvas({
 
     setSimulatedItemState(newSimulatedItems)
     setSimulatedWires(newSimulatedWires)
-  }, [])
+  }, [clockValue])
 
   useEffect(() => {
     simulate()
-  }, [items, wires])
+  }, [items, wires, clockValue ?? false])
 
   return (
     <>
@@ -619,6 +640,7 @@ export default function Canvas({
                     }
                   }
                   input={item}
+                  clock={clockValue}
                   className={!usingDatabase && !isNew ? 'opacity-0' : 'opacity-100'}
                 />
               ) : null

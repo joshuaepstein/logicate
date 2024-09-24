@@ -4,7 +4,21 @@ import { darkerColour, lighterColour } from '@logicate/utils/color'
 import useCanvasStore from '../../../hooks/useCanvasStore'
 import { useEffect } from 'react'
 
-export default function ClockBody({ input, clock }: { input: InputItem; clock: boolean }) {
+export default function ClockBody({ input }: { input: InputItem }) {
+  const { updateItem } = useCanvasStore()
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateItem(input.id, {
+        value: !input.value,
+      })
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [input.id, input.value, updateItem])
+
   return (
     <svg
       className="pointer-events-auto"
@@ -15,7 +29,7 @@ export default function ClockBody({ input, clock }: { input: InputItem; clock: b
       }}
     >
       <path
-        stroke={clock ? '#6c92e4' : '#FFFFFF'}
+        stroke={input.value ? '#6c92e4' : '#FFFFFF'}
         strokeWidth="3"
         strokeLinejoin="miter"
         strokeLinecap="butt"

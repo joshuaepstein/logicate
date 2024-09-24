@@ -62,8 +62,6 @@ export default function Canvas({
     updatingDatabase,
     updateSelected,
   } = useCanvasStore()
-  const [clockInterval, setClockInterval] = useState<NodeJS.Timeout | null>(null)
-  const [clockValue, setClockValue] = useState(false)
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType
     x: number
@@ -176,13 +174,13 @@ export default function Canvas({
       })
       .filter((a) => a !== null)
     const newItems = items.filter((items) => !selectedItemIds.includes(items.id))
-    let newWires = wires.filter((items) => !selectedWires.includes(items.id))
+    const newWires = wires.filter((items) => !selectedWires.includes(items.id))
 
-    if (selectedItemIds.length > 0) {
-      newWires = newWires.filter((wire) => {
-        return wire.from.id !== selectedItemIds[0] && wire.to.id !== selectedItemIds[0]
-      })
-    }
+    // if (selectedItemIds.length > 0) {
+    //   newWires = newWires.filter((wire) => {
+    //     return wire.from.id !== selectedItemIds[0] && wire.to.id !== selectedItemIds[0]
+    //   })
+    // }
 
     setWires(newWires)
     setItems(newItems)
@@ -435,16 +433,6 @@ export default function Canvas({
     }
   })
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setClockValue((previous) => !previous)
-    }, 1000)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [items])
-
   const simulate = useCallback(() => {
     const { items, wires } = useCanvasStore.getState()
     const newSimulatedItems: { id: string; state: boolean }[] = []
@@ -454,9 +442,6 @@ export default function Canvas({
       const item = items.find((item) => item.id === id)
       if (!item) return false
       if (item.itemType === 'input') {
-        if (item.type === InputType.CLOCK) {
-          return clockValue
-        }
         return item.value
       }
       return item.computedValue || false
@@ -488,11 +473,7 @@ export default function Canvas({
         const item = items.find((item) => item.id === id)
         if (item) {
           if (item.itemType === 'input') {
-            if (item.type === InputType.CLOCK) {
-              newSimulatedItems.push({ id: item.id, state: clockValue })
-            } else {
-              newSimulatedItems.push({ id: item.id, state: item.value })
-            }
+            newSimulatedItems.push({ id: item.id, state: item.value })
           } else if (item.itemType === 'gate' || item.itemType === 'output') {
             const inputWires = wires.filter((wire) => wire.to.id === item.id)
             const inputValues = inputWires.map((wire) => getValue(wire.from.id))
@@ -518,11 +499,11 @@ export default function Canvas({
 
     setSimulatedItemState(newSimulatedItems)
     setSimulatedWires(newSimulatedWires)
-  }, [clockValue])
+  }, [])
 
   useEffect(() => {
     simulate()
-  }, [items, wires, clockValue ?? false])
+  }, [items, wires])
 
   return (
     <>
@@ -640,7 +621,6 @@ export default function Canvas({
                     }
                   }
                   input={item}
-                  clock={clockValue}
                   className={!usingDatabase && !isNew ? 'opacity-0' : 'opacity-100'}
                 />
               ) : null

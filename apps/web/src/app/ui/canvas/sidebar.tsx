@@ -39,9 +39,9 @@ export default function Sidebar({ canvas }: { canvas: LogicateSession }) {
             {expanded ? (
               <motion.div
                 key="expanded"
-                initial={{ opacity: 0, x: '-20%' }}
+                initial={{ opacity: 0, x: '20%' }}
                 animate={{ opacity: 1, x: '0' }}
-                exit={{ opacity: 0, x: '20%' }}
+                exit={{ opacity: 0, x: '-20%' }}
                 transition={{ duration: 0.2 }}
               >
                 <AlignLeft02Icon className="size-5" />

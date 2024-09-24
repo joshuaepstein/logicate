@@ -1,8 +1,9 @@
 import { useEffect, useState, useTransition } from 'react'
 import SuperJSON from 'superjson'
-import useCanvasStore from './useCanvasStore'
+import useCanvasStore, { State } from './useCanvasStore'
 import { useDebounce } from 'use-debounce'
 import { getCookie } from 'react-use-cookie'
+import { toast } from 'sonner'
 
 export const updateDatabase = async (stringData: string, canvasId: string) => {
   const { updatingDatabase, setUpdatingDatabase } = useCanvasStore.getState()
@@ -17,7 +18,6 @@ export const updateDatabase = async (stringData: string, canvasId: string) => {
       'Content-Type': 'application/json',
     },
   })
-  console.debug(`Database updated: ${Date.now()}`)
   return response.ok
 }
 
@@ -25,14 +25,20 @@ export const updateDatabase = async (stringData: string, canvasId: string) => {
 const useUpdateCanvasStore = (canvasId: string) => {
   const [cachedDatabase, setCachedDatabase] = useState<string | null>(null)
   const { updatingDatabase, setUpdatingDatabase, ...canvasStore } = useCanvasStore()
-  const [debouncedCanvasStore] = useDebounce(canvasStore, 1000) // Will update the database every 5 seconds
+  const [debouncedCanvasStore] = useDebounce(
+    {
+      items: canvasStore.items.map((item) => (item.itemType === 'input' ? { ...item, value: undefined } : item)),
+      wires: canvasStore.wires,
+    },
+    1000
+  ) // Will update the database every 5 seconds
   const [fetching, useFetch] = useTransition() // Allows us to run an async function while keeping track of the state of the function.
 
   useEffect(() => {
     if (getCookie(`autoSave-${canvasId}`) === 'false') return
     // We cache the database string here so that we are not updating the database every time that the canvas store changes
     // This makes sure that we are not sending too many requests to our database.
-    const stringified = SuperJSON.stringify(canvasStore)
+    const stringified = SuperJSON.stringify(debouncedCanvasStore)
     if (stringified === cachedDatabase) return
     setCachedDatabase(stringified)
     if (updatingDatabase.is || fetching) return
@@ -42,6 +48,7 @@ const useUpdateCanvasStore = (canvasId: string) => {
         setUpdatingDatabase({ is: false, lastUpdated: Date.now(), progress: 0 })
       } else {
         setUpdatingDatabase({ is: false, lastUpdated: null, progress: 0 })
+        toast.error(`There was an error while saving your data to the database. Please save manually or prepare to loose data.`)
       }
     })
   }, [debouncedCanvasStore])

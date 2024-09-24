@@ -26,9 +26,8 @@ export const Input = forwardRef<
       state: boolean
     }
     input: InputItem
-    clock: boolean
   } & React.HTMLAttributes<HTMLDivElement>
->(({ type, x, y, input, clock, inputId, className, value, simulated, ...rest }, ref) => {
+>(({ type, x, y, input, inputId, className, value, simulated, ...rest }, ref) => {
   const {
     isHolding,
     setHolding,
@@ -197,7 +196,7 @@ export const Input = forwardRef<
                 case InputType.SWITCH:
                   return <SwitchBody input={input} />
                 case InputType.CLOCK:
-                  return <ClockBody input={input} clock={clock} />
+                  return <ClockBody input={input} />
                 case InputType.HIGH_CONSTANT:
                   return <HighConstantBody input={input} />
                 default:

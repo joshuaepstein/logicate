@@ -10,5 +10,5 @@ export default async function Navbar() {
 
   console.log(session)
 
-  return <ClientNavbar user={session.user} publicDisplay={session.publicDisplay} />
+  return <ClientNavbar user={session.user} />
 }

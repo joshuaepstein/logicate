@@ -9,7 +9,13 @@ import { redirect, usePathname } from 'next/navigation'
 import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
 
-export default function ClientNavbar({ user, publicDisplay }: { user: User; publicDisplay: PublicDisplay }) {
+export default function ClientNavbar({
+  user,
+}: {
+  user: User & {
+    publicDisplay: PublicDisplay
+  }
+}) {
   const pathname = usePathname()
 
   const { setShowCMDK } = useContext(AppContext)

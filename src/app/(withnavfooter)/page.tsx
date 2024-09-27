@@ -7,6 +7,7 @@ import Features from '@/components/marketing/sections/features'
 import landingDemo from '~/landing_demo.png'
 import landingGradient from '~/beams-home@95.jpeg'
 import XorGate from '@/components/marketing/xor-gate'
+import { VelocityScroll } from '@/components/ui/scroll-based-velocity'
 
 export default function Page() {
   return (

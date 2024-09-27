@@ -2,6 +2,7 @@
     "name": "logicate",
     "private": true,
     "scripts": {
+        "postinstall": "prisma generate",
         "dev": "concurrently -k -p \"[{name}]\" -n \"next,emails,prisma\" -c \"cyan,green,purple\" \"next dev\" \"email dev --port 3333\" \"prisma studio\"",
         "dev:emails": "email dev",
         "dev:prisma": "prisma studio",

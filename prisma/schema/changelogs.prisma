@@ -1,0 +1,8 @@
+model Changelog {
+  id        String   @id @default(cuid())
+  title String
+  subtitle String
+  additions String[]
+  changes String[]
+  fixes String[]
+}

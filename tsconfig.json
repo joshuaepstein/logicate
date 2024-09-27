@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "~/*": ["public/*"],
+      "@logicate/database": ["src/database/index.ts"],
+      "@logicate/database/*": ["src/database/*"],
+      "@logicate/emails/*": ["emails/*", "emails/index.ts"],
+      "@logicate/emails": ["emails/index.ts"]
+    },
+    "strictNullChecks": true,
+    "target": "ES2020"
+  },
+  "display": "Next.js",
+  "exclude": ["node_modules", ".next/**/*"],
+  "extends": ["./tsconfig-base.json", "@tsconfig/next/tsconfig.json"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", ".next/types/**/*.ts"]
+}

@@ -35,8 +35,6 @@ export default function LoginForm() {
       className="flex h-full w-full flex-col items-center justify-center"
       onSubmit={async (e) => {
         e.preventDefault()
-        console.log('started login process')
-
         login(async () => {
           const res = await fetch('/api/auth/account-exists', {
             method: 'POST',

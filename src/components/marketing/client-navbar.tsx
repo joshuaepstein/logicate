@@ -32,7 +32,7 @@ export default function ClientNavbar({
         <div className="flex items-center gap-4">
           <div className="flex items-stretch justify-end gap-4">
             <div
-              className="bg-neutralgrey-200 flex h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md px-2"
+              className="bg-neutralgrey-200 hidden h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md px-2 md:flex"
               onClick={() => {
                 setShowCMDK(true)
               }}
@@ -80,7 +80,7 @@ export default function ClientNavbar({
                 </Link>
 
                 <div
-                  className="shadow-hard-xs size-8 rounded-md"
+                  className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat"
                   style={{
                     backgroundImage: `url(${user.publicDisplay.profilePicture})`,
                   }}

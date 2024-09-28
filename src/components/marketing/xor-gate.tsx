@@ -10,7 +10,7 @@ export default function XorGate() {
       animate={{ opacity: 1, scale: 1, rotate: '7deg' }}
       transition={{ delay: 0.2, type: 'spring', stiffness: 450, damping: 8 }}
       key="xor-gate-animatable"
-      className="absolute left-4 top-[30rem]"
+      className="absolute left-4 top-[30rem] hidden md:block"
       style={{
         rotate: '-17deg',
         userSelect: 'none',

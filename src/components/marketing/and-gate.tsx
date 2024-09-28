@@ -10,7 +10,7 @@ export default function AndGate() {
       animate={{ opacity: 1, scale: 1, rotate: '-12deg' }}
       transition={{ type: 'spring', stiffness: 400, damping: 10 }}
       key="and-gate-animatable"
-      className="absolute left-8 top-36"
+      className="absolute left-8 top-36 hidden md:block"
       style={{
         userSelect: 'none',
         WebkitUserSelect: 'none',

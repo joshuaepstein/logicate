@@ -1,11 +1,11 @@
-'use client';
-import { cn, humanFileSize } from '@/components/ui';
-import { UploadIcon } from '@radix-ui/react-icons';
-import { ClassValue } from 'clsx';
-import React, { DragEvent, FC } from 'react';
-import { toast } from 'sonner';
+'use client'
+import { cn, humanFileSize } from '@/lib'
+import { UploadIcon } from '@radix-ui/react-icons'
+import { ClassValue } from 'clsx'
+import React, { DragEvent, FC } from 'react'
+import { toast } from 'sonner'
 
-type AcceptProp = `${string}/${string}` | string;
+type AcceptProp = `${string}/${string}` | string
 
 type DragNDropProps = {
   /**
@@ -13,35 +13,35 @@ type DragNDropProps = {
    * @example 'image/*'
    * @author joshuaepstein
    */
-  accept: string;
+  accept: string
   /**
    * Whether or not the input should accept multiple files
    * @example true
    * @author joshuaepstein
    */
-  acceptMultiple?: boolean;
+  acceptMultiple?: boolean
   /**
    * An additional function to be called when a file, or multiple files, are dropped
    * @example (files: File[]) => console.log(files[0].name) // 'my-file.jpg'
    * @author joshuaepstein
    */
-  onDrop?: (files: File[]) => void;
+  onDrop?: (files: File[]) => void
   /**
    * String to be displayed for "Accepted file types:"
    * @example 'PNG, JPEG, JPG, GIF, BMP, TIFF, WebP' // Default: 'Any file type'
    * @default 'Any file type'
    * @author joshuaepstein
    */
-  acceptedFileTypesString?: string;
+  acceptedFileTypesString?: string
   /**
    * File size limit in kilobytes
    */
-  fileSizeLimit?: number;
-};
+  fileSizeLimit?: number
+}
 
 export const DragNDropComponent: FC<
   React.PropsWithChildren<DragNDropProps> & {
-    className?: ClassValue | ClassValue[];
+    className?: ClassValue | ClassValue[]
   }
 > = ({
   children,
@@ -52,33 +52,33 @@ export const DragNDropComponent: FC<
   fileSizeLimit,
   className,
 }) => {
-  const [dragOn, setDragOn] = React.useState(false);
-  const [files, setFiles] = React.useState<File[]>([]);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [dragOn, setDragOn] = React.useState(false)
+  const [files, setFiles] = React.useState<File[]>([])
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleDragOn = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOn(true);
-  };
+    event.preventDefault()
+    setDragOn(true)
+  }
 
   const handleDragOff = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOn(false);
-  };
+    event.preventDefault()
+    setDragOn(false)
+  }
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOn(false);
+    event.preventDefault()
+    setDragOn(false)
 
-    const dropFiles = Array.from(event.dataTransfer.files);
+    const dropFiles = Array.from(event.dataTransfer.files)
 
     if (onDrop) {
-      onDrop(files);
+      onDrop(files)
     }
 
     if (fileSizeLimit) {
-      const fileSizes = dropFiles.map((file) => file.size);
-      const overLimit = fileSizes.some((size) => size > fileSizeLimit * 1024);
+      const fileSizes = dropFiles.map((file) => file.size)
+      const overLimit = fileSizes.some((size) => size > fileSizeLimit * 1024)
 
       if (overLimit) {
         toast.error('One or more files are over the size limit of 2MB', {
@@ -86,21 +86,21 @@ export const DragNDropComponent: FC<
             .filter((file) => file.size > fileSizeLimit * 1024)
             .map((file) => file.name)
             .join(', ')} are over the size limit of 2MB`,
-        });
-        return;
+        })
+        return
       }
     }
 
     if (acceptMultiple) {
       setFiles((prev) => {
-        const newFiles = dropFiles.filter((file) => !prev.some((prevFile) => prevFile.name === file.name));
+        const newFiles = dropFiles.filter((file) => !prev.some((prevFile) => prevFile.name === file.name))
 
-        return [...prev, ...newFiles];
-      });
+        return [...prev, ...newFiles]
+      })
     } else {
-      setFiles(dropFiles);
+      setFiles(dropFiles)
     }
-  };
+  }
 
   return (
     <div
@@ -120,11 +120,11 @@ export const DragNDropComponent: FC<
         type="file"
         accept={accept}
         onChange={(e) => {
-          const files = e.target.files;
+          const files = e.target.files
           if (files) {
-            setFiles(Array.from(files));
+            setFiles(Array.from(files))
             if (onDrop) {
-              onDrop(Array.from(files));
+              onDrop(Array.from(files))
             }
           }
         }}
@@ -136,9 +136,9 @@ export const DragNDropComponent: FC<
         <div
           className="bg-neutralgrey-300 hover:bg-neutralgrey-400 cursor-pointer rounded-lg p-3 transition"
           onClick={(e) => {
-            e.preventDefault();
+            e.preventDefault()
             if (inputRef.current) {
-              inputRef.current.click();
+              inputRef.current.click()
             }
           }}
         >
@@ -150,7 +150,7 @@ export const DragNDropComponent: FC<
             className="cursor-pointer text-blue-900"
             onClick={() => {
               if (inputRef.current) {
-                inputRef.current.click();
+                inputRef.current.click()
               }
             }}
           >
@@ -164,8 +164,8 @@ export const DragNDropComponent: FC<
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const acceptTypeToReadable = (accept: AcceptProp, limit: number = -1) => {
   const mappings: Record<AcceptProp, string> = {
@@ -174,13 +174,13 @@ const acceptTypeToReadable = (accept: AcceptProp, limit: number = -1) => {
     'video/*': 'MP4, AVI, MKV, MOV, WMV, WebM',
     'application/pdf': 'PDF',
     '*/*': 'Any file type',
-  };
+  }
 
   // return mappings[accept] || 'Unknown file type'
   if (mappings[accept] && limit === -1) {
-    return mappings[accept];
+    return mappings[accept]
   } else if (mappings[accept] && limit !== -1) {
-    return mappings[accept].split(',').slice(0, limit).join(', ') + '...';
+    return mappings[accept].split(',').slice(0, limit).join(', ') + '...'
   }
-  return 'Unknown file type';
-};
+  return 'Unknown file type'
+}

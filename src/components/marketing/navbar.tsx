@@ -8,7 +8,5 @@ export default async function Navbar() {
 
   if (!session) return <LoadingNavbar />
 
-  console.log(session)
-
   return <ClientNavbar user={session.user} />
 }

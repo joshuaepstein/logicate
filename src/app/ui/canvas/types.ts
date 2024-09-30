@@ -58,7 +58,7 @@ type OutputItem = {
 
 type Item = GateItem | InputItem | OutputItem
 
-interface Wire {
+type Wire = {
   from: {
     id: string
     node_index: number

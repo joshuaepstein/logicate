@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { AlignLeft02Icon, AlignRight02Icon } from '@jfstech/icons-react/24/outline'
 import { cn } from '@/lib'
-import { OutputType } from './node/type'
+import { OutputType } from './node/outputs/types'
 
 export default function Sidebar({ canvas }: { canvas: LogicateSession }) {
   const [expanded, setExpanded] = useState<boolean>(true)

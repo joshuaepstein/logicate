@@ -19,11 +19,15 @@ export default function Page() {
           <OrGate />
           <XorGate />
           <h1 className="text-neutralgrey-1200 text-center text-5xl font-semibold leading-tight">
-            Build, Simulate, Test
+            <span className="motion-preset-focus-lg motion-delay-300 motion-duration-1000">Build</span>
+            <span className="motion-preset-focus-lg motion-delay-500 motion-duration-1000">, Simulate</span>
+            <span className="motion-preset-focus-lg motion-delay-700 motion-duration-1000">, Test</span>
             <br />
-            <span className="bg-gradient-to-b from-blue-700 to-indigo-600 bg-clip-text font-semibold text-transparent">Logic Gates</span>
+            <span className="motion-preset-focus-lg motion-delay-1000 motion-duration-1000 bg-gradient-to-b from-blue-700 to-indigo-600 bg-clip-text font-semibold text-transparent">
+              Logic Gates
+            </span>
           </h1>
-          <p className="text-neutralgrey-1000/85 mt-6 text-center text-lg">
+          <p className="text-neutralgrey-1000/85 motion-preset-slide-up-lg motion-preset-fade-lg motion-delay-[1200ms] motion-duration-700 mt-6 text-center text-lg">
             A powerful, easy-to-use logic gate simulator for students, hobbyists, and professionals.
           </p>
 

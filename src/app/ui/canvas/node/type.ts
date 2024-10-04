@@ -1,5 +1,6 @@
 import { GateType } from './gates/types'
 import { InputType } from './inputs/types'
+import { OutputType } from './outputs/types'
 
 export type NodeType =
   | {
@@ -14,8 +15,3 @@ export type NodeType =
       type: 'output'
       node: OutputType
     }
-
-export enum OutputType {
-  LIGHT = 'LIGHT',
-  VARIABLE = 'VARIABLE',
-}

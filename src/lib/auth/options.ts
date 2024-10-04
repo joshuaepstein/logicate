@@ -7,6 +7,7 @@ import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from './lock-account'
 import { validatePassword } from './password'
+import { randomAvatar } from '../random'
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
 export const authConfig: NextAuthOptions = {
@@ -119,9 +120,23 @@ export const authConfig: NextAuthOptions = {
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
         })
-        const publicDisplay = await prisma.publicDisplay.findUnique({
+        let publicDisplay = await prisma.publicDisplay.findUnique({
           where: { userId: token.sub },
         })
+
+        if (publicDisplay) {
+          if (publicDisplay.profilePicture === null) {
+            // publicDisplay.profilePicture = `internal:${randomAvatar()}`
+            const updatedProfilePicture = await prisma.publicDisplay.update({
+              where: { userId: token.sub },
+              data: {
+                profilePicture: `internal:${randomAvatar()}`,
+              },
+            })
+
+            publicDisplay = updatedProfilePicture
+          }
+        }
 
         if (refreshedUser) {
           token.user = {
@@ -136,15 +151,31 @@ export const authConfig: NextAuthOptions = {
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
         })
-        const publicDisplay = await prisma.publicDisplay.findUnique({
+        let publicDisplay = await prisma.publicDisplay.findUnique({
           where: { userId: token.sub },
         })
+
+        if (publicDisplay) {
+          if (publicDisplay.profilePicture === null) {
+            // publicDisplay.profilePicture = `internal:${randomAvatar()}`
+            const updatedProfilePicture = await prisma.publicDisplay.update({
+              where: { userId: token.sub },
+              data: {
+                profilePicture: `internal:${randomAvatar()}`,
+              },
+            })
+
+            publicDisplay = updatedProfilePicture
+          }
+        }
 
         if (refreshedUser) {
           token.user = {
             ...refreshedUser,
             publicDisplay: publicDisplay || {},
           }
+        } else {
+          return {}
         }
       }
 
@@ -153,7 +184,7 @@ export const authConfig: NextAuthOptions = {
     session: async ({ session, token }) => {
       session.user = {
         id: token.sub,
-        // @ts-expect-error - token.user is not always defined
+        // @ts-ignore
         ...(token || session).user,
       }
 

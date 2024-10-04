@@ -16,7 +16,7 @@ interface WithSessionHandler {
     req: Request
     params: Record<string, string>
     searchParams: Record<string, string>
-    session: Session
+    session: Omit<Session, 'user'> & { user: Omit<Session['user'], 'password'> }
   }): Promise<Response>
 }
 
@@ -24,7 +24,7 @@ export const withSession =
   (handler: WithSessionHandler) =>
   async (req: NextRequest, { params = {} }: { params: Record<string, string> | undefined }) => {
     try {
-      let session: Session | undefined
+      let session: (Omit<Session, 'user'> & { user: Omit<Session['user'], 'password'> }) | undefined
       const authorizationHeader = req.headers.get('Authorization')
       if (authorizationHeader) {
         if (!authorizationHeader.includes('Bearer ')) {
@@ -54,6 +54,19 @@ export const withSession =
           })
         }
 
+        const publicDisplay = await prisma.publicDisplay.findUnique({
+          where: {
+            userId: user.id,
+          },
+        })
+
+        if (!publicDisplay) {
+          throw new LogicateError({
+            code: 'unauthorized',
+            message: 'Unauthorized: Invalid API Key.',
+          })
+        }
+
         waitUntil(
           prisma.token.update({
             where: { hashedKey },
@@ -72,6 +85,11 @@ export const withSession =
             progressLevel: user.progressLevel,
             updatedAt: user.updatedAt,
             username: user.username,
+            client_showBackground: user.client_showBackground,
+            invalidLoginAttempts: user.invalidLoginAttempts,
+            isAdmin: user.isAdmin,
+            lockedAt: user.lockedAt,
+            publicDisplay: publicDisplay,
           },
         }
       } else {

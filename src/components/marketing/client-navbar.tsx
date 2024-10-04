@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { redirect, usePathname } from 'next/navigation'
 import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
+import ProfilePicture from '@/components/ui/profile-picture/client'
 
 export default function ClientNavbar({
   user,
@@ -30,6 +31,17 @@ export default function ClientNavbar({
           Logicate
         </Link>
         <div className="flex items-center gap-4">
+          <ul className="flex items-center justify-start gap-4">
+            <li
+              className="text-sm transition hover:scale-105 active:scale-95"
+              style={{
+                // make the animation bouncy/spring like
+                transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              }}
+            >
+              <Link href="/changelog">Changelog</Link>
+            </li>
+          </ul>
           <div className="flex items-stretch justify-end gap-4">
             <div
               className="bg-neutralgrey-200 hidden h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md px-2 md:flex"
@@ -47,7 +59,7 @@ export default function ClientNavbar({
                 </Kbd>
               </div>
             </div>
-            {!user ? (
+            {!user || !user.email ? (
               <>
                 <Link
                   href={'/login'}
@@ -79,12 +91,7 @@ export default function ClientNavbar({
                   Dashboard
                 </Link>
 
-                <div
-                  className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(${user.publicDisplay.profilePicture})`,
-                  }}
-                />
+                <ProfilePicture type="user" className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat" user={user} />
               </>
             )}
           </div>

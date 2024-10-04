@@ -26,7 +26,6 @@ export const incrementLoginAttemps = async (user: Pick<User, 'id' | 'email' | 'n
       },
     })
 
-    // TODO: Send email to user that their account has been locked
     const emailResponse = await sendEmail({
       email: user.email,
       subject: 'Account Locked',

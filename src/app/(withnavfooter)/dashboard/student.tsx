@@ -59,10 +59,11 @@ export default async function StudentDashboard({ user }: { user: User }) {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid gap-4">
         {classroom.map((classroom) => (
-          <Link href={`/dashboard/${classroom.id}`} key={classroom.id} className="rounded-lg bg-white p-4">
+          <Link href={`/dashboard/${classroom.id}`} key={classroom.id} className="w-full rounded-lg bg-white p-4">
             <h2 className="text-xl font-medium">{capitalise(classroom.name)}</h2>
+            <p className="text-neutralgrey-800 w-full max-w-4xl text-sm">{classroom.description}</p>
           </Link>
         ))}
       </div>

@@ -17,6 +17,7 @@ const config: Config = {
     require('@igorkowalczyk/is-browser'),
     require('tailwindcss-inner-border'),
     require('@tailwindcss/forms'),
+    require('tailwindcss-motion'),
   ],
   theme: {
     container: {

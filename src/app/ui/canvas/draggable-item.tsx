@@ -3,6 +3,7 @@ import { GateType, gateTypeToIcon } from './node/gates/types'
 import { inputTypeToIcon } from './node/inputs/types'
 import { NodeType } from './node/type'
 import AndBody from './node/gates/and/body'
+import { outputTypeToIcon } from './node/outputs/types'
 
 export const DraggableItem = ({ type }: { type: NodeType }) => {
   return (
@@ -19,7 +20,7 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
           <div
             className="size-6"
             style={{
-              backgroundImage: `url(${type.type === 'gate' ? gateTypeToIcon[type.node] : type.type === 'input' ? inputTypeToIcon[type.node] : ''})`,
+              backgroundImage: `url(${type.type === 'gate' ? gateTypeToIcon[type.node] : type.type === 'input' ? inputTypeToIcon[type.node] : outputTypeToIcon[type.node]})`,
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',

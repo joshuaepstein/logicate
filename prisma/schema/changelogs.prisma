@@ -1,8 +1,14 @@
 model Changelog {
   id        String   @id @default(cuid())
-  title String
-  subtitle String
+  title     String
+  subtitle  String
   additions String[]
-  changes String[]
-  fixes String[]
+  changes   String[]
+  fixes     String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
 }

@@ -35,7 +35,7 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const user = await getUserViaToken(req)
 
   if (
-    !user &&
+    (!user || !user.email) &&
     path !== '/login' &&
     path !== '/register' &&
     !path.startsWith('/auth/reset-password/') &&

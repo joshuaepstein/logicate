@@ -1,9 +1,10 @@
 import { Footer } from '@/components/marketing/footer'
 import Navbar from '@/components/marketing/navbar'
+import ClientProfilePicture, { getProfilePictureSource } from '@/components/ui/profile-picture/client'
 import { Progress } from '@/components/ui/progress'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { capitalise, cn } from '@/lib'
-import { getAvatar, randomAvatar } from '@/lib/random'
+import { getAvatar, getAvatarFromId, randomAvatar } from '@/lib/random'
 import { prisma, User } from '@logicate/database'
 import { camelCase } from 'lodash'
 import { notFound } from 'next/navigation'
@@ -48,12 +49,6 @@ async function getLeaderboard(classroomId: string) {
     },
     take: 10,
   })
-  // duplicate leaderboardUsers to simulate 10 users
-  leaderboardUsers.push(...leaderboardUsers)
-  leaderboardUsers.push(...leaderboardUsers)
-  // now only push 2
-  leaderboardUsers.push(leaderboardUsers[0])
-  leaderboardUsers.push(leaderboardUsers[1])
   return leaderboardUsers
 }
 
@@ -98,7 +93,6 @@ export default async function StudentDashboard({ user, classroomId }: { user: Us
                       'border-ultramarine-600 border': user.id === leaderboardUser.id,
                     })}
                     style={{
-                      backgroundImage: `url(${leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar()})`,
                       ...(user.id === leaderboardUser.id && index !== 0
                         ? {
                             // purple glow
@@ -106,15 +100,14 @@ export default async function StudentDashboard({ user, classroomId }: { user: Us
                           }
                         : index === 0
                           ? {
-                              // gold border using 9-slice texture
                               border: 'none',
-                              backgroundImage: `url(/elements/gold-border.png), url(${leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar()})`,
+                              backgroundImage: `url(/elements/gold-border.png), url(${getProfilePictureSource(leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar())})`,
                               backgroundClip: 'padding-box, content-box',
                               backgroundOrigin: 'border-box, content-box',
                               backgroundPosition: 'center',
                               backgroundRepeat: 'no-repeat',
                               backgroundSize: '100% 100%, contain',
-                              padding: '2px', // Adjust this value to control the border thickness
+                              padding: '2px',
                               imageRendering: 'pixelated',
                             }
                           : {}),
@@ -122,8 +115,10 @@ export default async function StudentDashboard({ user, classroomId }: { user: Us
                   />
                   <h4
                     className={cn('font-medium', {
-                      'text-ultramarine-600': user.id === leaderboardUser.id,
-                      'text-squash-800': index === 0,
+                      'text-ultramarine-600': user.id === leaderboardUser.id && index !== 0,
+                      'text-squash-800': index === 0 && user.id === leaderboardUser.id,
+                      'text-neutralgrey-1000': index !== 0 && user.id !== leaderboardUser.id,
+                      'text-teal-600': index === 0 && user.id !== leaderboardUser.id,
                     })}
                   >
                     {leaderboardUser.name}

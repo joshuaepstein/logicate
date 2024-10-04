@@ -10,12 +10,12 @@ export default async function ChangelogPage() {
 
   return (
     <>
-      <Navbar />
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="relative mx-auto max-w-[37.5rem] pb-20 pt-20 text-center">
-          <h1 className="text-neutralgrey-1100 text-4xl font-extrabold tracking-tight sm:text-5xl">Changelog</h1>
-          <p className="text-neutralgrey-800 mt-4 text-base leading-7">
-            Stay up to date with all of the latest additions and improvements we've made to Tailwind UI.
+        <div className="relative flex flex-col items-center justify-start pb-20 pt-20 text-center">
+          <h1 className="text-neutralgrey-1100 text-4xl font-semibold tracking-tight sm:text-5xl">Changelog</h1>
+          <p className="text-neutralgrey-800 mt-4 max-w-xl text-base leading-7">
+            Stay up to date with the latest changes to Logicate. Subscribe to our newsletter to get the latest updates delivered to your
+            inbox.
           </p>
           {/* TODO: Add to resend thing */}
           <form method="post" className="mt-6 flex justify-center">
@@ -37,9 +37,9 @@ export default async function ChangelogPage() {
                 className="stroke-neutralgrey-600 pointer-events-none absolute left-3 top-2 h-6 w-6"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="M5 7.92C5 6.86 5.865 6 6.931 6h10.138C18.135 6 19 6.86 19 7.92v8.16c0 1.06-.865 1.92-1.931 1.92H6.931A1.926 1.926 0 0 1 5 16.08V7.92Z"></path>
                 <path d="m6 7 6 5 6-5"></path>
@@ -61,7 +61,6 @@ export default async function ChangelogPage() {
           <ChangelogItem key={changelog.id} changelog={changelog} />
         ))}
       </div>
-      <Footer />
     </>
   )
 }
@@ -70,7 +69,12 @@ function ChangelogItem({ changelog }: { changelog: Changelog }) {
   return (
     <section id="2024-07-04" aria-labelledby="2024-07-04-heading" className="md:flex">
       <h2 id="2024-07-04-heading" className="text-neutralgrey-700 pl-7 text-sm leading-6 md:w-1/4 md:pl-0 md:pr-12 md:text-right">
-        <a href="#2024-07-04">July 4, 2024</a>
+        <a href="#2024-07-04">
+          {
+            //July 4, 2024
+            // changelog.
+          }
+        </a>
       </h2>
       <div className="relative pb-16 pl-7 pt-2 md:w-3/4 md:pl-12 md:pt-0">
         <div className="bg-neutralgrey-400 absolute -top-3 bottom-0 left-0 w-px md:top-2.5"></div>

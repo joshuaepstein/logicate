@@ -17,7 +17,8 @@ import { Input } from './node/inputs'
 import { InputType } from './node/inputs/types'
 import { TemporaryInput } from './node/inputs/temporary'
 import { TemporaryGate } from './node/gates/temporary'
-import { NodeType, OutputType } from './node/type'
+import { NodeType } from './node/type'
+import { OutputType } from './node/outputs/types'
 import Sidebar from './sidebar'
 import { Item, Selected, SelectedItem, TypeWire, Wire as WireType } from './types'
 import { ConnectionWire, Wire } from './wire'
@@ -27,6 +28,8 @@ import LoadingCircle from '@/components/ui/icons/loading-circle'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib'
 import FloatingToolbar from './toolbar'
+import { Output } from './node/outputs'
+import { TemporaryOutput } from './node/outputs/temporary'
 
 export default function Canvas({
   sessionId,
@@ -293,7 +296,28 @@ export default function Canvas({
                 setTemporaryWire(null)
                 setHolding(false)
                 break
-              default:
+              case 'output':
+                if (terminalType === 'input') {
+                  parent.inputs.push({
+                    id: temporaryWire.fromId,
+                    node_index: temporaryWire.fromNodeIndex,
+                  })
+                  const wire = {
+                    id: randomWireId(),
+                    from: {
+                      id: temporaryWire.fromId,
+                      node_index: temporaryWire.fromNodeIndex,
+                    },
+                    to: {
+                      id: parentId,
+                      node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                    },
+                    active: false,
+                  } satisfies WireType
+                  addWire(wire)
+                }
+                setTemporaryWire(null)
+                setHolding(false)
                 break
             }
           } else {
@@ -417,62 +441,56 @@ export default function Canvas({
     const newSimulatedWires: { id: string; active: boolean }[] = []
 
     const getValue = (id: string) => {
+      const simulatedItem = newSimulatedItems.find((item) => item.id === id)
+      if (simulatedItem) return simulatedItem.state
       const item = items.find((item) => item.id === id)
       if (!item) return false
+      if (item.itemType === 'input') return item.value
+      return false
+    }
+
+    const simulateItem = (id: string) => {
+      const item = items.find((item) => item.id === id)
+      if (!item) return false
+
       if (item.itemType === 'input') {
         return item.value
-      }
-      return item.computedValue || false
-    }
+      } else if (item.itemType === 'gate' || item.itemType === 'output') {
+        const inputWires = wires.filter((wire) => wire.to.id === id)
+        const inputValues = inputWires.map((wire) => getValue(wire.from.id))
 
-    const visited = new Set<string>()
-    const stack: string[] = []
-
-    const visit = (id: string) => {
-      if (visited.has(id)) return
-      visited.add(id)
-      const item = items.find((item) => item.id === id)
-      if (item) {
-        const outputs = wires.filter((wire) => wire.from.id === id).map((wire) => wire.to.id)
-        outputs.forEach((outputId) => visit(outputId))
-        stack.push(id)
-      }
-    }
-
-    items.forEach((item) => {
-      if (!visited.has(item.id)) {
-        visit(item.id)
-      }
-    })
-
-    while (stack.length > 0) {
-      const id = stack.pop()
-      if (id !== undefined) {
-        const item = items.find((item) => item.id === id)
-        if (item) {
-          if (item.itemType === 'input') {
-            newSimulatedItems.push({ id: item.id, state: item.value })
-          } else if (item.itemType === 'gate' || item.itemType === 'output') {
-            const inputWires = wires.filter((wire) => wire.to.id === item.id)
-            const inputValues = inputWires.map((wire) => getValue(wire.from.id))
-            let computedValue = false
-
-            if (item.itemType === 'output') {
-              computedValue = inputValues[0] || false
-            } else if (item.type in gates) {
-              computedValue = gates[item.type](inputValues)
-            }
-
-            newSimulatedItems.push({ id: item.id, state: computedValue })
-          }
+        if (item.itemType === 'output') {
+          return inputValues[0] || false
+        } else if (item.type in gates) {
+          return gates[item.type](inputValues)
         }
       }
+      return false
+    }
+
+    const maxIterations = items.length * 2 // Prevent infinite loops
+    let iteration = 0
+    let changed = true
+
+    while (changed && iteration < maxIterations) {
+      changed = false
+      iteration++
+
+      items.forEach((item) => {
+        const oldState = getValue(item.id)
+        const newState = simulateItem(item.id)
+
+        if (oldState !== newState) {
+          changed = true
+          newSimulatedItems.push({ id: item.id, state: newState })
+        }
+      })
     }
 
     // Update simulated wires
     wires.forEach((wire) => {
-      const fromItem = newSimulatedItems.find((item) => item.id === wire.from.id)
-      newSimulatedWires.push({ id: wire.id, active: fromItem?.state || false })
+      const fromState = getValue(wire.from.id)
+      newSimulatedWires.push({ id: wire.id, active: fromState })
     })
 
     setSimulatedItemState(newSimulatedItems)
@@ -602,6 +620,22 @@ export default function Canvas({
                   input={item}
                   className={!usingDatabase && !isNew && sessionId !== 'demo' ? 'opacity-0' : 'opacity-100'}
                 />
+              ) : item.itemType === 'output' ? (
+                <Output
+                  key={item.id}
+                  type={item.type}
+                  output={item}
+                  simulated={
+                    simulatedItemState.find((item) => item.id === item.id) ?? {
+                      id: item.id,
+                      state: false,
+                    }
+                  }
+                  outputId={item.id}
+                  value={item.computedValue ?? false}
+                  x={item.x + canvas.x}
+                  y={item.y + canvas.y}
+                />
               ) : null
             )}
           </div>
@@ -633,7 +667,15 @@ export default function Canvas({
               x={draggingNewElement.x}
               y={draggingNewElement.y}
             />
-          ) : null}
+          ) : (
+            <TemporaryOutput
+              canvasZoom={canvas.zoom}
+              type={draggingNewElement.type.node}
+              outputId={'temporary-dragging-logicate-element'}
+              x={draggingNewElement.x}
+              y={draggingNewElement.y}
+            />
+          )}
         </div>
       )}
 

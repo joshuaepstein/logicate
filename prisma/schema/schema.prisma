@@ -73,6 +73,8 @@ model User {
 
   studentClassrooms Classroom[] @relation("StudentClassrooms")
   teacherClassrooms Classroom[] @relation("TeacherClassrooms")
+
+  Changelog Changelog[]
 }
 
 enum Language {

@@ -6,6 +6,7 @@ import { hashPassword } from '@/lib/encrypt'
 import { signIn } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { randomAvatar } from '@/lib/random'
 
 const registerSchema = z.object({
   name: z.string().min(1),
@@ -35,11 +36,14 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
   const existingUserByEmail = await prisma.user.findUnique({
     where: { email },
   })
+  if (existingUserByEmail) {
+    return Failure('A user with this email already exists')
+  }
   const existingUserByUsername = await prisma.user.findUnique({
     where: { username },
   })
-  if (existingUserByEmail || existingUserByUsername) {
-    return Failure('User already exists')
+  if (existingUserByUsername) {
+    return Failure('A user with this username already exists')
   }
 
   if (password.length < 8) {
@@ -64,7 +68,9 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
       password: hashedPassword,
       accountType: 'TEACHER',
       publicDisplay: {
-        create: {},
+        create: {
+          profilePicture: `internal:${randomAvatar()}`,
+        },
       },
     },
   })
@@ -73,18 +79,8 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
     return Failure('Failed to create user')
   }
 
-  try {
-    const login = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
-    if (login) {
-      redirect('/?newLogin=true')
-    }
-  } catch (error) {
-    throw error
-  }
-
-  return Success('User created successfully')
+  return Success('User created successfully', {
+    email,
+    password,
+  })
 }

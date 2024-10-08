@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { cn } from '@/lib';
-import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image';
-import { Dispatch, SetStateAction, useState } from 'react';
-import buildDemo from '~/build_demo.png';
-import learnDemo from '~/learn_demo.png';
-import questionsDemo from '~/questions_demo.png';
-import simulateDemo from '~/simulate_demo.png';
+import { cn } from '@/lib'
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
+import { Dispatch, SetStateAction, useState } from 'react'
+import buildDemo from '~/build_demo.png'
+import learnDemo from '~/learn_demo.png'
+import questionsDemo from '~/questions_demo.png'
+import simulateDemo from '~/simulate_demo.png'
 
 const features = [
   {
@@ -102,10 +102,10 @@ const features = [
     ],
     demo: learnDemo,
   },
-];
+]
 
 export default function Features() {
-  const [selected, setSelected] = useState<(typeof features)[number]['id']>('build');
+  const [selected, setSelected] = useState<(typeof features)[number]['id']>('build')
 
   return (
     <section id="features" className="flex w-full flex-col items-start justify-start gap-10 py-16">
@@ -163,14 +163,14 @@ export default function Features() {
                   >
                     <Image src={feature.demo} alt="Demo" className="shadow-hard-2xs aspect-video w-full rounded-md" />
                   </motion.div>
-                );
+                )
               }
             })}
           </AnimatePresence>
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function FeatureCard({
@@ -180,24 +180,30 @@ function FeatureCard({
   title,
   description,
 }: {
-  id: string;
-  selected: string;
-  setSelected: Dispatch<SetStateAction<string>>;
-  title: string;
-  description: string;
+  id: string
+  selected: string
+  setSelected: Dispatch<SetStateAction<string>>
+  title: string
+  description: string
 }) {
   return (
     <div
       className={cn(
-        'border-b-neutralgrey-600 flex w-full max-w-sm cursor-pointer flex-col items-start justify-start border-b px-4 py-3 transition',
+        'border-b-neutralgrey-600 relative flex w-full max-w-sm cursor-pointer flex-col items-start justify-start border-b px-4 py-3 transition',
         {
-          'border-b-blue-600': selected === id,
+          // 'border-b-blue-600': selected === id,
         }
       )}
       onClick={() => setSelected(id)}
     >
+      <div
+        className={cn('absolute -bottom-px left-0 right-0 h-[1px] bg-blue-600 transition-all duration-700 ease-in-out', {
+          'w-full': selected === id,
+          'left-auto right-0 w-0': selected !== id,
+        })}
+      />
       <h3 className="font-medium">{title}</h3>
       <p className="text-neutralgrey-900 text-xs">{description}</p>
     </div>
-  );
+  )
 }

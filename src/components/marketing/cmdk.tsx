@@ -21,7 +21,7 @@ function CMDKHelper({ showCMDK, setShowCMDK }: { showCMDK: boolean; setShowCMDK:
   }, 1000)
 
   return (
-    <Modal showModal={showCMDK} setShowModal={setShowCMDK} className="sm:max-w-xl">
+    <Modal showModal={showCMDK} setShowModal={setShowCMDK} className="animate-smallZoomIn sm:max-w-xl">
       <Command label="CMDK" loop shouldFilter={false}>
         <Command.Input
           autoFocus

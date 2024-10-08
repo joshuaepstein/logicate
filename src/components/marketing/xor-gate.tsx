@@ -8,7 +8,7 @@ export default function XorGate() {
     <motion.div
       initial={{ opacity: 0, scale: 0.4, rotate: '-17deg' }}
       animate={{ opacity: 1, scale: 1, rotate: '7deg' }}
-      transition={{ delay: 0.2, type: 'spring', stiffness: 450, damping: 8 }}
+      transition={{ delay: 0.4 + 1, type: 'spring', stiffness: 450, damping: 8 }}
       key="xor-gate-animatable"
       className="absolute left-4 top-[30rem] hidden md:block"
       style={{

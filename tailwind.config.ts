@@ -741,6 +741,10 @@ const config: Config = {
           from: { right: '0%' },
           to: { right: '100%' },
         },
+        smallZoomIn: {
+          from: { transform: 'scale(0.98)', opacity: '0', filter: 'blur(2.5px) saturate(0)' },
+          to: { transform: 'scale(1)', opacity: '1', filter: 'blur(0px) saturate(1)' },
+        },
       },
 
       animation: {
@@ -782,6 +786,7 @@ const config: Config = {
         contentShow: 'contentShow 250ms cubic-bezier(0.16, 1, 0.3, 1)',
         slideRight: 'slideRight 250ms cubic-bezier(0.16, 1, 0.3, 1)',
         'scale-in': 'scale-in 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+        smallZoomIn: 'smallZoomIn 0.2s ease',
       },
 
       screens: {

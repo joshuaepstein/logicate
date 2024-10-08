@@ -75,6 +75,8 @@ model User {
   teacherClassrooms Classroom[] @relation("TeacherClassrooms")
 
   Changelog Changelog[]
+
+  Invites Invites[]
 }
 
 enum Language {
@@ -116,4 +118,25 @@ model Classroom {
 
   students User[] @relation("StudentClassrooms")
   teachers User[] @relation("TeacherClassrooms")
+
+  Invites Invites[]
+}
+
+// This stores the outgoing invitations to join a classroom
+// So we need to store a toUser and a fromUser
+model Invites {
+  id          String @id @default(cuid())
+  to          String
+  fromId      String
+  code        String @unique
+  classroomId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expires   DateTime
+
+  accepted Boolean @default(false)
+
+  from      User      @relation(fields: [fromId], references: [id])
+  classroom Classroom @relation(fields: [classroomId], references: [id])
 }

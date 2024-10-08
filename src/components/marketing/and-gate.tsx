@@ -8,7 +8,7 @@ export default function AndGate() {
     <motion.div
       initial={{ opacity: 0, scale: 1.4, rotate: '-20deg' }}
       animate={{ opacity: 1, scale: 1, rotate: '-12deg' }}
-      transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 10, delay: 0 + 1 }}
       key="and-gate-animatable"
       className="absolute left-8 top-36 hidden md:block"
       style={{

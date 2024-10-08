@@ -85,7 +85,7 @@ export default function Modal({
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
           className={cn(
-            'animate-slide-up-fade shadow-hard-sm fixed inset-0 z-[123456789] m-auto hidden max-h-fit w-full max-w-md overflow-hidden rounded-md bg-white p-0 shadow-xl md:block',
+            'shadow-hard-sm fixed inset-0 z-[123456789] m-auto hidden max-h-fit w-full max-w-md overflow-hidden rounded-md bg-white p-0 shadow-xl md:block',
             className
           )}
         >

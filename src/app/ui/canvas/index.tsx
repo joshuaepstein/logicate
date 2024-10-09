@@ -244,12 +244,24 @@ export default function Canvas({
           if (parentId && terminalType) {
             const parent = items.find((item) => item.id === parentId)
             if (!parent) return
+            const nodeIndex = parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0')
+
+            // Check if there's already a wire connected to this input
+            const existingWire = wires.find((wire) => wire.to.id === parentId && wire.to.node_index === nodeIndex)
+
+            if (existingWire && terminalType === 'input') {
+              // If there's already a wire connected to this input, don't add a new one
+              setTemporaryWire(null)
+              setHolding(false)
+              return
+            }
+
             switch (parent.itemType) {
               case 'gate':
                 if (terminalType === 'input') {
                   parent.inputs.push({
                     id: temporaryWire.fromId,
-                    node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                    node_index: nodeIndex,
                   })
                   const wire = {
                     id: randomWireId(),
@@ -259,7 +271,7 @@ export default function Canvas({
                     },
                     to: {
                       id: parentId,
-                      node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                      node_index: nodeIndex,
                     },
                     active: false,
                   } satisfies WireType
@@ -267,7 +279,7 @@ export default function Canvas({
                 } else if (terminalType === 'output') {
                   parent.outputs.push({
                     id: temporaryWire.fromId,
-                    node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                    node_index: nodeIndex,
                   })
                 }
                 setTemporaryWire(null)
@@ -277,7 +289,7 @@ export default function Canvas({
                 if (terminalType === 'output') {
                   parent.outputs.push({
                     id: temporaryWire.fromId,
-                    node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                    node_index: nodeIndex,
                   })
                   const wire = {
                     id: randomWireId(),
@@ -287,7 +299,7 @@ export default function Canvas({
                     },
                     to: {
                       id: parentId,
-                      node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                      node_index: nodeIndex,
                     },
                     active: false,
                   } satisfies WireType
@@ -297,7 +309,7 @@ export default function Canvas({
                 setHolding(false)
                 break
               case 'output':
-                if (terminalType === 'input') {
+                if (terminalType === 'input' && !existingWire) {
                   parent.inputs.push({
                     id: temporaryWire.fromId,
                     node_index: temporaryWire.fromNodeIndex,
@@ -310,7 +322,7 @@ export default function Canvas({
                     },
                     to: {
                       id: parentId,
-                      node_index: parseInt(cursorOn.getAttribute('data-logicate-parent-terminal-index') ?? '0'),
+                      node_index: nodeIndex,
                     },
                     active: false,
                   } satisfies WireType

@@ -128,16 +128,29 @@ export default function Features() {
         <div className="flex w-1/3 flex-col">
           <h3 className="text-neutralgrey-1100 text-3xl font-medium">{features.find((feature) => feature.id === selected)?.title}</h3>
           <p className="text-neutralgrey-900 mt-2 text-sm">{features.find((feature) => feature.id === selected)?.extended_description}</p>
-          <div className="mt-4 flex flex-col gap-4">
-            {features
-              .find((feature) => feature.id === selected)
-              ?.extended_information_list?.map((item) => (
-                <div className="shadow-hard-soft-2xs bg-neutralgrey-100 rounded-md p-4" key={item.title}>
-                  <h4 className="text-neutralgrey-1100 font-[475]">{item.title}</h4>
-                  <p className="text-neutralgrey-900 mt-2 text-sm">{item.description}</p>
-                </div>
-              ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div className="mt-4 flex flex-col gap-4">
+              {features
+                .find((feature) => feature.id === selected)
+                ?.extended_information_list?.map((item) => (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 20,
+                    }}
+                    animate={{
+                      opacity: 100,
+                      y: 0,
+                    }}
+                    className="border-l pl-4"
+                    key={item.title}
+                  >
+                    <h4 className="text-neutralgrey-1100 font-[475]">{item.title}</h4>
+                    <p className="text-neutralgrey-900 mt-2 text-sm">{item.description}</p>
+                  </motion.div>
+                ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
         <div className="flex w-2/3 flex-col">
           <AnimatePresence mode="wait">
@@ -156,7 +169,7 @@ export default function Features() {
                       opacity: 0,
                     }}
                     transition={{
-                      duration: 0.15,
+                      duration: 0.4,
                       stiffness: 300,
                       damping: 30,
                     }}

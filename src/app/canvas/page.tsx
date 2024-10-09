@@ -1,26 +1,36 @@
 import { Footer } from '@/components/marketing/footer'
 import Navbar from '@/components/marketing/navbar'
+import { getSession } from '@/lib/auth/utils'
 import { prisma } from '@logicate/database'
+import { unstable_cache } from 'next/cache'
 import Link from 'next/link'
 
-async function getAllCanvas() {
-  'use server'
-  const canvas = await prisma.logicateSession.findMany()
-  return canvas
-}
+const getAllCanvas = unstable_cache(
+  async (userId: string) => {
+    return prisma.logicateSession.findMany({
+      where: {
+        ownerId: userId,
+      },
+    })
+  },
+  ['canvas'],
+  {
+    revalidate: 3600,
+    tags: ['canvas'],
+  }
+)
 
 export default async function CanvasPage({}) {
-  const canvas = await getAllCanvas()
+  const session = await getSession()
+  const canvas = await getAllCanvas(session.user.id)
 
   return (
     <>
-      <Navbar />
       {canvas.map((c) => (
         <Link href={`/canvas/${c.id}`} key={c.id}>
           {c.id}
         </Link>
       ))}
-      <Footer />
     </>
   )
 }

@@ -1,25 +1,25 @@
 import { getSession } from '@/lib/auth/utils'
 import { prisma } from '@logicate/database'
-import { revalidateTag } from 'next/cache'
+import { revalidateTag, unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import Canvas from '../../ui/canvas'
 
-const getDatabaseSession = async (canvasId: string, userId: string) => {
-  'use server'
-  const canvas = await prisma.logicateSession.findUnique({
-    where: {
-      id: canvasId,
-      ownerId: userId,
-    },
-  })
-  return canvas
-}
-
-async function revalidateData(canvasId: string) {
-  'use server'
-  revalidateTag(`canvas-${canvasId}`)
-}
+const getDatabaseSession = unstable_cache(
+  async (canvasId: string, userId: string) => {
+    return prisma.logicateSession.findUnique({
+      where: {
+        id: canvasId,
+        ownerId: userId,
+      },
+    })
+  },
+  ['canvas'],
+  {
+    revalidate: 3600,
+    tags: ['canvas'],
+  }
+)
 
 export default async function Home({
   params: { canvas },
@@ -31,7 +31,6 @@ export default async function Home({
   const session = await getSession()
   if (!session) notFound()
   const logicateSession = await getDatabaseSession(canvas, session.user.id)
-
   if (!logicateSession) {
     // TODO: Canvas not found design
     return notFound()

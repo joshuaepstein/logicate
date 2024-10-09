@@ -132,7 +132,7 @@ export default function Features() {
             <motion.div className="mt-4 flex flex-col gap-4">
               {features
                 .find((feature) => feature.id === selected)
-                ?.extended_information_list?.map((item) => (
+                ?.extended_information_list?.map((item, index) => (
                   <motion.div
                     initial={{
                       opacity: 0,
@@ -141,6 +141,9 @@ export default function Features() {
                     animate={{
                       opacity: 100,
                       y: 0,
+                    }}
+                    transition={{
+                      delay: 0.1 * index,
                     }}
                     className="border-l pl-4"
                     key={item.title}

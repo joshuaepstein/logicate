@@ -93,8 +93,6 @@ export const Output = forwardRef<
     }
   }, [dragging])
 
-  console.log(simulated.state, value)
-
   return (
     <>
       <div

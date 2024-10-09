@@ -53,6 +53,7 @@ export default function ButtonBody({ input }: { input: InputItem }) {
           cy="15"
           r="11"
           data-logicate-input-content
+          data-logicate-button-clickable
         />
       </g>
     </svg>

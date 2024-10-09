@@ -47,6 +47,9 @@ export const Input = forwardRef<
     (e: React.MouseEvent<HTMLDivElement>) => {
       const target = e.target as HTMLDivElement
       if (target.dataset.logicateBody || target.dataset.logicateInputContent) {
+        if (target.dataset.logicateButtonClickable) {
+          return
+        }
         setDragging(true)
         setOffset({
           x: e.clientX - position.x,

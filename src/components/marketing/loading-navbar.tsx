@@ -7,6 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import LoadingCircle from '../ui/icons/loading-circle'
+import Logo from '../Logo'
 
 export default function LoadingNavbar() {
   const { setShowCMDK } = useContext(AppContext)
@@ -17,7 +18,7 @@ export default function LoadingNavbar() {
   return (
     <>
       <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
-        <p className="font-medium">Logicate</p>
+        <Logo className="h-8 transition hover:scale-105 active:scale-95" />
         <div className="flex items-center gap-4">
           <div className="flex items-stretch justify-end gap-4">
             <div

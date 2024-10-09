@@ -7,6 +7,8 @@ import { getSession } from '@/lib/auth/utils'
 import { unstable_cache } from 'next/cache'
 import { prisma, User } from '@/database'
 import { checkInviteExpired } from '@/lib/invite'
+import Navbar from '@/components/marketing/navbar'
+import { Footer } from '@/components/marketing/footer'
 
 const getInvites = unstable_cache(
   async (user: User) => {
@@ -24,14 +26,17 @@ const getInvites = unstable_cache(
 )
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  // const { user } = await getSession()
+  const sessionPromise = getSession()
   // const invites = (await getInvites(user)).filter((invite) => !invite.accepted && !checkInviteExpired(invite))
-  const hiddenLayoutPages = ['/login', '/register', '/logout', '/canvas']
 
   return (
     <html lang="en">
       <body className={cn(GeistSans.className, GeistMono.className)}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar sessionPromise={sessionPromise} />
+          {children}
+          <Footer />
+        </Providers>
         {/* TODO: Play a ding if */}
       </body>
     </html>

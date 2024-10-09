@@ -9,6 +9,7 @@ import { redirect, usePathname } from 'next/navigation'
 import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
 import ProfilePicture from '@/components/ui/profile-picture/client'
+import Logo from '@/components/Logo'
 
 export default function ClientNavbar({
   user,
@@ -27,8 +28,8 @@ export default function ClientNavbar({
   return (
     <>
       <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
-        <Link href="/" className="font-medium">
-          Logicate
+        <Link href="/">
+          <Logo className="h-8 transition hover:scale-105 active:scale-95" />
         </Link>
         <div className="flex items-center gap-4">
           <ul className="flex items-center justify-start gap-4">

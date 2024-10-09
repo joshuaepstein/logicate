@@ -30,6 +30,7 @@ import { cn } from '@/lib'
 import FloatingToolbar from './toolbar'
 import { Output } from './node/outputs'
 import { TemporaryOutput } from './node/outputs/temporary'
+import LogoIcon from '@/components/Logo'
 
 export default function Canvas({
   sessionId,
@@ -533,12 +534,19 @@ export default function Canvas({
                 duration: 1,
                 ease: 'easeInOut',
               }}
-              className="pointer-events-auto absolute inset-0 z-50 flex cursor-none flex-col items-center justify-center gap-2 bg-black/30"
+              className="pointer-events-auto absolute inset-0 z-[12345678] flex cursor-none flex-col items-center justify-center gap-2"
+              style={{
+                backgroundImage: `url(/grid.png)`,
+                backgroundRepeat: 'repeat',
+                backgroundSize: '50px 50px',
+                backgroundPosition: 'center',
+              }}
             >
-              <LoadingCircle className="size-5" />
+              <LogoIcon className="mb-8 h-12" />
+              <LoadingCircle className="text-neutralgrey-1200 size-5" />
               <div className="flex flex-col items-center justify-center">
-                <p className="text-neutralgrey-100 text-sm font-medium">Loading...</p>
-                <p className="text-neutralgrey-100/50 text-xs">We are loading your data so you can use this canvas.</p>
+                <p className="text-neutralgrey-1100 text-sm font-medium">Loading...</p>
+                <p className="text-neutralgrey-1000/50 text-xs">We are loading your data so you can use this canvas.</p>
               </div>
             </motion.div>
           )) ||

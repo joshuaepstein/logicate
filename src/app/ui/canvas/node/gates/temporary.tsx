@@ -15,6 +15,7 @@ export type TemporaryGateProps = {
   inputs: number
   state: GateState
   gateId: string
+  noAbsolute?: boolean
 }
 
 export const TemporaryGate = forwardRef<
@@ -24,7 +25,7 @@ export const TemporaryGate = forwardRef<
     y: number
     canvasZoom: number
   } & React.HTMLAttributes<HTMLDivElement>
->(({ type, inputs, x, y, state, gateId, canvasZoom, ...rest }, ref) => {
+>(({ type, inputs, noAbsolute, x, y, state, gateId, canvasZoom, ...rest }, ref) => {
   const isInverted = useMemo(() => {
     return inverted.includes(type)
   }, [type])
@@ -51,7 +52,10 @@ export const TemporaryGate = forwardRef<
     <>
       <div
         className={cn(
-          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
+          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none',
+          {
+            static: noAbsolute,
+          }
         )}
         style={{ left: x, top: y, transform: `scale(${canvasZoom})` }}
         tabIndex={-1}

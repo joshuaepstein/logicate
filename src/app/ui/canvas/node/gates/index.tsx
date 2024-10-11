@@ -36,19 +36,7 @@ export const Gate = forwardRef<
     demo: boolean
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, className, demo = false, x, y, state, gateId, ...rest }, ref) => {
-  const {
-    setHolding,
-    canvas,
-    updateItem,
-    updateItemPosition,
-    temporaryWire,
-    setTemporaryWire,
-    selectItemId: select,
-    unselectItemId: unselect,
-    setSelected,
-    setSelectedIds,
-    isSelected,
-  } = useCanvasStore()
+  const { setHolding, canvas, updateItemPosition, setTemporaryWire, setSelectedIds, isSelected } = useCanvasStore()
   const item = useNode(gateId) as GateItem
   const isInverted = useMemo(() => {
     return inverted.includes(type)
@@ -291,17 +279,6 @@ export const Gate = forwardRef<
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center">
-            {/* <span
-              className={cn('min-h-8 w-8 select-none bg-no-repeat', {
-                '-ml-[2px]': inputs > 3,
-                'w-[38px]': isOrType,
-                'w-[40px]': isXorXnorType,
-              })}
-              style={{
-                backgroundImage: `url(${gateTypeToIcon[type]})`,
-              }}
-              data-logicate-body
-            ></span> */}
             {(() => {
               switch (type) {
                 case GateType.AND:

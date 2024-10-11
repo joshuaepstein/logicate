@@ -2,35 +2,14 @@ export default function LightBody() {
   return (
     <svg
       //   class="defaultTheme signal--false"
-      className="pointer-events-auto"
+      className="pointer-events-none"
       style={{
         // "overflow: visible; width: 37px; height: 54px;"
         overflow: 'visible',
         width: '37px',
         height: '54px',
       }}
-    >
-      <defs>
-        <radialGradient id={`defaultTheme-light-bulb-gradient-temporary`}>
-          <stop
-            style={{
-              stopColor: '#ffffff',
-            }}
-            offset="0%"
-          />
-          <stop
-            style={{
-              stopColor: '#1b88e7',
-            }}
-            offset="80%"
-          />
-        </radialGradient>
-      </defs>
-      <path
-        fill={`url(#defaultTheme-light-bulb-gradient-temporary)`}
-        stroke="none"
-        d="M 36 18.5 Q 36 11.25 30.85 6.1 25.75 1 18.5 1 11.25 1 6.1 6.1 1 11.25 1 18.5 1 25.75 6.1 30.85 7 31.75 8 32.55 L 8 32 8 32.55 8 42 29 42 29 32.5 29 32 29 32.5 Q 29.95 31.75 30.85 30.85 36 25.75 36 18.5 M 26.75 21 Q 24.05 28.2 21.3 21 18.6 28.2 15.45 21 12.75 28.2 10 21 L 14.75 41.2 10 21 Q 12.75 28.2 15.45 21 18.6 28.2 21.3 21 24.05 28.2 26.75 21 L 22 41.2 26.75 21 Z"
-      />
+    > 
       <path
         fill="#000000"
         stroke="none"
@@ -45,7 +24,7 @@ export default function LightBody() {
         d="M 22 41.2 L 26.75 21 M 10 21 L 14.75 41.2"
       />
       <path
-        className="stroke-current text-black"
+        className={'stroke-current text-black'}
         stroke="#000000"
         strokeWidth="1"
         strokeLinejoin="round"

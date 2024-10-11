@@ -7,10 +7,11 @@ import Features from '@/components/marketing/sections/features'
 import landingDemo from '~/landing_demo.png'
 import landingGradient from '~/beams.a164b634.png'
 import XorGate from '@/components/marketing/xor-gate'
+import { Container } from '@/components/ui/not-done-yet/container'
 
 export default function Page() {
   return (
-    <>
+    <Container>
       <Image src={landingGradient} alt="Landing Gradient" priority className="absolute top-20 -z-50 md:w-3/4" />
 
       <div className="container">
@@ -43,6 +44,6 @@ export default function Page() {
           <Features />
         </div>
       </div>
-    </>
+    </Container>
   )
 }

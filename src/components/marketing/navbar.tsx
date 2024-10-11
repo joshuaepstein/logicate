@@ -11,7 +11,6 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
   const session = use(sessionPromise)
   const pathname = usePathname()
 
-  if (!session) return <LoadingNavbar />
   if (
     hiddenLayoutPages.some((page) => {
       let path: string = page.replace('%s', '')
@@ -23,7 +22,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
 
   return (
     <Suspense fallback={<LoadingNavbar />}>
-      <ClientNavbar user={session.user} />
+      <ClientNavbar user={session?.user} />
     </Suspense>
   )
 }

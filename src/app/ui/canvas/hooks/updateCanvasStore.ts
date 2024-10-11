@@ -1,9 +1,8 @@
 import { useEffect, useState, useTransition } from 'react'
 import SuperJSON from 'superjson'
-import useCanvasStore, { State } from './useCanvasStore'
+import useCanvasStore from './useCanvasStore'
 import { useDebounce } from 'use-debounce'
 import { getCookie } from 'react-use-cookie'
-import { toast } from 'sonner'
 import { InputType } from '../node/inputs/types'
 
 export const updateDatabase = async (stringData: string, canvasId: string) => {

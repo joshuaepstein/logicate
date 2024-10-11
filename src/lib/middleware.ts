@@ -6,7 +6,7 @@ export const parse = (req: NextRequest) => {
   domain = domain.replace('www.', '').toLowerCase()
   if (domain.endsWith('.vercel.app')) {
     // for local development and preview URLs
-    domain = 'logicate.joshepstein.co.uk'
+    domain = 'logicate'
   }
 
   // path is the path of the URL (e.g. dub.co/stats/github -> /stats/github)

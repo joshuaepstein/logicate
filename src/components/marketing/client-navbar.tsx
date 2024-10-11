@@ -10,6 +10,9 @@ import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
 import ProfilePicture from '@/components/ui/profile-picture/client'
 import Logo from '@/components/Logo'
+import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { P } from '../ui/typography'
+import { signOut } from 'next-auth/react'
 
 export default function ClientNavbar({
   user,
@@ -33,6 +36,15 @@ export default function ClientNavbar({
         </Link>
         <div className="flex items-center gap-4">
           <ul className="flex items-center justify-start gap-4">
+            <li
+              className="text-sm transition hover:scale-105 active:scale-95"
+              style={{
+                // make the animation bouncy/spring like
+                transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              }}
+            >
+              <Link href="/canvas">Your Canvases</Link>
+            </li>
             <li
               className="text-sm transition hover:scale-105 active:scale-95"
               style={{
@@ -92,7 +104,28 @@ export default function ClientNavbar({
                   Dashboard
                 </Link>
 
-                <ProfilePicture type="user" className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat" user={user} />
+                <Popover>
+                  <PopoverTrigger>
+                    <ProfilePicture
+                      type="user"
+                      className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat"
+                      user={user}
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent side="bottom" align="end" className="w-max min-w-0">
+                    <P className="!mt-0 mb-2 font-medium">{user.name}</P>
+                    <button
+                      onClick={() => {
+                        signOut()
+                      }}
+                      className={cn(
+                        'bg-neutralgrey-1100 text-neutralgrey-400 hover:bg-neutralgrey-1000 hover:text-neutralgrey-300 mt-1.5 w-full rounded px-2 py-1 text-left transition duration-150'
+                      )}
+                    >
+                      Logout
+                    </button>
+                  </PopoverContent>
+                </Popover>
               </>
             )}
           </div>

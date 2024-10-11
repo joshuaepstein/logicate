@@ -8,6 +8,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import LogoIcon from '@/components/Logo'
 
 const errorCodes = {
   'no-credentials': 'Invalid email or password',
@@ -70,7 +71,8 @@ export default function LoginForm() {
             toast.success('Logged in successfully', {
               description: `Welcome back, ${email}. Redirecting you to your dashboard...`,
             })
-            router.push(next ?? '/')
+            // redirect to next or / but reload the page as we need to re-render the layout
+            window.location.href = next || '/'
           } else {
             toast.error('No account found with that email address.')
           }
@@ -78,6 +80,7 @@ export default function LoginForm() {
       }}
     >
       <div className="relative flex flex-col items-start justify-start">
+        <LogoIcon className="mb-8 h-8" />
         <h2 className="text-2xl font-medium">Login</h2>
         <p className="text-neutralgrey-800">Enter your details below to login to your account</p>
         <div className="mt-4 flex w-full flex-col items-start justify-start gap-4">

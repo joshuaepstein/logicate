@@ -2,8 +2,6 @@ import { getChangelogs } from './actions'
 import { TextInput } from '@/components/ui/input/index'
 import { Button } from '@/components/ui/button'
 import { Changelog } from '@logicate/database'
-import Navbar from '@/components/marketing/navbar'
-import { Footer } from '@/components/marketing/footer'
 
 export default async function ChangelogPage() {
   const changelogs: Changelog[] = await getChangelogs()
@@ -82,7 +80,11 @@ function ChangelogItem({ changelog }: { changelog: Changelog }) {
         <div className="prose-h3:mb-4 prose-h3:text-base prose-h4:text-base prose-h4:font-medium prose-h3:leading-6 prose-sm prose prose-neutralgrey prose-a:font-semibold prose-a:text-blue-700 hover:prose-a:text-blue-800 max-w-none">
           <h2 className="text-2xl font-semibold">{changelog.title}</h2>
           <p>{changelog.subtitle}</p>
-          <img className="rounded-xl" src="//tailwindui.com/img/changelog/react-server-components.png" alt="React Server Components" />
+          <img
+            className="rounded-xl"
+            src="https://tailwindui.com/plus/img/changelog/20241003-new-pricing-table-example.png"
+            alt="React Server Components"
+          />
           <h4>Additions</h4>
           <ul className="marker:text-neutralgrey-900 list-disc">
             {changelog.additions.map((addition) => (

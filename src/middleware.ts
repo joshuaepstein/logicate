@@ -1,6 +1,7 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 import { parse } from './lib/middleware'
 import { getUserViaToken } from './lib/auth/middleware/get-user-via-token'
+import { get } from '@vercel/edge-config'
 
 export const config = {
   matcher: [
@@ -13,7 +14,7 @@ export const config = {
      * 5. /_vercel (Vercel internals)
      * 6. Static files (e.g. /favicon.ico, /robots.txt, /sitemap.xml, etc.)
      */
-    '/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+).*)',
+    '/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+|maintenance).*)',
   ],
 }
 
@@ -23,11 +24,16 @@ const appRoutes = {
 
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain, path, key, fullPath } = parse(req)
+  const maintenance = await get('isMaintenance')
+
+  if (maintenance === true) {
+    return NextResponse.redirect(new URL('/maintenance', req.url))
+  }
 
   //TODO: If the page is "admin." then redirect to the admin page
 
   for (const [key, value] of Object.entries(appRoutes)) {
-    if (domain === `${key}.logicate.joshepstein.uk` || domain === `${key}.localhost:3000`) {
+    if (domain === `${key}.logicate` || domain === `${key}.localhost:3000`) {
       return NextResponse.rewrite(new URL(`${value}${path}`, req.url))
     }
   }

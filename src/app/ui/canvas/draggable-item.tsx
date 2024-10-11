@@ -4,6 +4,10 @@ import { inputTypeToIcon } from './node/inputs/types'
 import { NodeType } from './node/type'
 import AndBody from './node/gates/and/body'
 import { outputTypeToIcon } from './node/outputs/types'
+import OrBody from './node/gates/or/body'
+import XorBody from './node/gates/xor/body'
+import BufferBody from './node/gates/buffer/body'
+import { TemporaryGate } from './node/gates/temporary'
 
 export const DraggableItem = ({ type }: { type: NodeType }) => {
   return (
@@ -17,7 +21,7 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
           data-logicate-gate-type-type={type.type}
           data-logicate-type={type.node}
         >
-          <div
+          {/* <div
             className="size-6"
             style={{
               backgroundImage: `url(${type.type === 'gate' ? gateTypeToIcon[type.node] : type.type === 'input' ? inputTypeToIcon[type.node] : outputTypeToIcon[type.node]})`,
@@ -25,7 +29,39 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
             }}
-          />
+          /> */}
+
+          {(() => {
+            switch (type.type) {
+              case 'gate':
+                // switch for each gate type to display the body for each
+                switch (type.node) {
+                  case GateType.AND:
+                    return (
+                      <TemporaryGate
+                        type={GateType.AND}
+                        inputs={0}
+                        state={null}
+                        gateId="draggable_and"
+                        x={0}
+                        y={0}
+                        canvasZoom={1}
+                        noAbsolute
+                      />
+                    )
+                  case GateType.OR:
+                    return <OrBody />
+                  case GateType.XOR:
+                    return <XorBody />
+                  case GateType.NOT:
+                    return <BufferBody />
+                  default:
+                    return 'hi'
+                }
+              default:
+                return 'hi'
+            }
+          })()}
         </div>
       </TooltipTrigger>
       <TooltipContent>

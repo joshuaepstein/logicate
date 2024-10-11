@@ -12,6 +12,7 @@ type WireType = {
 }
 
 export const Wire = (props: WireType) => {
+  const { items } = useCanvasStore()
   const { start, end, isActive } = props
 
   const startWireTerminal = getWireTerminalLocation(start.fromId, start.fromIndex, start.fromTerminal)
@@ -46,6 +47,7 @@ export const Wire = (props: WireType) => {
         className={cn('stroke-current text-white', {
           'text-white': !isActive,
           'text-[#1b88e7]': isActive,
+          'text-red-700': items.length === 1,
         })}
       />
     </svg>

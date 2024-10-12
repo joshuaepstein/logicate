@@ -649,7 +649,7 @@ export default function Canvas({
                   type={item.type}
                   output={item}
                   simulated={
-                    simulatedItemState.find((item) => item.id === item.id) ?? {
+                    simulatedItemState.find((item) => item.id === item.id) || {
                       id: item.id,
                       state: false,
                     }

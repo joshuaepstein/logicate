@@ -21,12 +21,14 @@ export const DraggableItem = ({
       type: NodeType
       x: number
       y: number
+      hidden: boolean
     } | null
   ) => void
   draggingNewElement: {
     type: NodeType
     x: number
     y: number
+    hidden: boolean
   } | null
 }) => {
   const { isHolding, setHolding } = useCanvasStore()
@@ -51,16 +53,15 @@ export const DraggableItem = ({
                 const deltaX = Math.abs(moveEvent.clientX - startX)
                 const deltaY = Math.abs(moveEvent.clientY - startY)
 
-                if (deltaX > 5 || deltaY > 5) {
-                  setDraggingNewElement({
-                    type: type,
-                    x: moveEvent.clientX,
-                    y: moveEvent.clientY,
-                  })
-                  setHolding(true)
-                  document.removeEventListener('mousemove', handleMouseMove)
-                  document.removeEventListener('mouseup', handleMouseUp)
-                }
+                setDraggingNewElement({
+                  type: type,
+                  x: moveEvent.clientX,
+                  y: moveEvent.clientY,
+                  hidden: true,
+                })
+                setHolding(true)
+                document.removeEventListener('mousemove', handleMouseMove)
+                document.removeEventListener('mouseup', handleMouseUp)
               }
 
               const handleMouseUp = () => {

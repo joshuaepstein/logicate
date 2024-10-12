@@ -24,12 +24,14 @@ export default function Sidebar({
       type: NodeType
       x: number
       y: number
+      hidden: boolean
     } | null
   ) => void
   draggingNewElement: {
     type: NodeType
     x: number
     y: number
+    hidden: boolean
   } | null
 }) {
   const [expanded, setExpanded] = useState<boolean>(true)

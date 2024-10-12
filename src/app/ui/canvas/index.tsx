@@ -73,6 +73,7 @@ export default function Canvas({
     type: NodeType
     x: number
     y: number
+    hidden: boolean
   } | null>(null)
   const [simulatedItemState, setSimulatedItemState] = useState<
     {
@@ -208,6 +209,7 @@ export default function Canvas({
               ...previous,
               x: mouseX - element.getBoundingClientRect().width / 2,
               y: mouseY - element.getBoundingClientRect().height / 2,
+              hidden: false,
             }
           }
           return null
@@ -665,7 +667,9 @@ export default function Canvas({
       </main>
       {draggingNewElement && (
         <div
-          className="pointer-events-none absolute z-[123456] origin-top-left"
+          className={cn('pointer-events-none absolute z-[123456] origin-top-left', {
+            'opacity-0': draggingNewElement.hidden,
+          })}
           style={{
             width: '1000000px',
           }}

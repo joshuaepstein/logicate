@@ -8,8 +8,29 @@ import OrBody from './node/gates/or/body'
 import XorBody from './node/gates/xor/body'
 import BufferBody from './node/gates/buffer/body'
 import { TemporaryGate } from './node/gates/temporary'
+import useCanvasStore from './hooks/useCanvasStore'
 
-export const DraggableItem = ({ type }: { type: NodeType }) => {
+export const DraggableItem = ({
+  type,
+  draggingNewElement,
+  setDraggingNewElement,
+}: {
+  type: NodeType
+  setDraggingNewElement: (
+    element: {
+      type: NodeType
+      x: number
+      y: number
+    } | null
+  ) => void
+  draggingNewElement: {
+    type: NodeType
+    x: number
+    y: number
+  } | null
+}) => {
+  const { isHolding, setHolding } = useCanvasStore()
+
   return (
     <Tooltip key={type.node}>
       <TooltipTrigger asChild>
@@ -20,8 +41,39 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
           data-logicate-draggable-sidebar
           data-logicate-gate-type-type={type.type}
           data-logicate-type={type.node}
+          onMouseDown={(e) => {
+            if (e.buttons === 1) {
+              // Left mouse button
+              const startX = e.clientX
+              const startY = e.clientY
+
+              const handleMouseMove = (moveEvent: MouseEvent) => {
+                const deltaX = Math.abs(moveEvent.clientX - startX)
+                const deltaY = Math.abs(moveEvent.clientY - startY)
+
+                if (deltaX > 5 || deltaY > 5) {
+                  setDraggingNewElement({
+                    type: type,
+                    x: moveEvent.clientX,
+                    y: moveEvent.clientY,
+                  })
+                  setHolding(true)
+                  document.removeEventListener('mousemove', handleMouseMove)
+                  document.removeEventListener('mouseup', handleMouseUp)
+                }
+              }
+
+              const handleMouseUp = () => {
+                document.removeEventListener('mousemove', handleMouseMove)
+                document.removeEventListener('mouseup', handleMouseUp)
+              }
+
+              document.addEventListener('mousemove', handleMouseMove)
+              document.addEventListener('mouseup', handleMouseUp)
+            }
+          }}
         >
-          {/* <div
+          <div
             className="size-6"
             style={{
               backgroundImage: `url(${type.type === 'gate' ? gateTypeToIcon[type.node] : type.type === 'input' ? inputTypeToIcon[type.node] : outputTypeToIcon[type.node]})`,
@@ -29,9 +81,9 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
             }}
-          /> */}
+          />
 
-          {(() => {
+          {/* {(() => {
             switch (type.type) {
               case 'gate':
                 // switch for each gate type to display the body for each
@@ -61,7 +113,7 @@ export const DraggableItem = ({ type }: { type: NodeType }) => {
               default:
                 return 'hi'
             }
-          })()}
+          })()} */}
         </div>
       </TooltipTrigger>
       <TooltipContent>

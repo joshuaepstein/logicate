@@ -67,6 +67,7 @@ export default function Canvas({
     updateTemporaryWire,
     updatingDatabase,
     updateSelected,
+    currentTool,
   } = useCanvasStore()
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType
@@ -195,6 +196,8 @@ export default function Canvas({
           to: { x: e.clientX, y: e.clientY },
         }))
       }
+      const mouseX = e.clientX
+      const mouseY = e.clientY
 
       if (draggingNewElement && e.buttons === Click.Primary) {
         const element = document.querySelector('[data-logicate-temporary-dragging-node]')
@@ -211,29 +214,27 @@ export default function Canvas({
         })
       }
 
-      const mouseX = e.clientX
-      const mouseY = e.clientY
-      const mouseOverElement = document.elementFromPoint(mouseX, mouseY)
-      if (
-        mouseOverElement &&
-        mouseOverElement.getAttribute('data-logicate-draggable') &&
-        mouseOverElement.getAttribute('data-logicate-draggable-sidebar') &&
-        !isHolding
-      ) {
-        const type = mouseOverElement.getAttribute('data-logicate-gate-type-type')
-        const typeType = mouseOverElement.getAttribute('data-logicate-type')
-        if (type && !draggingNewElement && e.buttons === Click.Primary) {
-          setDraggingNewElement({
-            type: {
-              type: type as NodeType['type'],
-              node: typeType as NodeType['node'],
-            } as NodeType,
-            x: mouseX - 16 / -canvas.zoom,
-            y: mouseY + 16 / -canvas.zoom,
-          })
-          setHolding(true)
-        }
-      }
+      // const mouseOverElement = document.elementFromPoint(mouseX, mouseY)
+      // if (
+      //   mouseOverElement &&
+      //   mouseOverElement.getAttribute('data-logicate-draggable') &&
+      //   mouseOverElement.getAttribute('data-logicate-draggable-sidebar') &&
+      //   !isHolding
+      // ) {
+      //   const type = mouseOverElement.getAttribute('data-logicate-gate-type-type')
+      //   const typeType = mouseOverElement.getAttribute('data-logicate-type')
+      //   if (type && !draggingNewElement && e.buttons === Click.Primary) {
+      //     setDraggingNewElement({
+      //       type: {
+      //         type: type as NodeType['type'],
+      //         node: typeType as NodeType['node'],
+      //       } as NodeType,
+      //       x: mouseX - 16 / -canvas.zoom,
+      //       y: mouseY + 16 / -canvas.zoom,
+      //     })
+      //     setHolding(true)
+      //   }
+      // }
     }
 
     const handleMouseUp = (e: MouseEvent) => {
@@ -552,7 +553,7 @@ export default function Canvas({
           )) ||
             null}
         </AnimatePresence>
-        <Sidebar canvas={logicateSession} />
+        <Sidebar setDraggingNewElement={setDraggingNewElement} draggingNewElement={draggingNewElement} canvas={logicateSession} />
         <FloatingToolbar session={logicateSession} />
         <div
           ref={canvasReference}

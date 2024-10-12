@@ -11,8 +11,27 @@ import { Button } from '@/components/ui/button'
 import { AlignLeft02Icon, AlignRight02Icon } from '@jfstech/icons-react/24/outline'
 import { cn } from '@/lib'
 import { OutputType } from './node/outputs/types'
+import { NodeType } from './node/type'
 
-export default function Sidebar({ canvas }: { canvas: LogicateSession }) {
+export default function Sidebar({
+  canvas,
+  setDraggingNewElement,
+  draggingNewElement,
+}: {
+  canvas: LogicateSession
+  setDraggingNewElement: (
+    element: {
+      type: NodeType
+      x: number
+      y: number
+    } | null
+  ) => void
+  draggingNewElement: {
+    type: NodeType
+    x: number
+    y: number
+  } | null
+}) {
   const [expanded, setExpanded] = useState<boolean>(true)
 
   return (
@@ -80,7 +99,12 @@ export default function Sidebar({ canvas }: { canvas: LogicateSession }) {
               <AccordionContent>
                 <div className="flex flex-wrap items-start justify-between gap-5 p-4">
                   {Object.values(InputType).map((type) => (
-                    <DraggableItem key={type} type={{ type: 'input', node: type }} />
+                    <DraggableItem
+                      setDraggingNewElement={setDraggingNewElement}
+                      draggingNewElement={draggingNewElement}
+                      key={type}
+                      type={{ type: 'input', node: type }}
+                    />
                   ))}
                 </div>
               </AccordionContent>
@@ -90,7 +114,12 @@ export default function Sidebar({ canvas }: { canvas: LogicateSession }) {
               <AccordionContent>
                 <div className="flex flex-wrap items-start justify-between gap-5 p-4">
                   {Object.values(GateType).map((type) => (
-                    <DraggableItem key={type} type={{ type: 'gate', node: type }} />
+                    <DraggableItem
+                      setDraggingNewElement={setDraggingNewElement}
+                      draggingNewElement={draggingNewElement}
+                      key={type}
+                      type={{ type: 'gate', node: type }}
+                    />
                   ))}
                 </div>
               </AccordionContent>
@@ -100,7 +129,12 @@ export default function Sidebar({ canvas }: { canvas: LogicateSession }) {
               <AccordionContent>
                 <div className="flex flex-wrap items-start justify-between gap-5 p-4">
                   {Object.values(OutputType).map((type) => (
-                    <DraggableItem key={type} type={{ type: 'output', node: type }} />
+                    <DraggableItem
+                      setDraggingNewElement={setDraggingNewElement}
+                      draggingNewElement={draggingNewElement}
+                      key={type}
+                      type={{ type: 'output', node: type }}
+                    />
                   ))}
                 </div>
               </AccordionContent>

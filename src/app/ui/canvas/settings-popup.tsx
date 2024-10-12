@@ -182,13 +182,19 @@ export default function SettingsPopup() {
                       <TextInput
                         value={(selectedItem as InputItem | OutputItem).settings.expressionLetter}
                         className="min-w-40"
+                        maxLength={1}
                         onChange={(e) => {
+                          // ensure only one character is allowed
+                          if (e.target.value.length > 1) return
+                          const value = e.target.value.toUpperCase()
+                          // dont allow non-alphabetic characters (but allow empty string)
+                          if (value !== '' && !/^[A-Z]$/.test(value)) return
                           updateItem(selectedItem.id, {
                             ...selectedItem,
                             settings: {
                               ...(selectedItem as InputItem | OutputItem).settings,
                               // @ts-expect-error because we know that the settings are an object with an expressionLetter property
-                              expressionLetter: e.target.value as Alphabet,
+                              expressionLetter: value as Alphabet,
                             },
                           })
                           updateSelected()

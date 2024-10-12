@@ -9,6 +9,8 @@ import ButtonBody from './button/body'
 import SwitchBody from './switch/body'
 import ClockBody from './clock/body'
 import HighConstantBody from './constant/high/body'
+import VariableBody from './variable/body'
+import LowConstantBody from './constant/low/body'
 
 export type InputProps = {
   type: InputType
@@ -179,7 +181,11 @@ export const Input = forwardRef<
           className={cn(
             'flex min-h-[30px] w-[30px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100',
             {
-              'size-[42px]': type === InputType.BUTTON || type === InputType.HIGH_CONSTANT,
+              'size-[42px]':
+                type === InputType.BUTTON ||
+                type === InputType.HIGH_CONSTANT ||
+                type === InputType.LOW_CONSTANT ||
+                type === InputType.VARIABLE,
               'h-[52px] w-[42px]': type === InputType.SWITCH,
               'h-[36px] w-[44px]': type === InputType.CLOCK,
             }
@@ -202,6 +208,10 @@ export const Input = forwardRef<
                   return <ClockBody input={input} />
                 case InputType.HIGH_CONSTANT:
                   return <HighConstantBody input={input} />
+                case InputType.LOW_CONSTANT:
+                  return <LowConstantBody input={input} />
+                case InputType.VARIABLE:
+                  return <VariableBody input={input} />
                 default:
                   return null
               }

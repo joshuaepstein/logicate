@@ -18,9 +18,11 @@ export interface State {
     progress?: number
   }
   recentActions: []
+  currentTool: 'select' | 'drag-canvas'
 }
 
 interface Actions {
+  setCurrentTool: (tool: State['currentTool']) => void
   setWires: (wires: Wire[]) => void
   addWire: (wire: Wire) => void
   removeWire: (wire: Wire) => void
@@ -72,6 +74,8 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     lastUpdated: 0,
   },
   recentActions: [],
+  currentTool: 'select',
+  setCurrentTool: (tool) => set({ currentTool: tool }),
   setWires: (wires) => set({ wires }),
   addWire: (wire) => set((state) => ({ wires: [...state.wires, wire] })),
   removeWire: (wire) => set((state) => ({ wires: state.wires.filter((w) => w.id !== wire.id) })),

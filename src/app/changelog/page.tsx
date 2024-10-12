@@ -16,7 +16,6 @@ export default async function ChangelogPage() {
             Stay up to date with the latest changes to Logicate. Subscribe to our newsletter to get the latest updates delivered to your
             inbox.
           </p>
-          {/* TODO: Add to resend thing */}
           <SubscribeForm />
         </div>
       </div>

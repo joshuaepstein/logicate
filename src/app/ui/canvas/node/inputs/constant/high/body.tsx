@@ -4,7 +4,7 @@ import { darkerColour, lighterColour } from '@/lib/color'
 import { MouseEvent, useCallback } from 'react'
 import useCanvasStore from '../../../../hooks/useCanvasStore'
 
-export default function HighConstantBody({ input }: { input: InputItem }) {
+export default function HighConstantBody({ input }: { input?: InputItem }) {
   const { updateItem } = useCanvasStore()
 
   return (
@@ -18,7 +18,7 @@ export default function HighConstantBody({ input }: { input: InputItem }) {
     >
       <path
         d="M4.3 6.1H0V2.75L1.85 2.65C2.48333 2.58333 3 2.45 3.4 2.25C3.86667 2.01667 4.21667 1.71667 4.45 1.35C4.68333 0.983333 4.81667 0.533333 4.85 0H9.4V21H4.3V6.1Z"
-        fill="black"
+        fill={(input && input.settings.color) || '#000'}
       />
     </svg>
   )

@@ -1,1 +1,1 @@
-export const hiddenLayoutPages = ['/login', '/register', '/logout', '/canvas/%s']
+export const hiddenLayoutPages = ['/login', '/register', '/logout', '/canvas/%s', '/maintenance']

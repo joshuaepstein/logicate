@@ -43,6 +43,10 @@ const config: Config = {
       // hard-soft should have the border which comes with the hard shadow but a soft shadow underneath it
       'hard-soft-2xs':
         '0px 0px 0px 1px rgba(10, 0, 11, 0.05), 0px 2px 5px 0px rgba(10, 9, 11, 0.025), 0px 2px 5px -2px rgba(10, 9, 11, 0.01)',
+      'hard-soft-xs': '0px 0px 0px 1px rgba(10, 9, 11, 0.05), 0px 2px 4px -1px #0A090B05, 0px 5px 13px -5px #0A090B0D',
+      'hard-soft-sm': '0px 0px 0px 1px rgba(10, 9, 11, 0.05), 0px 10px 18px -2px #0A090B12',
+      'hard-soft-md': '0px 0px 0px 1px rgba(10, 9, 11, 0.05), 0px 0px 3px -1px #0A090B0A, 0px 11px 24px -9px #0A090B24',
+      'hard-soft-lg': '0px 0px 0px 1px rgba(10, 9, 11, 0.05), 0px 0px 3px -1px #0A090B0A, 0px 32px 33px -15px #0A090B2B',
 
       button:
         '0px 0px 0px 1px rgba(10, 9, 11, 0.05), 0px 2px 2px -1px rgba(10, 9, 11, 0.04), 0px 2px 12px -1px rgba(10, 9, 11, 0.10), 0 0 14px 0 hsla(0,0%,100%,.19), inset 0 -2px 2px 0 rgba(0,0,0,.2), inset 0 2px 2px 0 #ffffff50',

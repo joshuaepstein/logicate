@@ -5,21 +5,14 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import Canvas from '../../ui/canvas'
 
-const getDatabaseSession = unstable_cache(
-  async (canvasId: string, userId: string) => {
-    return prisma.logicateSession.findUnique({
-      where: {
-        id: canvasId,
-        ownerId: userId,
-      },
-    })
-  },
-  ['canvas'],
-  {
-    revalidate: 3600,
-    tags: ['canvas'],
-  }
-)
+const getDatabaseSession = async (canvasId: string, userId: string) => {
+  return prisma.logicateSession.findUnique({
+    where: {
+      id: canvasId,
+      ownerId: userId,
+    },
+  })
+}
 
 export default async function Home({
   params: { canvas },

@@ -44,7 +44,7 @@ const useUpdateCanvasStore = (canvasId: string) => {
     if (getCookie(`autoSave-${canvasId}`) === 'false') return
     if (debouncedCanvasStore.items.length === 0 && debouncedCanvasStore.wires.length === 0) {
       // TODO: confirm with user if they want to continue and remove all data
-      return
+      // return
     }
     const stringified = SuperJSON.stringify(debouncedCanvasStore)
     if (stringified === cachedDatabase) return

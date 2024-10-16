@@ -4,7 +4,7 @@ import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from '@jfstech/i
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/input/index'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useCanvasStore from './hooks/useCanvasStore'
 import { defaultInputs } from './node/gates/constants'
 import { GateItem, InputItem, OutputItem, Selected } from './types'
@@ -15,12 +15,17 @@ export default function SettingsPopup() {
   const { selected, updateItem, updateSelected } = useCanvasStore()
   const [selectedItem, setSelectedItem] = useState<Selected | null>(null)
   const [minimized, setMinimized] = useState(true)
+  const expressionLetterRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (selected.length === 1) {
       if (selected[0]) {
         if (selectedItem?.id !== selected[0].id) {
           setMinimized(true)
+          // clear expressionLetterRef content
+          if (expressionLetterRef.current) {
+            expressionLetterRef.current.value = ''
+          }
         }
         setSelectedItem(selected[0])
       }
@@ -183,6 +188,7 @@ export default function SettingsPopup() {
                         value={(selectedItem as InputItem | OutputItem).settings.expressionLetter}
                         className="min-w-40"
                         maxLength={1}
+                        ref={expressionLetterRef}
                         onChange={(e) => {
                           // ensure only one character is allowed
                           if (e.target.value.length > 1) return

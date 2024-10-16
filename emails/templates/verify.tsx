@@ -1,4 +1,4 @@
-import { Body, Button, Container, Head, Html, Preview, Section, Tailwind, Text } from '@react-email/components'
+import { Body, Button, Container, Head, Html, Link, Preview, Section, Tailwind, Text } from '@react-email/components'
 import { styles } from '../global_styles'
 import { Footer } from '../_components/footer'
 import LogoIcon from '../_components/logo'
@@ -8,35 +8,42 @@ interface Props {
     email: string
     name: string
   }
-  unlockUrl: string
+  verifyUrl: string
 }
 
-export default function AccountLockedEmail({
+export default function VerifyEmail({
   user = { name: 'Joshua Epstein', email: 'josh@joshepstein.co.uk' },
-  unlockUrl = 'http://localhost:3000',
+  verifyUrl = 'http://localhost:3000',
 }: Props) {
   return (
     <Tailwind>
       <Html>
         <Head />
-        <Preview>Your account has been locked due to too many sign in attempts</Preview>
+        <Preview>Please verify your new account on Logicate.</Preview>
         <Body>
           <Section style={styles.main}>
             <Container style={styles.container}>
               <Section style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
                 <LogoIcon className="h-8" />
               </Section>
-              <Text style={styles.h1}>Locked Account</Text>
+              <Text style={styles.h1}>Verify Your Account</Text>
               <Text style={styles.text}>Hello {user.name},</Text>
               <Text style={styles.text}>
-                We have detected too many sign in attempts on your account. For your security, we have locked your account. Please click the
-                link below to verify your identity and unlock your account.
+                Thank you for registering with Logicate. To complete your registration, please verify your email address by clicking the
+                button below.
               </Text>
               <Section style={{ textAlign: 'center' }}>
-                <Button style={styles.btn} href={unlockUrl} className="mb-4 mt-3">
+                <Button style={styles.btn} href={verifyUrl} className="mt-3">
                   Unlock Account
                 </Button>
               </Section>
+              <Text style={styles.text}>
+                <br />
+                or copy and paste this URL into your browser:{' '}
+                <Link href={verifyUrl} target="_blank" style={styles.link} rel="noreferrer">
+                  {verifyUrl}
+                </Link>
+              </Text>
               <Text style={styles.text} className="">
                 Thank you for using Logicate,
                 <br />
@@ -45,7 +52,7 @@ export default function AccountLockedEmail({
               <Footer
                 email={user.email}
                 service="Authentication"
-                reasonForEmail="This email was sent to you due to unwanted access to your existing account. If you would like to speak to our security team, please email security@logicate.joshepstein.co.uk"
+                reasonForEmail="You were sent this email because you registered for a new account on Logicate. If you did not register, please ignore this email or contact us at security@logicate.joshepstein.co.uk"
               />
             </Container>
           </Section>

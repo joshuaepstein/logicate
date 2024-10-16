@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Item, Selected, SelectedItem, SelectedWire, TempWire, Wire } from '../types'
+import { Alphabet, Item, Selected, SelectedItem, SelectedWire, TempWire, Wire } from '../types'
 
 export interface State {
   wires: Wire[]
@@ -19,6 +19,12 @@ export interface State {
   }
   recentActions: []
   currentTool: 'select' | 'drag-canvas'
+  // variableValues: Record<Alphabet, boolean>
+  // variableValues should be a record of alphabet and boolean values but it shoudl be able to be empty or only have lenghts as it wants
+  variableValues: {
+    letter: Alphabet
+    value: boolean
+  }[]
 }
 
 interface Actions {
@@ -56,6 +62,15 @@ interface Actions {
   updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void
   updateSelected: () => void
   setUpdatingDatabase: ({ is, lastUpdated, progress }: { is: boolean; lastUpdated: number | null; progress?: number }) => void
+  setVariableValues: (
+    values: {
+      letter: Alphabet
+      value: boolean
+    }[]
+  ) => void
+  addVariableValue: (letter: Alphabet, value: boolean) => void
+  setVariableValue: (letter: Alphabet, value: boolean) => void
+  removeVariableValue: (letter: Alphabet) => void
 }
 
 const useCanvasStore = create<State & Actions>((set, get) => ({
@@ -75,6 +90,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   },
   recentActions: [],
   currentTool: 'select',
+  variableValues: [],
   setCurrentTool: (tool) => set({ currentTool: tool }),
   setWires: (wires) => set({ wires }),
   addWire: (wire) => set((state) => ({ wires: [...state.wires, wire] })),
@@ -173,6 +189,11 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
         .filter((item): item is Selected => item !== null),
     })),
   setUpdatingDatabase: ({ is, lastUpdated, progress }) => set({ updatingDatabase: { is, lastUpdated, progress } }),
+  setVariableValues: (values) => set({ variableValues: values }),
+  addVariableValue: (letter, value) => set((state) => ({ variableValues: [...state.variableValues, { letter, value }] })),
+  setVariableValue: (letter, value) =>
+    set((state) => ({ variableValues: state.variableValues.map((v) => (v.letter === letter ? { ...v, value } : v)) })),
+  removeVariableValue: (letter) => set((state) => ({ variableValues: state.variableValues.filter((v) => v.letter !== letter) })),
 }))
 
 export default useCanvasStore

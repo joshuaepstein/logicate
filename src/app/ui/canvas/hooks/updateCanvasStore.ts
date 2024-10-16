@@ -4,6 +4,7 @@ import useCanvasStore from './useCanvasStore'
 import { useDebounce } from 'use-debounce'
 import { getCookie } from 'react-use-cookie'
 import { InputType } from '../node/inputs/types'
+import { useBeforeunload } from 'react-beforeunload'
 
 export const updateDatabase = async (stringData: string, canvasId: string) => {
   const { updatingDatabase, setUpdatingDatabase } = useCanvasStore.getState()
@@ -39,6 +40,10 @@ const useUpdateCanvasStore = (canvasId: string) => {
     }
   ) // Will update the database every 5 seconds
   const [fetching, useFetch] = useTransition() // Allows us to run an async function while keeping track of the state of the function.
+
+  // if (fetching) {
+  // useBeforeunload(() => 'Are you sure you want to leave this page? You will lose all unsaved changes......')
+  // }
 
   useEffect(() => {
     if (getCookie(`autoSave-${canvasId}`) === 'false') return

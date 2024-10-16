@@ -31,6 +31,7 @@ import FloatingToolbar from './toolbar'
 import { Output } from './node/outputs'
 import { TemporaryOutput } from './node/outputs/temporary'
 import LogoIcon from '@/components/Logo'
+import VariableControls from './variable-controls'
 
 export default function Canvas({
   sessionId,
@@ -53,6 +54,7 @@ export default function Canvas({
     setSelected,
     setItemsSelected,
     wires,
+    variableValues,
     setWires,
     setItems,
     select,
@@ -101,7 +103,6 @@ export default function Canvas({
   const { CanvasActions, confirmClear, setConfirmClear } = useCanvasActions(sessionId)
   useDisableHook(canvasReference)
   useUpdateCanvasStore(logicateSession.id)
-  useBeforeunload(() => 'Are you sure you want to leave this page? You will lose all unsaved changes......')
   const [preinstalled_opacity, setPreinstalledOpacity] = useState<Item[]>([])
 
   useEffect(() => {
@@ -452,7 +453,7 @@ export default function Canvas({
   })
 
   const simulate = useCallback(() => {
-    const { items, wires } = useCanvasStore.getState()
+    const { items, wires, variableValues } = useCanvasStore.getState()
     const newSimulatedItems: { id: string; state: boolean }[] = []
     const newSimulatedWires: { id: string; active: boolean }[] = []
 
@@ -461,7 +462,13 @@ export default function Canvas({
       if (simulatedItem) return simulatedItem.state
       const item = items.find((item) => item.id === id)
       if (!item) return false
-      if (item.itemType === 'input') return item.value
+      if (item.itemType === 'input') {
+        if (item.type === InputType.VARIABLE) {
+          const variableValue = variableValues.find((v) => v.letter === item.settings.expressionLetter)
+          return variableValue?.value || false
+        }
+        return item.value
+      }
       return false
     }
 
@@ -470,6 +477,10 @@ export default function Canvas({
       if (!item) return false
 
       if (item.itemType === 'input') {
+        if (item.type === InputType.VARIABLE) {
+          const variableValue = variableValues.find((v) => v.letter === item.settings.expressionLetter)
+          return variableValue?.value || false
+        }
         return item.value
       } else if (item.itemType === 'gate' || item.itemType === 'output') {
         const inputWires = wires.filter((wire) => wire.to.id === id)
@@ -478,6 +489,10 @@ export default function Canvas({
         if (item.itemType === 'output') {
           return inputValues[0] || false
         } else if (item.type in gates) {
+          // if the item has a custom input number set and there aren't the same number as actual inputs, then it should be false
+          if (item.settings.inputs !== item.inputs.length - 1) {
+            return false
+          }
           return gates[item.type](inputValues)
         }
       }
@@ -515,7 +530,7 @@ export default function Canvas({
 
   useEffect(() => {
     simulate()
-  }, [items, wires])
+  }, [items, wires, variableValues])
 
   return (
     <>
@@ -649,13 +664,13 @@ export default function Canvas({
                   type={item.type}
                   output={item}
                   simulated={
-                    simulatedItemState.find((item) => item.id === item.id) || {
+                    simulatedItemState.find((item1) => item1.id === item.id) || {
                       id: item.id,
                       state: false,
                     }
                   }
                   outputId={item.id}
-                  value={item.computedValue ?? false}
+                  value={item.computedValue || false}
                   x={item.x + canvas.x}
                   y={item.y + canvas.y}
                 />
@@ -663,6 +678,7 @@ export default function Canvas({
             )}
           </div>
         </div>
+        <VariableControls />
         {CanvasActions}
       </main>
       {draggingNewElement && (

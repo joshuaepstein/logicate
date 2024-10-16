@@ -1,8 +1,63 @@
 import { GateType } from './node/gates/types'
 import { InputType } from './node/inputs/types'
-import { OutputType } from './node/type'
+import { OutputType } from './node/outputs/types'
 
-type Alphabet = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J'
+type Alphabet =
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'I'
+  | 'J'
+  | 'K'
+  | 'L'
+  | 'M'
+  | 'N'
+  | 'O'
+  | 'P'
+  | 'Q'
+  | 'R'
+  | 'S'
+  | 'T'
+  | 'U'
+  | 'V'
+  | 'W'
+  | 'X'
+  | 'Y'
+  | 'Z'
+
+export enum AlphabetEnum {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  F = 'F',
+  G = 'G',
+  H = 'H',
+  I = 'I',
+  J = 'J',
+  K = 'K',
+  L = 'L',
+  M = 'M',
+  N = 'N',
+  O = 'O',
+  P = 'P',
+  Q = 'Q',
+  R = 'R',
+  S = 'S',
+  T = 'T',
+  U = 'U',
+  V = 'V',
+  W = 'W',
+  X = 'X',
+  Y = 'Y',
+  Z = 'Z',
+}
 
 type ConnectedNode = {
   id: string

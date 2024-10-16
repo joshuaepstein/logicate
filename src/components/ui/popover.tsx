@@ -21,7 +21,7 @@ const PopoverContent = React.forwardRef<
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        'border-neutralgrey-400 bg-base-white text-neutralgrey-1300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-neutralgrey-1100 dark:bg-neutralgrey-1300 dark:text-neutralgrey-100 z-50 w-72 rounded-md border p-4 shadow-md outline-none',
+        'border-neutralgrey-400 bg-base-white text-neutralgrey-1300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-neutralgrey-1100 dark:bg-neutralgrey-1300 dark:text-neutralgrey-100 z-[123456789] w-72 rounded-md border p-4 shadow-md outline-none',
         {
           'origin-top-right': align === 'end' && props.side === 'bottom',
         },

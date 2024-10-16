@@ -1,7 +1,7 @@
 import { cn } from '@/lib'
 import { InputItem } from '../../../types'
 import { darkerColour, lighterColour } from '@/lib/color'
-import { MouseEvent, useCallback } from 'react'
+import { MouseEvent, useCallback, useEffect } from 'react'
 import useCanvasStore from '../../../hooks/useCanvasStore'
 
 export default function ButtonBody({ input }: { input: InputItem }) {
@@ -19,12 +19,23 @@ export default function ButtonBody({ input }: { input: InputItem }) {
     })
   }, [input.id, input.value, updateItem])
 
+  useEffect(() => {
+    if (input.value === true) {
+      document.addEventListener('mouseup', handleClickUp)
+    } else {
+      document.removeEventListener('mouseup', handleClickUp)
+    }
+
+    return () => {
+      document.removeEventListener('mouseup', handleClickUp)
+    }
+  }, [input.value])
+
   return (
     <svg
       style={{ overflow: 'visible', width: '30px', height: '30px' }}
       className={cn('pointer-events-auto')}
       onMouseDown={handleClickDown}
-      onMouseUp={handleClickUp}
       data-logicate-input-content
     >
       <g>

@@ -47,7 +47,7 @@ export default function Sidebar({
         animate={expanded ? 'expanded' : 'collapsed'}
         exit="collapsed"
         className={cn(
-          'border-neutralgrey-400 shadow-hard-sm fixed z-[12345] my-10 ml-4 h-full w-0 overflow-y-hidden rounded-xl border-r bg-white transition-all duration-300 md:w-[35%] lg:w-[25%] xl:w-[15%]'
+          'border-neutralgrey-400 shadow-hard-sm fixed z-[12345] my-4 ml-4 h-full max-h-[calc(100dvh-(16px*2))] w-0 overflow-y-hidden rounded-xl border-r bg-white transition-all duration-300 md:w-[35%] lg:w-[25%] xl:w-[15%]'
         )}
       >
         <div
@@ -95,7 +95,7 @@ export default function Sidebar({
           exit="collapsed"
           key="accordion_wrapper"
         >
-          <Accordion type="multiple" className={cn('min-h-[calc(100dvh-5rem-72px)] overflow-y-scroll text-nowrap')}>
+          <Accordion type="multiple" className={cn('min-h-[calc(100dvh-5rem-72px+(16px*3))] overflow-y-scroll text-nowrap')}>
             <AccordionItem value="inputs">
               <AccordionTrigger>Inputs</AccordionTrigger>
               <AccordionContent>

@@ -1,6 +1,5 @@
 import { getSession } from '@/lib/auth/utils'
 import { prisma } from '@logicate/database'
-import { revalidateTag, unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import Canvas from '../../ui/canvas'

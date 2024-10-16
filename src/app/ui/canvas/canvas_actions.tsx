@@ -47,21 +47,6 @@ export default function useCanvasActions(canvasId: string) {
             <>
               <Button
                 className="mr-2"
-                variant={autoSaving ? 'primary' : 'dark'}
-                size="icon-sm"
-                onClick={() => {
-                  setAutoSave(autoSave === 'true' ? 'false' : 'true')
-                  if (autoSave === 'true') {
-                    toast.info('Auto Save Disabled')
-                  } else {
-                    toast.info('Auto Save Enabled')
-                  }
-                }}
-              >
-                <FavouriteIcon className="size-5" />
-              </Button>
-              <Button
-                className="mr-2"
                 variant="green"
                 size="icon-sm"
                 disabled={updating || loadingSave}
@@ -84,48 +69,6 @@ export default function useCanvasActions(canvasId: string) {
               </Button>
             </>
           )}
-          <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
-            <DialogTrigger asChild>
-              <Button className="mr-2" variant="destructive-primary" size="icon-sm">
-                <Eraser01Icon className="size-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure you want to clear the canvas?</DialogTitle>
-                <DialogDescription className="text-neutralgrey-900 text-sm">
-                  This will clear all components and wires on the canvas. You cannot undo this action.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  variant="destructive-primary"
-                  onClick={() => {
-                    setItems([])
-                    setWires([])
-                    setConfirmClear(false)
-                  }}
-                >
-                  Clear Canvas
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <Button
-            onClick={() => {
-              setCanvas({
-                x: 0,
-                y: 0,
-                zoom: 1,
-              })
-            }}
-            className="mr-2"
-            variant="dark"
-            size="icon-sm"
-            title="Center Canvas"
-          >
-            <CenterIcon className="size-5" />
-          </Button>
         </div>
       </div>
     ),

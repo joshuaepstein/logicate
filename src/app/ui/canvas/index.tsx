@@ -2,8 +2,7 @@
 import { LogicateSession, User } from '@logicate/database'
 import { Click } from '@/lib/buttons'
 import { randomGateId, randomWireId } from '@/lib/id'
-import { use, useCallback, useEffect, useRef, useState } from 'react'
-import { useBeforeunload } from 'react-beforeunload'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import BackgroundElement from './background-element'
 import useCanvasActions from './canvas_actions'
@@ -20,7 +19,7 @@ import { TemporaryGate } from './node/gates/temporary'
 import { NodeType } from './node/type'
 import { OutputType } from './node/outputs/types'
 import Sidebar from './sidebar'
-import { Item, Selected, SelectedItem, TypeWire, Wire as WireType } from './types'
+import { Alphabet, Item, TypeWire, Wire as WireType } from './types'
 import { ConnectionWire, Wire } from './wire'
 import { gates } from './node'
 import Cookies from 'js-cookie'
@@ -70,6 +69,7 @@ export default function Canvas({
     updatingDatabase,
     updateSelected,
     currentTool,
+    setVariableValues,
   } = useCanvasStore()
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType
@@ -113,6 +113,7 @@ export default function Canvas({
       // TODO: Refactor this so that the server generates a new "ticket" when the canvas is updated when the client should check if is the most recent one. (e.g. the logicateSession stores the currentSession and cookies stores the current one and if they dont match then update.)
       setItems(logicateSession.items as Item[])
       setWires(logicateSession.wires as unknown as TypeWire[])
+      setVariableValues(logicateSession.variableValues as unknown as { letter: Alphabet; value: boolean }[])
       setPreinstalledOpacity(logicateSession.items as Item[])
       setUsedDatabase(true)
     }
@@ -463,11 +464,10 @@ export default function Canvas({
       const item = items.find((item) => item.id === id)
       if (!item) return false
       if (item.itemType === 'input') {
-        if (item.type === InputType.VARIABLE) {
-          const variableValue = variableValues.find((v) => v.letter === item.settings.expressionLetter)
-          return variableValue?.value || false
+        if (item.type === InputType.VARIABLE && item.settings.expressionLetter) {
+          return variableValues.some((v) => v.letter === item.settings.expressionLetter && v.value)
         }
-        return item.value
+        return item.value || false
       }
       return false
     }
@@ -477,11 +477,10 @@ export default function Canvas({
       if (!item) return false
 
       if (item.itemType === 'input') {
-        if (item.type === InputType.VARIABLE) {
-          const variableValue = variableValues.find((v) => v.letter === item.settings.expressionLetter)
-          return variableValue?.value || false
+        if (item.type === InputType.VARIABLE && item.settings.expressionLetter) {
+          return variableValues.some((v) => v.letter === item.settings.expressionLetter && v.value)
         }
-        return item.value
+        return item.value || false
       } else if (item.itemType === 'gate' || item.itemType === 'output') {
         const inputWires = wires.filter((wire) => wire.to.id === id)
         const inputValues = inputWires.map((wire) => getValue(wire.from.id))
@@ -489,8 +488,8 @@ export default function Canvas({
         if (item.itemType === 'output') {
           return inputValues[0] || false
         } else if (item.type in gates) {
-          // if the item has a custom input number set and there aren't the same number as actual inputs, then it should be false
-          if (item.settings.inputs !== item.inputs.length - 1) {
+          // Check if the item has a custom input number set and if it matches the actual inputs
+          if (item.settings.inputs && item.settings.inputs !== inputValues.length) {
             return false
           }
           return gates[item.type](inputValues)

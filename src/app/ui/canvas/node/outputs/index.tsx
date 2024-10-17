@@ -6,6 +6,7 @@ import { InputItem, OutputItem } from '../../types'
 import { darkerColour, lighterColour } from '@/lib/color'
 import { OutputType } from './types'
 import LightOutputBody from './light/body'
+import { useCookie } from 'react-use'
 
 export type OutputProps = {
   type: OutputType
@@ -36,6 +37,7 @@ export const Output = forwardRef<
     setSelectedIds,
     isSelected,
   } = useCanvasStore()
+  const [debug] = useCookie(`debugMode`)
   const [position, setPosition] = useState({ x, y })
   const [offset, setOffset] = useState({ x, y })
   const [dragging, setDragging] = useState(false)
@@ -113,6 +115,21 @@ export const Output = forwardRef<
         data-logicate-selected={isSelected(outputId)}
         data-logicate-simulated={simulated.state}
       >
+        {debug && debug === 'true' && (
+          <p className={cn('text-2xs absolute left-[80%] top-full w-[400%] font-semibold text-red-500')} data-logicate-debug-info>
+            <span>{outputId}</span>
+            <br />
+            <span>x: {position.x}</span>
+            <br />
+            <span>y: {position.y}</span>
+            <br />
+            <span>dragging: {dragging ? 'true' : 'false'}</span>
+            <br />
+            <span>state: {simulated.state ? 'true' : 'false'}</span>
+            <br />
+            <span>type: {type}</span>
+          </p>
+        )}
         {output.type === OutputType.LIGHT ? (
           <div
             className="flex flex-row items-start justify-center"

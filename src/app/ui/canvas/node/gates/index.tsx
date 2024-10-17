@@ -12,6 +12,7 @@ import { GateType } from './types'
 import { defaultInputs } from './constants'
 import BufferBody from './buffer/body'
 import XorBody from './xor/body'
+import { useCookie } from 'react-use'
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR]
 
@@ -37,6 +38,7 @@ export const Gate = forwardRef<
   } & React.HTMLAttributes<HTMLDivElement>
 >(({ type, inputs, className, demo = false, x, y, state, gateId, ...rest }, ref) => {
   const { setHolding, canvas, updateItemPosition, setTemporaryWire, setSelectedIds, isSelected } = useCanvasStore()
+  const [debug] = useCookie(`debugMode`)
   const item = useNode(gateId) as GateItem
   const isInverted = useMemo(() => {
     return inverted.includes(type)
@@ -125,6 +127,21 @@ export const Gate = forwardRef<
         data-logicate-dragging={dragging}
         data-logicate-selected={isSelected(gateId)}
       >
+        {debug && debug === 'true' && (
+          <p className={cn('text-2xs absolute left-[80%] top-full w-full font-semibold text-red-500')} data-logicate-debug-info>
+            <span>{gateId}</span>
+            <br />
+            <span>x: {position.x}</span>
+            <br />
+            <span>y: {position.y}</span>
+            <br />
+            <span>dragging: {dragging ? 'true' : 'false'}</span>
+            <br />
+            <span>state: {state ? 'true' : 'false'}</span>
+            <br />
+            <span>type: {type}</span>
+          </p>
+        )}
         <div
           className="flex flex-col items-start justify-center"
           style={{

@@ -33,6 +33,7 @@ const useUpdateCanvasStore = (canvasId: string) => {
         item.itemType === 'input' && item.type === InputType.CLOCK ? { ...item, value: undefined } : item
       ),
       wires: canvasStore.wires,
+      variableValues: canvasStore.variableValues,
     },
     1000,
     {

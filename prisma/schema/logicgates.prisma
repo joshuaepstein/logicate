@@ -1,7 +1,9 @@
 model LogicateSession {
-  id    String @id @default(uuid())
-  items Json
-  wires Json
+  id             String @id @default(uuid())
+  name           String
+  items          Json
+  wires          Json
+  variableValues Json   @default("[]")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

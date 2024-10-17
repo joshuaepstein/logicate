@@ -11,6 +11,7 @@ import ClockBody from './clock/body'
 import HighConstantBody from './constant/high/body'
 import VariableBody from './variable/body'
 import LowConstantBody from './constant/low/body'
+import { useCookie } from 'react-use'
 
 export type InputProps = {
   type: InputType
@@ -41,6 +42,7 @@ export const Input = forwardRef<
     setSelectedIds,
     isSelected,
   } = useCanvasStore()
+  const [debug] = useCookie(`debugMode`)
   const [position, setPosition] = useState({ x, y })
   const [offset, setOffset] = useState({ x, y })
   const [dragging, setDragging] = useState(false)
@@ -120,6 +122,21 @@ export const Input = forwardRef<
         data-logicate-dragging={dragging}
         data-logicate-selected={isSelected(inputId)}
       >
+        {debug && debug === 'true' && (
+          <p className={cn('text-2xs absolute left-[80%] top-full w-full font-semibold text-red-500')} data-logicate-debug-info>
+            <span>{inputId}</span>
+            <br />
+            <span>x: {position.x}</span>
+            <br />
+            <span>y: {position.y}</span>
+            <br />
+            <span>dragging: {dragging ? 'true' : 'false'}</span>
+            <br />
+            <span>value: {value ? 'true' : 'false'}</span>
+            <br />
+            <span>type: {type}</span>
+          </p>
+        )}
         <div
           className="flex flex-col items-start justify-center"
           style={{

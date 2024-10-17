@@ -1,54 +1,35 @@
+import { Alphabet } from '@/app/ui/canvas/types'
+
 export type BooleanExpression =
   | {
-      left: BooleanExpression;
-      operator?: BooleanOperator;
-      right?: BooleanExpression;
-      type: 'compound';
+      left: BooleanExpression
+      operator?: BooleanOperator
+      right?: BooleanExpression
+      type: 'compound'
     }
   | {
-      variable: BooleanVariable;
-      type: 'variable';
+      variable: BooleanVariable
+      type: 'variable'
     }
   | {
-      constant: BooleanConstant;
-      type: 'constant';
-    };
+      constant: BooleanConstant
+      type: 'constant'
+    }
 
-export type BooleanOperator = '∧' | '∨' | '¬';
+export type BooleanOperator = '∧' | '∨' | '¬'
 
-export const AndOperator: BooleanOperator = '∧';
-export const OrOperator: BooleanOperator = '∨';
-export const NotOperator: BooleanOperator = '¬';
+export const AndOperator: BooleanOperator = '∧'
+export const OrOperator: BooleanOperator = '∨'
+export const NotOperator: BooleanOperator = '¬'
 
-export type BooleanVariable =
-  | 'A'
-  | 'B'
-  | 'C'
-  | 'D'
-  | 'E'
-  | 'F'
-  | 'G'
-  | 'H'
-  | 'J'
-  | 'K'
-  | 'L'
-  | 'P'
-  | 'Q'
-  | 'R'
-  | 'S'
-  | 'T'
-  | 'U'
-  | 'W'
-  | 'X'
-  | 'Y'
-  | 'Z';
+export type BooleanVariable = Alphabet
 
 export enum BooleanConstant {
   TRUE = 1,
   FALSE = 0,
 }
 
-export const BooleanVariables: BooleanVariable[] = 'ABCDEFGHJKLMNPQRSTUWXYZ'.split('') as BooleanVariable[];
+export const BooleanVariables: BooleanVariable[] = 'ABCDEFGHJKLMNPQRSTUWXYZ'.split('') as BooleanVariable[]
 
 export enum ExpressionDifficulty {
   /**

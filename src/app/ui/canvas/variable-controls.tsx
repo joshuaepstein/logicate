@@ -5,13 +5,14 @@ import { InputItem } from './types'
 import { Alphabet, AlphabetEnum } from './types'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { convertCanvasToExpression } from './logic-gate-converter'
 
 export default function VariableControls() {
-  const { items, variableValues, setVariableValue, setVariableValues } = useCanvasStore()
+  const { items, variableValues, wires, setVariableValue, setVariableValues } = useCanvasStore()
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    setShow(items.some((item) => item.itemType === 'input' && item.type === InputType.VARIABLE))
+    setShow(items.some((item) => item.itemType === 'input' && item.type === InputType.VARIABLE && item.settings.expressionLetter))
 
     if (!items.some((item) => item.itemType === 'input' && item.type === InputType.VARIABLE)) {
       // we should clear the variable values because there are no variables
@@ -39,36 +40,77 @@ export default function VariableControls() {
           }}
           className="shadow-hard-xs absolute right-4 top-4 z-10 flex h-auto min-w-80 origin-center flex-col items-center justify-center gap-2 rounded-md bg-white p-4"
         >
-          {(items.filter((item) => item.itemType === 'input' && item.type === InputType.VARIABLE) as InputItem[])
-            .map((item) => item.settings.expressionLetter)
-            .map((letter) => {
-              const isSet = variableValues.some((v) => v.letter === letter && v.value)
+          <AnimatePresence>
+            {(items.filter((item) => item.itemType === 'input' && item.type === InputType.VARIABLE) as InputItem[])
+              .map((item) => item.settings.expressionLetter)
+              .filter((v, i, a) => a.indexOf(v) === i)
+              .map((letter) => {
+                const isSet = variableValues.some((v) => v.letter === letter && v.value)
 
-              if (!letter) return null
+                if (!letter) return null
 
-              return (
-                <div
-                  key={letter}
-                  className={cn(
-                    'text-neutralgrey-800 bg-neutralgrey-100 flex w-full items-center justify-between rounded-md px-3 py-1.5 transition',
-                    {
-                      'bg-green-200 text-green-800': variableValues.some((v) => v.letter === letter && v.value),
-                    }
-                  )}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    if (!variableValues.some((v) => v.letter === letter)) {
-                      setVariableValues([...variableValues, { letter, value: true }])
-                    } else {
-                      setVariableValue(letter, !isSet)
-                    }
-                  }}
-                >
-                  <p className="text-sm font-medium">{letter}</p>
-                  <p className="text-xs font-medium">{isSet ? 'True' : 'False'}</p>
-                </div>
-              )
-            })}
+                return (
+                  <div
+                    // initial={{
+                    //   opacity: 0,
+                    // }}
+                    // animate={{
+                    //   opacity: 1,
+                    // }}
+                    // exit={{
+                    //   opacity: 0,
+                    // }}
+                    key={letter}
+                    className={cn(
+                      'text-neutralgrey-800 bg-neutralgrey-100 relative flex w-full select-none items-center justify-between overflow-y-hidden rounded-md px-3 py-1.5 transition',
+                      {
+                        'bg-green-200 text-green-800': variableValues.some((v) => v.letter === letter && v.value),
+                      }
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (!variableValues.some((v) => v.letter === letter)) {
+                        setVariableValues([...variableValues, { letter, value: true }])
+                      } else {
+                        setVariableValue(letter, !isSet)
+                      }
+                    }}
+                  >
+                    <p className="text-sm font-medium">{letter}</p>
+                    <div className="h-full w-full">
+                      <AnimatePresence>
+                        <motion.p
+                          variants={{
+                            hidden: { y: -30 },
+                            visible: { y: 0 },
+                          }}
+                          key={letter + '-false'}
+                          initial="hidden"
+                          animate={!isSet ? 'visible' : 'hidden'}
+                          exit="hidden"
+                          className="absolute inset-y-0 right-0 flex w-full items-center justify-end pr-3 text-right leading-none"
+                        >
+                          False
+                        </motion.p>
+                        <motion.p
+                          variants={{
+                            hidden: { y: 30 },
+                            visible: { y: 0 },
+                          }}
+                          key={letter + '-true'}
+                          initial="hidden"
+                          animate={isSet ? 'visible' : 'hidden'}
+                          exit="hidden"
+                          className="absolute inset-y-0 right-0 flex w-full items-center justify-end pr-3 text-right leading-none"
+                        >
+                          True
+                        </motion.p>
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                )
+              })}
+          </AnimatePresence>
           <p className="text-neutralgrey-800 -mb-1.5 mt-0.5 w-full text-right text-xs leading-tight">Click to toggle</p>
         </motion.div>
       )}

@@ -55,7 +55,12 @@ export default function Sidebar({
             'px-4 py-2': !expanded,
           })}
         >
-          <motion.p className="text-nowrap text-sm font-medium">{canvas.id}</motion.p>
+          {(canvas.id === 'demo' && <p className="text-sm font-medium">Demo</p>) || (
+            <motion.input
+              className="hover:bg-neutralgrey-200 focus-visible:bg-neutralgrey-200 -m-1.5 text-nowrap rounded-lg border-0 p-1.5 text-sm font-medium transition focus-visible:border-0 focus-visible:outline-none focus-visible:ring-0"
+              value={canvas.name}
+            />
+          )}
           <Button variant="no-borders" className="overflow-hidden" size="icon-md" onClick={() => setExpanded(!expanded)}>
             {expanded ? (
               <motion.div

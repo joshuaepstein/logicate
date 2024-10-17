@@ -5,11 +5,11 @@ enum Difficulty {
   Challenging,
 }
 
-type Operator = '∧' | '∨'
+type Operator = '∧' | '∨' | '⊕'
 type SimpleOperand = string | BooleanExpression
 type Operand = { value: SimpleOperand; isNegated: boolean }
 
-class BooleanExpression {
+export class BooleanExpression {
   left: Operand
   right: Operand
   operator: Operator

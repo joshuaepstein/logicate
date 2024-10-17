@@ -6,12 +6,22 @@ import { Item } from '../../ui/canvas/types'
 
 const createDatabaseSession = async (userId: string) => {
   'use server'
+  const canvasesWithUntitledName = await prisma.logicateSession.findMany({
+    where: {
+      ownerId: userId,
+      name: {
+        startsWith: 'Untitled Canvas',
+      },
+    },
+  })
+
   const response = await prisma.logicateSession.create({
     data: {
       id: generateLogicateSessionId(),
       items: [],
       wires: [],
       ownerId: userId,
+      name: 'Untitled Canvas' + (canvasesWithUntitledName.length > 0 ? ` (${canvasesWithUntitledName.length + 1})` : ''),
     },
   })
   return {

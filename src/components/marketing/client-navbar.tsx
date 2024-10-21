@@ -15,7 +15,11 @@ import { P } from '../ui/typography'
 import { signOut } from 'next-auth/react'
 import useNewFeatureState from '@/lib/features/new-hook'
 import { NewFeature, NewFeatureDateLimit } from '@/lib/features/new'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import ExpandingArrow from '../ui/icons/expanding-arrow'
+import { useLocalStorage } from 'usehooks-ts'
+import { Button } from '../ui/button'
+import { X01Icon, X02Icon, X03Icon } from '@jfstech/icons-react/24/outline'
 
 export default function ClientNavbar({
   user,
@@ -27,7 +31,7 @@ export default function ClientNavbar({
   const pathname = usePathname()
   const router = useRouter()
   // const [isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled, newFeature] = useNewFeatureState(NewFeature.INSIGHTS, true)
-
+  const [hiddenInsights, setHiddenInsights] = useLocalStorage('hiddenInsights-navbar', false)
   const { setShowCMDK } = useContext(AppContext)
   useHotkeys('l', () => {
     // redirect('/login')
@@ -43,7 +47,7 @@ export default function ClientNavbar({
   // }, [pathname, isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled])
 
   return (
-    <>
+    <navigation-header>
       <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
         <Link href="/">
           <Logo className="h-8 transition hover:scale-105 active:scale-95" />
@@ -168,6 +172,33 @@ export default function ClientNavbar({
           </div>
         </div>
       </nav>
-    </>
+      <AnimatePresence mode="wait">
+        {new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights ? (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+            transition={{ duration: 0.5 }}
+            className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden backdrop-blur-[6px]"
+          >
+            <div className="text-neutralgrey-1200 py-2 text-sm font-[450]">
+              Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '}
+              <Link
+                href="/insights"
+                className="group ml-1 inline-flex items-center underline opacity-75 transition-opacity hover:opacity-100"
+              >
+                Click here to learn more <ExpandingArrow className="size-4" />
+              </Link>
+            </div>
+            <button
+              className="group absolute right-4 rounded-md bg-black/5 p-1 transition hover:bg-black/10"
+              onClick={() => setHiddenInsights(true)}
+            >
+              <X02Icon className="group-hover:text-neutralgrey-1300 text-neutralgrey-1000 size-4 transition" />
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </navigation-header>
   )
 }

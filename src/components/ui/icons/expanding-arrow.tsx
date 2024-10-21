@@ -1,10 +1,12 @@
-'use client';
+'use client'
+
+import { cn } from '@/lib'
 
 export default function ExpandingArrow({ className }: { className?: string }) {
   return (
     <div className="group relative flex items-center">
       <svg
-        className={`${className ? className : 'h-4 w-4'} absolute transition-all group-hover:translate-x-1 group-hover:opacity-0`}
+        className={`${cn('size-4', className)} absolute transition-all group-hover:translate-x-1 group-hover:opacity-0 peer-hover:translate-x-0 peer-hover:opacity-100`}
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
         viewBox="0 0 16 16"
@@ -17,9 +19,7 @@ export default function ExpandingArrow({ className }: { className?: string }) {
         ></path>
       </svg>
       <svg
-        className={`${
-          className ? className : 'h-4 w-4'
-        } absolute opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100`}
+        className={`${cn('size-4', className)} absolute opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100 peer-hover:translate-x-0 peer-hover:opacity-100`}
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
         viewBox="0 0 16 16"
@@ -32,5 +32,5 @@ export default function ExpandingArrow({ className }: { className?: string }) {
         ></path>
       </svg>
     </div>
-  );
+  )
 }

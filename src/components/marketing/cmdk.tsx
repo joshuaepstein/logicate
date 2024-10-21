@@ -1,7 +1,7 @@
 'use client'
 
 import { MagicIcon } from '@jfstech/icons-react/24/outline'
-import ExpandingArrow from '@/components/ui/icons/expanding-error'
+import ExpandingArrow from '@/components/ui/icons/expanding-arrow'
 import cmdkPages from '@/lib/cmdk-pages'
 import va from '@vercel/analytics'
 import { Command, useCommandState } from 'cmdk'

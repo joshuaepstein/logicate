@@ -57,7 +57,7 @@ export default function ClientNavbar({
             <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/canvas">Your Canvases</Link>
             </li>
-            {new Date() > NewFeatureDateLimit[NewFeature.INSIGHTS] ? (
+            {/* {new Date() > NewFeatureDateLimit[NewFeature.INSIGHTS] ? (
               <li className="text-neutralgrey-1200 text-xs font-[450]">
                 <Link href="/insights">Insights</Link>
               </li>
@@ -91,7 +91,7 @@ export default function ClientNavbar({
                   })}
                 </motion.a>
               </motion.li>
-            )}
+            )} */}
             <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/changelog">Changelog</Link>
             </li>
@@ -173,7 +173,7 @@ export default function ClientNavbar({
         </div>
       </nav>
       <AnimatePresence mode="wait">
-        {new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights ? (
+        {(new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights) || true ? (
           <motion.div
             initial={{ height: 0 }}
             animate={{ height: 'auto' }}
@@ -181,21 +181,22 @@ export default function ClientNavbar({
             transition={{ duration: 0.5 }}
             className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden backdrop-blur-[6px]"
           >
-            <div className="text-neutralgrey-1200 py-2 text-sm font-[450]">
-              Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '}
-              <Link
+            <div className="text-neutralgrey-1200 py-2 text-xs font-medium">
+              {/* Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '} */}
+              This web application is currently in development. There are bugs and unfinished features.
+              {/* <Link
                 href="/insights"
                 className="group ml-1 inline-flex items-center underline opacity-75 transition-opacity hover:opacity-100"
               >
                 Click here to learn more <ExpandingArrow className="size-4" />
-              </Link>
+              </Link> */}
             </div>
-            <button
+            {/* <button
               className="group absolute right-4 rounded-md bg-black/5 p-1 transition hover:bg-black/10"
               onClick={() => setHiddenInsights(true)}
             >
               <X02Icon className="group-hover:text-neutralgrey-1300 text-neutralgrey-1000 size-4 transition" />
-            </button>
+            </button> */}
           </motion.div>
         ) : null}
       </AnimatePresence>

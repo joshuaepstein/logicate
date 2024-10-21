@@ -46,7 +46,8 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     path !== '/register' &&
     !path.startsWith('/auth/reset-password/') &&
     !path.startsWith('/auth/verify-email') &&
-    !path.startsWith('/auth/unlock-account')
+    !path.startsWith('/auth/unlock-account') &&
+    !path.startsWith('/canvas/demo')
   ) {
     if (fullPath.startsWith('/logout')) {
       return NextResponse.redirect(new URL('/login', req.url))
@@ -57,6 +58,8 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
       return NextResponse.redirect(new URL('/welcome', req.url))
     } else if (path === '/login' || path === '/register') {
       return NextResponse.redirect(new URL('/', req.url))
+    } else if (path.startsWith('/canvas/demo')) {
+      return NextResponse.redirect(new URL('/canvas/new', req.url))
     }
   }
 

@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button'
 import { capitaliseEachWord, cn } from '@/lib'
 import { QuestionType } from '@/questions/question'
 import { DashIcon, Plus01Icon } from '@jfstech/icons-react/24/outline'
+import { AnimatePresence, motion, MotionValue, useSpring, useTransform } from 'framer-motion'
 import { lowerCase } from 'lodash'
 import { redirect } from 'next/navigation'
-import { Dispatch, SetStateAction, useState, useTransition } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 const STAGES = [
@@ -38,7 +39,7 @@ const STAGES = [
 export default function CreateQuizQuestionsForm() {
   const [stage, setStage] = useState<number>(0)
   const [selectedQuestionTypes, setSelectedQuestionTypes] = useState<QuestionType[]>([])
-  const [questionCount, setQuestionCount] = useState<number>(0)
+  const [questionCount, setQuestionCount] = useState<number>(10)
   const [creatingQuestions, createQuestions] = useTransition()
 
   const updateStage = () => {
@@ -154,8 +155,8 @@ export function StageTwo({
   return (
     <div className="flex flex-col gap-4">
       <h4 className="text-neutralgrey-900 mb-1 mt-2">Select the number of questions you would like to include:</h4>
-      <div className="w-full">
-        <div className="flex w-max flex-row items-center">
+      <div className="w-full max-w-lg">
+        {/* <div className="flex w-max flex-row items-center">
           <Button
             variant="no-borders"
             size="icon-xs"
@@ -188,9 +189,190 @@ export function StageTwo({
           >
             <Plus01Icon className="size-4" />
           </Button>
-        </div>
+        </div> */}
+        <CustomSlider questionCount={questionCount} setQuestionCount={setQuestionCount} />
       </div>
     </div>
+  )
+}
+import { useEventListener } from 'usehooks-ts'
+
+const CustomSlider = ({
+  questionCount,
+  setQuestionCount,
+}: {
+  questionCount: number
+  setQuestionCount: Dispatch<SetStateAction<number>>
+}) => {
+  const [dragging, setDragging] = useState(false)
+
+  useEventListener('mouseup', () => {
+    if (dragging) {
+      setDragging(false)
+    }
+  })
+
+  useEventListener('mousemove', (e) => {
+    if (dragging === true && e.buttons === 1) {
+      const rect = document.querySelector('[data-slider-questions]')?.getBoundingClientRect()
+      const maxRect = document.querySelector('[data-slider-questions]')?.parentElement?.getBoundingClientRect()
+      if (rect && maxRect) {
+        // if mouse not in the maxRect, do nothing
+        if (e.clientX < maxRect.left || e.clientX > maxRect.right) return
+        if (e.clientY < maxRect.top || e.clientY > maxRect.bottom) return
+        const x = e.clientX + 5
+        const maxWidth = maxRect.width
+        const width = rect.width
+        console.log(x, width, maxWidth)
+        // get the position of the mouse relative to the slider
+        const position = x - rect.left
+        const percentage = (position / maxWidth) * 100
+        // the percentage should lock at intervals of MAX_QUESTIONS
+        const MAX_QUESTIONS = 50
+        const roundedPercentage = Math.round(percentage / (100 / MAX_QUESTIONS)) * (100 / MAX_QUESTIONS)
+        ;(document.querySelector('[data-slider-questions]')! as HTMLDivElement).style.width = `${roundedPercentage}%`
+        const newQuestionCount = Math.round((roundedPercentage / 100) * MAX_QUESTIONS)
+        // min question count is 1
+        if (newQuestionCount < 1) {
+          setQuestionCount(1)
+        } else {
+          setQuestionCount(newQuestionCount)
+        }
+      }
+    }
+  })
+
+  return (
+    <div
+      className="bg-neutralgrey-200 group/p flex h-8 w-full items-center overflow-hidden rounded-md p-[2px]"
+      onMouseDown={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        // click to a position on the slider
+        const rect = document.querySelector('[data-slider-questions]')?.getBoundingClientRect()
+        const maxRect = document.querySelector('[data-slider-questions]')?.parentElement?.getBoundingClientRect()
+        if (rect && maxRect) {
+          const x = e.clientX
+          const position = x - rect.left
+          const percentage = (position / maxRect.width) * 100
+          console.log(percentage)
+          ;(document.querySelector('[data-slider-questions]')! as HTMLDivElement).style.width = `${percentage}%`
+          const newQuestionCount = Math.round((percentage / 100) * 50)
+          setQuestionCount(newQuestionCount)
+          setDragging(true)
+        }
+      }}
+    >
+      <div
+        className="shadow-soft-xs group relative flex h-full min-w-max items-center justify-end overflow-hidden rounded-[4px] bg-white pr-1.5"
+        data-slider-questions
+        style={{
+          width: `${(questionCount / 50) * 100}%`,
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {questionCount > 13 && (
+            <motion.div
+              initial={{
+                x: -100,
+              }}
+              animate={{
+                x: 0,
+              }}
+              exit={{
+                x: -100,
+              }}
+              style={{ fontSize }}
+              className="text-neutralgrey-1300 absolute left-2 flex overflow-hidden text-left leading-none"
+            >
+              <Digit place={10} value={questionCount} />
+              <Digit place={1} value={questionCount} />{' '}
+              <span className="text-neutralgrey-900 ml-1">Question{questionCount > 1 ? 's' : ''}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div
+          className="absolute bottom-0 right-0 top-0 h-full w-[15px] cursor-col-resize"
+          onMouseDown={(e) => {
+            e.preventDefault()
+            setDragging(true)
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault()
+            setDragging(false)
+          }}
+        />
+        <div className="bg-neutralgrey-800 group-hover:bg-neutralgrey-1100 group-active:bg-neutralgrey-1300 group-hover/p:bg-neutralgrey-1300 easey-bouncy ml-4 h-4 w-[3px] rounded-full transition-all group-hover/p:h-[18px] group-hover:h-[18px] group-active:h-[18px]" />
+      </div>
+      <AnimatePresence mode="wait">
+        {questionCount < 14 && (
+          <motion.div
+            initial={{
+              y: -25,
+            }}
+            animate={{
+              y: 0,
+            }}
+            exit={{
+              y: 25,
+            }}
+            style={{ fontSize }}
+            className="text-neutralgrey-1300 ml-1 flex select-none overflow-hidden text-left leading-none"
+          >
+            <Digit place={10} value={questionCount} />
+            <Digit place={1} value={questionCount} />{' '}
+            <span className="text-neutralgrey-900 ml-1">Question{questionCount > 1 ? 's' : ''}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+const fontSize = 13
+const padding = 0
+const height = fontSize + padding
+
+function Digit({ place, value }: { place: number; value: number }) {
+  let valueRoundedToPlace = Math.floor(value / place)
+  let animatedValue = useSpring(valueRoundedToPlace, { stiffness: 300, damping: 30 })
+
+  useEffect(() => {
+    animatedValue.set(valueRoundedToPlace)
+  }, [animatedValue, valueRoundedToPlace])
+
+  if (valueRoundedToPlace === 0) {
+    return null
+  }
+
+  return (
+    <div style={{ height }} className="relative w-[1ch] tabular-nums">
+      {[...Array(10).keys()].map((i) => (
+        <Number key={i} mv={animatedValue} number={i} />
+      ))}
+    </div>
+  )
+}
+
+function Number({ mv, number }: { mv: MotionValue; number: number }) {
+  let y = useTransform(mv, (latest) => {
+    let placeValue = latest % 10
+    let offset = (10 + number - placeValue) % 10
+
+    let memo = offset * height
+
+    if (offset > 5) {
+      memo -= 10 * height
+    }
+
+    return memo
+  })
+
+  return (
+    <motion.span style={{ y }} className="absolute inset-0 flex items-center justify-center">
+      {number}
+    </motion.span>
   )
 }
 

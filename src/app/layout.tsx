@@ -30,7 +30,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   // const invites = (await getInvites(user)).filter((invite) => !invite.accepted && !checkInviteExpired(invite))
 
   return (
-    <html lang="en">
+    <html suppressHydrationWarning lang="en">
       <body className={cn(GeistSans.className, GeistMono.className)}>
         <Providers>
           <Navbar sessionPromise={sessionPromise} />

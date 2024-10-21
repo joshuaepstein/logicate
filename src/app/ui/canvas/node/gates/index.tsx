@@ -13,6 +13,7 @@ import { defaultInputs } from './constants'
 import BufferBody from './buffer/body'
 import XorBody from './xor/body'
 import { useCookie } from 'react-use'
+import { WireTerminal } from '../wire-terminal'
 
 const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR]
 
@@ -151,7 +152,7 @@ export const Gate = forwardRef<
         >
           <div className="relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
             <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
-              <svg
+              {/* <svg
                 style={{
                   overflow: 'visible',
                   width: '12.5px',
@@ -188,7 +189,8 @@ export const Gate = forwardRef<
                     setHolding(true)
                   }}
                 />
-              </svg>
+              </svg> */}
+              <WireTerminal isInput index={0} parentId={gateId} />
             </div>
             <div
               className="order-1 h-[2px] min-w-4 grow"

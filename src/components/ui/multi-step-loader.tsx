@@ -1,7 +1,7 @@
-'use client';
-import { cn } from '@/lib';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+'use client'
+import { cn } from '@/lib'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 const CheckIcon = ({ className }: { className?: string }) => {
   return (
@@ -15,8 +15,8 @@ const CheckIcon = ({ className }: { className?: string }) => {
     >
       <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
     </svg>
-  );
-};
+  )
+}
 
 const CheckFilled = ({ className }: { className?: string }) => {
   return (
@@ -27,27 +27,27 @@ const CheckFilled = ({ className }: { className?: string }) => {
         clipRule="evenodd"
       />
     </svg>
-  );
-};
+  )
+}
 
 type LoadingState = {
-  text: string;
-};
+  text: string
+}
 
 export const LoaderCore = ({
   loadingStates,
   value = 0,
   className,
 }: {
-  loadingStates: LoadingState[];
-  value?: number;
-  className?: string;
+  loadingStates: LoadingState[]
+  value?: number
+  className?: string
 }) => {
   return (
     <div className={cn('relative mx-auto mt-40 flex max-w-xl flex-col justify-start', className)}>
       {loadingStates.map((loadingState, index) => {
-        const distance = Math.abs(index - value);
-        const opacity = Math.max(1 - distance * 0.2, 0); // Minimum opacity is 0, keep it 0.2 if you're sane.
+        const distance = Math.abs(index - value)
+        const opacity = Math.max(1 - distance * 0.2, 0) // Minimum opacity is 0, keep it 0.2 if you're sane.
 
         return (
           <motion.div
@@ -61,19 +61,19 @@ export const LoaderCore = ({
               {index > value && <CheckIcon className="dark:text-base-white text-black" />}
               {index <= value && (
                 <CheckFilled
-                  className={cn('dark:text-base-white text-black', value === index && 'text-black opacity-100 dark:text-lime-500')}
+                  className={cn('dark:text-base-white text-black', value === index && 'text-black opacity-100 dark:text-green-800')}
                 />
               )}
             </div>
-            <span className={cn('dark:text-base-white text-black', value === index && 'text-black opacity-100 dark:text-lime-500')}>
+            <span className={cn('dark:text-base-white text-black', value === index && 'text-black opacity-100 dark:text-green-800')}>
               {loadingState.text}
             </span>
           </motion.div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
 export const MultiStepLoader = ({
   loadingStates,
@@ -81,26 +81,26 @@ export const MultiStepLoader = ({
   duration = 2000,
   loop = true,
 }: {
-  loadingStates: LoadingState[];
-  loading?: boolean;
-  duration?: number;
-  loop?: boolean;
+  loadingStates: LoadingState[]
+  loading?: boolean
+  duration?: number
+  loop?: boolean
 }) => {
-  const [currentState, setCurrentState] = useState(0);
+  const [currentState, setCurrentState] = useState(0)
 
   useEffect(() => {
     if (!loading) {
-      setCurrentState(0);
-      return;
+      setCurrentState(0)
+      return
     }
     const timeout = setTimeout(() => {
       setCurrentState((prevState) =>
         loop ? (prevState === loadingStates.length - 1 ? 0 : prevState + 1) : Math.min(prevState + 1, loadingStates.length - 1)
-      );
-    }, duration);
+      )
+    }, duration)
 
-    return () => clearTimeout(timeout);
-  }, [currentState, loading, loop, loadingStates.length, duration]);
+    return () => clearTimeout(timeout)
+  }, [currentState, loading, loop, loadingStates.length, duration])
   return (
     <AnimatePresence mode="wait">
       {loading && (
@@ -124,5 +124,5 @@ export const MultiStepLoader = ({
         </motion.div>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}

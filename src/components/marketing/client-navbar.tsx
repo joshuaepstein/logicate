@@ -2,10 +2,10 @@
 
 import { AppContext } from '@/app/providers'
 import Kbd from '@/components/ui/kbd'
-import { useContext } from 'react'
+import { CSSProperties, useContext, useEffect } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Link from 'next/link'
-import { redirect, usePathname } from 'next/navigation'
+import { redirect, usePathname, useRouter } from 'next/navigation'
 import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
 import ProfilePicture from '@/components/ui/profile-picture/client'
@@ -13,6 +13,9 @@ import Logo from '@/components/Logo'
 import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { P } from '../ui/typography'
 import { signOut } from 'next-auth/react'
+import useNewFeatureState from '@/lib/features/new-hook'
+import { NewFeature, NewFeatureDateLimit } from '@/lib/features/new'
+import { motion } from 'framer-motion'
 
 export default function ClientNavbar({
   user,
@@ -22,11 +25,22 @@ export default function ClientNavbar({
   }
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+  // const [isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled, newFeature] = useNewFeatureState(NewFeature.INSIGHTS, true)
 
   const { setShowCMDK } = useContext(AppContext)
   useHotkeys('l', () => {
-    redirect('/login')
+    // redirect('/login')
+    router.push('/login')
   })
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (!isInsightsNewFeatureEnabled) {
+  //       setIsInsightsNewFeatureEnabled(true)
+  //     }
+  //   }
+  // }, [pathname, isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled])
 
   return (
     <>
@@ -36,22 +50,45 @@ export default function ClientNavbar({
         </Link>
         <div className="flex items-center gap-4">
           <ul className="flex items-center justify-start gap-4">
-            <li
-              className="text-sm transition hover:scale-105 active:scale-95"
-              style={{
-                // make the animation bouncy/spring like
-                transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-              }}
-            >
+            <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/canvas">Your Canvases</Link>
             </li>
-            <li
-              className="text-sm transition hover:scale-105 active:scale-95"
-              style={{
-                // make the animation bouncy/spring like
-                transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-              }}
-            >
+            {new Date() > NewFeatureDateLimit[NewFeature.INSIGHTS] ? (
+              <li className="text-neutralgrey-1200 text-xs font-[450]">
+                <Link href="/insights">Insights</Link>
+              </li>
+            ) : (
+              // Start: Animating the width from 0 to 100% - then opacity each letter from 0 to 1 with spread and delay of 0.05 per character
+              <motion.li
+                initial={{ width: 0 }}
+                animate={{ width: 'auto' }}
+                exit={{ width: 'auto' }}
+                transition={{ duration: 0.5, delay: 2 }}
+              >
+                <motion.a href="/insights" className="text-xs font-[450] text-blue-800">
+                  {'Insights'.split('').map((letter, index) => {
+                    return (
+                      <motion.span
+                        key={index}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 2.05 + 0.05 * index }}
+                        exit={{ opacity: 1 }}
+                        className="animate-shimmer"
+                        style={
+                          {
+                            '--index': index,
+                          } as CSSProperties
+                        }
+                      >
+                        {letter}
+                      </motion.span>
+                    )
+                  })}
+                </motion.a>
+              </motion.li>
+            )}
+            <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/changelog">Changelog</Link>
             </li>
           </ul>

@@ -52,7 +52,16 @@ export const TemporaryOutput = forwardRef<
           >
             <div className="relative mb-[2.5px] flex h-7 flex-col items-center last-of-type:mb-0">
               <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
-                <WireTerminal isOutput className="pointer-events-none transition-transform hover:scale-[1.2]" />
+                <svg
+                  style={{
+                    overflow: 'visible',
+                    width: '12.5px',
+                    height: '12.5px',
+                  }}
+                  className="pointer-events-none transition-transform hover:scale-[1.2]"
+                >
+                  <circle className="pointer-events-auto" cx="6.5" cy="6.5" r="6" strokeWidth="1" stroke="black" fill="white" />
+                </svg>
               </div>
               <div
                 className="order-1 min-h-4 w-[2px] grow"

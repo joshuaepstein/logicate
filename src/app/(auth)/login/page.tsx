@@ -1,9 +1,10 @@
 import Image from 'next/image'
-import LogicGates from '~/logic_gates_login.png'
+import CanvasDemo from '~/canvas.demo.png'
 import LoginForm from './form'
 import { Suspense } from 'react'
 import LoadingCircle from '@/components/ui/icons/loading-circle'
 import LogoIcon from '@/components/Logo'
+import SlideImage from './slide-image'
 
 export default async function LoginPage() {
   return (
@@ -14,9 +15,7 @@ export default async function LoginPage() {
             <LoginForm />
           </Suspense>
         </div>
-        <div className="hidden items-center justify-center md:flex md:w-1/2">
-          <Image src={LogicGates} alt="Logic Gates" className="w-full" />
-        </div>
+        <SlideImage />
       </div>
     </div>
   )

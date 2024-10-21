@@ -24,11 +24,13 @@ export default function LoginForm() {
   const next = searchParams?.get('next')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const [loading, login] = useTransition()
 
   useEffect(() => {
     const error = searchParams?.get('error')
     error && toast.error(error)
+    error && setErrorMessage(error)
   }, [searchParams])
 
   return (
@@ -37,6 +39,7 @@ export default function LoginForm() {
       onSubmit={async (e) => {
         e.preventDefault()
         login(async () => {
+          setErrorMessage('')
           const res = await fetch('/api/auth/account-exists', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -46,6 +49,7 @@ export default function LoginForm() {
           if (!res.ok) {
             const error = await res.text()
             toast.error(error)
+            setErrorMessage(error)
             return
           }
 
@@ -62,8 +66,10 @@ export default function LoginForm() {
             if (!signInRes.ok && signInRes.error) {
               if (errorCodes[signInRes.error as keyof typeof errorCodes]) {
                 toast.error(errorCodes[signInRes.error as keyof typeof errorCodes])
+                setErrorMessage(errorCodes[signInRes.error as keyof typeof errorCodes])
               } else {
                 toast.error(signInRes.error)
+                setErrorMessage(signInRes.error)
               }
 
               return
@@ -75,6 +81,7 @@ export default function LoginForm() {
             window.location.href = next || '/'
           } else {
             toast.error('No account found with that email address.')
+            setErrorMessage('No account found with that email address.')
           }
         })
       }}
@@ -117,12 +124,7 @@ export default function LoginForm() {
               </div>
             )}
           </Button>
-          {/* {errorMessage && errorMessage !== "success" && (
-            <p className="text-red-700 max-w-xs absolute -bottom-24">
-              {errorCodes[errorMessage as keyof typeof errorCodes] ||
-                errorMessage}
-            </p>
-          )} */}
+          {errorMessage && <p className="max-w-xs text-red-700">{errorMessage}</p>}
         </div>
       </div>
     </form>

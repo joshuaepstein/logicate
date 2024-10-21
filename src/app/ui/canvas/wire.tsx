@@ -66,7 +66,7 @@ export const ConnectionWire = ({
   }[]
   className?: string
 }) => {
-  const { items, wires, isSelected, selectWireId, unselectWireId } = useCanvasStore()
+  const { items, wires, isSelected, selectWireId, setSelected, unselectWireId } = useCanvasStore()
   const { from, to, active, id } = wire
   const canvas = useCanvasElement()
   const startNode = useNode(from.id)
@@ -168,11 +168,12 @@ export const ConnectionWire = ({
           'text-[#1b88e7]': simulatedWires.find((wire) => wire.id === id)?.active,
         })}
         onClick={() => {
-          if (isSelected(id)) {
-            unselectWireId(id)
-          } else {
-            selectWireId(id)
-          }
+          setSelected([
+            {
+              ...wire,
+              selectedType: 'wire',
+            },
+          ])
         }}
       />
     </svg>

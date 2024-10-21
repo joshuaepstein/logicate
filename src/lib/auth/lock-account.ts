@@ -2,6 +2,7 @@ import { prisma, User } from '@logicate/database'
 import { MAX_LOGIN_ATTEMPTS } from './constants'
 import { sendEmail } from '@logicate/emails/index'
 import AccountLockedEmail from '@logicate/emails/templates/AccountLocked'
+import { generateLockCode } from '../id'
 
 export const incrementLoginAttemps = async (user: Pick<User, 'id' | 'email' | 'name'>) => {
   const { invalidLoginAttempts, lockedAt } = await prisma.user.update({
@@ -19,10 +20,13 @@ export const incrementLoginAttemps = async (user: Pick<User, 'id' | 'email' | 'n
 
   if (!lockedAt && invalidLoginAttempts >= MAX_LOGIN_ATTEMPTS) {
     const lockedAtTime = new Date()
+    const lockCode = generateLockCode()
+
     await prisma.user.update({
       where: { id: user.id },
       data: {
         lockedAt: lockedAtTime,
+        lockedAccountUnlockCode: lockCode,
       },
     })
 
@@ -34,7 +38,7 @@ export const incrementLoginAttemps = async (user: Pick<User, 'id' | 'email' | 'n
           email: user.email,
           name: user.name,
         },
-        unlockUrl: '/',
+        unlockUrl: `https://logicate.joshepstein.co.uk/auth/unlock-account?code=${lockCode}`,
       }),
       marketing: false,
       headers: {
@@ -42,7 +46,7 @@ export const incrementLoginAttemps = async (user: Pick<User, 'id' | 'email' | 'n
       },
     })
 
-    if (emailResponse.error) {
+    if (emailResponse && emailResponse.error) {
       console.error('Error sending email', emailResponse.error)
       return {
         invalidLoginAttempts,

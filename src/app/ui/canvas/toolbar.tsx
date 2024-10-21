@@ -3,6 +3,7 @@ import {
   Cursor03Icon,
   Eraser01Icon,
   FavouriteIcon,
+  FlipLeftIcon,
   MoveIcon,
   Save01Icon,
   Save02Icon,
@@ -61,7 +62,17 @@ export default function FloatingToolbar({ session }: { session: LogicateSession 
           />
         </div>
         <div className="bg-neutralgrey-1300/30 mx-[calc(0.5px+2px)] h-[18px] w-px" />
-
+        <Tooltip>
+          <TooltipTrigger>
+            <FlipLeftIcon
+              onClick={() => {
+                document.dispatchEvent(new Event('UndoEvent'))
+              }}
+              className="size-5 cursor-pointer"
+            />
+          </TooltipTrigger>
+          <TooltipContent>Undo (Ctrl/Cmd+Z)</TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <CenterIcon
@@ -78,7 +89,7 @@ export default function FloatingToolbar({ session }: { session: LogicateSession 
           <TooltipContent>Center Canvas</TooltipContent>
         </Tooltip>
         <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
-          <DialogTrigger asChild>
+          <DialogTrigger>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Eraser01Icon className="size-5 cursor-pointer" />

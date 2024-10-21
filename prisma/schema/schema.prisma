@@ -48,19 +48,20 @@ model Session {
 }
 
 model User {
-  id                    String      @id @default(uuid())
-  name                  String
-  email                 String      @unique
-  username              String      @unique
-  password              String
-  progressLevel         Float       @default(0.0)
-  accountType           AccountType @default(STUDENT)
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-  invalidLoginAttempts  Int         @default(0)
-  lockedAt              DateTime?
-  client_showBackground Boolean     @default(true)
-  isAdmin               Boolean     @default(false)
+  id                      String      @id @default(uuid())
+  name                    String
+  email                   String      @unique
+  username                String      @unique
+  password                String
+  progressLevel           Float       @default(0.0)
+  accountType             AccountType @default(STUDENT)
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+  invalidLoginAttempts    Int         @default(0)
+  lockedAccountUnlockCode String?
+  lockedAt                DateTime?
+  client_showBackground   Boolean     @default(true)
+  isAdmin                 Boolean     @default(false)
 
   publicDisplay      PublicDisplay[]
   accounts           Account[]

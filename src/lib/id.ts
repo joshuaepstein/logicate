@@ -50,3 +50,7 @@ export const generateClassroomId = () => {
   }
   return result.slice(0, -1) // Remove the last '-'
 }
+
+export const generateLockCode = () => {
+  return nanoid(24)
+}

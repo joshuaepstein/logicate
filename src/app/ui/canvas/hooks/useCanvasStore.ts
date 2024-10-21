@@ -17,7 +17,22 @@ export interface State {
     lastUpdated: number | null
     progress?: number
   }
-  recentActions: []
+  recentActions: (
+    | {
+        actionType: 'add' | 'remove' | 'update'
+        itemType: 'item' | 'wire'
+        id: string
+        oldState: Selected
+        newState: Selected | null
+        datetime: number
+      }
+    | {
+        actionType: 'mass_remove'
+        id: string[]
+        oldState: Selected[]
+        datetime: number
+      }
+  )[]
   currentTool: 'select' | 'drag-canvas'
   // variableValues: Record<Alphabet, boolean>
   // variableValues should be a record of alphabet and boolean values but it shoudl be able to be empty or only have lenghts as it wants
@@ -71,6 +86,11 @@ interface Actions {
   addVariableValue: (letter: Alphabet, value: boolean) => void
   setVariableValue: (letter: Alphabet, value: boolean) => void
   removeVariableValue: (letter: Alphabet) => void
+  setRecentActions: (actions: State['recentActions']) => void
+  addRecentAction: (action: State['recentActions'][0]) => void
+  removeRecentAction: (id: string) => void
+  removeMostRecentAction: () => void
+  clearRecentActions: () => void
 }
 
 const useCanvasStore = create<State & Actions>((set, get) => ({
@@ -194,6 +214,20 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
   setVariableValue: (letter, value) =>
     set((state) => ({ variableValues: state.variableValues.map((v) => (v.letter === letter ? { ...v, value } : v)) })),
   removeVariableValue: (letter) => set((state) => ({ variableValues: state.variableValues.filter((v) => v.letter !== letter) })),
+  setRecentActions: (actions) => set({ recentActions: actions }),
+  // addRecentAction: (action) => set((state) => ({ recentActions: [...state.recentActions, action] })),
+  addRecentAction: (action) => {
+    set((state) => {
+      const newActions = [...state.recentActions, action]
+      if (newActions.length > 10) {
+        newActions.shift()
+      }
+      return { recentActions: newActions }
+    })
+  },
+  removeRecentAction: (id) => set((state) => ({ recentActions: state.recentActions.filter((a) => a.id !== id) })),
+  clearRecentActions: () => set({ recentActions: [] }),
+  removeMostRecentAction: () => set((state) => ({ recentActions: state.recentActions.slice(0, -1) })),
 }))
 
 export default useCanvasStore

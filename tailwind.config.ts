@@ -497,18 +497,18 @@ const config: Config = {
         800: '#bedfe4',
         900: '#dfeff1',
       },
-      'blue_(munsell)': {
-        DEFAULT: '#3592a3',
-        100: '#0a1d20',
-        200: '#153a41',
-        300: '#1f5761',
-        400: '#2a7481',
-        500: '#3592a3',
-        600: '#4cb3c5',
-        700: '#79c6d4',
-        800: '#a6d9e2',
-        900: '#d2ecf1',
-      },
+      // 'blue_(munsell)': {
+      //   DEFAULT: '#3592a3',
+      //   100: '#0a1d20',
+      //   200: '#153a41',
+      //   300: '#1f5761',
+      //   400: '#2a7481',
+      //   500: '#3592a3',
+      //   600: '#4cb3c5',
+      //   700: '#79c6d4',
+      //   800: '#a6d9e2',
+      //   900: '#d2ecf1',
+      // },
       cerulean: {
         DEFAULT: '#0c7489',
         100: '#02171b',
@@ -578,6 +578,10 @@ const config: Config = {
       },
 
       keyframes: {
+        shine: {
+          '0%': { backgroundPosition: '200% 0%' },
+          '100%': { backgroundPosition: '-200% 0%' },
+        },
         strokedashoffset: {
           // 60 180 = 240
           // '0%': { 'stroke-dashoffset': '0' },
@@ -791,6 +795,7 @@ const config: Config = {
         slideRight: 'slideRight 250ms cubic-bezier(0.16, 1, 0.3, 1)',
         'scale-in': 'scale-in 250ms cubic-bezier(0.16, 1, 0.3, 1)',
         smallZoomIn: 'smallZoomIn 0.2s ease',
+        shine: 'shine 3s linear infinite',
       },
 
       screens: {

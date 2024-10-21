@@ -31,6 +31,9 @@ import { Output } from './node/outputs'
 import { TemporaryOutput } from './node/outputs/temporary'
 import LogoIcon from '@/components/Logo'
 import VariableControls from './variable-controls'
+import useMediaQuery from '@/lib/hooks/use-media-query'
+import { cursorInside, cursorInsideElement } from '@/lib/dom-cursor'
+import LogicGateLoader from './logic-gate-loader'
 
 export default function Canvas({
   sessionId,
@@ -69,7 +72,10 @@ export default function Canvas({
     updatingDatabase,
     updateSelected,
     currentTool,
+    recentActions,
+    addRecentAction,
     setVariableValues,
+    removeMostRecentAction,
   } = useCanvasStore()
   const [draggingNewElement, setDraggingNewElement] = useState<{
     type: NodeType
@@ -104,6 +110,7 @@ export default function Canvas({
   useDisableHook(canvasReference)
   useUpdateCanvasStore(logicateSession.id)
   const [preinstalled_opacity, setPreinstalledOpacity] = useState<Item[]>([])
+  const { isMobile } = useMediaQuery()
 
   useEffect(() => {
     if (sessionId === 'demo') return
@@ -131,45 +138,129 @@ export default function Canvas({
     }
   })
 
-  useHotkeys('ctrl+z', (e) => {
+  const undoRecent = useCallback(() => {
+    const lastAction = recentActions[recentActions.length - 1]
+    if (!lastAction) return
+
+    if (lastAction.actionType === 'add') {
+      if (lastAction.itemType === 'item') {
+        setItems(items.filter((item) => item.id !== lastAction.id))
+      } else if (lastAction.itemType === 'wire') {
+        setWires(wires.filter((wire) => wire.id !== lastAction.id))
+      }
+      removeMostRecentAction()
+    } else if (lastAction.actionType === 'remove') {
+      if (lastAction.itemType === 'item') {
+        if (lastAction.oldState.selectedType === 'item') {
+          setItems([...items, lastAction.oldState])
+        } else {
+          // there was an unexpected error
+        }
+      } else if (lastAction.itemType === 'wire') {
+        if (lastAction.oldState.selectedType === 'wire') {
+          setWires([...wires, lastAction.oldState])
+        } else {
+          // there was an unexpected error
+        }
+      }
+      removeMostRecentAction()
+    } else if (lastAction.actionType === 'mass_remove') {
+      const newItems = items
+      const newWires = wires
+      lastAction.oldState.forEach((item) => {
+        if (item.selectedType === 'item') {
+          newItems.push(item)
+        } else if (item.selectedType === 'wire') {
+          newWires.push(item)
+        }
+      })
+      setItems(newItems)
+      setWires(newWires)
+      removeMostRecentAction()
+    }
+  }, [items, wires, recentActions])
+
+  useHotkeys('meta+z', (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (selected.length > 0) setSelected([])
-    if (draggingNewElement) setDraggingNewElement(null)
-    if (confirmClear) setConfirmClear(false)
-
-    const recentItem = items[items.length - 1]
-    if (recentItem) {
-      itemsUpdate((items) => items.slice(0, -1))
-      const wiresConnecting = wires.filter((wire) => wire.from.id === recentItem.id || wire.to.id === recentItem.id)
-      const updatedWires = wires.filter((wire) => !wiresConnecting.includes(wire))
-      setWires(updatedWires)
-    }
+    undoRecent()
   })
 
   useHotkeys('Delete,Backspace', (e) => {
     e.preventDefault()
     e.stopPropagation()
+    if (selected.length === 1) {
+      if (selected[0].selectedType === 'item') {
+        const newItems = items.filter((item) => item.id !== selected[0].id)
+        setItems(newItems)
+        addRecentAction({
+          actionType: 'remove',
+          datetime: Date.now(),
+          id: selected[0].id,
+          itemType: 'item',
+          oldState: selected[0],
+          newState: null,
+        })
+      } else if (selected[0].selectedType === 'wire') {
+        const deleteWire = wires.find((wire) => wire.id === selected[0].id)
+        if (!deleteWire) return
+        setWires(wires.filter((wire) => wire.id !== selected[0].id))
+        const fromItem = items.find((item) => item.id === deleteWire.from.id)
+        const toItem = items.find((item) => item.id === deleteWire.to.id)
+        if (fromItem && toItem) {
+          // delete the links
+          if (fromItem.itemType === 'gate') {
+            fromItem.outputs = fromItem.outputs.filter((output) => output.id !== deleteWire.to.id)
+          } else if (fromItem.itemType === 'input') {
+            fromItem.outputs = fromItem.outputs.filter((output) => output.id !== deleteWire.to.id)
+          } else if (fromItem.itemType === 'output') {
+            fromItem.inputs = fromItem.inputs.filter((input) => input.id !== deleteWire.to.id)
+          } else {
+            // unexpected error
+          }
 
-    // we need to check if the ids of items and wires match any in selected and delete them from the arrays
-    const selectedItemIds = selected
-      .map((item) => {
-        if (item.selectedType === 'item') return item.id
-        return null
+          if (toItem.itemType === 'gate') {
+            toItem.inputs = toItem.inputs.filter((input) => input.id !== deleteWire.from.id)
+          } else if (toItem.itemType === 'output') {
+            toItem.inputs = toItem.inputs.filter((input) => input.id !== deleteWire.from.id)
+          } else {
+            // unexpected error (can't input into   an input)
+          }
+        }
+        addRecentAction({
+          actionType: 'remove',
+          datetime: Date.now(),
+          id: selected[0].id,
+          itemType: 'wire',
+          oldState: selected[0],
+          newState: null,
+        })
+      }
+    } else {
+      // delete all the items and wires that are selected - also delete all wires where the selected item is the from or to
+      const newItems = items.filter((item) => !selected.flatMap((selected) => selected.id).includes(item.id))
+      const newWires = wires.filter(
+        (wire) =>
+          !selected.flatMap((selected) => selected.id).includes(wire.from.id) &&
+          !selected.flatMap((selected) => selected.id).includes(wire.to.id)
+      )
+      setItems(newItems)
+      setWires(newWires)
+      addRecentAction({
+        actionType: 'mass_remove',
+        datetime: Date.now(),
+        id: selected.flatMap((selected) => selected.id),
+        oldState: selected,
       })
-      .filter((a) => a !== null)
-    const selectedWires = selected
-      .map((item) => {
-        if (item.selectedType === 'wire') return item.id
-        return null
-      })
-      .filter((a) => a !== null)
-    const newItems = items.filter((items) => !selectedItemIds.includes(items.id))
-    const newWires = wires.filter((items) => !selectedWires.includes(items.id))
+    }
+  })
 
-    setWires(newWires)
-    setItems(newItems)
+  useHotkeys('meta+a', (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    items.forEach((item) => selectItemId(item.id))
+    wires.forEach((wire) => select({ ...wire, selectedType: 'wire' }))
   })
 
   // When user starts dragging from the element, save drag position - but it should continue dragging when the cursor leaves this element. So this means the listener needs to be added to the document.
@@ -269,7 +360,7 @@ export default function Canvas({
                     id: temporaryWire.fromId,
                     node_index: nodeIndex,
                   })
-                  const wire = {
+                  addWire({
                     id: randomWireId(),
                     from: {
                       id: temporaryWire.fromId,
@@ -280,8 +371,7 @@ export default function Canvas({
                       node_index: nodeIndex,
                     },
                     active: false,
-                  } satisfies WireType
-                  addWire(wire)
+                  })
                 } else if (terminalType === 'output') {
                   parent.outputs.push({
                     id: temporaryWire.fromId,
@@ -297,7 +387,7 @@ export default function Canvas({
                     id: temporaryWire.fromId,
                     node_index: nodeIndex,
                   })
-                  const wire = {
+                  addWire({
                     id: randomWireId(),
                     from: {
                       id: temporaryWire.fromId,
@@ -308,8 +398,7 @@ export default function Canvas({
                       node_index: nodeIndex,
                     },
                     active: false,
-                  } satisfies WireType
-                  addWire(wire)
+                  })
                 }
                 setTemporaryWire(null)
                 setHolding(false)
@@ -320,7 +409,7 @@ export default function Canvas({
                     id: temporaryWire.fromId,
                     node_index: temporaryWire.fromNodeIndex,
                   })
-                  const wire = {
+                  addWire({
                     id: randomWireId(),
                     from: {
                       id: temporaryWire.fromId,
@@ -331,8 +420,7 @@ export default function Canvas({
                       node_index: nodeIndex,
                     },
                     active: false,
-                  } satisfies WireType
-                  addWire(wire)
+                  })
                 }
                 setTemporaryWire(null)
                 setHolding(false)
@@ -360,12 +448,34 @@ export default function Canvas({
           clientY < canvasReference.current.getBoundingClientRect().top ||
           clientY > canvasReference.current.getBoundingClientRect().bottom
         ) {
+          setHolding(false)
+          return
+        }
+        const sidebarElement = document.querySelector('aside[data-logicate-sidebar]')
+        if (!sidebarElement) {
+          console.error('Sidebar element not found')
+          setHolding(false)
+          return
+        }
+        // if the mouse is over the sidebar, then dont add the item
+        if (
+          cursorInsideElement(
+            {
+              x: clientX,
+              y: clientY,
+            },
+            sidebarElement.getBoundingClientRect()
+          )
+        ) {
+          setHolding(false)
+          // replace cursor with poof cursor
+          document.body.style.cursor = 'url(/poof.png), auto'
           return
         }
         const xOnCanvas = (draggingNewElement.x - canvasReference.current.getBoundingClientRect().left) / canvas.zoom
-        const maxMinX = Math.max(0, Math.min(xOnCanvas, 1000))
+        const maxMinX = Math.max(0, xOnCanvas)
         const yOnCanvas = (draggingNewElement.y - canvasReference.current.getBoundingClientRect().top) / canvas.zoom
-        const maxMinY = Math.max(0, Math.min(yOnCanvas, 1000))
+        const maxMinY = Math.max(0, yOnCanvas)
         const item = {
           id: randomGateId(),
           x: maxMinX,
@@ -445,11 +555,13 @@ export default function Canvas({
     document.addEventListener('mousemove', handleDrag)
     document.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('mousedown', mouseDown)
+    document.addEventListener('UndoEvent', undoRecent)
 
     return () => {
       document.removeEventListener('mousemove', handleDrag)
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('mousedown', mouseDown)
+      document.removeEventListener('UndoEvent', undoRecent)
     }
   })
 
@@ -531,44 +643,20 @@ export default function Canvas({
     simulate()
   }, [items, wires, variableValues])
 
+  if (isMobile) {
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <LogoIcon className="text-neutralgrey-700 mb-8 h-8" />
+        <p className="text-neutralgrey-1100 text-sm font-medium">Mobile is not supported</p>
+        <p className="text-neutralgrey-1000/50 text-xs">Please use a desktop device to use Logicate.</p>
+      </div>
+    )
+  }
+
   return (
     <>
       <main className="flex h-full w-full grow flex-row">
-        <AnimatePresence mode="wait">
-          {(!isNew && !usingDatabase && sessionId !== 'demo' && (
-            <motion.div
-              initial={{
-                opacity: 1,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{
-                delay: 0.3,
-                duration: 1,
-                ease: 'easeInOut',
-              }}
-              className="pointer-events-auto absolute inset-0 z-[12345678] flex cursor-none flex-col items-center justify-center gap-2"
-              style={{
-                backgroundImage: `url(/grid.png)`,
-                backgroundRepeat: 'repeat',
-                backgroundSize: '50px 50px',
-                backgroundPosition: 'center',
-              }}
-            >
-              <LogoIcon className="mb-8 h-12" />
-              <LoadingCircle className="text-neutralgrey-1200 size-5" />
-              <div className="flex flex-col items-center justify-center">
-                <p className="text-neutralgrey-1100 text-sm font-medium">Loading...</p>
-                <p className="text-neutralgrey-1000/50 text-xs">We are loading your data so you can use this canvas.</p>
-              </div>
-            </motion.div>
-          )) ||
-            null}
-        </AnimatePresence>
+        <AnimatePresence mode="wait">{(!isNew && !usingDatabase && sessionId !== 'demo' && <LogicGateLoader />) || null}</AnimatePresence>
         <Sidebar setDraggingNewElement={setDraggingNewElement} draggingNewElement={draggingNewElement} canvas={logicateSession} />
         <FloatingToolbar session={logicateSession} />
         <div

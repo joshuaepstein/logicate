@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { cn } from '@/lib';
-import { VariantProps, cva } from 'class-variance-authority';
+import { cn } from '@/lib'
+import { VariantProps, cva } from 'class-variance-authority'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {}
 
@@ -42,7 +42,7 @@ export const inputVariants = cva(
       displayError: true,
     },
   }
-);
+)
 
 const TextInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, variant, displayError, children, disabled, inputSize, debug, ...props }, ref) => {
@@ -69,9 +69,9 @@ const TextInput = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
       </>
-    );
+    )
   }
-);
-TextInput.displayName = 'Input';
+)
+TextInput.displayName = 'Input'
 
-export { TextInput as Input, TextInput };
+export { TextInput as Input, TextInput }

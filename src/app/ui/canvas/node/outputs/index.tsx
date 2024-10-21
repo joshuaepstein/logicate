@@ -7,6 +7,7 @@ import { darkerColour, lighterColour } from '@/lib/color'
 import { OutputType } from './types'
 import LightOutputBody from './light/body'
 import { useCookie } from 'react-use'
+import { WireTerminal } from '../wire-terminal'
 
 export type OutputProps = {
   type: OutputType
@@ -140,28 +141,16 @@ export const Output = forwardRef<
           >
             <div className="relative mb-[2.5px] flex h-7 flex-col items-center last-of-type:mb-0">
               <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
-                <svg
+                {/* <svg
                   style={{
                     overflow: 'visible',
                     width: '12.5px',
                     height: '12.5px',
                   }}
                   className="pointer-events-none transition-transform hover:scale-[1.2]"
-                >
-                  <circle
-                    className="pointer-events-auto"
-                    cx="6.5"
-                    cy="6.5"
-                    r="6"
-                    stroke={output.settings.color || '#000'}
-                    strokeWidth="1"
-                    fill="white"
-                    data-logicate-output-terminal={0}
-                    data-logicate-node-parent-id={outputId}
-                    data-logicate-parent-terminal-index={0}
-                    data-logicate-parent-terminal-type="input"
-                  ></circle>
-                </svg>
+                > */}
+                <WireTerminal parentId={outputId} index={0} isOutput />
+                {/* </svg> */}
               </div>
               <div
                 className="order-1 min-h-4 w-[2px] grow"

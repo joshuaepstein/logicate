@@ -25,8 +25,9 @@ const appRoutes = {
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain, path, key, fullPath } = parse(req)
   const maintenance = await get('isMaintenance')
+  const isDev = process.env.NODE_ENV === 'development'
 
-  if (maintenance === true) {
+  if (maintenance === true && !isDev) {
     return NextResponse.redirect(new URL('/maintenance', req.url))
   }
 
@@ -58,9 +59,10 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
       return NextResponse.redirect(new URL('/welcome', req.url))
     } else if (path === '/login' || path === '/register') {
       return NextResponse.redirect(new URL('/', req.url))
-    } else if (path.startsWith('/canvas/demo')) {
-      return NextResponse.redirect(new URL('/canvas/new', req.url))
     }
+    // else if (path.startsWith('/canvas/demo')) {
+    // return NextResponse.redirect(new URL('/canvas/new', req.url))
+    // }
   }
 
   return NextResponse.next()

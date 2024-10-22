@@ -2,24 +2,20 @@
 
 import { AppContext } from '@/app/providers'
 import Kbd from '@/components/ui/kbd'
-import { CSSProperties, useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Link from 'next/link'
-import { redirect, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
 import ProfilePicture from '@/components/ui/profile-picture/client'
 import Logo from '@/components/Logo'
-import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { P } from '../ui/typography'
 import { signOut } from 'next-auth/react'
-import useNewFeatureState from '@/lib/features/new-hook'
 import { NewFeature, NewFeatureDateLimit } from '@/lib/features/new'
 import { AnimatePresence, motion } from 'framer-motion'
-import ExpandingArrow from '../ui/icons/expanding-arrow'
 import { useLocalStorage } from 'usehooks-ts'
-import { Button } from '../ui/button'
-import { X01Icon, X02Icon, X03Icon } from '@jfstech/icons-react/24/outline'
 
 export default function ClientNavbar({
   user,
@@ -31,7 +27,7 @@ export default function ClientNavbar({
   const pathname = usePathname()
   const router = useRouter()
   // const [isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled, newFeature] = useNewFeatureState(NewFeature.INSIGHTS, true)
-  const [hiddenInsights, setHiddenInsights] = useLocalStorage('hiddenInsights-navbar', false)
+  const [hiddenInsights] = useLocalStorage('hiddenInsights-navbar', false)
   const { setShowCMDK } = useContext(AppContext)
   useHotkeys('l', () => {
     // redirect('/login')

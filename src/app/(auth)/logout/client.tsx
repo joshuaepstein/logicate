@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { signOut } from 'next-auth/react';
-import { useEffectOnce } from 'react-use';
+import { signOut } from 'next-auth/react'
+import { useEffect } from 'react'
 
 export default function LogoutClient() {
-  useEffectOnce(() => {
-    signOut();
-  });
+  useEffect(() => {
+    signOut()
+  }, [])
 
-  return <></>;
+  return <></>
 }

@@ -1,14 +1,13 @@
-import '@/styles/globals.css'
+import { Footer } from '@/components/marketing/footer'
+import Navbar from '@/components/marketing/navbar'
+import { prisma, User } from '@/database'
 import { cn } from '@/lib'
+import { getSession } from '@/lib/auth/utils'
+import '@/styles/globals.css'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import Providers from './providers'
-import { getSession } from '@/lib/auth/utils'
 import { unstable_cache } from 'next/cache'
-import { prisma, User } from '@/database'
-import { checkInviteExpired } from '@/lib/invite'
-import Navbar from '@/components/marketing/navbar'
-import { Footer } from '@/components/marketing/footer'
+import Providers from './providers'
 
 const getInvites = unstable_cache(
   async (user: User) => {

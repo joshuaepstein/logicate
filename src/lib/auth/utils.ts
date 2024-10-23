@@ -1,7 +1,7 @@
 import { PublicDisplay, User } from '@logicate/database'
 import { NextRequest } from 'next/server'
-import { LogicateError } from '../api/error'
 import { auth } from '.'
+import { LogicateError } from '../api/error'
 
 export interface Session {
   user: Exclude<User, 'password' | 'invalidLoginAttempts' | 'lockedAt'> & {

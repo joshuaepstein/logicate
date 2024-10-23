@@ -1,9 +1,9 @@
-import LogoutClient from './client';
+import LogoutClient from './client'
 
-export default function Logout() {
+export default async function Logout() {
   return (
     <>
       <LogoutClient />
     </>
-  );
+  )
 }

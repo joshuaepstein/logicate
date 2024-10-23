@@ -1,8 +1,7 @@
 import { PublicDisplay, User } from '@logicate/database'
-import { getServerSession } from 'next-auth'
 import { NextRequest } from 'next/server'
 import { LogicateError } from '../api/error'
-import { authConfig } from './options'
+import { auth } from '.'
 
 export interface Session {
   user: Exclude<User, 'password' | 'invalidLoginAttempts' | 'lockedAt'> & {
@@ -11,7 +10,8 @@ export interface Session {
 }
 
 export const getSession = async () => {
-  return getServerSession(authConfig) as Promise<Session>
+  // return getServerSession(authConfig) as Promise<Session>
+  return auth() as Promise<Session>
 }
 
 export const getAuthTokenOrThrow = (req: Request | NextRequest, type: 'Bearer' | 'Basic' = 'Bearer') => {

@@ -122,7 +122,10 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set({ selected })
   },
   setItemsSelected: (items) => {
-    const itemsSelected = items.map((item) => ({ ...item, selectedType: 'item' }) as SelectedItem)
+    const itemsSelected = items.map((item) => (({
+      ...item,
+      selectedType: 'item'
+    }) as SelectedItem))
     set({ selected: itemsSelected })
   },
   select: (item) => set((state) => ({ selected: [...state.selected, item] })),
@@ -153,7 +156,10 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set((state) => {
       const itemsSelected = state.items
         .filter((item) => selected.includes(item.id))
-        .map((item) => ({ ...item, selectedType: 'item' }) as SelectedItem)
+        .map((item) => (({
+        ...item,
+        selectedType: 'item'
+      }) as SelectedItem))
       return { selected: itemsSelected }
     })
   },

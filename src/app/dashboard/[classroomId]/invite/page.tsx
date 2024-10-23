@@ -2,7 +2,13 @@ import { getSession } from '@/lib/auth/utils'
 import { notFound } from 'next/navigation'
 import { getClassroom } from '../actions'
 
-export default async function DashboardPage({ params: { classroomId } }: { params: { classroomId: string } }) {
+export default async function DashboardPage(props: { params: Promise<{ classroomId: string }> }) {
+  const params = await props.params;
+
+  const {
+    classroomId
+  } = params;
+
   const session = await getSession()
   const classroom = await getClassroom(classroomId)()
 
@@ -12,8 +18,8 @@ export default async function DashboardPage({ params: { classroomId } }: { param
 
   return (
     // TODO: Implement Invite students page
-    <form>
+    (<form>
       <h1>Invite students</h1>
-    </form>
-  )
+    </form>)
+  );
 }

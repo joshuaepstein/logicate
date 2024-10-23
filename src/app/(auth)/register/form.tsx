@@ -5,13 +5,12 @@ import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
-import { useFormState } from 'react-dom'
 import { toast } from 'sonner'
 import { registerAction } from './action'
 import { signIn } from 'next-auth/react'
 
 export function RegisterForm() {
-  const [state, formAction] = useFormState(registerAction, undefined)
+  const [state, formAction] = useActionState(registerAction, undefined)
 
   useEffect(() => {
     if (state && state.success) {

@@ -1,13 +1,14 @@
+import { useActionState } from "react";
 'use client'
 
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/input'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom';
 import { addToResend } from './actions'
 import { capitalise } from '@/lib'
 
 export default function SubscribeForm() {
-  const [error, submit] = useFormState(addToResend, undefined)
+  const [error, submit] = useActionState(addToResend, undefined)
 
   return (
     <div className="mt-8 flex flex-col items-center">

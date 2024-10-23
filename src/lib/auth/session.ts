@@ -22,7 +22,7 @@ interface WithSessionHandler {
 
 export const withSession =
   (handler: WithSessionHandler) =>
-  async (req: NextRequest, { params = {} }: { params: Record<string, string> | undefined }) => {
+  async (req: NextRequest, { params = Promise.resolve({}) }: { params: Promise<Record<string, string> | undefined> }) => {
     try {
       let session: (Omit<Session, 'user'> & { user: Omit<Session['user'], 'password'> }) | undefined
       const authorizationHeader = req.headers.get('Authorization')
@@ -90,6 +90,7 @@ export const withSession =
             isAdmin: user.isAdmin,
             lockedAt: user.lockedAt,
             publicDisplay: publicDisplay,
+            lockedAccountUnlockCode: user.lockedAccountUnlockCode,
           },
         }
       } else {
@@ -103,7 +104,7 @@ export const withSession =
       }
 
       const searchParams = getSearchParams(req.url)
-      return await handler({ req, searchParams, params, session })
+      return await handler({ req, searchParams, params: (await params) || {}, session })
     } catch (error) {
       return handleAndReturnErrorResponse(error)
     }

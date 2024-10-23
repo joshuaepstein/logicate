@@ -3,14 +3,13 @@ import { prisma } from '@logicate/database'
 import { sendEmail } from '@logicate/emails'
 import { subscribe } from '@logicate/emails/resend'
 import { waitUntil } from '@vercel/functions'
-import { NextAuthOptions } from 'next-auth'
+import { NextAuthConfig } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from './lock-account'
 import { validatePassword } from './password'
 import { randomAvatar } from '../random'
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
-export const authConfig: NextAuthOptions = {
+export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
       id: 'credentials',

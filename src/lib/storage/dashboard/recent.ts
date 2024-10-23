@@ -5,17 +5,17 @@ import { cookies } from 'next/headers'
 const RECENT_CLASSROOMS_COOKIE = 'recentClassrooms'
 
 const setRecentClassrooms = async (classrooms: string[]) => {
-  const response = await cookies().set(RECENT_CLASSROOMS_COOKIE, classrooms.join(','))
+  const response = await (await cookies()).set(RECENT_CLASSROOMS_COOKIE, classrooms.join(','))
   console.log('setRecentClassrooms', response)
   return response
 }
 
 const getRecentClassrooms = async (): Promise<string[]> => {
-  if (!cookies().has(RECENT_CLASSROOMS_COOKIE)) {
+  if (!(await cookies()).has(RECENT_CLASSROOMS_COOKIE)) {
     return []
   }
 
-  const recentClassrooms = await cookies().get(RECENT_CLASSROOMS_COOKIE)
+  const recentClassrooms = (await cookies()).get(RECENT_CLASSROOMS_COOKIE)
 
   if (!recentClassrooms) {
     return []

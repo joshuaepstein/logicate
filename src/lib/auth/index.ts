@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
-import { authConfig } from './options';
+import NextAuth from 'next-auth'
+import { authConfig } from './options'
 
-export const nextAuth = NextAuth(authConfig);
+export const { auth, handlers, signIn, signOut } = NextAuth(authConfig)

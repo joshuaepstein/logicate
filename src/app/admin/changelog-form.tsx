@@ -6,11 +6,10 @@ import { DialogFooter, DialogHeader } from '@/components/ui/modal';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/not-done-yet/accordion';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
-import { useFormState } from 'react-dom';
 import { createChangelog } from './action';
 
 export default function ChangelogForm() {
-  const [error, formAction] = useFormState(createChangelog, undefined);
+  const [error, formAction] = useActionState(createChangelog, undefined);
 
   const [additions, setAdditions] = useState<string[]>([]);
   const [changes, setChanges] = useState<string[]>([]);

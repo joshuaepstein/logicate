@@ -182,7 +182,7 @@ const OTPInputSegmented = React.forwardRef<HTMLInputElement, OTPInputProps>(func
 /**
  * Handle updating the input selection range to ensure a single character is selected when moving the cursor, or if the input value changes.
  */
-function selectionRangeUpdater(cur: SelectionRange, inputRef: React.RefObject<HTMLInputElement>) {
+function selectionRangeUpdater(cur: SelectionRange, inputRef: React.RefObject<HTMLInputElement | null>) {
   let updated: [number, number, HTMLInputElement['selectionDirection']] = [
     inputRef.current?.selectionStart ?? 0,
     inputRef.current?.selectionEnd ?? 0,

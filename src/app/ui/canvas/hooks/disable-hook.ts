@@ -1,7 +1,7 @@
 import { Click } from '@/lib/buttons'
 import { useEffect } from 'react'
 
-const useDisableHook = (canvasReference: React.RefObject<HTMLDivElement>) => {
+const useDisableHook = (canvasReference: React.RefObject<HTMLDivElement | null>) => {
   useEffect(() => {
     // disable right click context menu on canvas as we dont need a context menu
     const disableContextMenu = (e: MouseEvent) => {

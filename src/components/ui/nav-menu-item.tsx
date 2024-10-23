@@ -21,7 +21,7 @@ const NavigationMenuItem = React.forwardRef<React.ElementRef<'li'>, Props>(
 
     return (
       // @ts-ignore
-      <Component
+      (<Component
         className={cn(
           'hover:bg-neutralgrey-200 focus:inner-border-2 focus:inner-border-blue-900 group box-content flex w-max flex-row items-center gap-3 rounded-lg p-2 transition focus:border-none focus:outline-none',
           {
@@ -51,7 +51,7 @@ const NavigationMenuItem = React.forwardRef<React.ElementRef<'li'>, Props>(
             {props.text}
           </span>
         )}
-      </Component>
+      </Component>)
     );
   }
 );

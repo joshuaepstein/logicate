@@ -32,7 +32,13 @@ const getDatabaseSessionAsAdmin = async (canvasId: string) => {
   })
 }
 
-export async function generateMetadata({ params: { canvas } }: { params: { canvas: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ canvas: string }> }): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    canvas
+  } = params;
+
   const logicateSession = await getDatabaseSessionAsAdmin(canvas)
 
   return {
@@ -40,13 +46,24 @@ export async function generateMetadata({ params: { canvas } }: { params: { canva
   }
 }
 
-export default async function Home({
-  params: { canvas },
-  searchParams: { isNew },
-}: {
-  params: { canvas: string }
-  searchParams: { isNew: string }
-}) {
+export default async function Home(
+  props: {
+    params: Promise<{ canvas: string }>
+    searchParams: Promise<{ isNew: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+
+  const {
+    isNew
+  } = searchParams;
+
+  const params = await props.params;
+
+  const {
+    canvas
+  } = params;
+
   const session = await getSession()
   if (!session) notFound()
   const logicateSession = await getDatabaseSession(canvas, session.user.id)

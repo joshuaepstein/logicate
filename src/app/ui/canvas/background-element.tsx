@@ -6,7 +6,7 @@ export default function BackgroundElement({
   canvasReference,
 }: {
   showBackground: boolean
-  canvasReference: React.RefObject<HTMLDivElement>
+  canvasReference: React.RefObject<HTMLDivElement | null>
 }) {
   const { canvas } = useCanvasStore()
   const backgroundElementRef = useRef<HTMLDivElement>(null)

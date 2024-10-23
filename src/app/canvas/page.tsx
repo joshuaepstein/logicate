@@ -25,12 +25,12 @@ export default async function CanvasPage({}) {
   const canvas = await getAllCanvas(session.user.id)
 
   return (
-    <>
+    <ul>
       {canvas.map((c) => (
-        <Link href={`/canvas/${c.id}`} key={c.id}>
-          {c.id}
-        </Link>
+        <li key={c.id}>
+          <Link href={`/canvas/${c.id}`}>{c.name}</Link>
+        </li>
       ))}
-    </>
+    </ul>
   )
 }

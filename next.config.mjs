@@ -7,15 +7,6 @@ dotenv.config({
 
 /** @type {import('next').NextConfig} */
 const config = {
-  webpack(config, { isServer }) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      issuer: /\.[jt]sx?$/,
-      use: ['@svgr/webpack'],
-    });
-
-    return config;
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },

@@ -4,7 +4,6 @@ import useCanvasStore from './useCanvasStore'
 import { useDebounce } from 'use-debounce'
 import { getCookie } from 'react-use-cookie'
 import { InputType } from '../node/inputs/types'
-import { useBeforeunload } from 'react-beforeunload'
 
 export const updateDatabase = async (stringData: string, canvasId: string) => {
   const { updatingDatabase, setUpdatingDatabase } = useCanvasStore.getState()
@@ -27,6 +26,7 @@ const useUpdateCanvasStore = (canvasId: string) => {
   if (canvasId === 'demo') return
   const [cachedDatabase, setCachedDatabase] = useState<string | null>(null)
   const { updatingDatabase, setUpdatingDatabase, ...canvasStore } = useCanvasStore()
+  const [initialRun, setInitialRun] = useState(false)
   const [debouncedCanvasStore] = useDebounce(
     {
       items: canvasStore.items.map((item) =>
@@ -47,13 +47,18 @@ const useUpdateCanvasStore = (canvasId: string) => {
   // }
 
   useEffect(() => {
-    if (getCookie(`autoSave-${canvasId}`) === 'false') return
-    if (debouncedCanvasStore.items.length === 0 && debouncedCanvasStore.wires.length === 0) {
-      // TODO: confirm with user if they want to continue and remove all data
-      // return
+    if (!initialRun) {
+      setInitialRun(true)
+      return
     }
+    if (getCookie(`autoSave-${canvasId}`) === 'false') return
     const stringified = SuperJSON.stringify(debouncedCanvasStore)
     if (stringified === cachedDatabase) return
+    if (debouncedCanvasStore.items.length === 0 && debouncedCanvasStore.wires.length === 0) {
+      // TODO: confirm with user if they want to continue and remove all data
+      // console.log('AVOIDING SAVING EMPTY CANVAS')
+      // return
+    }
     // We cache the database string here so that we are not updating the database every time that the canvas store changes
     // This makes sure that we are not sending too many requests to our database.
     setCachedDatabase(stringified)

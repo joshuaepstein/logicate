@@ -1,7 +1,5 @@
-import { addToResend, getChangelogs } from './actions'
-import { TextInput } from '@/components/ui/input/index'
-import { Button } from '@/components/ui/button'
 import { Changelog } from '@logicate/database'
+import { getChangelogs } from './actions'
 import SubscribeForm from './subscribe-form'
 
 export default async function ChangelogPage() {
@@ -20,9 +18,11 @@ export default async function ChangelogPage() {
         </div>
       </div>
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        {changelogs.map((changelog) => (
-          <ChangelogItem key={changelog.id} changelog={changelog} />
-        ))}
+        {changelogs
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .map((changelog) => (
+            <ChangelogItem key={changelog.id} changelog={changelog} />
+          ))}
       </div>
     </>
   )

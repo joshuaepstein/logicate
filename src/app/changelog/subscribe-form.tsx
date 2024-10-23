@@ -1,9 +1,9 @@
-import { useActionState } from "react";
 'use client'
 
+import { useActionState } from 'react'
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/input'
-import { useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom'
 import { addToResend } from './actions'
 import { capitalise } from '@/lib'
 

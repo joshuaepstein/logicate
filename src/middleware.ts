@@ -1,7 +1,7 @@
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
-import { parse } from './lib/middleware'
-import { getUserViaToken } from './lib/auth/middleware/get-user-via-token'
 import { get } from '@vercel/edge-config'
+import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
+import { getUserViaToken } from './lib/auth/middleware/get-user-via-token'
+import { parse } from './lib/middleware'
 
 export const config = {
   matcher: [
@@ -29,13 +29,21 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   if (maintenance === true && !isDev) {
     return NextResponse.redirect(new URL('/maintenance', req.url))
+  } else {
+    if (path.startsWith('/maintenance')) {
+      const response = NextResponse.redirect(new URL('/', req.url))
+      response.headers.set('x-url', fullPath)
+      return response
+    }
   }
 
   //TODO: If the page is "admin." then redirect to the admin page
 
   for (const [key, value] of Object.entries(appRoutes)) {
     if (domain === `${key}.logicate` || domain === `${key}.localhost:3000`) {
-      return NextResponse.rewrite(new URL(`${value}${path}`, req.url))
+      const response = NextResponse.rewrite(new URL(`${value}${path}`, req.url))
+      response.headers.set('x-url', fullPath)
+      return response
     }
   }
 
@@ -51,19 +59,29 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     !path.startsWith('/canvas/demo')
   ) {
     if (fullPath.startsWith('/logout')) {
-      return NextResponse.redirect(new URL('/login', req.url))
+      const response = NextResponse.redirect(new URL('/login', req.url))
+      response.headers.set('x-url', fullPath)
+      return response
     }
-    return NextResponse.redirect(new URL(`/login${path === '/' ? '' : `?next=${encodeURIComponent(fullPath)}`}`, req.url))
+    const response = NextResponse.redirect(new URL(`/login${path === '/' ? '' : `?next=${encodeURIComponent(fullPath)}`}`, req.url))
+    response.headers.set('x-url', fullPath)
+    return response
   } else if (user) {
     if (user.createdAt && new Date(user.createdAt).getTime() > Date.now() - 10000 && path !== '/welcome') {
-      return NextResponse.redirect(new URL('/welcome', req.url))
+      const response = NextResponse.redirect(new URL('/welcome', req.url))
+      response.headers.set('x-url', fullPath)
+      return response
     } else if (path === '/login' || path === '/register') {
-      return NextResponse.redirect(new URL('/', req.url))
+      const response = NextResponse.redirect(new URL('/', req.url))
+      response.headers.set('x-url', fullPath)
+      return response
     }
     // else if (path.startsWith('/canvas/demo')) {
     // return NextResponse.redirect(new URL('/canvas/new', req.url))
     // }
   }
 
-  return NextResponse.next()
+  const response = NextResponse.next()
+  response.headers.set('x-url', fullPath)
+  return response
 }

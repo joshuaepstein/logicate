@@ -5,7 +5,7 @@ import Kbd from '@/components/ui/kbd'
 import { useContext } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSelectedLayoutSegment } from 'next/navigation'
 import { PublicDisplay, User } from '@logicate/database'
 import { cn } from '@/lib'
 import ProfilePicture from '@/components/ui/profile-picture/client'
@@ -25,6 +25,7 @@ export default function ClientNavbar({
   }
 }) {
   const pathname = usePathname()
+  const segment = useSelectedLayoutSegment()
   const router = useRouter()
   // const [isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled, newFeature] = useNewFeatureState(NewFeature.INSIGHTS, true)
   const [hiddenInsights] = useLocalStorage('hiddenInsights-navbar', false)
@@ -169,32 +170,35 @@ export default function ClientNavbar({
         </div>
       </nav>
       <AnimatePresence mode="wait">
-        {(new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights) || true ? (
-          <motion.div
-            initial={{ height: 0 }}
-            animate={{ height: 'auto' }}
-            exit={{ height: 0 }}
-            transition={{ duration: 0.5 }}
-            className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden backdrop-blur-[6px]"
-          >
-            <div className="text-neutralgrey-1200 py-2 text-xs font-medium">
-              {/* Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '} */}
-              This web application is currently in development. There are bugs and unfinished features.
-              {/* <Link
+        {
+          //(new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights) ||
+          segment !== '/_not-found' ? (
+            <motion.div
+              initial={{ height: 0 }}
+              animate={{ height: 'auto' }}
+              exit={{ height: 0 }}
+              transition={{ duration: 0.5 }}
+              className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden backdrop-blur-[6px]"
+            >
+              <div className="text-neutralgrey-1200 py-2 text-xs font-medium">
+                {/* Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '} */}
+                This web application is currently in development. There are bugs and unfinished features.
+                {/* <Link
                 href="/insights"
                 className="group ml-1 inline-flex items-center underline opacity-75 transition-opacity hover:opacity-100"
               >
                 Click here to learn more <ExpandingArrow className="size-4" />
               </Link> */}
-            </div>
-            {/* <button
+              </div>
+              {/* <button
               className="group absolute right-4 rounded-md bg-black/5 p-1 transition hover:bg-black/10"
               onClick={() => setHiddenInsights(true)}
             >
               <X02Icon className="group-hover:text-neutralgrey-1300 text-neutralgrey-1000 size-4 transition" />
             </button> */}
-          </motion.div>
-        ) : null}
+            </motion.div>
+          ) : null
+        }
       </AnimatePresence>
     </navigation-header>
   )

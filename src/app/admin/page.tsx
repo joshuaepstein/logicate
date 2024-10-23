@@ -1,15 +1,13 @@
-import { getSession } from '@/lib/auth/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input/index';
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/modal';
-import { notFound } from 'next/navigation';
-import { Textarea } from '@/components/ui/textarea';
-import ChangelogForm from './changelog-form';
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/modal'
+import { getSession } from '@/lib/auth/utils'
+import { notFound } from 'next/navigation'
+import ChangelogForm from './changelog-form'
 
 export default async function AdminPage() {
-  const session = await getSession();
+  const session = await getSession()
   if (!session.user.isAdmin) {
-    notFound();
+    notFound()
   }
   return (
     <>
@@ -22,5 +20,5 @@ export default async function AdminPage() {
         </DialogContent>
       </Dialog>
     </>
-  );
+  )
 }

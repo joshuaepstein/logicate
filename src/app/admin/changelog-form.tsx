@@ -1,26 +1,28 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input/index';
-import { DialogFooter, DialogHeader } from '@/components/ui/modal';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/not-done-yet/accordion';
-import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { createChangelog } from './action';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input/index'
+import { DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/modal'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/not-done-yet/accordion'
+import { Textarea } from '@/components/ui/textarea'
+import { useActionState, useState } from 'react'
+import { createChangelog } from './action'
 
 export default function ChangelogForm() {
-  const [error, formAction] = useActionState(createChangelog, undefined);
+  const [error, formAction] = useActionState(createChangelog, undefined)
 
-  const [additions, setAdditions] = useState<string[]>([]);
-  const [changes, setChanges] = useState<string[]>([]);
-  const [fixes, setFixes] = useState<string[]>([]);
+  const [additions, setAdditions] = useState<string[]>([])
+  const [changes, setChanges] = useState<string[]>([])
+  const [fixes, setFixes] = useState<string[]>([])
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <input type="hidden" name="additions_length" value={additions.length} />
       <input type="hidden" name="changes_length" value={changes.length} />
       <input type="hidden" name="fixes_length" value={fixes.length} />
-      <DialogHeader>Create Changelog</DialogHeader>
+      <DialogHeader>
+        <DialogTitle>Create Changelog</DialogTitle>
+      </DialogHeader>
       <Input name="title" placeholder="Title" />
       <Textarea name="subtitle" placeholder="Subtitle" />
 
@@ -31,8 +33,8 @@ export default function ChangelogForm() {
             <Button
               variant="borders"
               onClick={(e) => {
-                e.preventDefault();
-                setAdditions([...additions, '']);
+                e.preventDefault()
+                setAdditions([...additions, ''])
               }}
               type="button"
             >
@@ -48,15 +50,15 @@ export default function ChangelogForm() {
                   placeholder="Additions"
                   value={addition}
                   onChange={(e) => {
-                    const newAdditions = [...additions];
-                    newAdditions[index] = e.target.value;
-                    setAdditions(newAdditions);
+                    const newAdditions = [...additions]
+                    newAdditions[index] = e.target.value
+                    setAdditions(newAdditions)
                   }}
                 />
                 <Button
                   variant="borders"
                   onClick={() => {
-                    setAdditions(additions.filter((_, i) => i !== index));
+                    setAdditions(additions.filter((_, i) => i !== index))
                   }}
                   type="button"
                 >
@@ -72,8 +74,8 @@ export default function ChangelogForm() {
             <Button
               variant="borders"
               onClick={(e) => {
-                e.preventDefault();
-                setChanges([...changes, '']);
+                e.preventDefault()
+                setChanges([...changes, ''])
               }}
               type="button"
             >
@@ -89,15 +91,15 @@ export default function ChangelogForm() {
                   placeholder="Changes"
                   value={change}
                   onChange={(e) => {
-                    const newChanges = [...changes];
-                    newChanges[index] = e.target.value;
-                    setChanges(newChanges);
+                    const newChanges = [...changes]
+                    newChanges[index] = e.target.value
+                    setChanges(newChanges)
                   }}
                 />
                 <Button
                   variant="borders"
                   onClick={() => {
-                    setChanges(changes.filter((_, i) => i !== index));
+                    setChanges(changes.filter((_, i) => i !== index))
                   }}
                   type="button"
                 >
@@ -113,8 +115,8 @@ export default function ChangelogForm() {
             <Button
               variant="borders"
               onClick={(e) => {
-                e.preventDefault();
-                setFixes([...fixes, '']);
+                e.preventDefault()
+                setFixes([...fixes, ''])
               }}
               type="button"
             >
@@ -130,15 +132,15 @@ export default function ChangelogForm() {
                   placeholder="Fixes"
                   value={fix}
                   onChange={(e) => {
-                    const newFixes = [...fixes];
-                    newFixes[index] = e.target.value;
-                    setFixes(newFixes);
+                    const newFixes = [...fixes]
+                    newFixes[index] = e.target.value
+                    setFixes(newFixes)
                   }}
                 />
                 <Button
                   variant="borders"
                   onClick={() => {
-                    setFixes(fixes.filter((_, i) => i !== index));
+                    setFixes(fixes.filter((_, i) => i !== index))
                   }}
                   type="button"
                 >
@@ -155,5 +157,5 @@ export default function ChangelogForm() {
         {error && <p className="text-red-500">{error}</p>}
       </DialogFooter>
     </form>
-  );
+  )
 }

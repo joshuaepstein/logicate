@@ -54,3 +54,7 @@ export const generateClassroomId = () => {
 export const generateLockCode = () => {
   return nanoid(24)
 }
+
+export const changelogId = () => {
+  return 'cl_' + nanoid(8)
+}

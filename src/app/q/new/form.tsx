@@ -6,12 +6,12 @@ import TruthTableIcon from '@/components/icons/truth-table-icon'
 import { Button } from '@/components/ui/button'
 import { capitaliseEachWord, cn } from '@/lib'
 import { QuestionType } from '@/questions/question'
-import { DashIcon, Plus01Icon } from '@jfstech/icons-react/24/outline'
 import { AnimatePresence, motion, MotionValue, useSpring, useTransform } from 'framer-motion'
 import { lowerCase } from 'lodash'
 import { redirect } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useRef, useState, useTransition } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import { useEventListener } from 'usehooks-ts'
 
 const STAGES = [
   {
@@ -93,7 +93,7 @@ export function StageOne({
       <div className="flex flex-row items-start justify-start gap-6">
         {Object.values(QuestionType).map((questionType, index) => {
           return (
-            <div className="flex flex-col items-center justify-center">
+            <div key={index} className="flex flex-col items-center justify-center">
               <div
                 className={cn(
                   'shadow-hard-soft-md hover:shadow-hard-soft-lg peer flex size-48 scale-100 flex-col items-center justify-center rounded-md transition hover:scale-105 active:scale-[1]',
@@ -111,7 +111,6 @@ export function StageOne({
                     }
                   })
                 }}
-                key={index}
               >
                 <IconFromQuestionType questionType={questionType} />
               </div>
@@ -195,7 +194,6 @@ export function StageTwo({
     </div>
   )
 }
-import { useEventListener } from 'usehooks-ts'
 
 const CustomSlider = ({
   questionCount,

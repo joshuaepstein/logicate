@@ -1,10 +1,6 @@
 import { BooleanExpression } from '@/questions/boolean-expression'
-import { GateItem, InputItem, Item, OutputItem, Wire } from './types'
-import { gates } from './node'
 import { GateType } from './node/gates/types'
-import { InputType } from './node/inputs/types'
-import { OutputType } from './node/outputs/types'
-
+import { GateItem, InputItem, Item, OutputItem, Wire } from './types'
 
 // TODO: CODE DOES NOT WORK PROPERLY - RE-WRITE
 
@@ -90,13 +86,13 @@ function buildExpression(itemId: string, items: Item[], wires: Wire[]): BooleanE
 function gateTypeToOperator(gateType: GateType): { operator: '∧' | '∨' | '⊕'; isNegated: boolean } {
   switch (gateType) {
     case GateType.AND:
+    case GateType.BUFFER:
       return { operator: '∧', isNegated: false }
     case GateType.OR:
       return { operator: '∨', isNegated: false }
     case GateType.NOT:
-      return { operator: '∧', isNegated: true } // Unary operator, negation applied
     case GateType.NAND:
-      return { operator: '∧', isNegated: true }
+      return { operator: '∧', isNegated: true } // Unary operator, negation applied
     case GateType.NOR:
       return { operator: '∨', isNegated: true }
     case GateType.XOR:
@@ -104,8 +100,6 @@ function gateTypeToOperator(gateType: GateType): { operator: '∧' | '∨' | '�
       return { operator: '⊕', isNegated: false }
     case GateType.XNOR:
       return { operator: '⊕', isNegated: true }
-    case GateType.BUFFER:
-      return { operator: '∧', isNegated: false } // Acts like an AND gate with a single input
     default:
       throw new Error(`Unknown gate type: ${gateType}`)
   }

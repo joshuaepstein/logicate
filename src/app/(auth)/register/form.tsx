@@ -3,11 +3,11 @@
 import { Input } from '@/components/ui/input/index'
 import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/ui/submit-button'
+import { signIn } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { registerAction } from './action'
-import { signIn } from 'next-auth/react'
 
 export function RegisterForm() {
   const [state, formAction] = useActionState(registerAction, undefined)
@@ -19,14 +19,25 @@ export function RegisterForm() {
           email: state.data.email,
           password: state.data.password,
           redirect: false,
-        }).then((response) => {
-          if (response) {
-            // wait 5 seconds
-            setTimeout(() => {
-              redirect('/?newLogin=true')
-            }, 5000)
-          }
         })
+          .then((response) => {
+            if (response) {
+              // wait 5 seconds
+              setTimeout(() => {
+                redirect('/?newLogin=true')
+              }, 5000)
+            } else {
+              toast.error('An error occurred while logging in', {
+                description: "You've been registered successfully, but we couldn't log you in. Please try again or go to the login page.",
+              })
+            }
+          })
+          .catch((error) => {
+            console.error(error)
+            toast.error('An error occurred while logging in', {
+              description: "You've been registered successfully, but we couldn't log you in. Please try again or go to the login page.",
+            })
+          })
       } catch (error) {
         console.error(error)
         toast.error('An error occurred while logging in', {

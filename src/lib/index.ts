@@ -48,5 +48,5 @@ export function humanFileSize(bytes: number, si = false, dp = 1) {
 }
 
 export function snakeToCamel(str: string) {
-  return str.replace(/([-_][a-z])/gi, ($1) => $1.toUpperCase().replace('-', '').replace('_', ''));
+  return str.replace(/([-_][a-z])/gi, ($1) => $1.toUpperCase().replaceAll('-', '').replaceAll('_', ''))
 }

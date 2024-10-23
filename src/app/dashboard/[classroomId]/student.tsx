@@ -1,23 +1,11 @@
-import { Footer } from '@/components/marketing/footer'
-import Navbar from '@/components/marketing/navbar'
-import ClientProfilePicture, { getProfilePictureSource } from '@/components/ui/profile-picture/client'
+import { getProfilePictureSource } from '@/components/ui/profile-picture/client'
 import { Progress } from '@/components/ui/progress'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { capitalise, cn } from '@/lib'
-import { getAvatar, getAvatarFromId, randomAvatar } from '@/lib/random'
+import { cn } from '@/lib'
+import { randomAvatar } from '@/lib/random'
+import { addRecentClassroom } from '@/lib/storage/dashboard/recent'
 import { prisma, User } from '@logicate/database'
-import { camelCase } from 'lodash'
+import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
-
-async function getOwnedCanvas(userId: string) {
-  'use server'
-  const canvas = await prisma.logicateSession.findMany({
-    where: {
-      ownerId: userId,
-    },
-  })
-  return canvas
-}
 
 async function getClassroom(classroomId: string) {
   'use server'
@@ -52,10 +40,23 @@ async function getLeaderboard(classroomId: string) {
   return leaderboardUsers
 }
 
+const updatedRecentClassrooms = async (classroomId: string) => {
+  'use server'
+  const cookie_store = cookies()
+  if (!cookie_store.has('recentClassrooms')) {
+    cookie_store.set('recentClassrooms', JSON.stringify([classroomId]))
+  } else {
+    const recentClassrooms = JSON.parse(cookie_store.get('recentClassrooms')?.value || '[]')
+    recentClassrooms.unshift(classroomId) // This will ensure the most recent classroom is at the beginning of the array
+    cookie_store.set('recentClassrooms', JSON.stringify(recentClassrooms))
+  }
+}
+
 export default async function StudentDashboard({ user, classroomId }: { user: User; classroomId: string }) {
   const classroom = await getClassroom(classroomId)
   if (!classroom) notFound()
   const leaderboard = await getLeaderboard(classroomId)
+  await updatedRecentClassrooms(classroomId)
 
   return (
     <main className="max-w-dvw mb-8 flex min-h-[calc(100dvh-15rem)] flex-col">

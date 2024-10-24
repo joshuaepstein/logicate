@@ -176,7 +176,7 @@
   },
   "packageManager": "pnpm@8.15.6",
   "engines": {
-    "node": ">20"
+    "node": "20.x"
   },
   "pnpm": {
     "overrides": {

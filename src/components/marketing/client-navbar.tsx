@@ -1,21 +1,20 @@
 'use client'
 
 import { AppContext } from '@/app/providers'
+import Logo from '@/components/Logo'
 import Kbd from '@/components/ui/kbd'
-import { useContext } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
+import ProfilePicture from '@/components/ui/profile-picture/client'
+import { cn } from '@/lib'
+import { PublicDisplay, User } from '@logicate/database'
+import { AnimatePresence, motion } from 'framer-motion'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSelectedLayoutSegment } from 'next/navigation'
-import { PublicDisplay, User } from '@logicate/database'
-import { cn } from '@/lib'
-import ProfilePicture from '@/components/ui/profile-picture/client'
-import Logo from '@/components/Logo'
+import { useContext } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
+import { useLocalStorage } from 'usehooks-ts'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { P } from '../ui/typography'
-import { signOut } from 'next-auth/react'
-import { NewFeature, NewFeatureDateLimit } from '@/lib/features/new'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useLocalStorage } from 'usehooks-ts'
 
 export default function ClientNavbar({
   user,
@@ -43,13 +42,14 @@ export default function ClientNavbar({
   //   }
   // }, [pathname, isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled])
 
+  // TODO: Add mobile navbar
   return (
     <navigation-header>
       <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
         <Link href="/">
           <Logo className="h-8 transition hover:scale-105 active:scale-95" />
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           <ul className="flex items-center justify-start gap-4">
             <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/canvas">Your Canvases</Link>
@@ -178,7 +178,7 @@ export default function ClientNavbar({
               animate={{ height: 'auto' }}
               exit={{ height: 0 }}
               transition={{ duration: 0.5 }}
-              className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden backdrop-blur-[6px]"
+              className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden text-center backdrop-blur-[6px]"
             >
               <div className="text-neutralgrey-1200 py-2 text-xs font-medium">
                 {/* Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '} */}

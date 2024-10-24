@@ -1,7 +1,13 @@
 'use client'
-import { LogicateSession, User } from '@logicate/database'
+import LogoIcon from '@/components/Logo'
+import { cn } from '@/lib'
 import { Click } from '@/lib/buttons'
+import { cursorInsideElement } from '@/lib/dom-cursor'
+import useMediaQuery from '@/lib/hooks/use-media-query'
 import { randomGateId, randomWireId } from '@/lib/id'
+import { LogicateSession, User } from '@logicate/database'
+import { AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import BackgroundElement from './background-element'
@@ -9,43 +15,38 @@ import useCanvasActions from './canvas_actions'
 import useDisableHook from './hooks/disable-hook'
 import useUpdateCanvasStore from './hooks/updateCanvasStore'
 import useCanvasStore from './hooks/useCanvasStore'
-import { GateType } from './node/gates/types'
-import { defaultInputs } from './node/gates/constants'
-import { Gate } from './node/gates'
-import { Input } from './node/inputs'
-import { InputType } from './node/inputs/types'
-import { TemporaryInput } from './node/inputs/temporary'
-import { TemporaryGate } from './node/gates/temporary'
-import { NodeType } from './node/type'
-import { OutputType } from './node/outputs/types'
-import Sidebar from './sidebar'
-import { Alphabet, Item, TypeWire, Wire as WireType } from './types'
-import { ConnectionWire, Wire } from './wire'
+import LogicGateLoader from './logic-gate-loader'
 import { gates } from './node'
-import Cookies from 'js-cookie'
-import LoadingCircle from '@/components/ui/icons/loading-circle'
-import { AnimatePresence, motion } from 'framer-motion'
-import { cn } from '@/lib'
-import FloatingToolbar from './toolbar'
+import { Gate } from './node/gates'
+import { defaultInputs } from './node/gates/constants'
+import { TemporaryGate } from './node/gates/temporary'
+import { GateType } from './node/gates/types'
+import { Input } from './node/inputs'
+import { TemporaryInput } from './node/inputs/temporary'
+import { InputType } from './node/inputs/types'
 import { Output } from './node/outputs'
 import { TemporaryOutput } from './node/outputs/temporary'
-import LogoIcon from '@/components/Logo'
+import { OutputType } from './node/outputs/types'
+import { NodeType } from './node/type'
+import Sidebar from './sidebar'
+import FloatingToolbar from './toolbar'
+import { Alphabet, Item, TypeWire } from './types'
 import VariableControls from './variable-controls'
-import useMediaQuery from '@/lib/hooks/use-media-query'
-import { cursorInside, cursorInsideElement } from '@/lib/dom-cursor'
-import LogicGateLoader from './logic-gate-loader'
+import { ConnectionWire, Wire } from './wire'
 
 export default function Canvas({
   sessionId,
   user,
   logicateSession,
   isNew,
+  isMobile = false,
   demo = false,
 }: {
   sessionId: string
   logicateSession: LogicateSession
   user: User | null
   isNew: boolean
+  isMobile?: boolean
   demo?: boolean
 }) {
   const canvasReference = useRef<HTMLDivElement>(null)
@@ -110,7 +111,7 @@ export default function Canvas({
   useDisableHook(canvasReference)
   useUpdateCanvasStore(logicateSession.id)
   const [preinstalled_opacity, setPreinstalledOpacity] = useState<Item[]>([])
-  const { isMobile } = useMediaQuery()
+  const { isMobile: isMobileQuery } = useMediaQuery()
 
   useEffect(() => {
     if (sessionId === 'demo') return
@@ -643,12 +644,19 @@ export default function Canvas({
     simulate()
   }, [items, wires, variableValues])
 
-  if (isMobile) {
+  if (isMobile || isMobileQuery) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
         <LogoIcon className="text-neutralgrey-700 mb-8 h-8" />
-        <p className="text-neutralgrey-1100 text-sm font-medium">Mobile is not supported</p>
+        <p className="text-neutralgrey-1100 text-sm font-medium">Mobile/Tablet is not supported</p>
         <p className="text-neutralgrey-1000/50 text-xs">Please use a desktop device to use Logicate.</p>
+
+        <p className="text-neutralgrey-1000/50 mt-4 text-xs">
+          If you believe this is an error, please contact us at{' '}
+          <Link href="mailto:support@joshepstein.co.uk" className="underline">
+            support@joshepstein.co.uk
+          </Link>
+        </p>
       </div>
     )
   }

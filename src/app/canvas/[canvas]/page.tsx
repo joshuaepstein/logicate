@@ -1,10 +1,11 @@
+import LogicGateLoader from '@/app/ui/canvas/logic-gate-loader'
 import { getSession } from '@/lib/auth/utils'
 import { prisma } from '@logicate/database'
+import { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import Canvas from '../../ui/canvas'
-import { Metadata } from 'next'
-import LogicGateLoader from '@/app/ui/canvas/logic-gate-loader'
 
 const getDatabaseSession = async (canvasId: string, userId: string) => {
   return prisma.logicateSession.findUnique({
@@ -33,11 +34,9 @@ const getDatabaseSessionAsAdmin = async (canvasId: string) => {
 }
 
 export async function generateMetadata(props: { params: Promise<{ canvas: string }> }): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    canvas
-  } = params;
+  const { canvas } = params
 
   const logicateSession = await getDatabaseSessionAsAdmin(canvas)
 
@@ -46,23 +45,14 @@ export async function generateMetadata(props: { params: Promise<{ canvas: string
   }
 }
 
-export default async function Home(
-  props: {
-    params: Promise<{ canvas: string }>
-    searchParams: Promise<{ isNew: string }>
-  }
-) {
-  const searchParams = await props.searchParams;
+export default async function Home(props: { params: Promise<{ canvas: string }>; searchParams: Promise<{ isNew: string }> }) {
+  const searchParams = await props.searchParams
 
-  const {
-    isNew
-  } = searchParams;
+  const { isNew } = searchParams
 
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    canvas
-  } = params;
+  const { canvas } = params
 
   const session = await getSession()
   if (!session) notFound()
@@ -71,13 +61,24 @@ export default async function Home(
     // TODO: Canvas not found design
     return notFound()
   }
+  const userAgent = (await headers()).get('user-agent') || ''
 
   return (
     <div className="flex h-dvh max-h-dvh w-full flex-col overflow-hidden">
       {/* <nav className="border-neutralgrey-400 h-16 w-full border-b">{session.user.name}</nav> */}
       <Suspense fallback={<LogicGateLoader />}>
-        <Canvas sessionId={logicateSession.id} isNew={isNew === 'true'} logicateSession={logicateSession} user={session.user} />
+        <Canvas
+          sessionId={logicateSession.id}
+          isMobile={isMobile(userAgent)}
+          isNew={isNew === 'true'}
+          logicateSession={logicateSession}
+          user={session.user}
+        />
       </Suspense>
     </div>
   )
+}
+
+const isMobile = (userAgent: string): boolean => {
+  return /android.+mobile|ip(hone|[oa]d)/i.test(userAgent)
 }

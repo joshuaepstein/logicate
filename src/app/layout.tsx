@@ -5,6 +5,7 @@ import { prisma, User } from '@/database'
 import { cn } from '@/lib'
 import { getSession } from '@/lib/auth/utils'
 import '@/styles/globals.css'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import { unstable_cache } from 'next/cache'
@@ -36,6 +37,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <Providers>
           <Navbar sessionPromise={sessionPromise} />
           {children}
+          <SpeedInsights />
           <Footer />
         </Providers>
         {/* TODO: Play a ding if */}

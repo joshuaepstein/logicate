@@ -2,7 +2,7 @@ import { ArrowRightSmIcon } from '@jfstech/icons-react/24/outline'
 import { headers } from 'next/headers'
 import Image from 'next/image'
 
-import Image404 from '~/404.png'
+import Image404 from '~/_static/404.png'
 
 export default async function NotFound() {
   const headersList = await headers()

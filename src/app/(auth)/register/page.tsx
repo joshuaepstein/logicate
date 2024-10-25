@@ -1,6 +1,6 @@
 import { get } from '@vercel/edge-config'
 import Image from 'next/image'
-import LogicGates from '~/logic_gates_login.png'
+import LogicGates from '~/_static/logic_gates_login.png'
 import { RegisterForm } from './form'
 
 export default async function LoginPage() {

@@ -31,7 +31,7 @@ export default function BackgroundElement({
       data-logicate-canvas-background
       className="pointer-events-none absolute inset-0 -z-10"
       style={{
-        backgroundImage: `url(/grid.png)`,
+        backgroundImage: `url(/_static/grid.png)`,
         backgroundRepeat: 'repeat',
         backgroundSize: '50px 50px',
         backgroundPosition: 'center',

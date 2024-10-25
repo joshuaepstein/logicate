@@ -9,7 +9,7 @@ import { PublicDisplay, User } from '@logicate/database'
 import { AnimatePresence, motion } from 'framer-motion'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { usePathname, useRouter, useSelectedLayoutSegment } from 'next/navigation'
+import { redirect, usePathname, useRouter, useSelectedLayoutSegment } from 'next/navigation'
 import { useContext } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useLocalStorage } from 'usehooks-ts'
@@ -30,8 +30,13 @@ export default function ClientNavbar({
   const [hiddenInsights] = useLocalStorage('hiddenInsights-navbar', false)
   const { setShowCMDK } = useContext(AppContext)
   useHotkeys('l', () => {
-    // redirect('/login')
-    router.push('/login')
+    if (user) return
+    redirect('/login')
+  })
+
+  useHotkeys('n', () => {
+    if (user) return
+    redirect('/register')
   })
 
   // useEffect(() => {
@@ -44,7 +49,7 @@ export default function ClientNavbar({
 
   // TODO: Add mobile navbar
   return (
-    <navigation-header>
+    <>
       <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
         <Link href="/">
           <Logo className="h-8 transition hover:scale-105 active:scale-95" />
@@ -126,6 +131,9 @@ export default function ClientNavbar({
                   className="bg-neutralgrey-1100 hover:bg-neutralgrey-1300 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
                 >
                   <span className="text-neutralgrey-100 text-sm transition">Sign up</span>
+                  <Kbd variant="ghost" className="bg-neutralgrey-1000 border-neutralgrey-1100 text-neutralgrey-100">
+                    N
+                  </Kbd>
                 </Link>
               </>
             ) : (
@@ -174,9 +182,9 @@ export default function ClientNavbar({
           //(new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights) ||
           segment !== '/_not-found' ? (
             <motion.div
-              initial={{ height: 0 }}
-              animate={{ height: 'auto' }}
-              exit={{ height: 0 }}
+              // initial={{ height: 0 }}
+              // animate={{ height: 'auto' }}
+              // exit={{ height: 0 }}
               transition={{ duration: 0.5 }}
               className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden text-center backdrop-blur-[6px]"
             >
@@ -200,6 +208,6 @@ export default function ClientNavbar({
           ) : null
         }
       </AnimatePresence>
-    </navigation-header>
+    </>
   )
 }

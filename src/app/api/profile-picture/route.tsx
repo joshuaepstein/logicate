@@ -3,15 +3,15 @@
 
 export async function GET() {
   const images = [
-    './profile_pictures/PNG/Blue.png',
-    './profile_pictures/PNG/Blue-Purple.png',
-    './profile_pictures/PNG/Green.png',
-    './profile_pictures/PNG/Green-Blue.png',
-    './profile_pictures/PNG/Purple.png',
-    './profile_pictures/PNG/Red.png',
-  ];
+    './_static/profile_pictures/PNG/Blue.png',
+    './_static/profile_pictures/PNG/Blue-Purple.png',
+    './_static/profile_pictures/PNG/Green.png',
+    './_static/profile_pictures/PNG/Green-Blue.png',
+    './_static/profile_pictures/PNG/Purple.png',
+    './_static/profile_pictures/PNG/Red.png',
+  ]
 
-  const randomImage = images[Math.floor(Math.random() * images.length)];
+  const randomImage = images[Math.floor(Math.random() * images.length)]
 
-  return new Response(randomImage);
+  return new Response(randomImage)
 }

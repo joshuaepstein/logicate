@@ -4,10 +4,10 @@ import { cn } from '@/lib'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
-import buildDemo from '~/build_demo.png'
-import learnDemo from '~/learn_demo.png'
-import questionsDemo from '~/questions_demo.png'
-import simulateDemo from '~/simulate_demo.png'
+import buildDemo from '~/_static/build_demo.png'
+import learnDemo from '~/_static/learn_demo.png'
+import questionsDemo from '~/_static/questions_demo.png'
+import simulateDemo from '~/_static/simulate_demo.png'
 
 const features = [
   {

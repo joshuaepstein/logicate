@@ -1,9 +1,6 @@
-import Image from 'next/image'
-import CanvasDemo from '~/canvas.demo.png'
-import LoginForm from './form'
-import { Suspense } from 'react'
 import LoadingCircle from '@/components/ui/icons/loading-circle'
-import LogoIcon from '@/components/Logo'
+import { Suspense } from 'react'
+import LoginForm from './form'
 import SlideImage from './slide-image'
 
 export default async function LoginPage() {

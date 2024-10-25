@@ -1,14 +1,15 @@
 'use client'
 
-import { cn } from '@/lib'
+import LogoIcon from '@/components/Logo'
 import { Button } from '@/components/ui/button'
 import LoadingCircle from '@/components/ui/icons/loading-circle'
 import { Input } from '@/components/ui/input/index'
+import { cn } from '@/lib'
+import { AuthError } from 'next-auth'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
-import LogoIcon from '@/components/Logo'
 
 const errorCodes = {
   'no-credentials': 'Invalid email or password',
@@ -55,30 +56,42 @@ export default function LoginForm() {
 
           const { accountExists } = await res.json()
           if (accountExists) {
-            const signInRes = await signIn('credentials', {
-              email,
-              password,
-              redirect: false,
-              ...(next ? { callbackUrl: next } : {}),
-            })
-            if (!signInRes) return
+            try {
+              const signInRes = await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+                ...(next ? { callbackUrl: next } : {}),
+              })
+              if (!signInRes) return
 
-            if (!signInRes.ok && signInRes.error) {
-              if (errorCodes[signInRes.error as keyof typeof errorCodes]) {
-                toast.error(errorCodes[signInRes.error as keyof typeof errorCodes])
-                setErrorMessage(errorCodes[signInRes.error as keyof typeof errorCodes])
-              } else {
-                toast.error(signInRes.error)
-                setErrorMessage(signInRes.error)
+              if (!signInRes.ok && signInRes.error) {
+                if (errorCodes[signInRes.error as keyof typeof errorCodes]) {
+                  toast.error(errorCodes[signInRes.error as keyof typeof errorCodes])
+                  setErrorMessage(errorCodes[signInRes.error as keyof typeof errorCodes])
+                } else {
+                  toast.error(signInRes.error)
+                  setErrorMessage(signInRes.error)
+                }
+
+                return
               }
-
-              return
+              toast.success('Logged in successfully', {
+                description: `Welcome back, ${email}. Redirecting you to your dashboard...`,
+              })
+              // redirect to next or / but reload the page as we need to re-render the layout
+              window.location.href = next || '/'
+            } catch (err) {
+              if (err instanceof Error || err instanceof AuthError) {
+                if (errorCodes[err.message as keyof typeof errorCodes]) {
+                  toast.error(errorCodes[err.message as keyof typeof errorCodes])
+                  setErrorMessage(errorCodes[err.message as keyof typeof errorCodes])
+                } else {
+                  toast.error(err.message)
+                  setErrorMessage(err.message)
+                }
+              }
             }
-            toast.success('Logged in successfully', {
-              description: `Welcome back, ${email}. Redirecting you to your dashboard...`,
-            })
-            // redirect to next or / but reload the page as we need to re-render the layout
-            window.location.href = next || '/'
           } else {
             toast.error('No account found with that email address.')
             setErrorMessage('No account found with that email address.')

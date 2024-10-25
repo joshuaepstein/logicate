@@ -3,9 +3,8 @@
 import { cn } from '@/lib'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import CanvasDemo from '~/canvas.demo.png'
 
-const IMAGES = ['/canvas.demo.png', '/questions.demo.png', '/classroom.demo.png', '/leaderboard.demo.png']
+const IMAGES = ['/_static/canvas.demo.png', '/_static/questions.demo.png', '/_static/classroom.demo.png', '/_static/leaderboard.demo.png']
 
 export default function SlideImage() {
   const maxImages = IMAGES.length

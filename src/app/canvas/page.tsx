@@ -38,7 +38,7 @@ export default async function CanvasPage({}) {
             <div
               className="flex h-full w-full items-center justify-center"
               style={{
-                backgroundImage: `url(/grid.png)`,
+                backgroundImage: `url(/_static/grid.png)`,
                 backgroundRepeat: 'repeat',
                 backgroundSize: '30px 30px',
                 backgroundPosition: 'center',

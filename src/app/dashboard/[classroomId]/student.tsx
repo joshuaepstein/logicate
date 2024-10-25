@@ -87,7 +87,7 @@ export default async function StudentDashboard({ user, classroomId }: { user: Us
                         : index === 0
                           ? {
                               border: 'none',
-                              backgroundImage: `url(/elements/gold-border.png), url(${getProfilePictureSource(leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar())})`,
+                              backgroundImage: `url(/_static/elements/gold-border.png), url(${getProfilePictureSource(leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar())})`,
                               backgroundClip: 'padding-box, content-box',
                               backgroundOrigin: 'border-box, content-box',
                               backgroundPosition: 'center',

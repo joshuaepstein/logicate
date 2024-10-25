@@ -5,8 +5,8 @@ import { randomAvatar } from '@/lib/random'
 import { prisma, User } from '@logicate/database'
 import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
-import NoStudents from './teacher-components/no-students'
 import { getClassroom } from './actions'
+import NoStudents from './teacher-components/no-students'
 
 const getLeaderboard = unstable_cache(
   async (classroomId: string) => {
@@ -91,7 +91,7 @@ export default async function TeacherClassroomDashboard({ user, classroomId }: {
                         : index === 0
                           ? {
                               border: 'none',
-                              backgroundImage: `url(/elements/gold-border.png), url(${getProfilePictureSource(leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar())})`,
+                              backgroundImage: `url(/_static/elements/gold-border.png), url(${getProfilePictureSource(leaderboardUser.publicDisplay.length > 0 ? leaderboardUser.publicDisplay[0].profilePicture : randomAvatar())})`,
                               backgroundClip: 'padding-box, content-box',
                               backgroundOrigin: 'border-box, content-box',
                               backgroundPosition: 'center',

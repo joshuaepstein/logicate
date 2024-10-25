@@ -470,7 +470,7 @@ export default function Canvas({
         ) {
           setHolding(false)
           // replace cursor with poof cursor
-          document.body.style.cursor = 'url(/poof.png), auto'
+          document.body.style.cursor = 'url(/_static/poof.png), auto'
           return
         }
         const xOnCanvas = (draggingNewElement.x - canvasReference.current.getBoundingClientRect().left) / canvas.zoom

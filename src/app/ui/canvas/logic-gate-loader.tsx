@@ -23,7 +23,7 @@ export default function LogicGateLoader() {
       }}
       className="pointer-events-auto absolute inset-0 z-[12345678] flex cursor-none flex-col items-center justify-center gap-2"
       style={{
-        backgroundImage: `url(/grid.png)`,
+        backgroundImage: `url(/_static/grid.png)`,
         backgroundRepeat: 'repeat',
         backgroundSize: '50px 50px',
         backgroundPosition: 'center',

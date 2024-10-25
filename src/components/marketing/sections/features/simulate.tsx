@@ -6,6 +6,8 @@ import { redirect } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useWindowScroll } from 'react-use'
+import { FeatureDescription, FeatureTag, FeatureTitle } from './components'
+import FeatureWrapper from './feature-wrapper'
 
 export default function FeatureSimulate() {
   const {
@@ -46,25 +48,21 @@ export default function FeatureSimulate() {
   }, [windowScroll])
 
   return (
-    <section id="feature-simulate" className="bg-neutralgrey-200 flex min-h-[25dvh] w-full scroll-mt-16 items-center justify-center py-12">
-      <div className="container flex flex-col items-center justify-center">
-        <p className="text-2xs scale-100 select-none font-mono font-medium text-indigo-800 transition hover:scale-105">SIMULATE</p>
-        <h4 className="text-neutralgrey-1200 mt-2 text-center text-2xl font-medium">Build and simulate circuits</h4>
-        <p className="text-neutralgrey-1000/85 mt-2 max-w-lg text-center">
-          Using our modern and easy to use canvas, you can build, test, and simulate logic circuits.
-        </p>
+    <FeatureWrapper id="feature-simulate">
+      <FeatureTag className="text-indigo-800">SIMULATE</FeatureTag>
+      <FeatureTitle>Build and simulate circuits</FeatureTitle>
+      <FeatureDescription>Using our modern and easy to use canvas, you can build, test, and simulate logic circuits.</FeatureDescription>
 
-        {/* <div className="bg-neutralgrey-100 mt-8 aspect-video w-2/3 rounded-lg"></div> */}
-        <CanvasDemo className="aspect-video h-full max-h-[286px] w-full max-w-[582px]" />
+      {/* <div className="bg-neutralgrey-100 mt-8 aspect-video w-2/3 rounded-lg"></div> */}
+      <CanvasDemo className="mb-6 aspect-[582/286] w-full max-w-[582px] sm:mb-0" />
 
-        <button
-          ref={buttonRef}
-          className="shadow-hard-2xs rounded-md border border-indigo-900/50 bg-indigo-800 px-3 py-1.5 text-sm text-white transition hover:scale-105 hover:border-indigo-900"
-        >
-          Create Your First Canvas
-          <kbd className="ml-2 rounded-[3px] bg-white/10 px-1 py-px font-mono text-xs transition">C</kbd>
-        </button>
-      </div>
-    </section>
+      <button
+        ref={buttonRef}
+        className="shadow-hard-2xs rounded-md border border-indigo-900/50 bg-indigo-800 px-3 py-1.5 text-sm text-white transition hover:scale-105 hover:border-indigo-900"
+      >
+        Create Your First Canvas
+        <kbd className="ml-2 hidden rounded-[3px] bg-white/10 px-1 py-px font-mono text-xs transition md:inline">C</kbd>
+      </button>
+    </FeatureWrapper>
   )
 }

@@ -1,14 +1,18 @@
 'use client'
 
 import { BlurImage } from '@/components/ui/blur-image'
+import useMediaQuery from '@/lib/hooks/use-media-query'
 import { motion } from 'framer-motion'
 import { RefObject, useRef } from 'react'
 import { useHover } from 'usehooks-ts'
 import Gradient1 from '~/_static/gradient_element_blue-1.png'
 import Gradient2 from '~/_static/gradient_element_blue-2.png'
 import Gradient3 from '~/_static/gradient_element_blue-3.png'
+import { FeatureDescription, FeatureTag, FeatureTitle } from './components'
+import FeatureWrapper from './feature-wrapper'
 
 export default function FeatureQuestions() {
+  const { device } = useMediaQuery()
   const truthTableRef = useRef<HTMLDivElement>(null)
   const truthTableHovering = useHover(truthTableRef as RefObject<HTMLDivElement>)
 
@@ -19,22 +23,22 @@ export default function FeatureQuestions() {
   const circuitDiagramHovering = useHover(circuitDiagramRef as RefObject<HTMLDivElement>)
 
   return (
-    <section id="feature-questions" className="bg-neutralgrey-200 flex min-h-[25dvh] w-full scroll-mt-16 items-center justify-center py-12">
-      <div className="container flex flex-col items-center justify-center">
-        <p className="text-2xs scale-100 select-none font-mono font-medium text-purple-800 transition hover:scale-105">QUESTIONS</p>
-        <h4 className="text-neutralgrey-1200 mt-2 text-center text-2xl font-medium">Challenge your students</h4>
-        <p className="text-neutralgrey-1000/85 mt-2 max-w-lg text-center">
-          Using our question generator, you can either generate questions to test your own knowledge, or assign them to your students.
-        </p>
+    <FeatureWrapper id="feature-questions">
+      <FeatureTag className="text-purple-800">QUESTIONS</FeatureTag>
+      <FeatureTitle>Challenge your students</FeatureTitle>
+      <FeatureDescription>
+        Using our question generator, you can either generate questions to test your own knowledge, or assign them to your students.
+      </FeatureDescription>
 
-        <div className="mt-8 flex w-full max-w-4xl flex-row gap-4">
-          <div
-            className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative flex h-64 w-1/3 items-center justify-center overflow-hidden rounded-lg p-6"
-            ref={truthTableRef}
-          >
-            <BlurImage src={Gradient1} alt="Gradient" className="absolute left-0 top-0 size-full" />
-            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
-              <p className="text-neutralgrey-1200 group-hover:text-ultramarine-700 text-lg font-medium transition">Truth Tables</p>
+      <div className="mt-8 flex w-full max-w-4xl flex-col justify-center gap-4 sm:flex-row">
+        <div
+          className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative flex h-64 w-full items-center justify-center overflow-hidden rounded-lg p-6 sm:w-1/3"
+          ref={truthTableRef}
+        >
+          <BlurImage src={Gradient1} alt="Gradient" className="absolute left-0 top-0 size-full" />
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
+            <p className="text-neutralgrey-1200 group-hover:text-ultramarine-700 text-lg font-medium transition">Truth Tables</p>
+            {(device !== 'mobile' && (
               <motion.p
                 className="text-neutralgrey-1000/85 text-center text-sm"
                 variants={{
@@ -52,15 +56,21 @@ export default function FeatureQuestions() {
               >
                 Generate questions with a boolean expression and truth table that must be filled in.
               </motion.p>
-            </div>
+            )) || (
+              <p className="text-neutralgrey-1000/85 text-center text-sm">
+                Generate questions with a boolean expression and truth table that must be filled in.
+              </p>
+            )}
           </div>
-          <div
-            className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative h-64 w-1/3 overflow-hidden rounded-lg p-6"
-            ref={booleanAlgebraRef}
-          >
-            <BlurImage src={Gradient2} alt="Gradient" className="absolute left-0 top-0 size-full" />
-            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
-              <p className="text-neutralgrey-1200 text-lg font-medium transition group-hover:text-blue-800">Boolean Algebra</p>
+        </div>
+        <div
+          className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative h-64 w-full overflow-hidden rounded-lg p-6 sm:w-1/3"
+          ref={booleanAlgebraRef}
+        >
+          <BlurImage src={Gradient2} alt="Gradient" className="absolute left-0 top-0 size-full" />
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
+            <p className="text-neutralgrey-1200 text-lg font-medium transition group-hover:text-blue-800">Boolean Algebra</p>
+            {(device !== 'mobile' && (
               <motion.p
                 className="text-neutralgrey-1000/85 text-center text-sm"
                 variants={{
@@ -78,15 +88,21 @@ export default function FeatureQuestions() {
               >
                 Reduce boolean expressions of a chosen difficulty to their most simple form.
               </motion.p>
-            </div>
+            )) || (
+              <p className="text-neutralgrey-1000/85 text-center text-sm">
+                Reduce boolean expressions of a chosen difficulty to their most simple form.
+              </p>
+            )}
           </div>
-          <div
-            className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative h-64 w-1/3 overflow-hidden rounded-lg p-6"
-            ref={circuitDiagramRef}
-          >
-            <BlurImage src={Gradient3} alt="Gradient" className="absolute left-0 top-0 z-0 size-full" />
-            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
-              <p className="text-neutralgrey-1200 text-lg font-medium transition group-hover:text-teal-800">Logic Circuits</p>
+        </div>
+        <div
+          className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative h-64 w-full overflow-hidden rounded-lg p-6 sm:w-1/3"
+          ref={circuitDiagramRef}
+        >
+          <BlurImage src={Gradient3} alt="Gradient" className="absolute left-0 top-0 z-0 size-full" />
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
+            <p className="text-neutralgrey-1200 text-lg font-medium transition group-hover:text-teal-800">Logic Circuits</p>
+            {(device !== 'mobile' && (
               <motion.p
                 className="text-neutralgrey-1000/85 text-center text-sm"
                 variants={{
@@ -104,10 +120,14 @@ export default function FeatureQuestions() {
               >
                 Create logic circuits from a boolean expression and vice versa.
               </motion.p>
-            </div>
+            )) || (
+              <p className="text-neutralgrey-1000/85 text-center text-sm">
+                Create logic circuits from a boolean expression and vice versa.
+              </p>
+            )}
           </div>
         </div>
       </div>
-    </section>
+    </FeatureWrapper>
   )
 }

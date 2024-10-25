@@ -1,5 +1,6 @@
 import { Footer } from '@/components/marketing/footer'
 import Navbar from '@/components/marketing/navbar'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { prisma, User } from '@/database'
 import { cn } from '@/lib'
 import { getSession } from '@/lib/auth/utils'
@@ -31,6 +32,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <html suppressHydrationWarning lang="en">
       <body className={cn(GeistSans.className, GeistMono.className, 'scroll-smooth')}>
+        <TailwindIndicator />
         <Providers>
           <Navbar sessionPromise={sessionPromise} />
           {children}

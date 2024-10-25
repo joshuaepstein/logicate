@@ -39,14 +39,6 @@ export default function ClientNavbar({
     redirect('/register')
   })
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (!isInsightsNewFeatureEnabled) {
-  //       setIsInsightsNewFeatureEnabled(true)
-  //     }
-  //   }
-  // }, [pathname, isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled])
-
   // TODO: Add mobile navbar
   return (
     <>

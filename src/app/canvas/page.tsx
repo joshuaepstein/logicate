@@ -46,7 +46,7 @@ export default async function CanvasPage({}) {
               }}
             >
               {/* TODO: Render the circuit with a smaller scale than normal. */}
-              <LogicGateIcon className="size-16" />
+              <LogicGateIcon className="size-16 [&>path]:stroke-1" />
             </div>
             <p className="border-t-neutralgrey-300 line-clamp-2 flex min-h-14 w-full items-center justify-center border-t text-center text-sm font-medium">
               {c.name}

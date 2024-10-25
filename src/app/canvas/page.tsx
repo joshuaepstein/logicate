@@ -12,6 +12,7 @@ const getAllCanvas = unstable_cache(
       where: {
         ownerId: userId,
       },
+      orderBy: [{ updatedAt: 'desc' }],
     })
   },
   ['canvas'],

@@ -1,13 +1,5 @@
 {
   "WillLuke.nextjs.addTypesOnSave": true,
   "WillLuke.nextjs.hasPrompted": true,
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
-  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list", "indicatorStyles"],
-  "todo-tree.tree.disableCompactFolders": false,
-  "todo-tree.tree.showBadges": true,
-  "todo-tree.tree.showCountsInTree": false
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list", "indicatorStyles"]
 }

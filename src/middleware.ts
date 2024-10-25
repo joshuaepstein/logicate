@@ -1,7 +1,7 @@
-import { get } from "@vercel/edge-config"
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server"
-import { getUserViaToken } from "./lib/auth/middleware/get-user-via-token"
-import { parse } from "./lib/middleware"
+import { get } from '@vercel/edge-config'
+import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
+import { getUserViaToken } from './lib/auth/middleware/get-user-via-token'
+import { parse } from './lib/middleware'
 
 export const config = {
   matcher: [
@@ -14,25 +14,25 @@ export const config = {
      * 5. /_vercel (Vercel internals)
      * 6. Static files (e.g. /favicon.ico, /robots.txt, /sitemap.xml, etc.)
      */
-    "/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+|maintenance).*)",
+    '/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+|maintenance).*)',
   ],
 }
 
 const appRoutes = {
-  ui: "/ui.logicate",
+  ui: '/ui.logicate',
 }
 
-export default async function middleware(req: NextRequest, _ev: NextFetchEvent) {
+export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain, path, fullPath } = parse(req)
-  const maintenance = await get("isMaintenance")
-  const isDev = process.env.NODE_ENV === "development"
+  const maintenance = await get('isMaintenance')
+  const isDev = process.env.NODE_ENV === 'development'
 
   if (maintenance === true && !isDev) {
-    return NextResponse.redirect(new URL("/maintenance", req.url))
+    return NextResponse.redirect(new URL('/maintenance', req.url))
   } else {
-    if (path.startsWith("/maintenance")) {
-      const response = NextResponse.redirect(new URL("/", req.url))
-      response.headers.set("x-url", fullPath)
+    if (path.startsWith('/maintenance')) {
+      const response = NextResponse.redirect(new URL('/', req.url))
+      response.headers.set('x-url', fullPath)
       return response
     }
   }
@@ -42,7 +42,7 @@ export default async function middleware(req: NextRequest, _ev: NextFetchEvent) 
   for (const [key, value] of Object.entries(appRoutes)) {
     if (domain === `${key}.logicate` || domain === `${key}.localhost:3000`) {
       const response = NextResponse.rewrite(new URL(`${value}${path}`, req.url))
-      response.headers.set("x-url", fullPath)
+      response.headers.set('x-url', fullPath)
       return response
     }
   }
@@ -51,32 +51,32 @@ export default async function middleware(req: NextRequest, _ev: NextFetchEvent) 
 
   if (
     (!user || !user.email) &&
-    path !== "/login" &&
-    path !== "/register" &&
-    !path.startsWith("/auth/reset-password/") &&
-    !path.startsWith("/auth/verify-email") &&
-    !path.startsWith("/auth/unlock-account") &&
-    !path.startsWith("/canvas/demo") &&
-    !path.startsWith("/changelog") &&
-    path !== "/" &&
-    !path.startsWith("/legal/")
+    path !== '/login' &&
+    path !== '/register' &&
+    !path.startsWith('/auth/reset-password/') &&
+    !path.startsWith('/auth/verify-email') &&
+    !path.startsWith('/auth/unlock-account') &&
+    !path.startsWith('/canvas/demo') &&
+    !path.startsWith('/changelog') &&
+    path !== '/' &&
+    !path.startsWith('/legal/')
   ) {
-    if (fullPath.startsWith("/logout")) {
-      const response = NextResponse.redirect(new URL("/login", req.url))
-      response.headers.set("x-url", fullPath)
+    if (fullPath.startsWith('/logout')) {
+      const response = NextResponse.redirect(new URL('/login', req.url))
+      response.headers.set('x-url', fullPath)
       return response
     }
-    const response = NextResponse.redirect(new URL(`/login${path === "/" ? "" : `?next=${encodeURIComponent(fullPath)}`}`, req.url))
-    response.headers.set("x-url", fullPath)
+    const response = NextResponse.redirect(new URL(`/login${path === '/' ? '' : `?next=${encodeURIComponent(fullPath)}`}`, req.url))
+    response.headers.set('x-url', fullPath)
     return response
   } else if (user) {
-    if (user.createdAt && new Date(user.createdAt).getTime() > Date.now() - 10000 && path !== "/welcome") {
-      const response = NextResponse.redirect(new URL("/welcome", req.url))
-      response.headers.set("x-url", fullPath)
+    if (user.createdAt && new Date(user.createdAt).getTime() > Date.now() - 10000 && path !== '/welcome') {
+      const response = NextResponse.redirect(new URL('/welcome', req.url))
+      response.headers.set('x-url', fullPath)
       return response
-    } else if (path === "/login" || path === "/register") {
-      const response = NextResponse.redirect(new URL("/", req.url))
-      response.headers.set("x-url", fullPath)
+    } else if (path === '/login' || path === '/register') {
+      const response = NextResponse.redirect(new URL('/', req.url))
+      response.headers.set('x-url', fullPath)
       return response
     }
     // else if (path.startsWith('/canvas/demo')) {
@@ -85,6 +85,6 @@ export default async function middleware(req: NextRequest, _ev: NextFetchEvent) 
   }
 
   const response = NextResponse.next()
-  response.headers.set("x-url", fullPath)
+  response.headers.set('x-url', fullPath)
   return response
 }

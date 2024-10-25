@@ -1,12 +1,10 @@
-'use server'
+"use server"
 
-import { Failure, Success } from '@/types/api'
-import { prisma } from '@logicate/database'
-import { hashPassword } from '@/lib/encrypt'
-import { signIn } from 'next-auth/react'
-import { redirect } from 'next/navigation'
-import { z } from 'zod'
-import { randomAvatar } from '@/lib/random'
+import { hashPassword } from "@/lib/encrypt"
+import { randomAvatar } from "@/lib/random"
+import { Failure, Success } from "@/types/api"
+import { prisma } from "@logicate/database"
+import { z } from "zod"
 
 const registerSchema = z.object({
   name: z.string().min(1),
@@ -20,15 +18,15 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
 
 export async function registerAction(_: Failure<string> | Success<string> | undefined, formData: FormData) {
   const validatedFields = registerSchema.safeParse({
-    name: formData.get('name'),
-    email: formData.get('email'),
-    username: formData.get('username'),
-    password: formData.get('password'),
+    name: formData.get("name"),
+    email: formData.get("email"),
+    username: formData.get("username"),
+    password: formData.get("password"),
   })
 
   if (!validatedFields.success) {
     const error = validatedFields.error.flatten().fieldErrors
-    return Failure('Missing fields: ' + Object.keys(error).join(', '))
+    return Failure("Missing fields: " + Object.keys(error).join(", "))
   }
 
   const { name, email, username, password } = validatedFields.data
@@ -37,25 +35,25 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
     where: { email },
   })
   if (existingUserByEmail) {
-    return Failure('A user with this email already exists')
+    return Failure("A user with this email already exists")
   }
   const existingUserByUsername = await prisma.user.findUnique({
     where: { username },
   })
   if (existingUserByUsername) {
-    return Failure('A user with this username already exists')
+    return Failure("A user with this username already exists")
   }
 
   if (password.length < 8) {
-    return Failure('Password must be at least 8 characters long')
+    return Failure("Password must be at least 8 characters long")
   } else if (!/[A-Z]/.test(password)) {
-    return Failure('Password must contain at least one uppercase letter')
+    return Failure("Password must contain at least one uppercase letter")
   } else if (!/[a-z]/.test(password)) {
-    return Failure('Password must contain at least one lowercase letter')
+    return Failure("Password must contain at least one lowercase letter")
   } else if (!/\d/.test(password)) {
-    return Failure('Password must contain at least one number')
+    return Failure("Password must contain at least one number")
   } else if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-    return Failure('Password must contain at least one special character')
+    return Failure("Password must contain at least one special character")
   }
 
   const hashedPassword = await hashPassword(password)
@@ -66,7 +64,7 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
       email,
       name,
       password: hashedPassword,
-      accountType: 'TEACHER',
+      accountType: "TEACHER",
       publicDisplay: {
         create: {
           profilePicture: `internal:${randomAvatar()}`,
@@ -76,10 +74,10 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
   })
 
   if (!newUser) {
-    return Failure('Failed to create user')
+    return Failure("Failed to create user")
   }
 
-  return Success('User created successfully', {
+  return Success("User created successfully", {
     email,
     password,
   })

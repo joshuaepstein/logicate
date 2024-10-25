@@ -1,26 +1,26 @@
-'use client';
+"use client"
 
-import { Minimise01Icon as MinusIcon, Plus01Icon as PlusIcon } from '@jfstech/icons-react/24/outline';
-import { cn } from '@/lib';
+import { cn } from "@/lib"
+import { Minimise01Icon as MinusIcon, Plus01Icon as PlusIcon } from "@jfstech/icons-react/24/outline"
 
-import React from 'react';
-import { InputProps, inputVariants } from '.';
-import { Button } from '../button';
+import React from "react"
+import { InputProps, inputVariants } from "."
+import { Button } from "../button"
 
 const QuantityInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, variant, children, disabled, inputSize, debug, onChange, ...props }, ref) => {
-    const inputReference = React.useRef<HTMLInputElement>(null);
+    const inputReference = React.useRef<HTMLInputElement>(null)
 
     return (
-      <div className="shadow-soft-2xs relative flex w-max flex-row items-center rounded-lg">
+      <div className="relative flex w-max flex-row items-center rounded-lg shadow-soft-2xs">
         <div className="absolute inset-y-0 right-2 flex items-center justify-center gap-2">
           <Button
             variant="secondary"
-            size={inputSize === 'sm' ? 'icon-2xs' : 'icon-sm'}
+            size={inputSize === "sm" ? "icon-2xs" : "icon-sm"}
             onClick={() => {
-              var currentValue = parseInt(inputReference.current?.value || '0');
+              const currentValue = parseInt(inputReference.current?.value || "0")
               if (currentValue > 0 && inputReference.current) {
-                inputReference.current.value = (currentValue - 1).toString();
+                inputReference.current.value = (currentValue - 1).toString()
               }
             }}
             aria-label="Decrement value"
@@ -29,35 +29,35 @@ const QuantityInput = React.forwardRef<HTMLInputElement, InputProps>(
           >
             <MinusIcon
               className={cn({
-                'h-4 w-4': inputSize === 'sm',
-                'h-5 w-5': inputSize === 'lg',
+                "h-4 w-4": inputSize === "sm",
+                "h-5 w-5": inputSize === "lg",
               })}
             />
           </Button>
           <Button
             variant="secondary"
-            size={inputSize === 'sm' ? 'icon-2xs' : 'icon-sm'}
+            size={inputSize === "sm" ? "icon-2xs" : "icon-sm"}
             aria-label="Increment value"
             title="Increment value"
             type="button"
             onClick={() => {
-              var currentValue = parseInt(inputReference.current?.value || '0');
-              var maxValue = parseInt(inputReference.current?.max || '-1');
+              const currentValue = parseInt(inputReference.current?.value || "0")
+              const maxValue = parseInt(inputReference.current?.max || "-1")
               if ((currentValue < maxValue || maxValue === -1) && inputReference.current) {
-                inputReference.current.value = (currentValue + 1).toString();
+                inputReference.current.value = (currentValue + 1).toString()
               }
             }}
           >
             <PlusIcon
               className={cn({
-                'h-4 w-4': inputSize === 'sm',
-                'h-5 w-5': inputSize === 'lg',
+                "h-4 w-4": inputSize === "sm",
+                "h-5 w-5": inputSize === "lg",
               })}
             />
           </Button>
         </div>
         <input
-          type={'number'}
+          type={"number"}
           className={cn(
             inputVariants({
               variant,
@@ -69,19 +69,19 @@ const QuantityInput = React.forwardRef<HTMLInputElement, InputProps>(
           //   ref={ref}
           ref={inputReference}
           {...(!props.value && !props.defaultValue && { defaultValue: 0 })}
-          disabled={disabled || debug === 'disabled'}
-          {...(debug && { 'data-debug': debug })}
-          {...(debug === 'error' && {
-            'aria-invalid': true,
-            'aria-describedby': 'error-message',
+          disabled={disabled || debug === "disabled"}
+          {...(debug && { "data-debug": debug })}
+          {...(debug === "error" && {
+            "aria-invalid": true,
+            "aria-describedby": "error-message",
           })}
           {...props}
         />
       </div>
-    );
+    )
   }
-);
+)
 
-QuantityInput.displayName = 'QuantityInput';
+QuantityInput.displayName = "QuantityInput"
 
-export { QuantityInput };
+export { QuantityInput }

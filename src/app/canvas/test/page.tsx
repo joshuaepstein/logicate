@@ -1,14 +1,9 @@
-import { getSession } from '@/lib/auth/utils'
-import { prisma } from '@logicate/database'
-import { revalidateTag } from 'next/cache'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import Canvas from '../../ui/canvas'
-import { generateRandomGate } from '@/app/ui/canvas/circuit-generator'
-import { Item, Wire } from '@/app/ui/canvas/types'
-import { InputType } from '@/app/ui/canvas/node/inputs/types'
-import { GateType } from '@/app/ui/canvas/node/gates/types'
-import { OutputType } from '@/app/ui/canvas/node/outputs/types'
+import { GateType } from "@/app/ui/canvas/node/gates/types"
+import { InputType } from "@/app/ui/canvas/node/inputs/types"
+import { OutputType } from "@/app/ui/canvas/node/outputs/types"
+import { Item, Wire } from "@/app/ui/canvas/types"
+import { Suspense } from "react"
+import Canvas from "../../ui/canvas"
 
 export default async function Home() {
   const testing: {
@@ -17,9 +12,9 @@ export default async function Home() {
   } = {
     items: [
       {
-        id: '1',
+        id: "1",
         type: InputType.SWITCH,
-        itemType: 'input',
+        itemType: "input",
         outputs: [],
         settings: {},
         value: false,
@@ -27,9 +22,9 @@ export default async function Home() {
         y: 100,
       },
       {
-        id: '2',
+        id: "2",
         type: InputType.SWITCH,
-        itemType: 'input',
+        itemType: "input",
         outputs: [],
         settings: {},
         value: false,
@@ -37,9 +32,9 @@ export default async function Home() {
         y: 300,
       },
       {
-        id: '3',
+        id: "3",
         type: GateType.AND,
-        itemType: 'gate',
+        itemType: "gate",
         settings: {
           inputs: 2,
         },
@@ -50,19 +45,19 @@ export default async function Home() {
         outputs: [],
       },
       {
-        id: '4',
+        id: "4",
         type: OutputType.LIGHT,
         inputs: [],
-        itemType: 'output',
+        itemType: "output",
         settings: {},
         x: 800,
         y: 200,
       },
     ],
     wires: [
-      { id: 'w-1', from: { id: '1', node_index: 0 }, to: { id: '3', node_index: 0 } },
-      { id: 'w-2', from: { id: '2', node_index: 0 }, to: { id: '3', node_index: 1 } },
-      { id: 'w-3', from: { id: '3', node_index: 0 }, to: { id: '4', node_index: 0 } },
+      { id: "w-1", from: { id: "1", node_index: 0 }, to: { id: "3", node_index: 0 } },
+      { id: "w-2", from: { id: "2", node_index: 0 }, to: { id: "3", node_index: 1 } },
+      { id: "w-3", from: { id: "3", node_index: 0 }, to: { id: "4", node_index: 0 } },
     ],
   }
   return (
@@ -73,13 +68,13 @@ export default async function Home() {
           sessionId="1239ua"
           isNew={false}
           logicateSession={{
-            id: 'demo',
-            name: 'Demo',
+            id: "demo",
+            name: "Demo",
             createdAt: new Date(),
             items: testing.items,
             wires: [...testing.wires],
             variableValues: [],
-            ownerId: '',
+            ownerId: "",
             updatedAt: new Date(),
           }}
           user={null}

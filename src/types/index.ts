@@ -1,3 +1,3 @@
 export type Logicate = {
-  version: string;
-};
+  version: string
+}

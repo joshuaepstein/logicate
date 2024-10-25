@@ -1,7 +1,7 @@
-import { Body, Button, Container, Head, Html, Link, Preview, Section, Tailwind, Text } from '@react-email/components'
-import { styles } from '../global_styles'
-import { Footer } from '../_components/footer'
-import LogoIcon from '../_components/logo'
+import { Body, Button, Container, Head, Html, Link, Preview, Section, Tailwind, Text } from "@react-email/components"
+import { Footer } from "../_components/footer"
+import LogoIcon from "../_components/logo"
+import { styles } from "../global_styles"
 
 interface Props {
   user: {
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export default function VerifyEmail({
-  user = { name: 'Joshua Epstein', email: 'josh@joshepstein.co.uk' },
-  verifyUrl = 'http://localhost:3000',
+  user = { name: "Joshua Epstein", email: "josh@joshepstein.co.uk" },
+  verifyUrl = "http://localhost:3000",
 }: Props) {
   return (
     <Tailwind>
@@ -23,7 +23,7 @@ export default function VerifyEmail({
         <Body>
           <Section style={styles.main}>
             <Container style={styles.container}>
-              <Section style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
+              <Section style={{ marginTop: "32px", display: "flex", justifyContent: "center" }}>
                 <LogoIcon className="h-8" />
               </Section>
               <Text style={styles.h1}>Verify Your Account</Text>
@@ -32,14 +32,14 @@ export default function VerifyEmail({
                 Thank you for registering with Logicate. To complete your registration, please verify your email address by clicking the
                 button below.
               </Text>
-              <Section style={{ textAlign: 'center' }}>
+              <Section style={{ textAlign: "center" }}>
                 <Button style={styles.btn} href={verifyUrl} className="mt-3">
                   Unlock Account
                 </Button>
               </Section>
               <Text style={styles.text}>
                 <br />
-                or copy and paste this URL into your browser:{' '}
+                or copy and paste this URL into your browser:{" "}
                 <Link href={verifyUrl} target="_blank" style={styles.link} rel="noreferrer">
                   {verifyUrl}
                 </Link>

@@ -1,7 +1,7 @@
-'use server'
+"use server"
 
-import { prisma } from '@/database'
-import { Success, Failure } from '@/types/api'
+import { prisma } from "@/database"
+import { Failure, Success } from "@/types/api"
 
 export async function unlockAccount(code: string) {
   const foundUser = await prisma.user.findFirst({
@@ -17,7 +17,7 @@ export async function unlockAccount(code: string) {
   })
 
   if (!foundUser) {
-    return Failure('Invalid code')
+    return Failure("Invalid code")
   }
 
   await prisma.user.update({
@@ -31,5 +31,5 @@ export async function unlockAccount(code: string) {
     },
   })
 
-  return Success('Unlocked account')
+  return Success("Unlocked account")
 }

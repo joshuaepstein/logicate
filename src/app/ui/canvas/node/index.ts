@@ -1,4 +1,4 @@
-import { GateType } from './gates/types';
+import { GateType } from "./gates/types"
 
 export const gates: Record<GateType, (inputs: boolean[]) => boolean> = {
   [GateType.AND]: (inputs: boolean[]) => inputs.length > 0 && inputs.every(Boolean),
@@ -9,4 +9,4 @@ export const gates: Record<GateType, (inputs: boolean[]) => boolean> = {
   [GateType.XOR]: (inputs: boolean[]) => inputs.length > 0 && inputs.filter(Boolean).length % 2 !== 0,
   [GateType.XNOR]: (inputs: boolean[]) => inputs.length > 0 && inputs.filter(Boolean).length % 2 === 0,
   [GateType.BUFFER]: (inputs: boolean[]) => inputs.length > 0 && inputs[0],
-};
+}

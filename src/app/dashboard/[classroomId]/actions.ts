@@ -1,5 +1,5 @@
-import { prisma } from '@logicate/database'
-import { unstable_cache } from 'next/cache'
+import { prisma } from "@logicate/database"
+import { unstable_cache } from "next/cache"
 
 export const getClassroom = (classroomId: string) =>
   unstable_cache(
@@ -21,9 +21,9 @@ export const getClassroom = (classroomId: string) =>
       })
       return classroom
     },
-    ['classroom', classroomId],
+    ["classroom", classroomId],
     {
       revalidate: 3600,
-      tags: ['classroom', `classroom:${classroomId}`],
+      tags: ["classroom", `classroom:${classroomId}`],
     }
   )

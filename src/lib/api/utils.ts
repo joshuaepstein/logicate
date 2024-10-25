@@ -1,13 +1,13 @@
-import { NextRequest } from 'next/server';
-import { LogicateError } from './error';
+import { NextRequest } from "next/server"
+import { LogicateError } from "./error"
 
 export const parseRequestBody = async (req: NextRequest | Request) => {
   try {
-    return req.json();
+    return req.json()
   } catch (error) {
     throw new LogicateError({
-      code: 'bad_request',
-      message: 'Invalid JSON format in request body. Please ensure the request body is a valid JSON object.',
-    });
+      code: "bad_request",
+      message: "Invalid JSON format in request body. Please ensure the request body is a valid JSON object.",
+    })
   }
-};
+}

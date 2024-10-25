@@ -1,4 +1,4 @@
-import { composeEventHandlers } from '@radix-ui/primitive';
+import { composeEventHandlers } from "@radix-ui/primitive"
 import type {
   FormControlProps,
   FormControlProps as RadixFormControlProps,
@@ -6,7 +6,7 @@ import type {
   FormMessageProps as RadixFormMessageProps,
   FormProps as RadixFormProps,
   FormSubmitProps as RadixFormSubmitProps,
-} from '@radix-ui/react-form';
+} from "@radix-ui/react-form"
 import {
   Control as RadixControl,
   Field as RadixField,
@@ -14,14 +14,14 @@ import {
   FormMessage as RadixFormMessage,
   Label as RadixLabel,
   Submit as RadixSubmit,
-} from '@radix-ui/react-form';
-import { Slot } from '@radix-ui/react-slot';
-import * as React from 'react';
-import type { SetRequired, Simplify } from 'type-fest';
-import type { BaseActorRef } from 'xstate';
+} from "@radix-ui/react-form"
+import { Slot } from "@radix-ui/react-slot"
+import * as React from "react"
+import type { SetRequired, Simplify } from "type-fest"
+import type { BaseActorRef } from "xstate"
 
-import type { ErrorMessagesKey } from '../../../../lib/generate-password-error-text';
-import { type JFSTechElementsError, JFSTechElementsFieldError } from './errors';
+import type { ErrorMessagesKey } from "../../../../lib/generate-password-error-text"
+import { type JFSTechElementsError, JFSTechElementsFieldError } from "./errors"
 import {
   fieldFeedbackSelector,
   fieldHasValueSelector,
@@ -29,132 +29,132 @@ import {
   globalErrorsSelector,
   useFormSelector,
   useFormStore,
-} from './machine/form.context';
-import type { FieldDetails } from './machine/form.types';
+} from "./machine/form.context"
+import type { FieldDetails } from "./machine/form.types"
 
-import type { OTPInputProps } from './otp';
-import { OTP_LENGTH_DEFAULT, OTPInput } from './otp';
-import { type FieldId, type FieldStates, Autocomplete, FIELD_STATES, FIELD_VALIDITY } from './types';
+import type { OTPInputProps } from "./otp"
+import { OTP_LENGTH_DEFAULT, OTPInput } from "./otp"
+import { type FieldId, type FieldStates, Autocomplete, FIELD_STATES, FIELD_VALIDITY } from "./types"
 
 /** -------------------------------------------------------------------------------------------------
  * Context
  * -----------------------------------------------------------------------------------------------*/
 
-const FieldContext = React.createContext<Pick<FieldDetails, 'name'> | null>(null);
-const useFieldContext = () => React.useContext(FieldContext);
+const FieldContext = React.createContext<Pick<FieldDetails, "name"> | null>(null)
+const useFieldContext = () => React.useContext(FieldContext)
 
 /** -------------------------------------------------------------------------------------------------
  * Hooks
  * -----------------------------------------------------------------------------------------------*/
 
 const useGlobalErrors = () => {
-  const errors = useFormSelector(globalErrorsSelector);
+  const errors = useFormSelector(globalErrorsSelector)
 
   return {
     errors,
-  };
-};
+  }
+}
 
-const useFieldFeedback = ({ name }: Partial<Pick<FieldDetails, 'name'>>) => {
-  const feedback = useFormSelector(fieldFeedbackSelector(name));
+const useFieldFeedback = ({ name }: Partial<Pick<FieldDetails, "name">>) => {
+  const feedback = useFormSelector(fieldFeedbackSelector(name))
 
   return {
     feedback,
-  };
-};
+  }
+}
 
-const determineInputTypeFromName = (name: FormFieldProps['name']) => {
-  if (name === 'password' || name === 'confirmPassword' || name === 'currentPassword' || name === 'newPassword') return 'password' as const;
-  if (name === 'emailAddress') return 'email' as const;
-  if (name === 'phoneNumber') return 'tel' as const;
-  if (name === 'code') return 'otp' as const;
+const determineInputTypeFromName = (name: FormFieldProps["name"]) => {
+  if (name === "password" || name === "confirmPassword" || name === "currentPassword" || name === "newPassword") return "password" as const
+  if (name === "emailAddress") return "email" as const
+  if (name === "phoneNumber") return "tel" as const
+  if (name === "code") return "otp" as const
 
-  return 'text' as const;
-};
+  return "text" as const
+}
 
 /**
  * Given a field name, determine the current state of the field
  */
-const useFieldState = ({ name }: Partial<Pick<FieldDetails, 'name'>>) => {
-  const { feedback } = useFieldFeedback({ name });
-  const hasValue = useFormSelector(fieldHasValueSelector(name));
+const useFieldState = ({ name }: Partial<Pick<FieldDetails, "name">>) => {
+  const { feedback } = useFieldFeedback({ name })
+  const hasValue = useFormSelector(fieldHasValueSelector(name))
 
   /**
    * If hasValue is false, the state should be idle
    * The rest depends on the feedback type
    */
-  let state: FieldStates = FIELD_STATES.idle;
+  let state: FieldStates = FIELD_STATES.idle
 
   if (!hasValue) {
-    state = FIELD_STATES.idle;
+    state = FIELD_STATES.idle
   }
 
   switch (feedback?.type) {
-    case 'error':
-      state = FIELD_STATES.error;
-      break;
-    case 'warning':
-      state = FIELD_STATES.warning;
-      break;
-    case 'info':
-      state = FIELD_STATES.info;
-      break;
-    case 'success':
-      state = FIELD_STATES.success;
-      break;
+    case "error":
+      state = FIELD_STATES.error
+      break
+    case "warning":
+      state = FIELD_STATES.warning
+      break
+    case "info":
+      state = FIELD_STATES.info
+      break
+    case "success":
+      state = FIELD_STATES.success
+      break
     default:
-      break;
+      break
   }
 
   return {
     state,
-  };
-};
+  }
+}
 
 /**
  * Provides the form submission handler along with the form's validity via a data attribute
  */
-const useForm = ({ flowActor }: { flowActor?: BaseActorRef<{ type: 'SUBMIT' }> }) => {
-  const { errors } = useGlobalErrors();
-  const validity = errors.length > 0 ? FIELD_VALIDITY.invalid : FIELD_VALIDITY.valid;
+const useForm = ({ flowActor }: { flowActor?: BaseActorRef<{ type: "SUBMIT" }> }) => {
+  const { errors } = useGlobalErrors()
+  const validity = errors.length > 0 ? FIELD_VALIDITY.invalid : FIELD_VALIDITY.valid
 
   // Register the onSubmit handler for form submission
   // TODO: merge user-provided submit handler
   const onSubmit = React.useCallback(
     (event: React.FormEvent<Element>) => {
-      event.preventDefault();
+      event.preventDefault()
       if (flowActor) {
-        flowActor.send({ type: 'SUBMIT' });
+        flowActor.send({ type: "SUBMIT" })
       }
     },
     [flowActor]
-  );
+  )
 
   return {
     props: {
       [`data-${validity}`]: true,
       onSubmit,
     },
-  };
-};
+  }
+}
 
-const useField = ({ name }: Partial<Pick<FieldDetails, 'name'>>) => {
-  const hasValue = useFormSelector(fieldHasValueSelector(name));
-  const { feedback } = useFieldFeedback({ name });
+const useField = ({ name }: Partial<Pick<FieldDetails, "name">>) => {
+  const hasValue = useFormSelector(fieldHasValueSelector(name))
+  const { feedback } = useFieldFeedback({ name })
 
-  const shouldBeHidden = false;
-  const hasError = feedback ? feedback.type === 'error' : false;
-  const validity = hasError ? FIELD_VALIDITY.invalid : FIELD_VALIDITY.valid;
+  const shouldBeHidden = false
+  const hasError = feedback ? feedback.type === "error" : false
+  const validity = hasError ? FIELD_VALIDITY.invalid : FIELD_VALIDITY.valid
 
   return {
     hasValue,
     props: {
       [`data-${validity}`]: true,
-      'data-hidden': shouldBeHidden ? true : undefined,
+      "data-hidden": shouldBeHidden ? true : undefined,
       serverInvalid: hasError,
     },
-  };
-};
+  }
+}
 
 const useInput = ({
   name: inputName,
@@ -166,145 +166,145 @@ const useInput = ({
   ...passthroughProps
 }: FormInputProps) => {
   // Inputs can be used outside of a <Field> wrapper if desired, so safely destructure here
-  const fieldContext = useFieldContext();
-  const name = inputName || fieldContext?.name;
-  const { state: fieldState } = useFieldState({ name });
+  const fieldContext = useFieldContext()
+  const name = inputName || fieldContext?.name
+  const { state: fieldState } = useFieldState({ name })
 
   if (!name) {
-    throw new Error('JFS-Tech: <Input /> must be wrapped in a <Field> component or have a name prop.');
+    throw new Error("JFS-Tech: <Input /> must be wrapped in a <Field> component or have a name prop.")
   }
 
-  const ref = useFormStore();
-  const [hasPassedValiation, setHasPassedValidation] = React.useState(false);
+  const ref = useFormStore()
+  const [hasPassedValiation, setHasPassedValidation] = React.useState(false)
 
-  const value = useFormSelector(fieldValueSelector(name));
-  const hasValue = Boolean(value);
-  const type = inputType ?? determineInputTypeFromName(name);
+  const value = useFormSelector(fieldValueSelector(name))
+  const hasValue = Boolean(value)
+  const type = inputType ?? determineInputTypeFromName(name)
 
   // Register the field in the machine context
   React.useEffect(() => {
-    if (!name || ref.getSnapshot().context.fields.get(name)) return;
+    if (!name || ref.getSnapshot().context.fields.get(name)) return
 
-    ref.send({ type: 'FIELD.ADD', field: { name, value: initialValue } });
+    ref.send({ type: "FIELD.ADD", field: { name, value: initialValue } })
 
-    return () => ref.send({ type: 'FIELD.REMOVE', field: { name } });
-  }, [ref]); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => ref.send({ type: "FIELD.REMOVE", field: { name } })
+  }, [ref]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Register the onChange handler for field updates to persist to the machine context
   const onChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeProp?.(event);
-      if (!name || initialValue) return;
-      ref.send({ type: 'FIELD.UPDATE', field: { name, value: event.target.value } });
+      onChangeProp?.(event)
+      if (!name || initialValue) return
+      ref.send({ type: "FIELD.UPDATE", field: { name, value: event.target.value } })
     },
     [ref, name, onChangeProp, initialValue]
-  );
+  )
 
   const onBlur = React.useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
-      onBlurProp?.(event);
+      onBlurProp?.(event)
     },
     [onBlurProp]
-  );
+  )
 
   const onFocus = React.useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
-      onFocusProp?.(event);
+      onFocusProp?.(event)
     },
     [onFocusProp]
-  );
+  )
 
   React.useEffect(() => {
-    if (!initialValue || !name) return;
-    ref.send({ type: 'FIELD.UPDATE', field: { name, value: initialValue } });
-  }, [name, ref, initialValue]);
+    if (!initialValue || !name) return
+    ref.send({ type: "FIELD.UPDATE", field: { name, value: initialValue } })
+  }, [name, ref, initialValue])
 
   if (!name) {
-    throw new Error('JFS-Tech: <Input /> must be wrapped in a <Field> component or have a name prop.');
+    throw new Error("JFS-Tech: <Input /> must be wrapped in a <Field> component or have a name prop.")
   }
 
-  const shouldBeHidden = false;
+  const shouldBeHidden = false
 
-  const Element = type === 'otp' ? OTPInput : RadixControl;
+  const Element = type === "otp" ? OTPInput : RadixControl
 
-  let props = {};
-  if (type === 'otp') {
-    const p = passthroughProps as Omit<OTPInputProps, 'name' | 'value' | 'type'>;
-    const length = p.length || OTP_LENGTH_DEFAULT;
+  let props = {}
+  if (type === "otp") {
+    const p = passthroughProps as Omit<OTPInputProps, "name" | "value" | "type">
+    const length = p.length || OTP_LENGTH_DEFAULT
 
     props = {
-      'data-otp-input': true,
-      autoComplete: 'one-time-code',
-      inputMode: 'numeric',
+      "data-otp-input": true,
+      autoComplete: "one-time-code",
+      inputMode: "numeric",
       pattern: `[0-9]{${length}}`,
       minLength: length,
       maxLength: length,
       onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         // Only accept numbers
-        event.currentTarget.value = event.currentTarget.value.replace(/\D+/g, '');
-        onChange(event);
+        event.currentTarget.value = event.currentTarget.value.replace(/\D+/g, "")
+        onChange(event)
       },
-      type: 'text',
+      type: "text",
       spellCheck: false,
-    };
+    }
   }
 
   // Filter out invalid props that should not be passed through
   // @ts-ignore i think it works but not sure.
-  const { validatePassword: _1, ...rest } = passthroughProps;
+  const { validatePassword: _1, ...rest } = passthroughProps
 
   return {
     Element,
     props: {
       type,
-      value: value ?? '',
+      value: value ?? "",
       onChange,
       onBlur,
       onFocus,
-      'data-hidden': shouldBeHidden ? true : undefined,
-      'data-has-value': hasValue ? true : undefined,
-      'data-state': fieldState,
+      "data-hidden": shouldBeHidden ? true : undefined,
+      "data-has-value": hasValue ? true : undefined,
+      "data-state": fieldState,
       ...props,
       ...rest,
     },
-  };
-};
+  }
+}
 
 /* -------------------------------------------------------------------------------------------------
  * Form
  * -----------------------------------------------------------------------------------------------*/
 
-const FORM_NAME = 'JFSTechElementsForm';
+const FORM_NAME = "JFSTechElementsForm"
 
-type FormElement = React.ElementRef<typeof RadixForm>;
-type FormProps = SetRequired<RadixFormProps, 'children'> & {
-  flowActor?: BaseActorRef<{ type: 'SUBMIT' }>;
-};
+type FormElement = React.ElementRef<typeof RadixForm>
+type FormProps = SetRequired<RadixFormProps, "children"> & {
+  flowActor?: BaseActorRef<{ type: "SUBMIT" }>
+}
 
 const Form = React.forwardRef<FormElement, FormProps>(({ flowActor, onSubmit, ...rest }, forwardedRef) => {
-  const form = useForm({ flowActor: flowActor });
+  const form = useForm({ flowActor: flowActor })
 
-  const { onSubmit: internalOnSubmit, ...internalFormProps } = form.props;
+  const { onSubmit: internalOnSubmit, ...internalFormProps } = form.props
 
-  return <RadixForm {...internalFormProps} {...rest} onSubmit={composeEventHandlers(internalOnSubmit, onSubmit)} ref={forwardedRef} />;
-});
+  return <RadixForm {...internalFormProps} {...rest} onSubmit={composeEventHandlers(internalOnSubmit, onSubmit)} ref={forwardedRef} />
+})
 
-Form.displayName = FORM_NAME;
+Form.displayName = FORM_NAME
 
 /** -------------------------------------------------------------------------------------------------
  * Field
  * -----------------------------------------------------------------------------------------------*/
 
-const FIELD_NAME = 'JFSTechElementsField';
-const FIELD_INNER_NAME = 'JFSTechElementsFieldInner';
-const FIELD_STATE_NAME = 'JFSTechElementsFieldState';
+const FIELD_NAME = "JFSTechElementsField"
+const FIELD_INNER_NAME = "JFSTechElementsFieldInner"
+const FIELD_STATE_NAME = "JFSTechElementsFieldState"
 
-type FormFieldElement = React.ElementRef<typeof RadixField>;
-type FormFieldProps = Omit<RadixFormFieldProps, 'children'> & {
-  name: Autocomplete<FieldId>;
-  alwaysShow?: boolean;
-  children: React.ReactNode | ((state: FieldStates) => React.ReactNode);
-};
+type FormFieldElement = React.ElementRef<typeof RadixField>
+type FormFieldProps = Omit<RadixFormFieldProps, "children"> & {
+  name: Autocomplete<FieldId>
+  alwaysShow?: boolean
+  children: React.ReactNode | ((state: FieldStates) => React.ReactNode)
+}
 
 /**
  * Field is used to associate its child elements with a specific input. It automatically handles unique ID generation and associating the contained label and input elements.
@@ -328,39 +328,39 @@ type FormFieldProps = Omit<RadixFormFieldProps, 'children'> & {
  * </Field>
  */
 const Field = React.forwardRef<FormFieldElement, FormFieldProps>(({ alwaysShow, ...rest }, forwardedRef) => {
-  const formRef = useFormStore();
-  const formCtx = formRef.getSnapshot().context;
+  const formRef = useFormStore()
+  const formCtx = formRef.getSnapshot().context
   // A field is marked as hidden if it's optional OR if it's a filled-out required field
-  const isHiddenField = formCtx.progressive && Boolean(formCtx.hidden?.has(rest.name));
+  const isHiddenField = formCtx.progressive && Boolean(formCtx.hidden?.has(rest.name))
 
   // Only alwaysShow={true} should force behavior to render the field, on `undefined` or alwaysShow={false} the isHiddenField logic should take over
-  const shouldHide = alwaysShow ? false : isHiddenField;
+  const shouldHide = alwaysShow ? false : isHiddenField
 
   return shouldHide ? null : (
     <FieldContext.Provider value={{ name: rest.name }}>
       <FieldInner {...rest} ref={forwardedRef} />
     </FieldContext.Provider>
-  );
-});
+  )
+})
 
 const FieldInner = React.forwardRef<FormFieldElement, FormFieldProps>((props, forwardedRef) => {
-  const { children, ...rest } = props;
-  const field = useField({ name: rest.name });
-  const { state: fieldState } = useFieldState({ name: rest.name });
+  const { children, ...rest } = props
+  const field = useField({ name: rest.name })
+  const { state: fieldState } = useFieldState({ name: rest.name })
 
   return (
     <RadixField {...field.props} {...rest} ref={forwardedRef}>
-      {typeof children === 'function' ? children(fieldState) : children}
+      {typeof children === "function" ? children(fieldState) : children}
     </RadixField>
-  );
-});
+  )
+})
 
-Field.displayName = FIELD_NAME;
-FieldInner.displayName = FIELD_INNER_NAME;
+Field.displayName = FIELD_NAME
+FieldInner.displayName = FIELD_INNER_NAME
 
 type FieldStateRenderFn = {
-  children: (state: { state: FieldStates; message: string | undefined; codes: ErrorMessagesKey[] | undefined }) => React.ReactNode;
-};
+  children: (state: { state: FieldStates; message: string | undefined; codes: ErrorMessagesKey[] | undefined }) => React.ReactNode
+}
 
 /**
  * Programmatically access the state of the wrapping `<Field>`. Useful for implementing animations when direct access to the state value is necessary.
@@ -392,34 +392,34 @@ type FieldStateRenderFn = {
  * </Field>
  */
 function FieldState({ children }: FieldStateRenderFn) {
-  const field = useFieldContext();
-  const { feedback } = useFieldFeedback({ name: field?.name });
-  const { state } = useFieldState({ name: field?.name });
+  const field = useFieldContext()
+  const { feedback } = useFieldFeedback({ name: field?.name })
+  const { state } = useFieldState({ name: field?.name })
 
-  const message = feedback?.message instanceof JFSTechElementsFieldError ? feedback.message.message : feedback?.message;
-  const codes = feedback?.codes;
+  const message = feedback?.message instanceof JFSTechElementsFieldError ? feedback.message.message : feedback?.message
+  const codes = feedback?.codes
 
-  const fieldState = { state, message, codes };
+  const fieldState = { state, message, codes }
 
-  return children(fieldState);
+  return children(fieldState)
 }
 
-FieldState.displayName = FIELD_STATE_NAME;
+FieldState.displayName = FIELD_STATE_NAME
 
 /* -------------------------------------------------------------------------------------------------
  * Input
  * -----------------------------------------------------------------------------------------------*/
 
-const INPUT_NAME = 'JFSTechElementsInput';
+const INPUT_NAME = "JFSTechElementsInput"
 
-type PasswordInputProps = Exclude<FormControlProps, 'type'> & {
-  validatePassword?: boolean;
-};
+type PasswordInputProps = Exclude<FormControlProps, "type"> & {
+  validatePassword?: boolean
+}
 type FormInputProps =
   | RadixFormControlProps
-  | ({ type: 'otp'; render: OTPInputProps['render'] } & Omit<OTPInputProps, 'asChild'>)
-  | ({ type: 'otp'; render?: undefined } & OTPInputProps)
-  | ({ type: 'password' } & PasswordInputProps);
+  | ({ type: "otp"; render: OTPInputProps["render"] } & Omit<OTPInputProps, "asChild">)
+  | ({ type: "otp"; render?: undefined } & OTPInputProps)
+  | ({ type: "password" } & PasswordInputProps)
 
 /**
  * Handles rendering of `<input>` elements within JFSTech's flows. Supports special `type` prop values to render input types that are unique to authentication and user management flows. Additional props will be passed through to the `<input>` element.
@@ -455,17 +455,17 @@ type FormInputProps =
  * </Field>
  */
 const Input = React.forwardRef<React.ElementRef<typeof RadixControl>, FormInputProps>((props: FormInputProps, forwardedRef) => {
-  const field = useInput(props);
-  return <field.Element ref={forwardedRef} {...field.props} />;
-});
+  const field = useInput(props)
+  return <field.Element ref={forwardedRef} {...field.props} />
+})
 
-Input.displayName = INPUT_NAME;
+Input.displayName = INPUT_NAME
 
 /* -------------------------------------------------------------------------------------------------
  * Label
  * -----------------------------------------------------------------------------------------------*/
 
-const LABEL_NAME = 'JFSTechElementsLabel';
+const LABEL_NAME = "JFSTechElementsLabel"
 
 /**
  * Renders a `<label>` element that is automatically associated with its sibling `<Input />` inside of a `<Field>`. Additional props will be passed through to the `<label>` element.
@@ -478,61 +478,61 @@ const LABEL_NAME = 'JFSTechElementsLabel';
  *   <Input />
  * </Field>
  */
-const Label = RadixLabel;
+const Label = RadixLabel
 
-Label.displayName = LABEL_NAME;
+Label.displayName = LABEL_NAME
 
 /* -------------------------------------------------------------------------------------------------
  * Submit
  * -----------------------------------------------------------------------------------------------*/
 
-const SUBMIT_NAME = 'JFSTechElementsSubmit';
+const SUBMIT_NAME = "JFSTechElementsSubmit"
 
-type FormSubmitProps = SetRequired<RadixFormSubmitProps, 'children'>;
-type FormSubmitComponent = React.ForwardRefExoticComponent<FormSubmitProps & React.RefAttributes<HTMLButtonElement>>;
+type FormSubmitProps = SetRequired<RadixFormSubmitProps, "children">
+type FormSubmitComponent = React.ForwardRefExoticComponent<FormSubmitProps & React.RefAttributes<HTMLButtonElement>>
 
 /**
  * A `<button type="submit">` element.
  *
  * @param {boolean} [asChild] - When `true`, the component will render its child and passes all props to it.
  */
-const Submit = RadixSubmit as FormSubmitComponent;
+const Submit = RadixSubmit as FormSubmitComponent
 
-Submit.displayName = SUBMIT_NAME;
+Submit.displayName = SUBMIT_NAME
 
 /* -------------------------------------------------------------------------------------------------
  * GlobalError & FieldError
  * -----------------------------------------------------------------------------------------------*/
 
-const GLOBAL_ERROR_NAME = 'JFSTechElementsGlobalError';
-const FIELD_ERROR_NAME = 'JFSTechElementsFieldError';
+const GLOBAL_ERROR_NAME = "JFSTechElementsGlobalError"
+const FIELD_ERROR_NAME = "JFSTechElementsFieldError"
 
-type FormErrorRenderProps = Pick<JFSTechElementsError, 'code' | 'message'>;
+type FormErrorRenderProps = Pick<JFSTechElementsError, "code" | "message">
 
 type FormErrorPropsRenderFn = {
-  asChild?: never;
-  children?: (error: FormErrorRenderProps) => React.ReactNode;
-  code?: string;
-};
+  asChild?: never
+  children?: (error: FormErrorRenderProps) => React.ReactNode
+  code?: string
+}
 
 type FormErrorPropsStd = {
-  asChild?: false;
-  children: React.ReactNode;
-  code: string;
-};
+  asChild?: false
+  children: React.ReactNode
+  code: string
+}
 
 type FormErrorPropsAsChild = {
-  asChild?: true;
-  children: React.ReactElement;
-  code: string;
-};
+  asChild?: true
+  children: React.ReactElement
+  code: string
+}
 
-type FormErrorProps<T> = Simplify<Omit<T, 'asChild' | 'children'> & (FormErrorPropsRenderFn | FormErrorPropsStd | FormErrorPropsAsChild)>;
+type FormErrorProps<T> = Simplify<Omit<T, "asChild" | "children"> & (FormErrorPropsRenderFn | FormErrorPropsStd | FormErrorPropsAsChild)>
 
-type FormGlobalErrorElement = React.ElementRef<'div'>;
-type FormGlobalErrorProps = FormErrorProps<React.ComponentPropsWithoutRef<'div'>>;
-type FormFieldErrorElement = React.ElementRef<typeof RadixFormMessage>;
-type FormFieldErrorProps = FormErrorProps<RadixFormMessageProps & { name?: string }>;
+type FormGlobalErrorElement = React.ElementRef<"div">
+type FormGlobalErrorProps = FormErrorProps<React.ComponentPropsWithoutRef<"div">>
+type FormFieldErrorElement = React.ElementRef<typeof RadixFormMessage>
+type FormFieldErrorProps = FormErrorProps<RadixFormMessageProps & { name?: string }>
 
 /**
  * Used to render errors that are returned from JFSTech's API, but that are not associated with a specific form field. By default, will render the error's message wrapped in a `<div>`. Optionally, the `children` prop accepts a function to completely customize rendering. Must be placed **inside** components like `<SignIn>`/`<SignUp>` to have access to the underlying form state.
@@ -562,24 +562,24 @@ type FormFieldErrorProps = FormErrorProps<RadixFormMessageProps & { name?: strin
  */
 const GlobalError = React.forwardRef<FormGlobalErrorElement, FormGlobalErrorProps>(
   ({ asChild = false, children, code, ...rest }, forwardedRef) => {
-    const { errors } = useGlobalErrors();
+    const { errors } = useGlobalErrors()
 
-    const error = errors?.[0];
+    const error = errors?.[0]
 
     if (!error || (code && error.code !== code)) {
-      return null;
+      return null
     }
 
-    const Comp = asChild ? Slot : 'div';
-    const child = typeof children === 'function' ? children(error) : children;
+    const Comp = asChild ? Slot : "div"
+    const child = typeof children === "function" ? children(error) : children
 
     return (
       <Comp role="alert" {...rest} ref={forwardedRef}>
         {child || error.message}
       </Comp>
-    );
+    )
   }
-);
+)
 
 /**
  * FieldError renders error messages associated with a specific field. By default, the error's message will be rendered in an unstyled `<span>`. Optionally, the `children` prop accepts a function to completely customize rendering.
@@ -602,21 +602,21 @@ const GlobalError = React.forwardRef<FormGlobalErrorElement, FormGlobalErrorProp
  * </Field>
  */
 const FieldError = React.forwardRef<FormFieldErrorElement, FormFieldErrorProps>(({ children, code, name, ...rest }, forwardedRef) => {
-  const fieldContext = useFieldContext();
-  const fieldName = fieldContext?.name || name;
-  const { feedback } = useFieldFeedback({ name: fieldName });
+  const fieldContext = useFieldContext()
+  const fieldName = fieldContext?.name || name
+  const { feedback } = useFieldFeedback({ name: fieldName })
 
-  if (!(feedback?.type === 'error')) {
-    return null;
+  if (!(feedback?.type === "error")) {
+    return null
   }
 
-  const error = feedback.message;
+  const error = feedback.message
 
   if (!error) {
-    return null;
+    return null
   }
 
-  const child = typeof children === 'function' ? children(error) : children;
+  const child = typeof children === "function" ? children(error) : children
   // const forceMatch = code ? error.code === code : undefined; // TODO: Re-add when Radix Form is updated
 
   return (
@@ -628,13 +628,13 @@ const FieldError = React.forwardRef<FormFieldErrorElement, FormFieldErrorProps>(
     >
       {child || error.message}
     </RadixFormMessage>
-  );
-});
+  )
+})
 
-GlobalError.displayName = GLOBAL_ERROR_NAME;
-FieldError.displayName = FIELD_ERROR_NAME;
+GlobalError.displayName = GLOBAL_ERROR_NAME
+FieldError.displayName = FIELD_ERROR_NAME
 
-export { Field, FieldError, FieldState, Form, GlobalError, Input, Label, Submit };
+export { Field, FieldError, FieldState, Form, GlobalError, Input, Label, Submit }
 export type {
   RadixFormControlProps as FormControlProps,
   FormErrorProps,
@@ -645,4 +645,4 @@ export type {
   FormInputProps,
   FormProps,
   FormSubmitProps,
-};
+}

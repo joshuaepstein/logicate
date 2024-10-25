@@ -1,27 +1,27 @@
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { prisma } from '@logicate/database'
-import { sendEmail } from '@logicate/emails'
-import { subscribe } from '@logicate/emails/resend'
-import { waitUntil } from '@vercel/functions'
-import { NextAuthConfig } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from './lock-account'
-import { validatePassword } from './password'
-import { randomAvatar } from '../random'
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@logicate/database"
+import { sendEmail } from "@logicate/emails"
+import { subscribe } from "@logicate/emails/resend"
+import { waitUntil } from "@vercel/functions"
+import { NextAuthConfig } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { randomAvatar } from "../random"
+import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account"
+import { validatePassword } from "./password"
 
 export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
-      id: 'credentials',
-      name: 'Logicate',
-      type: 'credentials',
+      id: "credentials",
+      name: "Logicate",
+      type: "credentials",
       credentials: {
-        email: { type: 'email' },
-        password: { type: 'password' },
+        email: { type: "email" },
+        password: { type: "password" },
       },
       async authorize(credentials) {
         if (!credentials) {
-          throw new Error('no-credentials')
+          throw new Error("no-credentials")
         }
 
         const { email, password } = credentials as {
@@ -30,7 +30,7 @@ export const authConfig: NextAuthConfig = {
         }
 
         if (!email || !password) {
-          throw new Error('no-credentials')
+          throw new Error("no-credentials")
         }
 
         const user = await prisma.user.findUnique({
@@ -50,11 +50,11 @@ export const authConfig: NextAuthConfig = {
         })
 
         if (!user || !user.password) {
-          throw new Error('invalid-credentials')
+          throw new Error("invalid-credentials")
         }
 
         if (exceededLoginAttemptsThreshold(user)) {
-          throw new Error('exceeded-login-attempts')
+          throw new Error("exceeded-login-attempts")
         }
 
         const passwordMatch = await validatePassword({
@@ -66,9 +66,9 @@ export const authConfig: NextAuthConfig = {
           const exceededLoginAttempts = exceededLoginAttemptsThreshold(await incrementLoginAttemps(user))
 
           if (exceededLoginAttempts) {
-            throw new Error('exceeded-login-attempts')
+            throw new Error("exceeded-login-attempts")
           } else {
-            throw new Error('invalid-credentials')
+            throw new Error("invalid-credentials")
           }
         }
 
@@ -93,7 +93,7 @@ export const authConfig: NextAuthConfig = {
   // @ts-expect-error - because
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   // cookies: {
   //   sessionToken: {
@@ -109,43 +109,13 @@ export const authConfig: NextAuthConfig = {
   //   },
   // },
   pages: {
-    error: '/login',
+    error: "/login",
   },
   callbacks: {
     jwt: async ({ token, user, trigger }) => {
       if (user) token.user = user
 
-      if (trigger === 'update') {
-        const refreshedUser = await prisma.user.findUnique({
-          where: { id: token.sub },
-        })
-        let publicDisplay = await prisma.publicDisplay.findUnique({
-          where: { userId: token.sub },
-        })
-
-        if (publicDisplay) {
-          if (publicDisplay.profilePicture === null) {
-            // publicDisplay.profilePicture = `internal:${randomAvatar()}`
-            const updatedProfilePicture = await prisma.publicDisplay.update({
-              where: { userId: token.sub },
-              data: {
-                profilePicture: `internal:${randomAvatar()}`,
-              },
-            })
-
-            publicDisplay = updatedProfilePicture
-          }
-        }
-
-        if (refreshedUser) {
-          token.user = {
-            ...refreshedUser,
-            publicDisplay: publicDisplay || {},
-          }
-        } else {
-          return {}
-        }
-      } else if (trigger === undefined) {
+      if (trigger === "update" || trigger === undefined) {
         // refresh the user because we want to make sure we have the latest data
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
@@ -183,7 +153,7 @@ export const authConfig: NextAuthConfig = {
     session: async ({ session, token }) => {
       session.user = {
         id: token.sub,
-        // @ts-ignore
+        // @ts-expect-error - unsure but it's fine
         ...(token || session).user,
       }
 
@@ -216,14 +186,14 @@ export const authConfig: NextAuthConfig = {
             Promise.allSettled([
               subscribe({ email, name: user.name }),
               sendEmail({
-                subject: 'Welcome to Logicate',
+                subject: "Welcome to Logicate",
                 email,
                 // react: WelcomeEmail({
                 //   email,
                 //   name: user.name,
                 //   accountType: user.accountType,
                 // }),
-                text: 'Welcome to Logicate - We are working on this email template and should be ready soon!',
+                text: "Welcome to Logicate - We are working on this email template and should be ready soon!",
                 scheduledAt: new Date(Date.now() + 5 * 60 + 1000).toISOString(),
                 marketing: true,
               }),

@@ -1,23 +1,23 @@
-'use server'
+"use server"
 
-import { getSession } from '@/lib/auth/utils'
-import { changelogId } from '@/lib/id'
-import { Changelog, prisma } from '@logicate/database'
+import { getSession } from "@/lib/auth/utils"
+import { changelogId } from "@/lib/id"
+import { Changelog, prisma } from "@logicate/database"
 
 export async function createChangelog(prevState: string | undefined, formData: FormData) {
   const session = await getSession()
   if (!session.user.isAdmin) {
-    return 'You are not authorized to create a changelog'
+    return "You are not authorized to create a changelog"
   }
-  const title = formData.get('title') as string
-  const subtitle = formData.get('subtitle') as string
+  const title = formData.get("title") as string
+  const subtitle = formData.get("subtitle") as string
   // additions, changes, fixes are string arrays - they need to be deserialized
-  const additionsLength = formData.get('additions_length') as string
-  const changesLength = formData.get('changes_length') as string
-  const fixesLength = formData.get('fixes_length') as string
+  const additionsLength = formData.get("additions_length") as string
+  const changesLength = formData.get("changes_length") as string
+  const fixesLength = formData.get("fixes_length") as string
 
   if (!title || !subtitle || !additionsLength || !changesLength || !fixesLength) {
-    return 'All fields are required'
+    return "All fields are required"
   }
 
   try {
@@ -25,7 +25,7 @@ export async function createChangelog(prevState: string | undefined, formData: F
     Number(changesLength)
     Number(fixesLength)
   } catch (error) {
-    return 'All fields are required'
+    return "All fields are required"
   }
 
   console.log(formData)
@@ -69,8 +69,8 @@ export async function createChangelog(prevState: string | undefined, formData: F
   })
 
   if (changelog) {
-    return 'Changelog created successfully'
+    return "Changelog created successfully"
   } else {
-    return 'Failed to create changelog'
+    return "Failed to create changelog"
   }
 }

@@ -1,15 +1,15 @@
-'use client'
+"use client"
 
-import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from '@jfstech/icons-react/24/outline'
-import { Button } from '@/components/ui/button'
-import { TextInput } from '@/components/ui/input/index'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
-import useCanvasStore from './hooks/useCanvasStore'
-import { defaultInputs } from './node/gates/constants'
-import { GateItem, InputItem, OutputItem, Selected } from './types'
-import { HexColorPicker } from 'react-colorful'
-import { cn } from '@/lib'
+import { Button } from "@/components/ui/button"
+import { TextInput } from "@/components/ui/input/index"
+import { cn } from "@/lib"
+import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from "@jfstech/icons-react/24/outline"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { HexColorPicker } from "react-colorful"
+import useCanvasStore from "./hooks/useCanvasStore"
+import { defaultInputs } from "./node/gates/constants"
+import { GateItem, InputItem, OutputItem, Selected } from "./types"
 
 export default function SettingsPopup() {
   const { selected, updateItem, updateSelected } = useCanvasStore()
@@ -24,7 +24,7 @@ export default function SettingsPopup() {
           setMinimized(true)
           // clear expressionLetterRef content
           if (expressionLetterRef.current) {
-            expressionLetterRef.current.value = ''
+            expressionLetterRef.current.value = ""
           }
         }
         setSelectedItem(selected[0])
@@ -33,25 +33,25 @@ export default function SettingsPopup() {
   }, [selected])
 
   return (
-    (<AnimatePresence>
+    <AnimatePresence>
       {selected.length === 1 && selected[0] && selectedItem && (
         <motion.div
-          className="shadow-hard-xs min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white"
+          className="min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white shadow-hard-xs"
           initial={{
             opacity: 0,
-            x: '20%',
+            x: "20%",
           }}
           animate={{
             opacity: 1,
-            x: '0',
+            x: "0",
           }}
           exit={{
             opacity: 0,
-            x: '20%',
+            x: "20%",
           }}
         >
-          <div className="border-b-neutralgrey-400 flex w-full items-center justify-between border-b px-4 py-2">
-            <h5 className="text-neutralgrey-1100 text-sm font-medium">Node Settings</h5>
+          <div className="flex w-full items-center justify-between border-b border-b-neutralgrey-400 px-4 py-2">
+            <h5 className="text-sm font-medium text-neutralgrey-1100">Node Settings</h5>
             <Button variant="no-borders" size="icon-xs" onClick={() => setMinimized(!minimized)}>
               {minimized ? <Maximise01Icon className="size-4" /> : <Minimise02Icon className="size-4" />}
             </Button>
@@ -59,25 +59,25 @@ export default function SettingsPopup() {
 
           <motion.div
             variants={{
-              open: { height: 'auto' },
+              open: { height: "auto" },
               closed: { height: 0 },
             }}
-            animate={minimized ? 'closed' : 'open'}
-            className={cn('flex w-full flex-col items-start justify-between overflow-y-hidden', {
-              'h-0': minimized,
-              'h-auto': !minimized,
+            animate={minimized ? "closed" : "open"}
+            className={cn("flex w-full flex-col items-start justify-between overflow-y-hidden", {
+              "h-0": minimized,
+              "h-auto": !minimized,
             })}
           >
-            {selectedItem.selectedType === 'item' ? (
+            {selectedItem.selectedType === "item" ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.1 }}
                 className="flex w-full flex-col gap-4 p-4"
               >
-                {selectedItem.itemType === 'gate' ? (
+                {selectedItem.itemType === "gate" ? (
                   <div className="flex w-full flex-row items-center justify-between gap-4">
-                    <p className="text-neutralgrey-800 text-sm">Inputs</p>
+                    <p className="text-sm text-neutralgrey-800">Inputs</p>
                     <div className="flex w-max flex-row items-center">
                       <Button
                         variant="no-borders"
@@ -144,7 +144,7 @@ export default function SettingsPopup() {
                   </div>
                 ) : null}
                 <div className="flex w-full flex-row items-center justify-between gap-4">
-                  <p className="text-neutralgrey-800 text-sm">Label</p>
+                  <p className="text-sm text-neutralgrey-800">Label</p>
                   <div className="flex w-max flex-row items-center">
                     <TextInput
                       value={selectedItem.settings.label}
@@ -163,7 +163,7 @@ export default function SettingsPopup() {
                   </div>
                 </div>
                 <div className="flex w-full flex-row items-center justify-between gap-4">
-                  <p className="text-neutralgrey-800 text-sm">Colour</p>
+                  <p className="text-sm text-neutralgrey-800">Colour</p>
                   <div className="flex w-max flex-row items-center">
                     <HexColorPicker
                       color={selectedItem.settings.color}
@@ -180,9 +180,9 @@ export default function SettingsPopup() {
                     />
                   </div>
                 </div>
-                {selectedItem.itemType === 'input' || selectedItem.itemType === 'output' ? (
+                {selectedItem.itemType === "input" || selectedItem.itemType === "output" ? (
                   <div className="flex w-full flex-row items-center justify-between gap-4">
-                    <p className="text-neutralgrey-800 text-sm">Symbol</p>
+                    <p className="text-sm text-neutralgrey-800">Symbol</p>
                     <div className="flex w-max flex-row items-center">
                       <TextInput
                         value={(selectedItem as InputItem | OutputItem).settings.expressionLetter}
@@ -194,7 +194,7 @@ export default function SettingsPopup() {
                           if (e.target.value.length > 1) return
                           const value = e.target.value.toUpperCase()
                           // dont allow non-alphabetic characters (but allow empty string)
-                          if (value !== '' && !/^[A-Z]$/.test(value)) return
+                          if (value !== "" && !/^[A-Z]$/.test(value)) return
                           updateItem(selectedItem.id, {
                             ...selectedItem,
                             settings: {
@@ -214,6 +214,6 @@ export default function SettingsPopup() {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>)
-  );
+    </AnimatePresence>
+  )
 }

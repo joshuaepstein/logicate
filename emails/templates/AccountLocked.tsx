@@ -1,7 +1,7 @@
-import { Body, Button, Container, Head, Html, Preview, Section, Tailwind, Text } from '@react-email/components'
-import { styles } from '../global_styles'
-import { Footer } from '../_components/footer'
-import LogoIcon from '../_components/logo'
+import { Body, Button, Container, Head, Html, Preview, Section, Tailwind, Text } from "@react-email/components"
+import { Footer } from "../_components/footer"
+import LogoIcon from "../_components/logo"
+import { styles } from "../global_styles"
 
 interface Props {
   user: {
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export default function AccountLockedEmail({
-  user = { name: 'Joshua Epstein', email: 'josh@joshepstein.co.uk' },
-  unlockUrl = 'http://localhost:3000',
+  user = { name: "Joshua Epstein", email: "josh@joshepstein.co.uk" },
+  unlockUrl = "http://localhost:3000",
 }: Props) {
   return (
     <Tailwind>
@@ -23,7 +23,7 @@ export default function AccountLockedEmail({
         <Body>
           <Section style={styles.main}>
             <Container style={styles.container}>
-              <Section style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
+              <Section style={{ marginTop: "32px", display: "flex", justifyContent: "center" }}>
                 <LogoIcon className="h-8" />
               </Section>
               <Text style={styles.h1}>Locked Account</Text>
@@ -32,7 +32,7 @@ export default function AccountLockedEmail({
                 We have detected too many sign in attempts on your account. For your security, we have locked your account. Please click the
                 link below to verify your identity and unlock your account.
               </Text>
-              <Section style={{ textAlign: 'center' }}>
+              <Section style={{ textAlign: "center" }}>
                 <Button style={styles.btn} href={unlockUrl} className="mb-4 mt-3">
                   Unlock Account
                 </Button>

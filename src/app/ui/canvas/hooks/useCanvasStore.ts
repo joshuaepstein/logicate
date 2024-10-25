@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { Alphabet, Item, Selected, SelectedItem, SelectedWire, TempWire, Wire } from '../types'
+import { create } from "zustand"
+import { Alphabet, Item, Selected, SelectedItem, SelectedWire, TempWire, Wire } from "../types"
 
 export interface State {
   wires: Wire[]
@@ -19,21 +19,21 @@ export interface State {
   }
   recentActions: (
     | {
-        actionType: 'add' | 'remove' | 'update'
-        itemType: 'item' | 'wire'
+        actionType: "add" | "remove" | "update"
+        itemType: "item" | "wire"
         id: string
         oldState: Selected
         newState: Selected | null
         datetime: number
       }
     | {
-        actionType: 'mass_remove'
+        actionType: "mass_remove"
         id: string[]
         oldState: Selected[]
         datetime: number
       }
   )[]
-  currentTool: 'select' | 'drag-canvas'
+  currentTool: "select" | "drag-canvas"
   // variableValues: Record<Alphabet, boolean>
   // variableValues should be a record of alphabet and boolean values but it shoudl be able to be empty or only have lenghts as it wants
   variableValues: {
@@ -43,7 +43,7 @@ export interface State {
 }
 
 interface Actions {
-  setCurrentTool: (tool: State['currentTool']) => void
+  setCurrentTool: (tool: State["currentTool"]) => void
   setWires: (wires: Wire[]) => void
   addWire: (wire: Wire) => void
   removeWire: (wire: Wire) => void
@@ -51,7 +51,7 @@ interface Actions {
   addItem: (item: Item) => void
   removeItem: (item: Item) => void
   setSelected: (selected: Selected[]) => void
-  setSelectedIds: (selected: Selected['id'][]) => void
+  setSelectedIds: (selected: Selected["id"][]) => void
   setItemsSelected: (selected: Item[]) => void
   select: (item: Selected) => void
   unselect: (item: Selected) => void
@@ -62,17 +62,17 @@ interface Actions {
   getZoom: () => number
   getX: () => number
   getY: () => number
-  canvasU: (update: (canvas: State['canvas']) => State['canvas']) => void
-  itemsUpdate: (update: (items: State['items']) => State['items']) => void
-  updateItem: (id: Item['id'], item: Partial<Item>) => void
-  updateItemPosition: (id: Item['id'], position: { x: number; y: number }) => void
+  canvasU: (update: (canvas: State["canvas"]) => State["canvas"]) => void
+  itemsUpdate: (update: (items: State["items"]) => State["items"]) => void
+  updateItem: (id: Item["id"], item: Partial<Item>) => void
+  updateItemPosition: (id: Item["id"], position: { x: number; y: number }) => void
   setHolding: (isHolding: boolean) => void
-  isSelected: (itemId: Item['id'] | Wire['id']) => boolean
-  getItem: (id: Item['id']) => Item | undefined
-  selectItemId: (id: Item['id']) => void
-  selectWireId: (id: Wire['id']) => void
-  unselectItemId: (id: Item['id']) => void
-  unselectWireId: (id: Wire['id']) => void
+  isSelected: (itemId: Item["id"] | Wire["id"]) => boolean
+  getItem: (id: Item["id"]) => Item | undefined
+  selectItemId: (id: Item["id"]) => void
+  selectWireId: (id: Wire["id"]) => void
+  unselectItemId: (id: Item["id"]) => void
+  unselectWireId: (id: Wire["id"]) => void
   setTemporaryWire: (wire: TempWire | null) => void
   updateTemporaryWire: (update: (wire: TempWire) => TempWire) => void
   updateSelected: () => void
@@ -86,8 +86,8 @@ interface Actions {
   addVariableValue: (letter: Alphabet, value: boolean) => void
   setVariableValue: (letter: Alphabet, value: boolean) => void
   removeVariableValue: (letter: Alphabet) => void
-  setRecentActions: (actions: State['recentActions']) => void
-  addRecentAction: (action: State['recentActions'][0]) => void
+  setRecentActions: (actions: State["recentActions"]) => void
+  addRecentAction: (action: State["recentActions"][0]) => void
   removeRecentAction: (id: string) => void
   removeMostRecentAction: () => void
   clearRecentActions: () => void
@@ -109,7 +109,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     lastUpdated: 0,
   },
   recentActions: [],
-  currentTool: 'select',
+  currentTool: "select",
   variableValues: [],
   setCurrentTool: (tool) => set({ currentTool: tool }),
   setWires: (wires) => set({ wires }),
@@ -122,10 +122,13 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set({ selected })
   },
   setItemsSelected: (items) => {
-    const itemsSelected = items.map((item) => (({
-      ...item,
-      selectedType: 'item'
-    }) as SelectedItem))
+    const itemsSelected = items.map(
+      (item) =>
+        ({
+          ...item,
+          selectedType: "item",
+        }) as SelectedItem
+    )
     set({ selected: itemsSelected })
   },
   select: (item) => set((state) => ({ selected: [...state.selected, item] })),
@@ -156,10 +159,13 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set((state) => {
       const itemsSelected = state.items
         .filter((item) => selected.includes(item.id))
-        .map((item) => (({
-        ...item,
-        selectedType: 'item'
-      }) as SelectedItem))
+        .map(
+          (item) =>
+            ({
+              ...item,
+              selectedType: "item",
+            }) as SelectedItem
+        )
       return { selected: itemsSelected }
     })
   },
@@ -171,7 +177,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
           ...state.selected,
           {
             ...item,
-            selectedType: 'item',
+            selectedType: "item",
           },
         ]
         return {
@@ -186,7 +192,7 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
       const wire = state.wires.find((w) => w.id === id)
       if (wire) {
         return {
-          selected: [...state.selected, { ...wire, selectedType: 'wire' } as SelectedWire],
+          selected: [...state.selected, { ...wire, selectedType: "wire" } as SelectedWire],
         }
       }
       return state
@@ -203,12 +209,12 @@ const useCanvasStore = create<State & Actions>((set, get) => ({
     set((state) => ({
       selected: state.selected
         .map((i) => {
-          if (i.selectedType === 'item') {
+          if (i.selectedType === "item") {
             const item = state.items.find((item) => item.id === i.id)
-            return item ? ({ ...item, selectedType: 'item' } as SelectedItem) : null
-          } else if (i.selectedType === 'wire') {
+            return item ? ({ ...item, selectedType: "item" } as SelectedItem) : null
+          } else if (i.selectedType === "wire") {
             const wire = state.wires.find((wire) => wire.id === i.id)
-            return wire ? ({ ...wire, selectedType: 'wire' } as SelectedWire) : null
+            return wire ? ({ ...wire, selectedType: "wire" } as SelectedWire) : null
           }
           return null
         })

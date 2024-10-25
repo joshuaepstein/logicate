@@ -1,13 +1,12 @@
-import { cn } from '@/lib'
-import { cursorInside } from '@/lib/dom-cursor'
-import { forwardRef, useCallback, useEffect, useState } from 'react'
-import useCanvasStore from '../../hooks/useCanvasStore'
-import { InputItem, OutputItem } from '../../types'
-import { darkerColour, lighterColour } from '@/lib/color'
-import { OutputType } from './types'
-import LightOutputBody from './light/body'
-import { useCookie } from 'react-use'
-import { WireTerminal } from '../wire-terminal'
+import { cn } from "@/lib"
+import { cursorInside } from "@/lib/dom-cursor"
+import { forwardRef, useCallback, useEffect, useState } from "react"
+import { useCookie } from "react-use"
+import useCanvasStore from "../../hooks/useCanvasStore"
+import { OutputItem } from "../../types"
+import { WireTerminal } from "../wire-terminal"
+import LightOutputBody from "./light/body"
+import { OutputType } from "./types"
 
 export type OutputProps = {
   type: OutputType
@@ -60,7 +59,7 @@ export const Output = forwardRef<
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (dragging) {
-        const canvasElement = document.querySelector('[data-logicate-canvas]')
+        const canvasElement = document.querySelector("[data-logicate-canvas]")
         if (canvasElement) {
           const bounds = canvasElement.getBoundingClientRect()
           if (cursorInside(e, bounds)) {
@@ -84,15 +83,15 @@ export const Output = forwardRef<
   useEffect(() => {
     if (dragging) {
       setHolding(true)
-      window.addEventListener('mousemove', handleMouseMove)
-      window.addEventListener('mouseup', handleMouseUp)
+      window.addEventListener("mousemove", handleMouseMove)
+      window.addEventListener("mouseup", handleMouseUp)
     } else {
       setHolding(false)
     }
 
     return () => {
-      window.removeEventListener('mouseup', handleMouseUp)
-      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener("mouseup", handleMouseUp)
+      window.removeEventListener("mousemove", handleMouseMove)
     }
   }, [dragging])
 
@@ -101,7 +100,7 @@ export const Output = forwardRef<
       <div
         ref={ref}
         className={cn(
-          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none',
+          "pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none",
           className
         )}
         style={{ left: position.x, top: position.y }}
@@ -116,17 +115,17 @@ export const Output = forwardRef<
         data-logicate-selected={isSelected(outputId)}
         data-logicate-simulated={simulated.state}
       >
-        {debug && debug === 'true' && (
-          <p className={cn('text-2xs absolute left-[80%] top-full w-[400%] font-semibold text-red-500')} data-logicate-debug-info>
+        {debug && debug === "true" && (
+          <p className={cn("absolute left-[80%] top-full w-[400%] text-2xs font-semibold text-red-500")} data-logicate-debug-info>
             <span>{outputId}</span>
             <br />
             <span>x: {position.x}</span>
             <br />
             <span>y: {position.y}</span>
             <br />
-            <span>dragging: {dragging ? 'true' : 'false'}</span>
+            <span>dragging: {dragging ? "true" : "false"}</span>
             <br />
-            <span>state: {simulated.state ? 'true' : 'false'}</span>
+            <span>state: {simulated.state ? "true" : "false"}</span>
             <br />
             <span>type: {type}</span>
           </p>
@@ -135,8 +134,8 @@ export const Output = forwardRef<
           <div
             className="flex flex-row items-start justify-center"
             style={{
-              gridColumn: '2 / span 1',
-              gridRow: '3 / span 1',
+              gridColumn: "2 / span 1",
+              gridRow: "3 / span 1",
             }}
           >
             <div className="relative mb-[2.5px] flex h-7 flex-col items-center last-of-type:mb-0">
@@ -155,7 +154,7 @@ export const Output = forwardRef<
               <div
                 className="order-1 min-h-4 w-[2px] grow"
                 style={{
-                  backgroundColor: output.settings.color || '#000',
+                  backgroundColor: output.settings.color || "#000",
                 }}
               ></div>
             </div>
@@ -164,17 +163,17 @@ export const Output = forwardRef<
           <div
             className="flex flex-col items-start justify-center"
             style={{
-              gridColumn: '3 / span 1',
-              gridRow: '2 / span 1',
+              gridColumn: "3 / span 1",
+              gridRow: "2 / span 1",
             }}
           >
             <div className="relative mb-[2.5px] flex w-7 flex-row items-center last-of-type:mb-0">
               <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
                 <svg
                   style={{
-                    overflow: 'visible',
-                    width: '12.5px',
-                    height: '12.5px',
+                    overflow: "visible",
+                    width: "12.5px",
+                    height: "12.5px",
                   }}
                   className="pointer-events-none transition-transform hover:scale-[1.2]"
                 >
@@ -183,7 +182,7 @@ export const Output = forwardRef<
                     cx="6.5"
                     cy="6.5"
                     r="6"
-                    stroke={output.settings.color || '#000'}
+                    stroke={output.settings.color || "#000"}
                     strokeWidth="1"
                     fill="white"
                     data-logicate-input-terminal={0}
@@ -196,7 +195,7 @@ export const Output = forwardRef<
               <div
                 className="order-1 h-[2px] min-w-4 grow"
                 style={{
-                  backgroundColor: output.settings.color || '#000',
+                  backgroundColor: output.settings.color || "#000",
                 }}
               ></div>
             </div>
@@ -204,16 +203,16 @@ export const Output = forwardRef<
         )}
         <div
           className={cn(
-            'flex min-h-[30px] w-[30px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100',
+            "flex min-h-[30px] w-[30px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100",
             {
-              'min-h-[30px] min-w-[30px] border-none bg-[none]': type === OutputType.LIGHT,
+              "min-h-[30px] min-w-[30px] border-none bg-[none]": type === OutputType.LIGHT,
             }
           )}
           style={{
-            gridColumn: '2 / span 1',
-            gridRow: '2 / span 1',
-            filter: isSelected(outputId) ? 'drop-shadow(0px 0px 3px #0079db)' : 'none',
-            borderColor: output.settings.color || '#000',
+            gridColumn: "2 / span 1",
+            gridRow: "2 / span 1",
+            filter: isSelected(outputId) ? "drop-shadow(0px 0px 3px #0079db)" : "none",
+            borderColor: output.settings.color || "#000",
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center" data-logicate-body>

@@ -1,22 +1,22 @@
-'use client'
+"use client"
 
-import { AppContext } from '@/app/providers'
-import Logo from '@/components/Logo'
-import Kbd from '@/components/ui/kbd'
-import ProfilePicture from '@/components/ui/profile-picture/client'
-import { cn } from '@/lib'
-import { getSession } from '@/lib/auth/utils'
-import { hiddenLayoutPages } from '@/lib/constants'
-import { AnimatePresence, motion } from 'framer-motion'
-import { signOut } from 'next-auth/react'
-import Link from 'next/link'
-import { redirect, usePathname, useRouter, useSelectedLayoutSegment } from 'next/navigation'
-import { Suspense, use, useContext } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useLocalStorage } from 'usehooks-ts'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { P } from '../ui/typography'
-import LoadingNavbar from './loading-navbar'
+import { AppContext } from "@/app/providers"
+import Logo from "@/components/Logo"
+import Kbd from "@/components/ui/kbd"
+import ProfilePicture from "@/components/ui/profile-picture/client"
+import { cn } from "@/lib"
+import { getSession } from "@/lib/auth/utils"
+import { hiddenLayoutPages } from "@/lib/constants"
+import { AnimatePresence, motion } from "framer-motion"
+import { signOut } from "next-auth/react"
+import Link from "next/link"
+import { redirect, usePathname, useRouter, useSelectedLayoutSegment } from "next/navigation"
+import { Suspense, use, useContext } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
+import { useLocalStorage } from "usehooks-ts"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { P } from "../ui/typography"
+import LoadingNavbar from "./loading-navbar"
 
 export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<typeof getSession> }) {
   const session = use(sessionPromise)
@@ -24,22 +24,22 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
   const segment = useSelectedLayoutSegment()
   const router = useRouter()
   // const [isInsightsNewFeatureEnabled, setIsInsightsNewFeatureEnabled, newFeature] = useNewFeatureState(NewFeature.INSIGHTS, true)
-  const [hiddenInsights] = useLocalStorage('hiddenInsights-navbar', false)
+  const [hiddenInsights] = useLocalStorage("hiddenInsights-navbar", false)
   const { setShowCMDK } = useContext(AppContext)
 
-  useHotkeys('l', () => {
+  useHotkeys("l", () => {
     if (session?.user) return
-    redirect('/login')
+    redirect("/login")
   })
 
-  useHotkeys('n', () => {
+  useHotkeys("n", () => {
     if (session?.user) return
-    redirect('/register')
+    redirect("/register")
   })
 
   if (
     hiddenLayoutPages.some((page) => {
-      let path: string = page.replace('%s', '')
+      const path: string = page.replace("%s", "")
       return pathname.startsWith(path)
     })
   ) {
@@ -48,13 +48,13 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
 
   return (
     <Suspense fallback={<LoadingNavbar />}>
-      <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
+      <nav className="border-b-neutral-500 container flex h-16 items-center justify-between border-b">
         <Link href="/">
           <Logo className="h-8 transition hover:scale-105 active:scale-95" />
         </Link>
         <div className="hidden items-center gap-4 md:flex">
           <ul className="flex items-center justify-start gap-4">
-            <li className="text-neutralgrey-1200 text-xs font-[450]">
+            <li className="text-xs font-[450] text-neutralgrey-1200">
               <Link href="/canvas">Your Canvases</Link>
             </li>
             {/* {new Date() > NewFeatureDateLimit[NewFeature.INSIGHTS] ? (
@@ -92,18 +92,18 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
                 </motion.a>
               </motion.li>
             )} */}
-            <li className="text-neutralgrey-1200 text-xs font-[450]">
+            <li className="text-xs font-[450] text-neutralgrey-1200">
               <Link href="/changelog">Changelog</Link>
             </li>
           </ul>
           <div className="flex items-stretch justify-end gap-4">
             <div
-              className="bg-neutralgrey-200 hidden h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md px-2 md:flex"
+              className="hidden h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md bg-neutralgrey-200 px-2 md:flex"
               onClick={() => {
                 setShowCMDK(true)
               }}
             >
-              <p className="text-neutralgrey-1000 text-sm">Search</p>
+              <p className="text-sm text-neutralgrey-1000">Search</p>
               <div className="flex items-center gap-1">
                 <Kbd variant="ghost" className="bg-neutralgrey-100">
                   ⌘
@@ -116,20 +116,20 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
             {!session?.user || !session?.user.email ? (
               <>
                 <Link
-                  href={'/login'}
-                  className="bg-neutralgrey-200 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
+                  href={"/login"}
+                  className="group flex items-center justify-center gap-2 rounded-md bg-neutralgrey-200 px-2 py-1 transition"
                 >
-                  <span className="text-neutralgrey-1000 group-hover:text-neutralgrey-1200 text-sm transition">Log in</span>{' '}
+                  <span className="text-sm text-neutralgrey-1000 transition group-hover:text-neutralgrey-1200">Log in</span>{" "}
                   <Kbd variant="ghost" className="bg-neutralgrey-100">
                     L
                   </Kbd>
                 </Link>
                 <Link
-                  href={'/register'}
-                  className="bg-neutralgrey-1100 hover:bg-neutralgrey-1300 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
+                  href={"/register"}
+                  className="group flex items-center justify-center gap-2 rounded-md bg-neutralgrey-1100 px-2 py-1 transition hover:bg-neutralgrey-1300"
                 >
-                  <span className="text-neutralgrey-100 text-sm transition">Sign up</span>
-                  <Kbd variant="ghost" className="bg-neutralgrey-1000 border-neutralgrey-1100 text-neutralgrey-100">
+                  <span className="text-sm text-neutralgrey-100 transition">Sign up</span>
+                  <Kbd variant="ghost" className="border-neutralgrey-1100 bg-neutralgrey-1000 text-neutralgrey-100">
                     N
                   </Kbd>
                 </Link>
@@ -137,11 +137,11 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
             ) : (
               <>
                 <Link
-                  href={'/dashboard'}
+                  href={"/dashboard"}
                   className={cn(
-                    'group flex items-center justify-center gap-2 rounded-md bg-blue-800 px-2 py-1 text-sm font-medium text-blue-100 transition hover:bg-blue-900',
+                    "group flex items-center justify-center gap-2 rounded-md bg-blue-800 px-2 py-1 text-sm font-medium text-blue-100 transition hover:bg-blue-900",
                     {
-                      'bg-neutralgrey-1100 hover:bg-neutralgrey-1300 text-neutralgrey-100': pathname === '/dashboard',
+                      "bg-neutralgrey-1100 text-neutralgrey-100 hover:bg-neutralgrey-1300": pathname === "/dashboard",
                     }
                   )}
                 >
@@ -152,7 +152,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
                   <PopoverTrigger>
                     <ProfilePicture
                       type="user"
-                      className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat"
+                      className="size-8 rounded-md bg-contain bg-center bg-no-repeat shadow-hard-xs"
                       user={session.user}
                     />
                   </PopoverTrigger>
@@ -163,7 +163,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
                         signOut()
                       }}
                       className={cn(
-                        'bg-neutralgrey-1100 text-neutralgrey-400 hover:bg-neutralgrey-1000 hover:text-neutralgrey-300 mt-1.5 w-full rounded px-2 py-1 text-left transition duration-150'
+                        "mt-1.5 w-full rounded bg-neutralgrey-1100 px-2 py-1 text-left text-neutralgrey-400 transition duration-150 hover:bg-neutralgrey-1000 hover:text-neutralgrey-300"
                       )}
                     >
                       Logout
@@ -178,7 +178,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
       <AnimatePresence mode="wait">
         {
           //(new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights) ||
-          segment !== '/_not-found' ? (
+          segment !== "/_not-found" ? (
             <motion.div
               // initial={{ height: 0 }}
               // animate={{ height: 'auto' }}
@@ -186,7 +186,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
               transition={{ duration: 0.5 }}
               className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden text-center backdrop-blur-[6px]"
             >
-              <div className="text-neutralgrey-1200 py-2 text-xs font-medium">
+              <div className="py-2 text-xs font-medium text-neutralgrey-1200">
                 {/* Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '} */}
                 This web application is currently in development. There are bugs and unfinished features.
                 {/* <Link

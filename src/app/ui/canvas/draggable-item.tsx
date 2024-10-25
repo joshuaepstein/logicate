@@ -1,14 +1,9 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { GateType, gateTypeToIcon } from './node/gates/types'
-import { inputTypeToIcon } from './node/inputs/types'
-import { NodeType } from './node/type'
-import AndBody from './node/gates/and/body'
-import { outputTypeToIcon } from './node/outputs/types'
-import OrBody from './node/gates/or/body'
-import XorBody from './node/gates/xor/body'
-import BufferBody from './node/gates/buffer/body'
-import { TemporaryGate } from './node/gates/temporary'
-import useCanvasStore from './hooks/useCanvasStore'
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import useCanvasStore from "./hooks/useCanvasStore"
+import { gateTypeToIcon } from "./node/gates/types"
+import { inputTypeToIcon } from "./node/inputs/types"
+import { outputTypeToIcon } from "./node/outputs/types"
+import { NodeType } from "./node/type"
 
 export const DraggableItem = ({
   type,
@@ -38,7 +33,7 @@ export const DraggableItem = ({
       <TooltipTrigger asChild>
         <div
           key={type.node}
-          className="shadow-hard-soft-2xs aspect-square h-max w-max rounded-sm p-3"
+          className="aspect-square h-max w-max rounded-sm p-3 shadow-hard-soft-2xs"
           data-logicate-draggable
           data-logicate-draggable-sidebar
           data-logicate-gate-type-type={type.type}
@@ -60,27 +55,27 @@ export const DraggableItem = ({
                   hidden: true,
                 })
                 setHolding(true)
-                document.removeEventListener('mousemove', handleMouseMove)
-                document.removeEventListener('mouseup', handleMouseUp)
+                document.removeEventListener("mousemove", handleMouseMove)
+                document.removeEventListener("mouseup", handleMouseUp)
               }
 
               const handleMouseUp = () => {
-                document.removeEventListener('mousemove', handleMouseMove)
-                document.removeEventListener('mouseup', handleMouseUp)
+                document.removeEventListener("mousemove", handleMouseMove)
+                document.removeEventListener("mouseup", handleMouseUp)
               }
 
-              document.addEventListener('mousemove', handleMouseMove)
-              document.addEventListener('mouseup', handleMouseUp)
+              document.addEventListener("mousemove", handleMouseMove)
+              document.addEventListener("mouseup", handleMouseUp)
             }
           }}
         >
           <div
             className="size-6"
             style={{
-              backgroundImage: `url(${type.type === 'gate' ? gateTypeToIcon[type.node] : type.type === 'input' ? inputTypeToIcon[type.node] : outputTypeToIcon[type.node]})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              backgroundImage: `url(${type.type === "gate" ? gateTypeToIcon[type.node] : type.type === "input" ? inputTypeToIcon[type.node] : outputTypeToIcon[type.node]})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
             }}
           />
 

@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import useCMDK from '@/components/marketing/cmdk'
-import { Toaster } from '@/components/ui/sonner'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { Analytics } from '@vercel/analytics/react'
-import { createContext, Dispatch, ReactNode, SetStateAction } from 'react'
+import useCMDK from "@/components/marketing/cmdk"
+import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { Analytics } from "@vercel/analytics/react"
+import { createContext, Dispatch, ReactNode, SetStateAction } from "react"
 
 export const AppContext = createContext<{
   setShowCMDK: Dispatch<SetStateAction<boolean>>

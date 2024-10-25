@@ -1,24 +1,24 @@
-import { Item } from '@/app/ui/canvas/types'
-import { LogicateError } from '@/lib/api/error'
-import { parseRequestBody } from '@/lib/api/utils'
-import { withSession } from '@/lib/auth/session'
-import { prisma } from '@logicate/database'
-import SuperJSON from 'superjson'
+import { Item } from "@/app/ui/canvas/types"
+import { LogicateError } from "@/lib/api/error"
+import { parseRequestBody } from "@/lib/api/utils"
+import { withSession } from "@/lib/auth/session"
+import { prisma } from "@logicate/database"
+import SuperJSON from "superjson"
 
 export const GET = withSession(async ({ session, params }) => {
   const { canvasId } = params
 
   if (!canvasId) {
     throw new LogicateError({
-      code: 'bad_request',
-      message: 'Canvas ID is required',
+      code: "bad_request",
+      message: "Canvas ID is required",
     })
   }
 
-  if (!canvasId.startsWith('lc-')) {
+  if (!canvasId.startsWith("lc-")) {
     throw new LogicateError({
-      code: 'bad_request',
-      message: 'Invalid canvas ID',
+      code: "bad_request",
+      message: "Invalid canvas ID",
     })
   }
 
@@ -31,14 +31,14 @@ export const GET = withSession(async ({ session, params }) => {
 
   if (!canvas) {
     throw new LogicateError({
-      code: 'not_found',
-      message: 'Canvas not found',
+      code: "not_found",
+      message: "Canvas not found",
     })
   }
 
   return new Response(JSON.stringify(canvas), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   })
 })
 
@@ -49,8 +49,8 @@ export const POST = withSession(async ({ session, params, req }) => {
 
   if (!database) {
     throw new LogicateError({
-      code: 'bad_request',
-      message: 'Database is required',
+      code: "bad_request",
+      message: "Database is required",
     })
   }
 
@@ -63,8 +63,8 @@ export const POST = withSession(async ({ session, params, req }) => {
 
   if (!existingCanvas) {
     throw new LogicateError({
-      code: 'not_found',
-      message: 'Canvas not found',
+      code: "not_found",
+      message: "Canvas not found",
     })
   }
 
@@ -98,15 +98,15 @@ export const POST = withSession(async ({ session, params, req }) => {
   })
 
   if (!canvas) {
-    console.error('Unable to update canvas')
+    console.error("Unable to update canvas")
     throw new LogicateError({
-      code: 'internal_server_error',
-      message: 'Failed to update canvas',
+      code: "internal_server_error",
+      message: "Failed to update canvas",
     })
   }
 
   return new Response(JSON.stringify(canvas), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   })
 })

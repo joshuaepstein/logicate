@@ -1,6 +1,6 @@
-import { Container } from '@/components/ui/not-done-yet/container'
-import CreateQuizQuestionForm from './form'
-import { H1, H2 } from '@/components/ui/typography'
+import { Container } from "@/components/ui/not-done-yet/container"
+import { H2 } from "@/components/ui/typography"
+import CreateQuizQuestionForm from "./form"
 
 export default function NewQuizPage() {
   return (

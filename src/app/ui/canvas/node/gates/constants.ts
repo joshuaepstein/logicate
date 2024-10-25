@@ -1,11 +1,11 @@
-import { GateType } from './types';
+import { GateType } from "./types"
 
 export const defaultInputs: Record<
   GateType,
   {
-    min: number;
-    max: number;
-    default: number;
+    min: number
+    max: number
+    default: number
   }
 > = {
   [GateType.AND]: {
@@ -48,6 +48,6 @@ export const defaultInputs: Record<
     min: 1,
     max: 1,
   },
-};
+}
 
-export const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR];
+export const inverted = [GateType.NOT, GateType.NAND, GateType.NOR, GateType.XNOR]

@@ -1,21 +1,21 @@
-import { useEffect, useState, useTransition } from 'react'
-import SuperJSON from 'superjson'
-import useCanvasStore from './useCanvasStore'
-import { useDebounce } from 'use-debounce'
-import { getCookie } from 'react-use-cookie'
-import { InputType } from '../node/inputs/types'
+import { useEffect, useState, useTransition } from "react"
+import { getCookie } from "react-use-cookie"
+import SuperJSON from "superjson"
+import { useDebounce } from "use-debounce"
+import { InputType } from "../node/inputs/types"
+import useCanvasStore from "./useCanvasStore"
 
 export const updateDatabase = async (stringData: string, canvasId: string) => {
   const { updatingDatabase, setUpdatingDatabase } = useCanvasStore.getState()
   if (updatingDatabase.is) return false
   setUpdatingDatabase({ is: true, lastUpdated: Date.now(), progress: 0 })
   const response = await fetch(`/api/canvas/${canvasId}`, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({
       database: stringData,
     }),
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   })
   return response.ok
@@ -23,14 +23,14 @@ export const updateDatabase = async (stringData: string, canvasId: string) => {
 
 // Function which allows us to update the database
 const useUpdateCanvasStore = (canvasId: string) => {
-  if (canvasId === 'demo') return
+  if (canvasId === "demo") return
   const [cachedDatabase, setCachedDatabase] = useState<string | null>(null)
   const { updatingDatabase, setUpdatingDatabase, ...canvasStore } = useCanvasStore()
   const [initialRun, setInitialRun] = useState(false)
   const [debouncedCanvasStore] = useDebounce(
     {
       items: canvasStore.items.map((item) =>
-        item.itemType === 'input' && item.type === InputType.CLOCK ? { ...item, value: undefined } : item
+        item.itemType === "input" && item.type === InputType.CLOCK ? { ...item, value: undefined } : item
       ),
       wires: canvasStore.wires,
       variableValues: canvasStore.variableValues,
@@ -51,7 +51,7 @@ const useUpdateCanvasStore = (canvasId: string) => {
       setInitialRun(true)
       return
     }
-    if (getCookie(`autoSave-${canvasId}`) === 'false') return
+    if (getCookie(`autoSave-${canvasId}`) === "false") return
     const stringified = SuperJSON.stringify(debouncedCanvasStore)
     if (stringified === cachedDatabase) return
     if (debouncedCanvasStore.items.length === 0 && debouncedCanvasStore.wires.length === 0) {
@@ -69,7 +69,7 @@ const useUpdateCanvasStore = (canvasId: string) => {
         setUpdatingDatabase({ is: false, lastUpdated: Date.now(), progress: 0 })
       } else {
         setUpdatingDatabase({ is: false, lastUpdated: null, progress: 0 })
-        console.error('Received error while saving canvas data.')
+        console.error("Received error while saving canvas data.")
       }
     })
   }, [debouncedCanvasStore])

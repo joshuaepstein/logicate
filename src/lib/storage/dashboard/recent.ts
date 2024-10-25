@@ -1,12 +1,12 @@
-'use server'
+"use server"
 
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers"
 
-const RECENT_CLASSROOMS_COOKIE = 'recentClassrooms'
+const RECENT_CLASSROOMS_COOKIE = "recentClassrooms"
 
 const setRecentClassrooms = async (classrooms: string[]) => {
-  const response = await (await cookies()).set(RECENT_CLASSROOMS_COOKIE, classrooms.join(','))
-  console.log('setRecentClassrooms', response)
+  const response = await (await cookies()).set(RECENT_CLASSROOMS_COOKIE, classrooms.join(","))
+  console.log("setRecentClassrooms", response)
   return response
 }
 
@@ -21,11 +21,11 @@ const getRecentClassrooms = async (): Promise<string[]> => {
     return []
   }
 
-  if (recentClassrooms.value === '') {
+  if (recentClassrooms.value === "") {
     return []
   }
 
-  return recentClassrooms.value.split(',')
+  return recentClassrooms.value.split(",")
 }
 
 const addRecentClassroom = async (classroomId: string) => {

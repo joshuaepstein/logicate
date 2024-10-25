@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import { Input } from '@/components/ui/input/index'
-import { Label } from '@/components/ui/label'
-import { SubmitButton } from '@/components/ui/submit-button'
-import { signIn } from 'next-auth/react'
-import { redirect } from 'next/navigation'
-import { useActionState, useEffect } from 'react'
-import { toast } from 'sonner'
-import { registerAction } from './action'
+import { Input } from "@/components/ui/input/index"
+import { Label } from "@/components/ui/label"
+import { SubmitButton } from "@/components/ui/submit-button"
+import { signIn } from "next-auth/react"
+import { redirect } from "next/navigation"
+import { useActionState, useEffect } from "react"
+import { toast } from "sonner"
+import { registerAction } from "./action"
 
 export function RegisterForm() {
   const [state, formAction] = useActionState(registerAction, undefined)
@@ -15,7 +15,7 @@ export function RegisterForm() {
   useEffect(() => {
     if (state && state.success) {
       try {
-        const login = signIn('credentials', {
+        const login = signIn("credentials", {
           email: state.data.email,
           password: state.data.password,
           redirect: false,
@@ -24,28 +24,28 @@ export function RegisterForm() {
             if (response) {
               // wait 5 seconds
               setTimeout(() => {
-                redirect('/?newLogin=true')
+                redirect("/?newLogin=true")
               }, 5000)
             } else {
-              toast.error('An error occurred while logging in', {
+              toast.error("An error occurred while logging in", {
                 description: "You've been registered successfully, but we couldn't log you in. Please try again or go to the login page.",
               })
             }
           })
           .catch((error) => {
             console.error(error)
-            toast.error('An error occurred while logging in', {
+            toast.error("An error occurred while logging in", {
               description: "You've been registered successfully, but we couldn't log you in. Please try again or go to the login page.",
             })
           })
       } catch (error) {
         console.error(error)
-        toast.error('An error occurred while logging in', {
+        toast.error("An error occurred while logging in", {
           description: "You've been registered successfully, but we couldn't log you in. Please try again or go to the login page.",
         })
       }
       toast.success(state.value)
-      redirect('/welcome')
+      redirect("/welcome")
     }
     if (state && !state.success) {
       toast.error(state.error)
@@ -58,7 +58,7 @@ export function RegisterForm() {
         <Label>Name</Label>
         <Input
           placeholder="John Smith"
-          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
+          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
           type="text"
           autoComplete="name"
           name="name"
@@ -70,7 +70,7 @@ export function RegisterForm() {
         <Label>Email</Label>
         <Input
           placeholder="john@smith.com"
-          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
+          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
           type="email"
           name="email"
           id="email"
@@ -81,7 +81,7 @@ export function RegisterForm() {
         <Label>Username</Label>
         <Input
           placeholder="johnsmith"
-          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
+          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
           type="text"
           autoComplete="username"
           name="username"
@@ -93,7 +93,7 @@ export function RegisterForm() {
         <Label>Password</Label>
         <Input
           placeholder="********"
-          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
+          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
           type="password"
           autoComplete="new-password"
           name="password"

@@ -1,4 +1,4 @@
-import { Invites } from '@prisma/client'
+import { Invites } from "@prisma/client"
 
 export const checkInviteExpired = (invite: Invites) => {
   const now = new Date()

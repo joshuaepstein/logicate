@@ -1,12 +1,11 @@
-import * as React from 'react'
-import { SVGProps, Ref, forwardRef } from 'react'
+import { SVGProps } from "react"
 export const LogoIcon = ({ style, ...props }: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
     viewBox="0 0 2000 421.48"
     style={{
-      color: 'black',
+      color: "black",
       ...style,
     }}
     {...props}

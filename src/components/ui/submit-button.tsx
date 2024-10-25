@@ -1,22 +1,22 @@
-'use client';
+"use client"
 
-import { useFormStatus } from 'react-dom';
-import { Button, type ButtonProps } from './button';
-import LoadingCircle from './icons/loading-circle';
-import { cn } from '@/lib';
+import { cn } from "@/lib"
+import { useFormStatus } from "react-dom"
+import { Button, type ButtonProps } from "./button"
+import LoadingCircle from "./icons/loading-circle"
 
 export function SubmitButton({
   children,
   className,
   ...props
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 } & ButtonProps) {
-  const { pending } = useFormStatus();
+  const { pending } = useFormStatus()
 
   return (
-    <Button disabled={pending} {...props} className={cn('relative', className)}>
-      <span className={cn({ 'opacity-0': pending })}>{children}</span>
+    <Button disabled={pending} {...props} className={cn("relative", className)}>
+      <span className={cn({ "opacity-0": pending })}>{children}</span>
 
       {pending && (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -24,5 +24,5 @@ export function SubmitButton({
         </div>
       )}
     </Button>
-  );
+  )
 }

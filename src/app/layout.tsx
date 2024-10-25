@@ -1,15 +1,15 @@
-import { Footer } from '@/components/marketing/footer'
-import Navbar from '@/components/marketing/navbar'
-import { TailwindIndicator } from '@/components/tailwind-indicator'
-import { prisma, User } from '@/database'
-import { cn } from '@/lib'
-import { getSession } from '@/lib/auth/utils'
-import '@/styles/globals.css'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
-import { unstable_cache } from 'next/cache'
-import Providers from './providers'
+import { Footer } from "@/components/marketing/footer"
+import Navbar from "@/components/marketing/navbar"
+import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { prisma, User } from "@/database"
+import { cn } from "@/lib"
+import { getSession } from "@/lib/auth/utils"
+import "@/styles/globals.css"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { GeistMono } from "geist/font/mono"
+import { GeistSans } from "geist/font/sans"
+import { unstable_cache } from "next/cache"
+import Providers from "./providers"
 
 const getInvites = unstable_cache(
   async (user: User) => {
@@ -19,10 +19,10 @@ const getInvites = unstable_cache(
       },
     })
   },
-  ['user_invites'],
+  ["user_invites"],
   {
     revalidate: 60,
-    tags: ['user_invites'],
+    tags: ["user_invites"],
   }
 )
 
@@ -32,7 +32,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <html suppressHydrationWarning lang="en">
-      <body className={cn(GeistSans.className, GeistMono.className, 'scroll-smooth')}>
+      <body className={cn(GeistSans.className, GeistMono.className, "scroll-smooth")}>
         <TailwindIndicator />
         <Providers>
           <Navbar sessionPromise={sessionPromise} />

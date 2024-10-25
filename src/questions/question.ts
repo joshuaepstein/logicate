@@ -1,15 +1,15 @@
 // import type { QuestionType } from '@logicate/database'
 
 export enum QuestionType {
-  BOOLEAN_EXPRESSION = 'BOOLEAN_EXPRESSION',
-  TRUTH_TABLE = 'TRUTH_TABLE',
-  LOGIC_GATE = 'LOGIC_GATE',
+  BOOLEAN_EXPRESSION = "BOOLEAN_EXPRESSION",
+  TRUTH_TABLE = "TRUTH_TABLE",
+  LOGIC_GATE = "LOGIC_GATE",
 }
 
 export enum AnswerType {
-  SIMPLIFIED_BOOLEAN_EXPRESSION = 'SIMPLIFIED_BOOLEAN_EXPRESSION',
-  FILLED_IN_TRUTH_TABLE = 'FILLED_IN_TRUTH_TABLE',
-  SIMPLIFIED_LOGIC_GATE = 'SIMPLIFIED_LOGIC_GATE',
+  SIMPLIFIED_BOOLEAN_EXPRESSION = "SIMPLIFIED_BOOLEAN_EXPRESSION",
+  FILLED_IN_TRUTH_TABLE = "FILLED_IN_TRUTH_TABLE",
+  SIMPLIFIED_LOGIC_GATE = "SIMPLIFIED_LOGIC_GATE",
 }
 
 export class Question {
@@ -45,7 +45,7 @@ export class Question {
         this._answerType = AnswerType.FILLED_IN_TRUTH_TABLE
         break
       default:
-        throw new Error('Invalid question type')
+        throw new Error("Invalid question type")
     }
   }
 }

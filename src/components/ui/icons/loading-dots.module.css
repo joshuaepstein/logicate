@@ -42,11 +42,11 @@
   background-color: #fff;
 }
 
-[class='dark'] .loading span {
+[class="dark"] .loading span {
   background-color: #fff;
 }
 
-[class='dark'] .loadingInverted span {
+[class="dark"] .loadingInverted span {
   background-color: #000;
 }
 

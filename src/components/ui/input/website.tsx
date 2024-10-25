@@ -1,36 +1,36 @@
-'use client';
+"use client"
 
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { cn } from '@/lib';
-import React from 'react';
-import { InputProps, inputVariants } from '.';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '../select';
+import { cn } from "@/lib"
+import { ChevronDownIcon } from "@heroicons/react/20/solid"
+import React from "react"
+import { InputProps, inputVariants } from "."
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../select"
 
 const WebsiteInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, variant, children, defaultValue, disabled, inputSize, debug, ...props }, ref) => {
-    const [http, setHttp] = React.useState('https://');
+    const [http, setHttp] = React.useState("https://")
     const [value, setValue] = React.useState(
-      defaultValue ? ((defaultValue as string).includes('http') ? (defaultValue as string) : http + (defaultValue as string)) : http + ''
-    );
+      defaultValue ? ((defaultValue as string).includes("http") ? (defaultValue as string) : http + (defaultValue as string)) : http + ""
+    )
 
     return (
-      <div className="shadow-soft-2xs flex flex-row items-center rounded-lg">
+      <div className="flex flex-row items-center rounded-lg shadow-soft-2xs">
         <Select
           value={http}
           onValueChange={(newValue) => {
             setValue((prev) => {
-              return prev.replace(http, newValue);
-            });
-            setHttp(newValue);
+              return prev.replace(http, newValue)
+            })
+            setHttp(newValue)
           }}
         >
           <SelectTrigger
             hideIcon
             defaultStyles={false}
             className={cn(
-              'border-neutralgrey-500 bg-base-background text-neutralgrey-900 focus-visible:border-neutralgrey-500 flex h-full appearance-none flex-row items-center justify-center rounded-l-lg rounded-r-none border border-r-0 px-2 text-sm focus-visible:outline-none',
+              "flex h-full appearance-none flex-row items-center justify-center rounded-l-lg rounded-r-none border border-r-0 border-neutralgrey-500 bg-base-background px-2 text-sm text-neutralgrey-900 focus-visible:border-neutralgrey-500 focus-visible:outline-none",
               {
-                'opacity-50': disabled || debug === 'disabled',
+                "opacity-50": disabled || debug === "disabled",
               }
             )}
           >
@@ -47,14 +47,14 @@ const WebsiteInput = React.forwardRef<HTMLInputElement, InputProps>(
               </button>
             </div> */}
             <SelectItem value="https://">https://</SelectItem>
-            <SelectItem value="http://">http://</SelectItem>{' '}
+            <SelectItem value="http://">http://</SelectItem>{" "}
           </SelectContent>
         </Select>
         <input
-          type={'url'}
-          value={value.replace(http, '')}
+          type={"url"}
+          value={value.replace(http, "")}
           onChange={(e) => {
-            setValue(http + e.target.value);
+            setValue(http + e.target.value)
           }}
           className={cn(
             inputVariants({
@@ -63,22 +63,22 @@ const WebsiteInput = React.forwardRef<HTMLInputElement, InputProps>(
               debug,
               className,
             }),
-            'peer rounded-l-none !shadow-none'
+            "peer rounded-l-none !shadow-none"
           )}
           ref={ref}
-          disabled={disabled || debug === 'disabled'}
-          {...(debug && { 'data-debug': debug })}
-          {...(debug === 'error' && {
-            'aria-invalid': true,
-            'aria-describedby': 'error-message',
+          disabled={disabled || debug === "disabled"}
+          {...(debug && { "data-debug": debug })}
+          {...(debug === "error" && {
+            "aria-invalid": true,
+            "aria-describedby": "error-message",
           })}
           {...props}
         />
       </div>
-    );
+    )
   }
-);
+)
 
-WebsiteInput.displayName = 'WebsiteInput';
+WebsiteInput.displayName = "WebsiteInput"
 
-export { WebsiteInput };
+export { WebsiteInput }

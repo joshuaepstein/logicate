@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input/index'
-import { DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/modal'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/not-done-yet/accordion'
-import { Textarea } from '@/components/ui/textarea'
-import { useActionState, useState } from 'react'
-import { createChangelog } from './action'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input/index"
+import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/modal"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/not-done-yet/accordion"
+import { Textarea } from "@/components/ui/textarea"
+import { useActionState, useState } from "react"
+import { createChangelog } from "./action"
 
 export default function ChangelogForm() {
   const [error, formAction] = useActionState(createChangelog, undefined)
@@ -34,7 +34,7 @@ export default function ChangelogForm() {
               variant="borders"
               onClick={(e) => {
                 e.preventDefault()
-                setAdditions([...additions, ''])
+                setAdditions([...additions, ""])
               }}
               type="button"
             >
@@ -75,7 +75,7 @@ export default function ChangelogForm() {
               variant="borders"
               onClick={(e) => {
                 e.preventDefault()
-                setChanges([...changes, ''])
+                setChanges([...changes, ""])
               }}
               type="button"
             >
@@ -116,7 +116,7 @@ export default function ChangelogForm() {
               variant="borders"
               onClick={(e) => {
                 e.preventDefault()
-                setFixes([...fixes, ''])
+                setFixes([...fixes, ""])
               }}
               type="button"
             >

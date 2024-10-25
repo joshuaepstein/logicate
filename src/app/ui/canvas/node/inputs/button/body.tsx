@@ -1,8 +1,8 @@
-import { cn } from '@/lib'
-import { InputItem } from '../../../types'
-import { darkerColour, lighterColour } from '@/lib/color'
-import { MouseEvent, useCallback, useEffect } from 'react'
-import useCanvasStore from '../../../hooks/useCanvasStore'
+import { cn } from "@/lib"
+import { darkerColour, lighterColour } from "@/lib/color"
+import { useCallback, useEffect } from "react"
+import useCanvasStore from "../../../hooks/useCanvasStore"
+import { InputItem } from "../../../types"
 
 export default function ButtonBody({ input }: { input: InputItem }) {
   const { updateItem } = useCanvasStore()
@@ -21,35 +21,35 @@ export default function ButtonBody({ input }: { input: InputItem }) {
 
   useEffect(() => {
     if (input.value === true) {
-      document.addEventListener('mouseup', handleClickUp)
+      document.addEventListener("mouseup", handleClickUp)
     } else {
-      document.removeEventListener('mouseup', handleClickUp)
+      document.removeEventListener("mouseup", handleClickUp)
     }
 
     return () => {
-      document.removeEventListener('mouseup', handleClickUp)
+      document.removeEventListener("mouseup", handleClickUp)
     }
   }, [input.value])
 
   return (
     <svg
-      style={{ overflow: 'visible', width: '30px', height: '30px' }}
-      className={cn('pointer-events-auto')}
+      style={{ overflow: "visible", width: "30px", height: "30px" }}
+      className={cn("pointer-events-auto")}
       onMouseDown={handleClickDown}
       data-logicate-input-content
     >
       <g>
         <circle
-          className={cn('pointer-events-auto', {
-            'fill-current': input.value === true,
+          className={cn("pointer-events-auto", {
+            "fill-current": input.value === true,
           })}
           style={{
-            color: (input.settings.color || '#000').startsWith('#000')
-              ? '#6c92e4'
-              : lighterColour(input.settings.color || '#6c92e4', 10) || '#6c92e4',
+            color: (input.settings.color || "#000").startsWith("#000")
+              ? "#6c92e4"
+              : lighterColour(input.settings.color || "#6c92e4", 10) || "#6c92e4",
           }}
           fill="#FFFFFF"
-          stroke={darkerColour(input.settings.color || '#000', 70) || '#000'}
+          stroke={darkerColour(input.settings.color || "#000", 70) || "#000"}
           cx="15"
           cy="15"
           r="15"
@@ -58,7 +58,7 @@ export default function ButtonBody({ input }: { input: InputItem }) {
         <circle
           className="cursor-pointer"
           fill="#FFFFFF"
-          stroke={darkerColour(input.settings.color || '#000', 70) || '#000'}
+          stroke={darkerColour(input.settings.color || "#000", 70) || "#000"}
           strokeWidth="1"
           cx="15"
           cy="15"

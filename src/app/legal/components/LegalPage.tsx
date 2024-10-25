@@ -1,7 +1,7 @@
-import MdxWrapper from '@/components/mdx-wrapper'
-import { cn } from '@/lib'
-import { LegalMetadata } from '@/lib/mdx/types'
-import Link from 'next/link'
+import MdxWrapper from "@/components/mdx-wrapper"
+import { cn } from "@/lib"
+import { LegalMetadata } from "@/lib/mdx/types"
+import Link from "next/link"
 
 export default function LegalPage({
   document,
@@ -23,19 +23,19 @@ export default function LegalPage({
         <h1 className="text-4xl font-semibold leading-[1.15] md:text-right">{document.metadata.title}</h1>
         <ul className="mt-16 flex h-max list-none flex-col gap-1 md:text-right">
           {getTableOfContents().map((heading) => {
-            const text = heading.replace(/^#+ /, '')
+            const text = heading.replace(/^#+ /, "")
             const id = text
               .toLowerCase()
-              .replace(/^\d+\.\s/, '')
-              .replace(/ /g, '-')
+              .replace(/^\d+\.\s/, "")
+              .replace(/ /g, "-")
               .trim()
             return (
-              <li key={id} className={cn('hover:underline')}>
+              <li key={id} className={cn("hover:underline")}>
                 <Link href={`#${id}`}>
-                  {text.includes('. ') ? (
+                  {text.includes(". ") ? (
                     <>
-                      <span className="text-neutralgrey-800">{text.split('. ')[0]}. </span>
-                      {text.split('. ')[1]}
+                      <span className="text-neutralgrey-800">{text.split(". ")[0]}. </span>
+                      {text.split(". ")[1]}
                     </>
                   ) : (
                     text

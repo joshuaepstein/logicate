@@ -1,52 +1,52 @@
-import { customAlphabet } from 'nanoid'
+import { customAlphabet } from "nanoid"
 
-export const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 12)
+export const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12)
 
-export const randomid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 12)
+export const randomid = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 12)
 
-export const generateOtp = customAlphabet('0123456789', 6)
+export const generateOtp = customAlphabet("0123456789", 6)
 
 export const randomGateId = () => {
-  var result = 'logicate-gate-'
+  let result = "logicate-gate-"
   for (let i = 0; i < 3; i++) {
     result += nanoid(6)
-    result += '-'
+    result += "-"
   }
   return result
 }
 
 export const randomWireId = () => {
-  var result = 'logicate-wire-'
+  let result = "logicate-wire-"
   for (let i = 0; i < 3; i++) {
     result += nanoid(6)
-    result += '-'
+    result += "-"
   }
   return result.slice(0, -1) // Remove the last '-'
 }
 
 export const generateQuestionId = () => {
-  var result = 'qu-'
+  let result = "qu-"
   for (let i = 0; i < 2; i++) {
     result += nanoid(5)
-    result += '-'
+    result += "-"
   }
   return result.slice(0, -1) // Remove the last '-'
 }
 
 export const generateLogicateSessionId = () => {
-  var result = 'lc-'
+  let result = "lc-"
   for (let i = 0; i < 2; i++) {
     result += nanoid(5)
-    result += '-'
+    result += "-"
   }
   return result.slice(0, -1) // Remove the last '-'
 }
 
 export const generateClassroomId = () => {
-  var result = 'cl-'
+  let result = "cl-"
   for (let i = 0; i < 2; i++) {
     result += nanoid(5)
-    result += '-'
+    result += "-"
   }
   return result.slice(0, -1) // Remove the last '-'
 }
@@ -56,5 +56,5 @@ export const generateLockCode = () => {
 }
 
 export const changelogId = () => {
-  return 'cl_' + nanoid(8)
+  return "cl_" + nanoid(8)
 }

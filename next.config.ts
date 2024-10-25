@@ -1,4 +1,4 @@
-import { NextConfig } from 'next'
+import { NextConfig } from "next"
 
 const config: NextConfig = {
   eslint: {
@@ -14,9 +14,9 @@ const config: NextConfig = {
     serverComponentsHmrCache: true,
     turbo: {
       rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
         },
       },
     },

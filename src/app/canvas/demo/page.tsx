@@ -1,4 +1,4 @@
-import Canvas from '../../ui/canvas'
+import Canvas from "../../ui/canvas"
 
 export default async function Home() {
   return (
@@ -7,13 +7,13 @@ export default async function Home() {
         sessionId="demo"
         isNew={false}
         logicateSession={{
-          name: '',
-          id: 'demo',
+          name: "",
+          id: "demo",
           createdAt: new Date(),
           items: [],
           wires: [],
           variableValues: [],
-          ownerId: '',
+          ownerId: "",
           updatedAt: new Date(),
         }}
         user={null}

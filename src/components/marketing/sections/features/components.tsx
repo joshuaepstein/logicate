@@ -1,5 +1,5 @@
-import { cn } from '@/lib'
-import React from 'react'
+import { cn } from "@/lib"
+import React from "react"
 
 /**
  * @deprecated Use FeatureTag, FeatureTitle, and FeatureDescription instead
@@ -20,9 +20,9 @@ export default function FeatureTitleCombined({
 }) {
   return (
     <>
-      <p className={cn(`text-2xs scale-100 select-none font-mono font-medium transition hover:scale-105`, colourClass)}>{section}</p>
-      <h4 className="text-neutralgrey-1200 mt-2 text-center text-2xl font-medium">{title}</h4>
-      <p className="text-neutralgrey-1000/85 mt-2 max-w-lg text-center">{description}</p>
+      <p className={cn(`scale-100 select-none font-mono text-2xs font-medium transition hover:scale-105`, colourClass)}>{section}</p>
+      <h4 className="mt-2 text-center text-2xl font-medium text-neutralgrey-1200">{title}</h4>
+      <p className="mt-2 max-w-lg text-center text-neutralgrey-1000/85">{description}</p>
     </>
   )
 }
@@ -30,7 +30,7 @@ export default function FeatureTitleCombined({
 export const FeatureTag = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ children, className }, ref) => {
     return (
-      <p ref={ref} className={cn(`text-2xs scale-100 select-none font-mono font-medium transition hover:scale-105`, className)}>
+      <p ref={ref} className={cn(`scale-100 select-none font-mono text-2xs font-medium transition hover:scale-105`, className)}>
         {children}
       </p>
     )
@@ -40,7 +40,7 @@ export const FeatureTag = React.forwardRef<HTMLParagraphElement, React.HTMLAttri
 export const FeatureTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ children, className }, ref) => {
     return (
-      <h4 ref={ref} className={cn(`text-neutralgrey-1200 mt-2 text-center text-2xl font-medium`, className)}>
+      <h4 ref={ref} className={cn(`mt-2 text-center text-2xl font-medium text-neutralgrey-1200`, className)}>
         {children}
       </h4>
     )
@@ -50,7 +50,7 @@ export const FeatureTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttri
 export const FeatureDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ children, className }, ref) => {
     return (
-      <p ref={ref} className={cn(`text-neutralgrey-1000/85 mt-2 max-w-lg text-center`, className)}>
+      <p ref={ref} className={cn(`mt-2 max-w-lg text-center text-neutralgrey-1000/85`, className)}>
         {children}
       </p>
     )

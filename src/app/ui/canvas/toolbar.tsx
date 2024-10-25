@@ -1,26 +1,14 @@
-import {
-  CenterIcon,
-  Cursor03Icon,
-  Eraser01Icon,
-  FavouriteIcon,
-  FlipLeftIcon,
-  MoveIcon,
-  Save01Icon,
-  Save02Icon,
-  SettingsIcon,
-} from '@jfstech/icons-react/24/outline'
-import { LogicateSession } from '@logicate/database'
-import useCanvasStore from './hooks/useCanvasStore'
-import { cn } from '@/lib'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { H3 } from '@/components/ui/typography'
-import { Toggle } from '@/components/ui/toggle'
-import { Switch } from '@/components/ui/switch'
-import { useCookie } from 'react-use'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/modal'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/modal"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Switch } from "@/components/ui/switch"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { cn } from "@/lib"
+import { CenterIcon, Cursor03Icon, Eraser01Icon, FlipLeftIcon, MoveIcon, SettingsIcon } from "@jfstech/icons-react/24/outline"
+import { LogicateSession } from "@logicate/database"
+import { useState } from "react"
+import { useCookie } from "react-use"
+import useCanvasStore from "./hooks/useCanvasStore"
 
 export default function FloatingToolbar({ session }: { session: LogicateSession }) {
   const [confirmClear, setConfirmClear] = useState(false)
@@ -29,16 +17,16 @@ export default function FloatingToolbar({ session }: { session: LogicateSession 
 
   return (
     <>
-      <div className="shadow-hard-soft-2xs fixed bottom-5 left-0 right-0 z-[123456] mx-auto flex w-max items-center justify-center gap-4 rounded-md bg-white/75 px-4 py-3 backdrop-blur-md">
+      <div className="fixed bottom-5 left-0 right-0 z-[123456] mx-auto flex w-max items-center justify-center gap-4 rounded-md bg-white/75 px-4 py-3 shadow-hard-soft-2xs backdrop-blur-md">
         <div className="relative flex flex-row gap-4">
           <Tooltip>
             <TooltipTrigger asChild>
               <Cursor03Icon
-                className={cn('size-5 cursor-pointer', {
-                  '': currentTool === 'select',
+                className={cn("size-5 cursor-pointer", {
+                  "": currentTool === "select",
                 })}
                 onClick={() => {
-                  setCurrentTool('select')
+                  setCurrentTool("select")
                 }}
               />
             </TooltipTrigger>
@@ -49,24 +37,24 @@ export default function FloatingToolbar({ session }: { session: LogicateSession 
               <MoveIcon
                 className="size-5 cursor-pointer"
                 onClick={() => {
-                  setCurrentTool('drag-canvas')
+                  setCurrentTool("drag-canvas")
                 }}
               />
             </TooltipTrigger>
             <TooltipContent>Select Tool: Drag Canvas</TooltipContent>
           </Tooltip>
           <div
-            className={cn('bg-neutralgrey-800/30 absolute -bottom-1 -left-1 -top-1 -z-10 aspect-square w-auto rounded-md transition-all', {
-              'translate-x-[36px]': currentTool === 'drag-canvas',
+            className={cn("absolute -bottom-1 -left-1 -top-1 -z-10 aspect-square w-auto rounded-md bg-neutralgrey-800/30 transition-all", {
+              "translate-x-[36px]": currentTool === "drag-canvas",
             })}
           />
         </div>
-        <div className="bg-neutralgrey-1300/30 mx-[calc(0.5px+2px)] h-[18px] w-px" />
+        <div className="mx-[calc(0.5px+2px)] h-[18px] w-px bg-neutralgrey-1300/30" />
         <Tooltip>
           <TooltipTrigger>
             <FlipLeftIcon
               onClick={() => {
-                document.dispatchEvent(new Event('UndoEvent'))
+                document.dispatchEvent(new Event("UndoEvent"))
               }}
               className="size-5 cursor-pointer"
             />
@@ -100,7 +88,7 @@ export default function FloatingToolbar({ session }: { session: LogicateSession 
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Are you sure you want to clear the canvas?</DialogTitle>
-              <DialogDescription className="text-neutralgrey-900 text-sm">
+              <DialogDescription className="text-sm text-neutralgrey-900">
                 This will clear all components and wires on the canvas. You cannot undo this action.
               </DialogDescription>
             </DialogHeader>
@@ -129,21 +117,21 @@ export default function FloatingToolbar({ session }: { session: LogicateSession 
           </PopoverTrigger>
           <PopoverContent>
             <p className="font-medium">Settings</p>
-            <p className="text-neutralgrey-700 text-sm">Adjust settings for this canvas only</p>
+            <p className="text-sm text-neutralgrey-700">Adjust settings for this canvas only</p>
 
             <div className="mt-2 flex flex-col gap-2">
-              {session.id !== 'demo' && (
+              {session.id !== "demo" && (
                 <>
-                  <div className="bg-neutralgrey-200 flex w-full items-center justify-between rounded-md px-2 py-2">
+                  <div className="flex w-full items-center justify-between rounded-md bg-neutralgrey-200 px-2 py-2">
                     <p className="text-xs font-medium">Auto-Save</p>
                     <Switch
                       id="auto-save"
                       checked={
                         // if cookie autoSave-${canvasId}
-                        autoSaveCookie === 'true'
+                        autoSaveCookie === "true"
                       }
                       onCheckedChange={(checked) => {
-                        changeAutoSaveCookie(checked ? 'true' : 'false')
+                        changeAutoSaveCookie(checked ? "true" : "false")
                       }}
                     />
                   </div>

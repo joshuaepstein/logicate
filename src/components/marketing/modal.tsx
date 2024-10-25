@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import { cn } from '@/lib'
-import { backgroundOverlayStylesTW } from '@/components/ui/bg-overlay'
-import useMediaQuery from '@/lib/hooks/use-media-query'
-import * as Dialog from '@radix-ui/react-dialog'
-import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction } from 'react'
-import { Drawer } from 'vaul'
+import { backgroundOverlayStylesTW } from "@/components/ui/bg-overlay"
+import { cn } from "@/lib"
+import useMediaQuery from "@/lib/hooks/use-media-query"
+import * as Dialog from "@radix-ui/react-dialog"
+import { useRouter } from "next/navigation"
+import { Dispatch, SetStateAction } from "react"
+import { Drawer } from "vaul"
 
 export default function Modal({
   children,
@@ -52,16 +52,16 @@ export default function Modal({
           }
         }}
       >
-        <Drawer.Overlay className={backgroundOverlayStylesTW('backdrop-blur-sm')} />
+        <Drawer.Overlay className={backgroundOverlayStylesTW("backdrop-blur-sm")} />
         <Drawer.Portal>
           <Drawer.Content
             className={cn(
-              'fixed bottom-0 left-0 right-0 z-[123456789] mt-24 rounded-t-[10px] border-t border-gray-200 bg-white',
+              "border-gray-200 fixed bottom-0 left-0 right-0 z-[123456789] mt-24 rounded-t-[10px] border-t bg-white",
               className
             )}
           >
             <div className="sticky top-0 z-20 flex w-full items-center justify-center rounded-t-[10px] bg-inherit">
-              <div className="my-3 h-1 w-12 rounded-full bg-gray-300" />
+              <div className="bg-gray-300 my-3 h-1 w-12 rounded-full" />
             </div>
             {children}
           </Drawer.Content>
@@ -80,12 +80,12 @@ export default function Modal({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay id="modal-backdrop" className={backgroundOverlayStylesTW('backdrop-blur-sm')} />
+        <Dialog.Overlay id="modal-backdrop" className={backgroundOverlayStylesTW("backdrop-blur-sm")} />
         <Dialog.Content
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
           className={cn(
-            'shadow-hard-sm fixed inset-0 z-[123456789] m-auto hidden max-h-fit w-full max-w-md overflow-hidden rounded-md bg-white p-0 shadow-xl md:block',
+            "shadow-xl fixed inset-0 z-[123456789] m-auto hidden max-h-fit w-full max-w-md overflow-hidden rounded-md bg-white p-0 shadow-hard-sm md:block",
             className
           )}
         >

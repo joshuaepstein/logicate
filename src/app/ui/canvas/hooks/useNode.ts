@@ -1,6 +1,6 @@
-import useCanvasStore from './useCanvasStore'
-import { useEffect, useState } from 'react'
-import { Item } from '../types'
+import { useEffect, useState } from "react"
+import { Item } from "../types"
+import useCanvasStore from "./useCanvasStore"
 
 export const useNode = (id: string) => {
   const { items } = useCanvasStore()

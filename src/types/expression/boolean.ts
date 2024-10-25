@@ -1,26 +1,26 @@
-import { Alphabet } from '@/app/ui/canvas/types'
+import { Alphabet } from "@/app/ui/canvas/types"
 
 export type BooleanExpression =
   | {
       left: BooleanExpression
       operator?: BooleanOperator
       right?: BooleanExpression
-      type: 'compound'
+      type: "compound"
     }
   | {
       variable: BooleanVariable
-      type: 'variable'
+      type: "variable"
     }
   | {
       constant: BooleanConstant
-      type: 'constant'
+      type: "constant"
     }
 
-export type BooleanOperator = '∧' | '∨' | '¬'
+export type BooleanOperator = "∧" | "∨" | "¬"
 
-export const AndOperator: BooleanOperator = '∧'
-export const OrOperator: BooleanOperator = '∨'
-export const NotOperator: BooleanOperator = '¬'
+export const AndOperator: BooleanOperator = "∧"
+export const OrOperator: BooleanOperator = "∨"
+export const NotOperator: BooleanOperator = "¬"
 
 export type BooleanVariable = Alphabet
 
@@ -29,7 +29,7 @@ export enum BooleanConstant {
   FALSE = 0,
 }
 
-export const BooleanVariables: BooleanVariable[] = 'ABCDEFGHJKLMNPQRSTUWXYZ'.split('') as BooleanVariable[]
+export const BooleanVariables: BooleanVariable[] = "ABCDEFGHJKLMNPQRSTUWXYZ".split("") as BooleanVariable[]
 
 export enum ExpressionDifficulty {
   /**

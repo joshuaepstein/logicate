@@ -1,16 +1,16 @@
-'use client'
+"use client"
 
-import { Button } from '@/components/ui/button'
-import LoadingCircle from '@/components/ui/icons/loading-circle'
-import { Input } from '@/components/ui/input'
-import { useEffect, useState, useTransition } from 'react'
-import { unlockAccount } from './action'
-import { redirect } from 'next/navigation'
-import { toast } from 'sonner'
+import { Button } from "@/components/ui/button"
+import LoadingCircle from "@/components/ui/icons/loading-circle"
+import { Input } from "@/components/ui/input"
+import { redirect } from "next/navigation"
+import { useEffect, useState, useTransition } from "react"
+import { toast } from "sonner"
+import { unlockAccount } from "./action"
 
 export default function CodeUnlocker({ code }: { code?: string }) {
   const [unlocking, useUnlock] = useTransition()
-  const [otp, setOtp] = useState<string>('')
+  const [otp, setOtp] = useState<string>("")
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -31,8 +31,8 @@ export default function CodeUnlocker({ code }: { code?: string }) {
               setError(null)
               const r = await unlockAccount(otp)
               if (r.success) {
-                toast.success('Account unlocked')
-                redirect('/login')
+                toast.success("Account unlocked")
+                redirect("/login")
               } else {
                 toast.error(r.error)
                 setError(r.error)
@@ -40,7 +40,7 @@ export default function CodeUnlocker({ code }: { code?: string }) {
             })
           }}
         >
-          {(unlocking && <LoadingCircle className="h-4 w-4" />) || 'Unlock Account'}
+          {(unlocking && <LoadingCircle className="h-4 w-4" />) || "Unlock Account"}
         </Button>
       </div>
 

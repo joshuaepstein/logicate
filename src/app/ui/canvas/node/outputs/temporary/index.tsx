@@ -1,11 +1,8 @@
-import { cn } from '@/lib'
-import { forwardRef } from 'react'
-import { OutputType, outputTypeToIcon } from '../types'
-import LightBody from '../light/body'
-import { InputType } from '../../inputs/types'
-import { OutputItem } from '../../../types'
-import { randomid } from '@/lib/id'
-import { WireTerminal } from '../../wire-terminal'
+import { cn } from "@/lib"
+import { forwardRef } from "react"
+import { OutputItem } from "../../../types"
+import LightBody from "../light/body"
+import { OutputType } from "../types"
 
 export type TemporaryOutputProps = {
   type: OutputType
@@ -24,7 +21,7 @@ export const TemporaryOutput = forwardRef<
     type: type,
     id: outputId,
     inputs: [],
-    itemType: 'output',
+    itemType: "output",
     settings: {},
     x,
     y,
@@ -34,7 +31,7 @@ export const TemporaryOutput = forwardRef<
     <>
       <div
         className={cn(
-          'pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none'
+          "pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none"
         )}
         style={{ left: x, top: y, transform: `scale(${canvasZoom})` }}
         tabIndex={-1}
@@ -46,17 +43,17 @@ export const TemporaryOutput = forwardRef<
           <div
             className="flex flex-row items-start justify-center"
             style={{
-              gridColumn: '2 / span 1',
-              gridRow: '3 / span 1',
+              gridColumn: "2 / span 1",
+              gridRow: "3 / span 1",
             }}
           >
             <div className="relative mb-[2.5px] flex h-7 flex-col items-center last-of-type:mb-0">
               <div className="pointer-events-auto z-[1] order-2" style={{ lineHeight: 0 }}>
                 <svg
                   style={{
-                    overflow: 'visible',
-                    width: '12.5px',
-                    height: '12.5px',
+                    overflow: "visible",
+                    width: "12.5px",
+                    height: "12.5px",
                   }}
                   className="pointer-events-none transition-transform hover:scale-[1.2]"
                 >
@@ -66,7 +63,7 @@ export const TemporaryOutput = forwardRef<
               <div
                 className="order-1 min-h-4 w-[2px] grow"
                 style={{
-                  backgroundColor: '#000',
+                  backgroundColor: "#000",
                 }}
               ></div>
             </div>
@@ -74,15 +71,15 @@ export const TemporaryOutput = forwardRef<
         )}
         <div
           className={cn(
-            'flex min-h-[30px] w-[30px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100',
+            "flex min-h-[30px] w-[30px] min-w-[42px] items-center justify-center border-2 bg-white transition-[filter] duration-100",
             {
-              'min-h-[30px] min-w-[30px] border-none bg-[none]': type === OutputType.LIGHT,
+              "min-h-[30px] min-w-[30px] border-none bg-[none]": type === OutputType.LIGHT,
             }
           )}
           style={{
-            gridColumn: '2 / span 1',
-            gridRow: '2 / span 1',
-            borderColor: '#000',
+            gridColumn: "2 / span 1",
+            gridRow: "2 / span 1",
+            borderColor: "#000",
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center" data-logicate-body>
@@ -101,4 +98,4 @@ export const TemporaryOutput = forwardRef<
   )
 })
 
-TemporaryOutput.displayName = 'Temporary Logicate Logic Output'
+TemporaryOutput.displayName = "Temporary Logicate Logic Output"

@@ -1,33 +1,33 @@
-'use client';
+"use client"
 
-import { cn } from '@/lib';
-import { DashIcon } from '@radix-ui/react-icons';
-import { AnimatePresence, motion } from 'framer-motion';
-import { OTPInput, OTPInputContext } from 'input-otp';
-import * as React from 'react';
+import { cn } from "@/lib"
+import { DashIcon } from "@radix-ui/react-icons"
+import { AnimatePresence, motion } from "framer-motion"
+import { OTPInput, OTPInputContext } from "input-otp"
+import * as React from "react"
 
 const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.ComponentPropsWithoutRef<typeof OTPInput>>(
   ({ className, containerClassName, ...props }, ref) => (
     <OTPInput
       ref={ref}
-      containerClassName={cn('flex items-center gap-2 has-[:disabled]:opacity-50', containerClassName)}
-      className={cn('disabled:cursor-not-allowed', className)}
+      containerClassName={cn("flex items-center gap-2 has-[:disabled]:opacity-50", containerClassName)}
+      className={cn("disabled:cursor-not-allowed", className)}
       {...props}
     />
   )
-);
-InputOTP.displayName = 'InputOTP';
+)
+InputOTP.displayName = "InputOTP"
 
-const InputOTPGroup = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('flex flex-wrap items-center justify-center gap-1', className)} {...props} />
-));
-InputOTPGroup.displayName = 'InputOTPGroup';
+const InputOTPGroup = React.forwardRef<React.ElementRef<"div">, React.ComponentPropsWithoutRef<"div">>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("flex flex-wrap items-center justify-center gap-1", className)} {...props} />
+))
+InputOTPGroup.displayName = "InputOTPGroup"
 
-const InputOTPSlot = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'> & { index: number }>(
+const InputOTPSlot = React.forwardRef<React.ElementRef<"div">, React.ComponentPropsWithoutRef<"div"> & { index: number }>(
   ({ index, className, ...props }, ref) => {
-    const inputOTPContext = React.useContext(OTPInputContext);
+    const inputOTPContext = React.useContext(OTPInputContext)
     // @ts-ignore
-    const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
+    const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index]
 
     return (
       <div
@@ -37,7 +37,7 @@ const InputOTPSlot = React.forwardRef<React.ElementRef<'div'>, React.ComponentPr
         //   isActive && 'ring-neutralgrey-1300 dark:ring-neutralgrey-500 z-10 ring-1',
         //   className
         // )}
-        className="ring-neutralgrey-500 relative h-10 w-9 rounded-md bg-white ring-1 ring-inset data-[status=selected]:bg-blue-600/10 data-[status=selected]:shadow-[0_0_8px_2px_theme(colors.blue.600/30%)] data-[status=selected]:ring-blue-600"
+        className="relative h-10 w-9 rounded-md bg-white ring-1 ring-inset ring-neutralgrey-500 data-[status=selected]:bg-blue-600/10 data-[status=selected]:shadow-[0_0_8px_2px_theme(colors.blue.600/30%)] data-[status=selected]:ring-blue-600"
         {...props}
       >
         <AnimatePresence>
@@ -46,7 +46,7 @@ const InputOTPSlot = React.forwardRef<React.ElementRef<'div'>, React.ComponentPr
               initial={{ opacity: 0, scale: 0.75 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.75 }}
-              className="text-neutralgrey-1300 absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center text-neutralgrey-1300"
             >
               {char}
             </motion.span>
@@ -61,16 +61,16 @@ const InputOTPSlot = React.forwardRef<React.ElementRef<'div'>, React.ComponentPr
           />
         )}
       </div>
-    );
+    )
   }
-);
-InputOTPSlot.displayName = 'InputOTPSlot';
+)
+InputOTPSlot.displayName = "InputOTPSlot"
 
-const InputOTPSeparator = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'>>(({ ...props }, ref) => (
+const InputOTPSeparator = React.forwardRef<React.ElementRef<"div">, React.ComponentPropsWithoutRef<"div">>(({ ...props }, ref) => (
   <div ref={ref} role="separator" {...props}>
     <DashIcon />
   </div>
-));
-InputOTPSeparator.displayName = 'InputOTPSeparator';
+))
+InputOTPSeparator.displayName = "InputOTPSeparator"
 
-export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };
+export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot }

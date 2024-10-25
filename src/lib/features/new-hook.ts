@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { useLocalStorage } from 'usehooks-ts'
-import { New_Feature_Key, NewFeature, NewFeatureDateLimit } from './new'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useEffectOnce } from 'react-use'
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useEffectOnce } from "react-use"
+import { useLocalStorage } from "usehooks-ts"
+import { New_Feature_Key, NewFeature, NewFeatureDateLimit } from "./new"
 
 export default function useNewFeatureState(
   newFeature: NewFeature,
@@ -27,7 +27,7 @@ export default function useNewFeatureState(
   useEffectOnce(() => {
     if (window !== undefined) {
       const local = localStorage.getItem(New_Feature_Key(newFeature))
-      if (local === 'true') {
+      if (local === "true") {
         setStored(true)
       }
     }

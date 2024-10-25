@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from "@/lib"
 
 export default function BooleanExpressionIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
   return (
@@ -7,7 +7,7 @@ export default function BooleanExpressionIcon({ className, ...props }: React.SVG
       height="43"
       viewBox="0 0 36 43"
       fill="none"
-      className={cn('text-black', className)}
+      className={cn("text-black", className)}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >

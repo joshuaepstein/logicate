@@ -1,14 +1,14 @@
-import { cn } from '@/lib'
-import { useNode } from './hooks/useNode'
-import { Wire as WireItemType } from './types'
-import useCanvasStore from './hooks/useCanvasStore'
-import { useCallback, useEffect, useState } from 'react'
+import { cn } from "@/lib"
+import { useCallback, useEffect, useState } from "react"
+import useCanvasStore from "./hooks/useCanvasStore"
+import { useNode } from "./hooks/useNode"
+import { Wire as WireItemType } from "./types"
 
 type WireType = {
-  start: { x: number; y: number; fromId: string; fromIndex: number; fromTerminal: 'input' | 'output' }
+  start: { x: number; y: number; fromId: string; fromIndex: number; fromTerminal: "input" | "output" }
   end: { x: number; y: number }
   isActive: boolean
-  type: 'normal'
+  type: "normal"
 }
 
 export const Wire = (props: WireType) => {
@@ -44,10 +44,10 @@ export const Wire = (props: WireType) => {
               `}
         strokeWidth="4"
         fill="none"
-        className={cn('stroke-current text-white', {
-          'text-white': !isActive,
-          'text-[#1b88e7]': isActive,
-          'text-red-700': items.length === 1,
+        className={cn("stroke-current text-white", {
+          "text-white": !isActive,
+          "text-[#1b88e7]": isActive,
+          "text-red-700": items.length === 1,
         })}
       />
     </svg>
@@ -57,7 +57,7 @@ export const Wire = (props: WireType) => {
 export const ConnectionWire = ({
   wire,
   simulatedWires = [],
-  className = '',
+  className = "",
 }: {
   wire: WireItemType
   simulatedWires: {
@@ -95,8 +95,8 @@ export const ConnectionWire = ({
   })
 
   const updateWirePositions = useCallback(() => {
-    const startWireTerminal = getWireTerminalLocation(from.id, from.node_index, 'output')
-    const endWireTerminal = getWireTerminalLocation(to.id, to.node_index, 'input')
+    const startWireTerminal = getWireTerminalLocation(from.id, from.node_index, "output")
+    const endWireTerminal = getWireTerminalLocation(to.id, to.node_index, "input")
 
     if (!startWireTerminal || !endWireTerminal || !canvas) return
     setStart({
@@ -133,7 +133,7 @@ export const ConnectionWire = ({
 
   return (
     <svg
-      className={cn('pointer-events-auto absolute left-0 top-0 overflow-visible transition-colors duration-100', className)}
+      className={cn("pointer-events-auto absolute left-0 top-0 overflow-visible transition-colors duration-100", className)}
       key={id}
       data-logicate-wire={id}
       data-logicate-signal={active}
@@ -150,7 +150,7 @@ export const ConnectionWire = ({
         strokeWidth="6"
         style={{
           ...(isSelected(id) && {
-            filter: 'drop-shadow(0px 0px 3px #0079db)',
+            filter: "drop-shadow(0px 0px 3px #0079db)",
           }),
         }}
       />
@@ -163,15 +163,15 @@ export const ConnectionWire = ({
               `}
         strokeWidth="4"
         fill="none"
-        className={cn('pointer-events-auto stroke-current text-white', {
-          'text-white': !simulatedWires.find((wire) => wire.id === id)?.active,
-          'text-[#1b88e7]': simulatedWires.find((wire) => wire.id === id)?.active,
+        className={cn("pointer-events-auto stroke-current text-white", {
+          "text-white": !simulatedWires.find((wire) => wire.id === id)?.active,
+          "text-[#1b88e7]": simulatedWires.find((wire) => wire.id === id)?.active,
         })}
         onClick={() => {
           setSelected([
             {
               ...wire,
-              selectedType: 'wire',
+              selectedType: "wire",
             },
           ])
         }}
@@ -180,7 +180,7 @@ export const ConnectionWire = ({
   )
 }
 
-const getWireTerminalLocation = (id: string, index: number, pos: 'input' | 'output') => {
+const getWireTerminalLocation = (id: string, index: number, pos: "input" | "output") => {
   const { items } = useCanvasStore.getState()
   const item = items.find((item) => item.id === id)
   if (!item) return null
@@ -193,7 +193,7 @@ const getWireTerminalLocation = (id: string, index: number, pos: 'input' | 'outp
 }
 
 const useCanvasElement = () => {
-  const element = document.querySelector('[data-logicate-canvas]') as HTMLElement
+  const element = document.querySelector("[data-logicate-canvas]") as HTMLElement
   if (!element) return null
   return element
 }

@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { cn } from '@/lib'
-import { ClassValue } from 'clsx'
-import { motion } from 'framer-motion'
-import landingDemo from '~/_static/landing_demo.png'
-import { BlurImage } from '../ui/blur-image'
+import { cn } from "@/lib"
+import { ClassValue } from "clsx"
+import { motion } from "framer-motion"
+import landingDemo from "~/_static/landing_demo.png"
+import { BlurImage } from "../ui/blur-image"
 
 export default function AppScreenshot({ className }: { className?: ClassValue }) {
   return (
@@ -28,15 +28,15 @@ export default function AppScreenshot({ className }: { className?: ClassValue })
       }}
       transition={{
         duration: 2,
-        ease: 'easeInOut',
+        ease: "easeInOut",
         delay: 0.25,
       }}
-      className={cn('shadow-hard-xs mt-12 aspect-video w-2/3 max-w-[900px] rounded-md bg-white/20 p-2 backdrop-blur-md', className)}
+      className={cn("mt-12 aspect-video w-2/3 max-w-[900px] rounded-md bg-white/20 p-2 shadow-hard-xs backdrop-blur-md", className)}
     >
       <BlurImage
         src={landingDemo}
         alt="Logicate Demo Screenshot - Homepage"
-        className={cn('rounded-[4px] bg-white transition-[filter] duration-200')}
+        className={cn("rounded-[4px] bg-white transition-[filter] duration-200")}
       />
     </motion.div>
   )

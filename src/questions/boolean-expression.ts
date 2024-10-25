@@ -5,7 +5,7 @@ enum Difficulty {
   Challenging,
 }
 
-type Operator = '∧' | '∨' | '⊕'
+type Operator = "∧" | "∨" | "⊕"
 type SimpleOperand = string | BooleanExpression
 type Operand = { value: SimpleOperand; isNegated: boolean }
 
@@ -15,7 +15,7 @@ export class BooleanExpression {
   operator: Operator
   private usedVariables: string[]
 
-  private static variables = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+  private static variables = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
   constructor(left: SimpleOperand, right: SimpleOperand, operator: Operator, leftNegated = false, rightNegated = false) {
     this.left = { value: left, isNegated: leftNegated }
@@ -26,7 +26,7 @@ export class BooleanExpression {
 
   displayAsString(): string {
     const formatOperand = (operand: Operand): string => {
-      let str = typeof operand.value === 'string' ? operand.value : `(${operand.value.displayAsString()})`
+      const str = typeof operand.value === "string" ? operand.value : `(${operand.value.displayAsString()})`
       return operand.isNegated ? `¬${str}` : str
     }
 
@@ -54,8 +54,8 @@ export class BooleanExpression {
   }
 
   static generateRandom(difficulty: Difficulty, usedVariables: string[] = [], depth: number = 0): BooleanExpression {
-    const operators: Operator[] = ['∧', '∨']
-    const expr = new BooleanExpression('A', 'B', '∧') // Temporary, will be overwritten
+    const operators: Operator[] = ["∧", "∨"]
+    const expr = new BooleanExpression("A", "B", "∧") // Temporary, will be overwritten
     expr.usedVariables = [...usedVariables]
 
     let maxDepth: number
@@ -104,15 +104,15 @@ export class BooleanExpression {
 
   simplify(): BooleanExpression | string {
     const simplifyOperand = (operand: Operand): Operand => {
-      if (typeof operand.value === 'string') {
-        if (operand.value === 'true' && operand.isNegated) return { value: 'false', isNegated: false }
-        if (operand.value === 'false' && operand.isNegated) return { value: 'true', isNegated: false }
+      if (typeof operand.value === "string") {
+        if (operand.value === "true" && operand.isNegated) return { value: "false", isNegated: false }
+        if (operand.value === "false" && operand.isNegated) return { value: "true", isNegated: false }
         return operand
       }
       const simplifiedValue = operand.value.simplify()
-      if (typeof simplifiedValue === 'string') {
-        if (simplifiedValue === 'true' && operand.isNegated) return { value: 'false', isNegated: false }
-        if (simplifiedValue === 'false' && operand.isNegated) return { value: 'true', isNegated: false }
+      if (typeof simplifiedValue === "string") {
+        if (simplifiedValue === "true" && operand.isNegated) return { value: "false", isNegated: false }
+        if (simplifiedValue === "false" && operand.isNegated) return { value: "true", isNegated: false }
         return { value: simplifiedValue, isNegated: operand.isNegated }
       }
       return {
@@ -121,21 +121,21 @@ export class BooleanExpression {
       }
     }
 
-    let left = simplifyOperand(this.left)
-    let right = simplifyOperand(this.right)
+    const left = simplifyOperand(this.left)
+    const right = simplifyOperand(this.right)
 
     // Handle cases with 'true' and 'false'
-    if (left.value === 'true' && !left.isNegated) {
-      return this.operator === '∧' ? right.value : 'true'
+    if (left.value === "true" && !left.isNegated) {
+      return this.operator === "∧" ? right.value : "true"
     }
-    if (left.value === 'false' && !left.isNegated) {
-      return this.operator === '∧' ? 'false' : right.value
+    if (left.value === "false" && !left.isNegated) {
+      return this.operator === "∧" ? "false" : right.value
     }
-    if (right.value === 'true' && !right.isNegated) {
-      return this.operator === '∧' ? left.value : 'true'
+    if (right.value === "true" && !right.isNegated) {
+      return this.operator === "∧" ? left.value : "true"
     }
-    if (right.value === 'false' && !right.isNegated) {
-      return this.operator === '∧' ? 'false' : left.value
+    if (right.value === "false" && !right.isNegated) {
+      return this.operator === "∧" ? "false" : left.value
     }
 
     // Idempotence: A ∧ A = A, A ∨ A = A
@@ -145,12 +145,12 @@ export class BooleanExpression {
 
     // Complementation: A ∧ ¬A = false, A ∨ ¬A = true
     if (
-      typeof left.value === 'string' &&
-      typeof right.value === 'string' &&
+      typeof left.value === "string" &&
+      typeof right.value === "string" &&
       left.value === right.value &&
       left.isNegated !== right.isNegated
     ) {
-      return this.operator === '∧' ? 'false' : 'true'
+      return this.operator === "∧" ? "false" : "true"
     }
 
     // If no simplification rules apply, return a new BooleanExpression
@@ -158,10 +158,10 @@ export class BooleanExpression {
   }
 
   static areEqual(expr1: BooleanExpression | string, expr2: BooleanExpression | string): boolean {
-    const simplifiedExpr1 = typeof expr1 === 'string' ? expr1 : expr1.simplify()
-    const simplifiedExpr2 = typeof expr2 === 'string' ? expr2 : expr2.simplify()
+    const simplifiedExpr1 = typeof expr1 === "string" ? expr1 : expr1.simplify()
+    const simplifiedExpr2 = typeof expr2 === "string" ? expr2 : expr2.simplify()
 
-    if (typeof simplifiedExpr1 === 'string' || typeof simplifiedExpr2 === 'string') {
+    if (typeof simplifiedExpr1 === "string" || typeof simplifiedExpr2 === "string") {
       return simplifiedExpr1 === simplifiedExpr2
     }
 
@@ -177,11 +177,11 @@ export class BooleanExpression {
       return false
     }
 
-    if (typeof operand1.value === 'string' && typeof operand2.value === 'string') {
+    if (typeof operand1.value === "string" && typeof operand2.value === "string") {
       return operand1.value === operand2.value
     }
 
-    if (typeof operand1.value === 'object' && typeof operand2.value === 'object') {
+    if (typeof operand1.value === "object" && typeof operand2.value === "object") {
       return BooleanExpression.areEqual(operand1.value, operand2.value)
     }
 
@@ -198,9 +198,9 @@ export class BooleanExpression {
 
   private serializeOperand(operand: Operand): object {
     return {
-      value: typeof operand.value === 'string' ? operand.value : operand.value.toJSON(),
+      value: typeof operand.value === "string" ? operand.value : operand.value.toJSON(),
       isNegated: operand.isNegated,
-      isExpression: typeof operand.value !== 'string',
+      isExpression: typeof operand.value !== "string",
     }
   }
 
@@ -222,15 +222,15 @@ export class BooleanExpression {
 }
 
 // Example usage:
-console.log('Generating expressions for each difficulty level:')
+console.log("Generating expressions for each difficulty level:")
 Object.values(Difficulty)
-  .filter((v) => typeof v === 'number')
+  .filter((v) => typeof v === "number")
   .forEach((difficulty: Difficulty) => {
     console.log(`\nDifficulty: ${Difficulty[difficulty]}`)
     for (let i = 0; i < 3; i++) {
       const randomExpr = BooleanExpression.generateRandom(difficulty)
       console.log(`Expression ${i + 1}:`, randomExpr.displayAsString())
       const simplifiedRandomExpr = randomExpr.simplify()
-      console.log(`Simplified:`, typeof simplifiedRandomExpr === 'string' ? simplifiedRandomExpr : simplifiedRandomExpr.displayAsString())
+      console.log(`Simplified:`, typeof simplifiedRandomExpr === "string" ? simplifiedRandomExpr : simplifiedRandomExpr.displayAsString())
     }
   })

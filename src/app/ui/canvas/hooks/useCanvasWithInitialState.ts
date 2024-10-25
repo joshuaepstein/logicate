@@ -1,8 +1,8 @@
 // useCanvasWithInitialState - Should take in the logicateSession and return the canvas store
 
-import { LogicateSession } from '@logicate/database'
-import useCanvasStore from './useCanvasStore'
-import { Item, TypeWire } from '../types'
+import { LogicateSession } from "@logicate/database"
+import { Item, TypeWire } from "../types"
+import useCanvasStore from "./useCanvasStore"
 
 export const useCanvasWithInitialState = (logicateSession: LogicateSession) => {
   const canvasStore = useCanvasStore()

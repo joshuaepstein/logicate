@@ -1,5 +1,5 @@
-import { cn } from '@/lib'
-import { InputItem } from '../../../types'
+import { cn } from "@/lib"
+import { InputItem } from "../../../types"
 
 export default function VariableBody({ input }: { input?: InputItem }) {
   return (
@@ -7,8 +7,8 @@ export default function VariableBody({ input }: { input?: InputItem }) {
       width="10"
       height="21"
       viewBox="0 0 10 21"
-      style={{ overflow: 'visible', width: '10px', height: '21px' }}
-      className={cn('pointer-events-none flex items-center justify-center')}
+      style={{ overflow: "visible", width: "10px", height: "21px" }}
+      className={cn("pointer-events-none flex items-center justify-center")}
       data-logicate-input-content
       data-logicate-input-variable={input?.settings.expressionLetter}
     >
@@ -20,9 +20,9 @@ export default function VariableBody({ input }: { input?: InputItem }) {
         textAnchor="middle"
         fontSize="26"
         fontWeight="700"
-        fill={(input && input.settings.color) || '#000'}
+        fill={(input && input.settings.color) || "#000"}
       >
-        {(input && input.settings.expressionLetter) || '?'}
+        {(input && input.settings.expressionLetter) || "?"}
       </text>
     </svg>
   )

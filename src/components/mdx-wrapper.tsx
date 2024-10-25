@@ -1,10 +1,10 @@
-import { cn } from '@/lib'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import Image from 'next/image'
-import React from 'react'
-import slugify from 'slugify'
-import { highlight } from 'sugar-high'
-import Link from './ui/link'
+import { cn } from "@/lib"
+import { MDXRemote } from "next-mdx-remote/rsc"
+import Image from "next/image"
+import React from "react"
+import slugify from "slugify"
+import { highlight } from "sugar-high"
+import Link from "./ui/link"
 
 function RoundedImage(props: React.ComponentProps<typeof Image>) {
   return <Image {...props} className="rounded-lg" />
@@ -12,7 +12,7 @@ function RoundedImage(props: React.ComponentProps<typeof Image>) {
 
 // @ts-ignore
 function Code({ children, ...props }) {
-  let codeHTML = highlight(children)
+  const codeHTML = highlight(children)
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
 }
 
@@ -26,8 +26,8 @@ type TableProps = {
 }
 
 function Table({ data }: TableProps) {
-  let headers = data.headers.map((header, index) => <th key={index}>{header}</th>)
-  let rows = data.rows.map((row, index) => (
+  const headers = data.headers.map((header, index) => <th key={index}>{header}</th>)
+  const rows = data.rows.map((row, index) => (
     <tr key={index}>
       {row.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
@@ -51,20 +51,20 @@ type HeadingProps = {
 
 function createHeading(level: number) {
   return ({ children }: HeadingProps) => {
-    let slug = slugify(children)
+    const slug = slugify(children)
     const id = children
       .toLowerCase()
-      .replace(/^\d+\.\s/, '')
-      .replace(/ /g, '-')
+      .replace(/^\d+\.\s/, "")
+      .replace(/ /g, "-")
       .trim()
     return React.createElement(
       `h${level}`,
       { id },
       [
-        React.createElement('a', {
+        React.createElement("a", {
           href: `#${slug}`,
           key: `link-${slug}`,
-          className: 'anchor',
+          className: "anchor",
         }),
       ],
       children
@@ -90,7 +90,7 @@ export default function MdxWrapper(props) {
     <article
       data-mdx-container
       className={cn(
-        'prose prose-zinc dark:prose-invert prose-headings:relative prose-headings:scroll-mt-20 prose-headings:font-semibold prose-p:text-base max-w-none transition-all'
+        "prose prose-zinc max-w-none transition-all dark:prose-invert prose-headings:relative prose-headings:scroll-mt-20 prose-headings:font-semibold prose-p:text-base"
       )}
     >
       <MDXRemote source={props.source} components={{ ...components, ...(props.components || {}) }} />

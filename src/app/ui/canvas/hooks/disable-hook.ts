@@ -1,5 +1,5 @@
-import { Click } from '@/lib/buttons'
-import { useEffect } from 'react'
+import { Click } from "@/lib/buttons"
+import { useEffect } from "react"
 
 const useDisableHook = (canvasReference: React.RefObject<HTMLDivElement | null>) => {
   useEffect(() => {
@@ -29,15 +29,15 @@ const useDisableHook = (canvasReference: React.RefObject<HTMLDivElement | null>)
       e.stopPropagation()
     }
 
-    canvasReference.current?.addEventListener('contextmenu', disableContextMenu)
-    document.addEventListener('wheel', disableScroll)
-    document.addEventListener('selectstart', disableSelect)
-    document.body.classList.add('fixed', 'w-full', 'h-full')
+    canvasReference.current?.addEventListener("contextmenu", disableContextMenu)
+    document.addEventListener("wheel", disableScroll)
+    document.addEventListener("selectstart", disableSelect)
+    document.body.classList.add("fixed", "w-full", "h-full")
     return () => {
-      canvasReference.current?.removeEventListener('contextmenu', disableContextMenu)
-      document.removeEventListener('wheel', disableScroll)
-      document.removeEventListener('selectstart', disableSelect)
-      document.body.classList.remove('fixed', 'w-full', 'h-full')
+      canvasReference.current?.removeEventListener("contextmenu", disableContextMenu)
+      document.removeEventListener("wheel", disableScroll)
+      document.removeEventListener("selectstart", disableSelect)
+      document.body.classList.remove("fixed", "w-full", "h-full")
     }
   })
 }

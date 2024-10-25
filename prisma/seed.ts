@@ -1,7 +1,7 @@
-import { faker } from '@faker-js/faker'
-import { hashPassword } from '@/lib/encrypt'
-import { PrismaClient, TimeFormat } from '@prisma/client'
-import { generateClassroomId } from '@/lib/id'
+import { hashPassword } from "@/lib/encrypt"
+import { generateClassroomId } from "@/lib/id"
+import { faker } from "@faker-js/faker"
+import { PrismaClient, TimeFormat } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
@@ -23,10 +23,10 @@ async function main() {
         create: {
           profilePicture: faker.image.avatarGitHub(),
           timeFormat: TimeFormat.hours24,
-          language: 'enGB',
+          language: "enGB",
         },
       },
-      accountType: 'TEACHER',
+      accountType: "TEACHER",
     },
   })
 

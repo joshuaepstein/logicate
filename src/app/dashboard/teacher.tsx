@@ -1,9 +1,8 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { InformationCircleContainedIcon } from '@jfstech/icons-react/24/outline'
-import { prisma, User } from '@logicate/database'
-import Link from 'next/link'
-import { unstable_cache } from 'next/cache'
-import { getSession } from 'next-auth/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { InformationCircleContainedIcon } from "@jfstech/icons-react/24/outline"
+import { prisma, User } from "@logicate/database"
+import { unstable_cache } from "next/cache"
+import Link from "next/link"
 
 const getClassrooms = unstable_cache(
   async (user) => {
@@ -36,10 +35,10 @@ const getClassrooms = unstable_cache(
     })
     return classrooms
   },
-  ['teacher_classrooms'],
+  ["teacher_classrooms"],
   {
     revalidate: 3600,
-    tags: ['teacher_classrooms'],
+    tags: ["teacher_classrooms"],
   }
 )
 
@@ -59,10 +58,10 @@ export default async function TeacherDashboard({ user }: { user: User }) {
   return (
     <div>
       <h1 className="text-3xl font-semibold">Your Dashboard</h1>
-      <p className="text-neutralgrey-1000 flex items-center justify-start text-sm">
-        You have {classrooms.length} classroom{classrooms.length > 1 ? 's' : ''} with a total of{' '}
+      <p className="flex items-center justify-start text-sm text-neutralgrey-1000">
+        You have {classrooms.length} classroom{classrooms.length > 1 ? "s" : ""} with a total of{" "}
         {classrooms.reduce((acc, classroom) => acc + classroom._count.students, 0)} student
-        {classrooms.reduce((acc, classroom) => acc + classroom._count.students, 0) > 1 ? 's' : ''}.
+        {classrooms.reduce((acc, classroom) => acc + classroom._count.students, 0) > 1 ? "s" : ""}.
         <Tooltip>
           <TooltipContent asChild>
             <Link href="/dashboard/teacher/stats">View more stats</Link>
@@ -80,7 +79,7 @@ export default async function TeacherDashboard({ user }: { user: User }) {
             <Link
               href={`/dashboard/${classroom.id}`}
               key={index + classroom.id}
-              className="shadow-hard-soft-2xs flex w-full flex-col items-start justify-start rounded-sm p-4"
+              className="flex w-full flex-col items-start justify-start rounded-sm p-4 shadow-hard-soft-2xs"
             >
               <h1 className="text-xl font-medium">{classroom.name}</h1>
               <p>

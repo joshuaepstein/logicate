@@ -1,11 +1,10 @@
-'use client'
+"use client"
 
-import { useActionState } from 'react'
-import { Button } from '@/components/ui/button'
-import { TextInput } from '@/components/ui/input'
-import { useFormStatus } from 'react-dom'
-import { addToResend } from './actions'
-import { capitalise } from '@/lib'
+import { Button } from "@/components/ui/button"
+import { TextInput } from "@/components/ui/input"
+import { useActionState } from "react"
+import { useFormStatus } from "react-dom"
+import { addToResend } from "./actions"
 
 export default function SubscribeForm() {
   const [error, submit] = useActionState(addToResend, undefined)
@@ -28,7 +27,7 @@ export default function SubscribeForm() {
             displayError={false}
           />
           <svg
-            className="stroke-neutralgrey-600 pointer-events-none absolute left-3 top-2 h-6 w-6"
+            className="pointer-events-none absolute left-3 top-2 h-6 w-6 stroke-neutralgrey-600"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             strokeWidth="2"
@@ -41,7 +40,7 @@ export default function SubscribeForm() {
         </div>
         <SubButton />
       </form>
-      {(error && error !== 'Subscribed successfully' && <p className="mt-2 text-red-600">{error}</p>) ||
+      {(error && error !== "Subscribed successfully" && <p className="mt-2 text-red-600">{error}</p>) ||
         (error && <p className="mt-2 text-sm font-medium text-green-600">{error}</p>)}
     </div>
   )
@@ -52,7 +51,7 @@ function SubButton() {
 
   return (
     <Button variant="dark" className="ml-4" disabled={pending} type="submit">
-      {pending ? 'Subscribing...' : 'Subscribe'}
+      {pending ? "Subscribing..." : "Subscribe"}
     </Button>
   )
 }

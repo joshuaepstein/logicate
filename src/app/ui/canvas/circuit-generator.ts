@@ -1,7 +1,7 @@
-import { randomGateId, randomWireId } from '@/lib/id'
-import { GateType } from './node/gates/types'
-import { InputType } from './node/inputs/types'
-import { Item, Wire } from './types'
+import { randomGateId, randomWireId } from "@/lib/id"
+import { GateType } from "./node/gates/types"
+import { InputType } from "./node/inputs/types"
+import { Item, Wire } from "./types"
 
 function getRandomEnum<T extends object>(enumObj: T): T[keyof T] {
   const values = Object.values(enumObj) as T[keyof T][]
@@ -29,9 +29,9 @@ export function generateRandomGate(): { items: Item[]; wires: Wire[] } {
     computedValue: false,
     settings: {
       inputs: inputCount,
-      color: '#000',
+      color: "#000",
     },
-    itemType: 'gate',
+    itemType: "gate",
   }
   items.push(mainGate)
 
@@ -46,7 +46,7 @@ export function generateRandomGate(): { items: Item[]; wires: Wire[] } {
       value: inputType === InputType.HIGH_CONSTANT ? true : inputType === InputType.LOW_CONSTANT ? false : Math.random() < 0.5, // Randomly set initial value for other types
       outputs: [],
       settings: {},
-      itemType: 'input',
+      itemType: "input",
     }
     items.push(input)
 

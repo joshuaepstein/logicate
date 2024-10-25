@@ -1,11 +1,11 @@
-import Link from 'next/link'
+import Link from "next/link"
 
 export default function GetStarted() {
   return (
-    <section id="get-started" className="border-neutralgrey-400 flex flex-col items-center justify-start border-t bg-white">
+    <section id="get-started" className="flex flex-col items-center justify-start border-t border-neutralgrey-400 bg-white">
       <div className="container flex h-full flex-col items-center justify-start py-16">
-        <h2 className="text-neutralgrey-1200 text-center text-3xl font-medium">Get Started Now!</h2>
-        <p className="text-neutralgrey-1000/85 mt-2 text-center">
+        <h2 className="text-center text-3xl font-medium text-neutralgrey-1200">Get Started Now!</h2>
+        <p className="mt-2 text-center text-neutralgrey-1000/85">
           Sign up for free and start building, simulating, and testing logic gates.
         </p>
 

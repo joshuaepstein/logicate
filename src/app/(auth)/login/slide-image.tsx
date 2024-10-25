@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { cn } from '@/lib'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { cn } from "@/lib"
+import Image from "next/image"
+import { useEffect, useState } from "react"
 
-const IMAGES = ['/_static/canvas.demo.png', '/_static/questions.demo.png', '/_static/classroom.demo.png', '/_static/leaderboard.demo.png']
+const IMAGES = ["/_static/canvas.demo.png", "/_static/questions.demo.png", "/_static/classroom.demo.png", "/_static/leaderboard.demo.png"]
 
 export default function SlideImage() {
   const maxImages = IMAGES.length
@@ -19,14 +19,14 @@ export default function SlideImage() {
   }, [maxImages])
 
   return (
-    <div className="shadow-hard-xs relative hidden h-full grow items-center justify-center overflow-hidden rounded-lg md:flex md:w-1/2">
+    <div className="relative hidden h-full grow items-center justify-center overflow-hidden rounded-lg shadow-hard-xs md:flex md:w-1/2">
       <div className="absolute bottom-3 z-50 h-8 w-32">
         <div className="flex h-full w-full items-center justify-center gap-1">
           {Array.from({ length: maxImages }).map((_, index) => (
             <div
-              key={index + '-dot'}
+              key={index + "-dot"}
               className={cn(`h-2 w-2 rounded-full bg-black/30 transition`, {
-                'bg-black/60': index === currentImageIndex,
+                "bg-black/60": index === currentImageIndex,
               })}
               onClick={() => setCurrentImageIndex(index)}
             />
@@ -35,7 +35,7 @@ export default function SlideImage() {
       </div>
       {IMAGES.map((image, index) => (
         <Image
-          key={index + '-image'}
+          key={index + "-image"}
           src={image}
           alt={`Login Slide ${index + 1}`}
           fill

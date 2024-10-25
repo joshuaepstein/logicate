@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import LogicGateIcon from '@/components/icons/logic-gate-icon'
+import LogicGateIcon from "@/components/icons/logic-gate-icon"
 
-import { Book04Icon, FileReturn02Icon, UsersProfiles03Icon } from '@jfstech/icons-react/24/outline'
-import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { CSSProperties } from 'react'
+import { Book04Icon, FileReturn02Icon, UsersProfiles03Icon } from "@jfstech/icons-react/24/outline"
+import { motion } from "framer-motion"
+import Link from "next/link"
+import { CSSProperties } from "react"
 
 export default function LogicateDescription() {
   return (
@@ -16,32 +16,32 @@ export default function LogicateDescription() {
         scale: 0.95,
       }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+      transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
       viewport={{ once: true, amount: 0.9 }}
       id="what-we-do"
       className="flex min-h-[45dvh] items-center justify-center"
     >
-      <p className="text-neutralgrey-1200 max-w-sm px-4 text-center text-lg font-medium sm:max-w-lg sm:px-0 md:max-w-xl md:text-2xl lg:max-w-3xl lg:text-3xl [&>span]:transition-colors [&>span]:duration-300">
-        With Logicate you can{' '}
+      <p className="max-w-sm px-4 text-center text-lg font-medium text-neutralgrey-1200 sm:max-w-lg sm:px-0 md:max-w-xl md:text-2xl lg:max-w-3xl lg:text-3xl [&>span]:transition-colors [&>span]:duration-300">
+        With Logicate you can{" "}
         <Link
           href="#feature-simulate"
-          style={{ '--animation-duration': '3s' } as CSSProperties}
+          style={{ "--animation-duration": "3s" } as CSSProperties}
           className="hover-text-shimmer inline-flex items-center gap-2 text-indigo-900"
         >
           build and simulate <LogicGateIcon className="inline-block size-6 text-current md:size-10" />
-        </Link>{' '}
-        logic gates,{' '}
+        </Link>{" "}
+        logic gates,{" "}
         <Link
           href="#feature-questions"
-          style={{ '--animation-duration': '3s' } as CSSProperties}
+          style={{ "--animation-duration": "3s" } as CSSProperties}
           className="hover-text-shimmer inline-flex items-center gap-1 text-purple-900 md:gap-2"
         >
           test knowledge <Book04Icon className="inline-block size-5 text-current md:size-9" />
-        </Link>{' '}
-        and{' '}
+        </Link>{" "}
+        and{" "}
         <Link
           href="#feature-learn"
-          style={{ '--animation-duration': '1.5s' } as CSSProperties}
+          style={{ "--animation-duration": "1.5s" } as CSSProperties}
           className="hover-text-shimmer inline-flex items-center justify-start gap-1 text-orange-900 md:gap-2"
         >
           learn
@@ -58,25 +58,25 @@ export default function LogicateDescription() {
               fill="currentColor"
             />
           </svg>
-        </Link>{' '}
-        with our question generator,{' '}
+        </Link>{" "}
+        with our question generator,{" "}
         <Link
           href="#feature-classrooms"
-          style={{ '--animation-duration': '3s' } as CSSProperties}
+          style={{ "--animation-duration": "3s" } as CSSProperties}
           className="hover-text-shimmer inline-flex items-center gap-1 text-green-900 md:gap-2"
         >
           create and manage <UsersProfiles03Icon className="inline-block size-5 text-current md:size-9" />
-        </Link>{' '}
-        classrooms, and{' '}
+        </Link>{" "}
+        classrooms, and{" "}
         <Link
           href="#feature-assign"
-          style={{ '--animation-duration': '2s' } as CSSProperties}
-          className="hover-text-shimmer text-maroon-900 inline-flex items-center gap-1 md:gap-2"
+          style={{ "--animation-duration": "2s" } as CSSProperties}
+          className="hover-text-shimmer inline-flex items-center gap-1 text-maroon-900 md:gap-2"
         >
           assign <FileReturn02Icon className="inline-block size-5 text-current md:size-9" />
-        </Link>{' '}
+        </Link>{" "}
         tasks and homework. <br />
-        <span className="text-neutralgrey-1000/85 mt-2 inline-block">All in one, easy to use platform.</span>
+        <span className="mt-2 inline-block text-neutralgrey-1000/85">All in one, easy to use platform.</span>
       </p>
     </motion.section>
   )

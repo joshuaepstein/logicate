@@ -1,36 +1,36 @@
-'use client'
+"use client"
 
-import { cn } from '@/lib'
-import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { FeatureDescription, FeatureTag, FeatureTitle } from './components'
-import FeatureWrapper from './feature-wrapper'
+import { cn } from "@/lib"
+import { Alignment, Fit, Layout, useRive } from "@rive-app/react-canvas"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { FeatureDescription, FeatureTag, FeatureTitle } from "./components"
+import FeatureWrapper from "./feature-wrapper"
 
 const DOCUMENTATION_STATES = [
   {
-    title: 'AND Gate',
+    title: "AND Gate",
     description:
-      'An AND gate is a digital logic gate that outputs a high signal (1) only when all its inputs are high (1); otherwise, it outputs a low signal (0).',
-    titleColor: 'text-orange-800',
+      "An AND gate is a digital logic gate that outputs a high signal (1) only when all its inputs are high (1); otherwise, it outputs a low signal (0).",
+    titleColor: "text-orange-800",
   },
   {
-    title: 'OR Gate',
+    title: "OR Gate",
     description:
-      'An OR gate is a digital logic gate that outputs a high signal (1) if at least one of its inputs is high (1); it outputs a low signal (0) only when all inputs are low (0).',
-    titleColor: 'text-blue-800',
+      "An OR gate is a digital logic gate that outputs a high signal (1) if at least one of its inputs is high (1); it outputs a low signal (0) only when all inputs are low (0).",
+    titleColor: "text-blue-800",
   },
   {
-    title: 'NOT Gate',
+    title: "NOT Gate",
     description:
-      'A NOT gate is a digital logic gate that inverts its input, outputting a high signal (1) when the input is low (0) and a low signal (0) when the input is high (1).',
-    titleColor: 'text-green-800',
+      "A NOT gate is a digital logic gate that inverts its input, outputting a high signal (1) when the input is low (0) and a low signal (0) when the input is high (1).",
+    titleColor: "text-green-800",
   },
   {
-    title: 'XOR Gate',
+    title: "XOR Gate",
     description:
-      'An XOR gate, or exclusive OR gate, is a digital logic gate that outputs a high signal (1) only when exactly one of its inputs is high (1); it outputs a low signal (0) when both inputs are either high (1) or low (0).',
-    titleColor: 'text-purple-800',
+      "An XOR gate, or exclusive OR gate, is a digital logic gate that outputs a high signal (1) only when exactly one of its inputs is high (1); it outputs a low signal (0) when both inputs are either high (1) or low (0).",
+    titleColor: "text-purple-800",
   },
 ]
 
@@ -40,7 +40,7 @@ export default function FeaturesLearn() {
     RiveComponent: InteractionDemo,
     canvas,
   } = useRive({
-    src: '/_static/animation/interaction-learn.riv',
+    src: "/_static/animation/interaction-learn.riv",
     autoplay: true,
     layout: new Layout({
       fit: Fit.Cover,
@@ -92,14 +92,14 @@ export default function FeaturesLearn() {
                   transition={{
                     duration: 1,
                     // ease: index === documentationState ? [0, 0.41, 0, 0.95] : [0.98, 0, 0.42, 0.99],
-                    ease: 'easeInOut',
+                    ease: "easeInOut",
                   }}
                   className="relative mt-4 h-full w-full select-none"
                   key={index}
                 >
                   <div className="absolute -inset-x-2 bottom-0 z-10 h-1/2 bg-gradient-to-b from-transparent to-white" />
                   <p
-                    className={cn('absolute top-0 text-lg font-medium opacity-75 blur-[1px] transition-all hover:blur-0', state.titleColor)}
+                    className={cn("absolute top-0 text-lg font-medium opacity-75 blur-[1px] transition-all hover:blur-0", state.titleColor)}
                   >
                     {state.title}
                   </p>
@@ -134,13 +134,13 @@ export function LearnCard({
   wrapperClassName?: string
 }) {
   return (
-    <div className="bg-neutralgrey-100 shadow-hard-soft-2xs flex aspect-video h-full w-full flex-col overflow-hidden rounded-lg md:aspect-square md:w-1/3">
-      <div className={cn('relative flex w-full grow flex-col items-center justify-center overflow-hidden px-4', wrapperClassName)}>
+    <div className="flex aspect-video h-full w-full flex-col overflow-hidden rounded-lg bg-neutralgrey-100 shadow-hard-soft-2xs md:aspect-square md:w-1/3">
+      <div className={cn("relative flex w-full grow flex-col items-center justify-center overflow-hidden px-4", wrapperClassName)}>
         {children}
       </div>
       <div className="flex flex-col px-4 pb-6">
         <h4 className="text-left font-medium">{title}</h4>
-        <p className="text-neutralgrey-1000/85 text-left text-sm">{description}</p>
+        <p className="text-left text-sm text-neutralgrey-1000/85">{description}</p>
       </div>
     </div>
   )

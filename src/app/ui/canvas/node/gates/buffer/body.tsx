@@ -1,4 +1,4 @@
-import { GateItem } from '../../../types'
+import { GateItem } from "../../../types"
 
 export default function BufferBody({ item }: { item?: GateItem }) {
   return (
@@ -10,13 +10,13 @@ export default function BufferBody({ item }: { item?: GateItem }) {
       width="33"
       height="33"
       style={{
-        color: (item && item.settings.color) || '#000',
+        color: (item && item.settings.color) || "#000",
       }}
     >
       <path
         className="pointer-events-none"
         fill="#fff"
-        stroke={(item && item.settings.color) || '#000'}
+        stroke={(item && item.settings.color) || "#000"}
         strokeLinecap="square"
         strokeMiterlimit="3"
         strokeWidth="2"

@@ -1,7 +1,7 @@
 // Container
 
-import { cn } from '@/lib'
-import React from 'react'
+import { cn } from "@/lib"
+import React from "react"
 
 type Type = React.HTMLProps<HTMLDivElement> & {
   children: React.ReactNode
@@ -13,14 +13,14 @@ type Type = React.HTMLProps<HTMLDivElement> & {
 /**
  * @deprecated Use MaxWidthWrapper instead
  */
-export const Container = ({ children, className, mt = 'mt-16', flex = false, ...props }: Type) => {
+export const Container = ({ children, className, mt = "mt-16", flex = false, ...props }: Type) => {
   return (
     <section
       className={cn(
         `container`,
         mt,
         {
-          'flex flex-row items-center justify-between': flex,
+          "flex flex-row items-center justify-between": flex,
         },
         className
       )}

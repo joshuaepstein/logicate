@@ -1,6 +1,6 @@
-import { forwardRef } from 'react'
-import useCanvasStore from '../hooks/useCanvasStore'
-import { cn } from '@/lib'
+import { cn } from "@/lib"
+import { forwardRef } from "react"
+import useCanvasStore from "../hooks/useCanvasStore"
 
 export type WireTerminalProps = {
   isInput?: boolean
@@ -16,16 +16,16 @@ export const WireTerminal = forwardRef<SVGSVGElement, WireTerminalProps & React.
       <>
         <svg
           style={{
-            overflow: 'visible',
-            width: '12.5px',
-            height: '12.5px',
+            overflow: "visible",
+            width: "12.5px",
+            height: "12.5px",
             ...style,
           }}
           ref={ref}
           className={cn(
-            'pointer-events-none',
+            "pointer-events-none",
             {
-              'transition-transform hover:scale-[1.2]': true,
+              "transition-transform hover:scale-[1.2]": true,
               // isInput ? !wires.find((wire) => wire.from.id === parentId && wire.from.node_index === index) : !wires.find((wire) => wire.to.id === parentId && wire.to.node_index === index),
             },
             className
@@ -43,9 +43,9 @@ export const WireTerminal = forwardRef<SVGSVGElement, WireTerminalProps & React.
             data-logicate-node-parent-id={parentId}
             {...(isOutput
               ? {
-                  'data-logicate-input-terminal': index,
-                  'data-logicate-parent-terminal-index': index,
-                  'data-logicate-parent-terminal-type': 'input',
+                  "data-logicate-input-terminal": index,
+                  "data-logicate-parent-terminal-index": index,
+                  "data-logicate-parent-terminal-type": "input",
                 }
               : {
                   // data-logicate-output-terminal={0}
@@ -70,9 +70,9 @@ export const WireTerminal = forwardRef<SVGSVGElement, WireTerminalProps & React.
                   //   setHolding(true)
                   // }}
 
-                  'data-logicate-output-terminal': index,
-                  'data-logicate-parent-terminal-index': 0,
-                  'data-logicate-parent-terminal-type': 'output',
+                  "data-logicate-output-terminal": index,
+                  "data-logicate-parent-terminal-index": 0,
+                  "data-logicate-parent-terminal-type": "output",
                   onMouseDown: (e) => {
                     setTemporaryWire({
                       from: {
@@ -86,7 +86,7 @@ export const WireTerminal = forwardRef<SVGSVGElement, WireTerminalProps & React.
                         y: e.clientY,
                       },
                       active: false,
-                      fromTerminal: 'output',
+                      fromTerminal: "output",
                     })
                     setHolding(true)
                   },

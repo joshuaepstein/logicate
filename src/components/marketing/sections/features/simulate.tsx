@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas'
-import { useInView } from 'framer-motion'
-import { redirect } from 'next/navigation'
-import { useEffect, useRef } from 'react'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { useWindowScroll } from 'react-use'
-import { FeatureDescription, FeatureTag, FeatureTitle } from './components'
-import FeatureWrapper from './feature-wrapper'
+import { Alignment, Fit, Layout, useRive } from "@rive-app/react-canvas"
+import { useInView } from "framer-motion"
+import { redirect } from "next/navigation"
+import { useEffect, useRef } from "react"
+import { useHotkeys } from "react-hotkeys-hook"
+import { useWindowScroll } from "react-use"
+import { FeatureDescription, FeatureTag, FeatureTitle } from "./components"
+import FeatureWrapper from "./feature-wrapper"
 
 export default function FeatureSimulate() {
   const {
@@ -15,7 +15,7 @@ export default function FeatureSimulate() {
     RiveComponent: CanvasDemo,
     canvas,
   } = useRive({
-    src: '/_static/animation/canvas-demo.riv',
+    src: "/_static/animation/canvas-demo.riv",
     autoplay: true,
     layout: new Layout({
       fit: Fit.Cover,
@@ -27,9 +27,9 @@ export default function FeatureSimulate() {
   const windowScroll = useWindowScroll()
   const isVisible = useInView(buttonRef)
 
-  useHotkeys('c', () => {
+  useHotkeys("c", () => {
     if (buttonRef.current && isVisible) {
-      redirect('/canvas/new')
+      redirect("/canvas/new")
     }
   })
 
@@ -58,7 +58,7 @@ export default function FeatureSimulate() {
 
       <button
         ref={buttonRef}
-        className="shadow-hard-2xs rounded-md border border-indigo-900/50 bg-indigo-800 px-3 py-1.5 text-sm text-white transition hover:scale-105 hover:border-indigo-900"
+        className="rounded-md border border-indigo-900/50 bg-indigo-800 px-3 py-1.5 text-sm text-white shadow-hard-2xs transition hover:scale-105 hover:border-indigo-900"
       >
         Create Your First Canvas
         <kbd className="ml-2 hidden rounded-[3px] bg-white/10 px-1 py-px font-mono text-xs transition md:inline">C</kbd>

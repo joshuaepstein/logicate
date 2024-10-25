@@ -1,8 +1,7 @@
-import { cn } from '@/lib'
-import * as React from 'react'
-import { SVGProps, Ref, forwardRef } from 'react'
+import { cn } from "@/lib"
+import { SVGProps } from "react"
 export const LogoIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 2000 421.48" className={cn('text-black', className)} {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 2000 421.48" className={cn("text-black", className)} {...props}>
     <path
       fill="#fff"
       d="M323.762 39.622V370.28h165.33c45.553 0 84.505-16.169 116.833-48.497 32.327-32.327 48.496-71.279 48.496-116.833s-16.169-84.505-48.496-116.833c-32.328-32.327-71.28-48.496-116.833-48.496h-165.33Z"

@@ -1,10 +1,10 @@
-import { prisma } from '@logicate/database'
-import { getSearchParams } from '@/lib/urls'
-import { waitUntil } from '@vercel/functions'
-import { NextRequest } from 'next/server'
-import { handleAndReturnErrorResponse, LogicateError } from '../api/error'
-import { hashToken } from './hash-token'
-import { getSession, Session } from './utils'
+import { getSearchParams } from "@/lib/urls"
+import { prisma } from "@logicate/database"
+import { waitUntil } from "@vercel/functions"
+import { NextRequest } from "next/server"
+import { handleAndReturnErrorResponse, LogicateError } from "../api/error"
+import { hashToken } from "./hash-token"
+import { getSession, Session } from "./utils"
 
 interface WithSessionHandler {
   ({
@@ -16,7 +16,7 @@ interface WithSessionHandler {
     req: Request
     params: Record<string, string>
     searchParams: Record<string, string>
-    session: Omit<Session, 'user'> & { user: Omit<Session['user'], 'password'> }
+    session: Omit<Session, "user"> & { user: Omit<Session["user"], "password"> }
   }): Promise<Response>
 }
 
@@ -24,16 +24,16 @@ export const withSession =
   (handler: WithSessionHandler) =>
   async (req: NextRequest, { params = Promise.resolve({}) }: { params: Promise<Record<string, string> | undefined> }) => {
     try {
-      let session: (Omit<Session, 'user'> & { user: Omit<Session['user'], 'password'> }) | undefined
-      const authorizationHeader = req.headers.get('Authorization')
+      let session: (Omit<Session, "user"> & { user: Omit<Session["user"], "password"> }) | undefined
+      const authorizationHeader = req.headers.get("Authorization")
       if (authorizationHeader) {
-        if (!authorizationHeader.includes('Bearer ')) {
+        if (!authorizationHeader.includes("Bearer ")) {
           throw new LogicateError({
-            code: 'bad_request',
+            code: "bad_request",
             message: "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           })
         }
-        const apiKey = authorizationHeader.replace('Bearer ', '')
+        const apiKey = authorizationHeader.replace("Bearer ", "")
 
         const hashedKey = await hashToken(apiKey)
 
@@ -49,8 +49,8 @@ export const withSession =
 
         if (!user) {
           throw new LogicateError({
-            code: 'unauthorized',
-            message: 'Unauthorized: Invalid API Key.',
+            code: "unauthorized",
+            message: "Unauthorized: Invalid API Key.",
           })
         }
 
@@ -62,8 +62,8 @@ export const withSession =
 
         if (!publicDisplay) {
           throw new LogicateError({
-            code: 'unauthorized',
-            message: 'Unauthorized: Invalid API Key.',
+            code: "unauthorized",
+            message: "Unauthorized: Invalid API Key.",
           })
         }
 
@@ -97,8 +97,8 @@ export const withSession =
         session = await getSession()
         if (!session?.user.id) {
           throw new LogicateError({
-            code: 'unauthorized',
-            message: 'Unauthorized: Login required.',
+            code: "unauthorized",
+            message: "Unauthorized: Login required.",
           })
         }
       }

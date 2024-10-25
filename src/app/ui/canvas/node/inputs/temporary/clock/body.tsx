@@ -3,13 +3,13 @@ export default function ClockBody() {
     <svg
       className="pointer-events-auto"
       style={{
-        overflow: 'visible',
-        width: '29px',
-        height: '17px',
+        overflow: "visible",
+        width: "29px",
+        height: "17px",
       }}
     >
       <path
-        stroke={'#FFFFFF'}
+        stroke={"#FFFFFF"}
         strokeWidth="3"
         strokeLinejoin="miter"
         strokeLinecap="butt"

@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from "@/lib"
 
 export default function LogicGateIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
   return (
@@ -7,7 +7,7 @@ export default function LogicGateIcon({ className, ...props }: React.SVGProps<SV
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      className={cn('text-black', className)}
+      className={cn("text-black", className)}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >

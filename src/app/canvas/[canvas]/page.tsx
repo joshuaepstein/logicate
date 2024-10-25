@@ -1,11 +1,11 @@
-import LogicGateLoader from '@/app/ui/canvas/logic-gate-loader'
-import { getSession } from '@/lib/auth/utils'
-import { prisma } from '@logicate/database'
-import { Metadata } from 'next'
-import { headers } from 'next/headers'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import Canvas from '../../ui/canvas'
+import LogicGateLoader from "@/app/ui/canvas/logic-gate-loader"
+import { getSession } from "@/lib/auth/utils"
+import { prisma } from "@logicate/database"
+import { Metadata } from "next"
+import { headers } from "next/headers"
+import { notFound } from "next/navigation"
+import { Suspense } from "react"
+import Canvas from "../../ui/canvas"
 
 const getDatabaseSession = async (canvasId: string, userId: string) => {
   return prisma.logicateSession.findUnique({
@@ -41,7 +41,7 @@ export async function generateMetadata(props: { params: Promise<{ canvas: string
   const logicateSession = await getDatabaseSessionAsAdmin(canvas)
 
   return {
-    title: logicateSession?.name + ' - Logicate' || 'Unnamed Canvas - Logicate',
+    title: logicateSession?.name + " - Logicate" || "Unnamed Canvas - Logicate",
   }
 }
 
@@ -61,7 +61,7 @@ export default async function Home(props: { params: Promise<{ canvas: string }>;
     // TODO: Canvas not found design
     return notFound()
   }
-  const userAgent = (await headers()).get('user-agent') || ''
+  const userAgent = (await headers()).get("user-agent") || ""
 
   return (
     <div className="flex h-dvh max-h-dvh w-full flex-col overflow-hidden">
@@ -70,7 +70,7 @@ export default async function Home(props: { params: Promise<{ canvas: string }>;
         <Canvas
           sessionId={logicateSession.id}
           isMobile={isMobile(userAgent)}
-          isNew={isNew === 'true'}
+          isNew={isNew === "true"}
           logicateSession={logicateSession}
           user={session.user}
         />

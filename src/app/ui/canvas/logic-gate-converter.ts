@@ -1,12 +1,12 @@
-import { BooleanExpression } from '@/questions/boolean-expression'
-import { GateType } from './node/gates/types'
-import { GateItem, InputItem, Item, OutputItem, Wire } from './types'
+import { BooleanExpression } from "@/questions/boolean-expression"
+import { GateType } from "./node/gates/types"
+import { GateItem, InputItem, Item, OutputItem, Wire } from "./types"
 
 // TODO: CODE DOES NOT WORK PROPERLY - RE-WRITE
 
 export function convertCanvasToExpression(items: Item[], wires: Wire[]): BooleanExpression | string | null {
   // Find the output item(s)
-  const outputItems = items.filter((item) => item.itemType === 'output') as OutputItem[]
+  const outputItems = items.filter((item) => item.itemType === "output") as OutputItem[]
   if (outputItems.length === 0) {
     return null
   }
@@ -24,12 +24,12 @@ function buildExpression(itemId: string, items: Item[], wires: Wire[]): BooleanE
     throw new Error(`Item with id ${itemId} not found`)
   }
 
-  if (item.itemType === 'input') {
+  if (item.itemType === "input") {
     // Return the variable associated with this input
     const inputItem = item as InputItem
     const variableName = inputItem.settings.expressionLetter || inputItem.id
-    return inputItem.settings.constant && inputItem.value ? 'true' : variableName
-  } else if (item.itemType === 'gate') {
+    return inputItem.settings.constant && inputItem.value ? "true" : variableName
+  } else if (item.itemType === "gate") {
     // Get the input wires for this gate
     const inputWires = wires.filter((wire) => wire.to.id === itemId)
     const inputExpressions: (BooleanExpression | string)[] = []
@@ -66,9 +66,9 @@ function buildExpression(itemId: string, items: Item[], wires: Wire[]): BooleanE
       }
 
       // Apply negation if gate is inverted (e.g., NAND, NOR)
-      return isNegated ? new BooleanExpression(expr, '', '∧', true, false).simplify() : expr
+      return isNegated ? new BooleanExpression(expr, "", "∧", true, false).simplify() : expr
     }
-  } else if (item.itemType === 'output') {
+  } else if (item.itemType === "output") {
     // Get the input wire for this output
     const outputItem = item as OutputItem
     const inputWire = wires.find((wire) => wire.to.id === itemId)
@@ -83,23 +83,23 @@ function buildExpression(itemId: string, items: Item[], wires: Wire[]): BooleanE
   }
 }
 
-function gateTypeToOperator(gateType: GateType): { operator: '∧' | '∨' | '⊕'; isNegated: boolean } {
+function gateTypeToOperator(gateType: GateType): { operator: "∧" | "∨" | "⊕"; isNegated: boolean } {
   switch (gateType) {
     case GateType.AND:
     case GateType.BUFFER:
-      return { operator: '∧', isNegated: false }
+      return { operator: "∧", isNegated: false }
     case GateType.OR:
-      return { operator: '∨', isNegated: false }
+      return { operator: "∨", isNegated: false }
     case GateType.NOT:
     case GateType.NAND:
-      return { operator: '∧', isNegated: true } // Unary operator, negation applied
+      return { operator: "∧", isNegated: true } // Unary operator, negation applied
     case GateType.NOR:
-      return { operator: '∨', isNegated: true }
+      return { operator: "∨", isNegated: true }
     case GateType.XOR:
       // XOR needs special handling; here's a simple representation
-      return { operator: '⊕', isNegated: false }
+      return { operator: "⊕", isNegated: false }
     case GateType.XNOR:
-      return { operator: '⊕', isNegated: true }
+      return { operator: "⊕", isNegated: true }
     default:
       throw new Error(`Unknown gate type: ${gateType}`)
   }

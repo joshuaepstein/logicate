@@ -1,5 +1,5 @@
-import { prisma } from '@/database'
-import { NextResponse } from 'next/server'
+import { prisma } from "@/database"
+import { NextResponse } from "next/server"
 
 export const GET = async (req: Request, res: Response) => {
   const changelogs =
@@ -11,7 +11,7 @@ export const GET = async (req: Request, res: Response) => {
 
   return NextResponse.json(changelogs, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   })
 }

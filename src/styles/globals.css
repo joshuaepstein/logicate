@@ -83,7 +83,7 @@ html {
     @apply border-border;
   }
   body {
-    @apply text-neutralgrey-1300 font-default bg-white;
+    @apply bg-white font-default text-neutralgrey-1300;
   }
 }
 
@@ -242,7 +242,7 @@ html {
 }
 
 .text-shimmer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -225%; /* Start shimmer off-screen */
@@ -268,7 +268,7 @@ html {
 }
 
 .hover-text-shimmer:hover::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -225%; /* Start shimmer off-screen */

@@ -29,12 +29,12 @@ export default function FeatureQuestions() {
 
         <div className="mt-8 flex w-full max-w-4xl flex-row gap-4">
           <div
-            className="bg-neutralgrey-100 shadow-hard-soft-2xs relative flex h-64 w-1/3 items-center justify-center overflow-hidden rounded-lg p-6"
+            className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative flex h-64 w-1/3 items-center justify-center overflow-hidden rounded-lg p-6"
             ref={truthTableRef}
           >
             <BlurImage src={Gradient1} alt="Gradient" className="absolute left-0 top-0 size-full" />
-            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
-              <p className="text-neutralgrey-1200 text-lg font-medium">Truth Tables</p>
+            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
+              <p className="text-neutralgrey-1200 group-hover:text-ultramarine-700 text-lg font-medium transition">Truth Tables</p>
               <motion.p
                 className="text-neutralgrey-1000/85 text-center text-sm"
                 variants={{
@@ -55,12 +55,12 @@ export default function FeatureQuestions() {
             </div>
           </div>
           <div
-            className="bg-neutralgrey-100 shadow-hard-soft-2xs relative h-64 w-1/3 overflow-hidden rounded-lg p-6"
+            className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative h-64 w-1/3 overflow-hidden rounded-lg p-6"
             ref={booleanAlgebraRef}
           >
             <BlurImage src={Gradient2} alt="Gradient" className="absolute left-0 top-0 size-full" />
             <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
-              <p className="text-neutralgrey-1200 text-lg font-medium">Boolean Algebra</p>
+              <p className="text-neutralgrey-1200 text-lg font-medium transition group-hover:text-blue-800">Boolean Algebra</p>
               <motion.p
                 className="text-neutralgrey-1000/85 text-center text-sm"
                 variants={{
@@ -81,12 +81,12 @@ export default function FeatureQuestions() {
             </div>
           </div>
           <div
-            className="bg-neutralgrey-100 shadow-hard-soft-2xs relative h-64 w-1/3 overflow-hidden rounded-lg p-6"
+            className="bg-neutralgrey-100 shadow-hard-soft-2xs group relative h-64 w-1/3 overflow-hidden rounded-lg p-6"
             ref={circuitDiagramRef}
           >
             <BlurImage src={Gradient3} alt="Gradient" className="absolute left-0 top-0 z-0 size-full" />
             <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-2">
-              <p className="text-neutralgrey-1200 text-lg font-medium">Circuit Diagrams</p>
+              <p className="text-neutralgrey-1200 text-lg font-medium transition group-hover:text-teal-800">Logic Circuits</p>
               <motion.p
                 className="text-neutralgrey-1000/85 text-center text-sm"
                 variants={{
@@ -102,7 +102,7 @@ export default function FeatureQuestions() {
                 initial="hidden"
                 animate={circuitDiagramHovering ? 'visible' : 'hidden'}
               >
-                Create and solve logic circuits with a chosen difficulty.
+                Create logic circuits from a boolean expression and vice versa.
               </motion.p>
             </div>
           </div>

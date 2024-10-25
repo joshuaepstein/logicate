@@ -30,7 +30,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <html suppressHydrationWarning lang="en">
-      <body className={cn(GeistSans.className, GeistMono.className)}>
+      <body className={cn(GeistSans.className, GeistMono.className, 'scroll-smooth')}>
         <Providers>
           <Navbar sessionPromise={sessionPromise} />
           {children}

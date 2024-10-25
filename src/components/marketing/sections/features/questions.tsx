@@ -19,7 +19,7 @@ export default function FeatureQuestions() {
   const circuitDiagramHovering = useHover(circuitDiagramRef as RefObject<HTMLDivElement>)
 
   return (
-    <section id="feature-questions" className="bg-neutralgrey-200 flex min-h-[25dvh] w-full items-center justify-center py-12">
+    <section id="feature-questions" className="bg-neutralgrey-200 flex min-h-[25dvh] w-full scroll-mt-16 items-center justify-center py-12">
       <div className="container flex flex-col items-center justify-center">
         <p className="text-2xs scale-100 select-none font-mono font-medium text-purple-800 transition hover:scale-105">QUESTIONS</p>
         <h4 className="text-neutralgrey-1200 mt-2 text-center text-2xl font-medium">Challenge your students</h4>

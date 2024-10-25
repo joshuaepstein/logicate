@@ -43,21 +43,24 @@ export default function Page() {
       <section id="what-we-do" className="flex min-h-[45dvh] items-center justify-center">
         <p className="text-neutralgrey-1200 max-w-3xl text-center text-3xl font-medium [&>span]:transition-colors [&>span]:duration-300">
           With Logicate you can{' '}
-          <span
+          <Link
+            href="#feature-simulate"
             style={{ '--animation-duration': '3s' } as CSSProperties}
             className="hover-text-shimmer inline-flex items-center gap-2 text-indigo-900"
           >
             build and simulate <LogicGateIcon className="inline-block size-10 text-current" />
-          </span>{' '}
+          </Link>{' '}
           logic gates,{' '}
-          <span
+          <Link
+            href="#feature-questions"
             style={{ '--animation-duration': '3s' } as CSSProperties}
             className="hover-text-shimmer inline-flex items-center gap-2 text-purple-900"
           >
             test knowledge <Book04Icon className="inline-block size-9 text-current" />
-          </span>{' '}
+          </Link>{' '}
           and{' '}
-          <span
+          <Link
+            href="#feature-learn"
             style={{ '--animation-duration': '1.5s' } as CSSProperties}
             className="hover-text-shimmer inline-flex items-center justify-start gap-2 text-orange-900"
           >
@@ -75,21 +78,23 @@ export default function Page() {
                 fill="currentColor"
               />
             </svg>
-          </span>{' '}
+          </Link>{' '}
           with our question generator,{' '}
-          <span
+          <Link
+            href="#feature-classrooms"
             style={{ '--animation-duration': '3s' } as CSSProperties}
             className="hover-text-shimmer inline-flex items-center gap-2 text-green-900"
           >
             create and manage <UsersProfiles03Icon className="inline-block size-9 text-current" />
-          </span>{' '}
+          </Link>{' '}
           classrooms, and{' '}
-          <span
+          <Link
+            href="#feature-assign"
             style={{ '--animation-duration': '2s' } as CSSProperties}
             className="hover-text-shimmer text-maroon-900 inline-flex items-center gap-2"
           >
             assign <FileReturn02Icon className="inline-block size-9 text-current" />
-          </span>{' '}
+          </Link>{' '}
           tasks and homework. <br />
           <span className="text-neutralgrey-1000/85 mt-2 inline-block">All in one, easy to use platform.</span>
         </p>

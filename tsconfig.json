@@ -1,6 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "noPropertyAccessFromIndexSignature": false,
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitReturns": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -16,6 +20,6 @@
   },
   "display": "Next.js",
   "exclude": ["node_modules", ".next/**/*"],
-  "extends": ["./tsconfig-base.json", "@tsconfig/next/tsconfig.json"],
+  "extends": ["@tsconfig/strictest/tsconfig.json", "@tsconfig/next/tsconfig.json"],
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", ".next/types/**/*.ts"]
 }

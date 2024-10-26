@@ -44,7 +44,7 @@ export default function CanvasPreview({ logicateSession }: { logicateSession: Lo
   }, [items])
 
   return (
-    <div className="pointer-events-none absolute inset-0 h-full w-full" data-logicate-canvas>
+    <div className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden" data-logicate-canvas>
       <div className="absolute inset-0 z-20 h-full w-full scale-[0.25]" data-logicate-canvas-items>
         {items.map((item, index) =>
           item.itemType === "gate" ? (

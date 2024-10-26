@@ -1,5 +1,4 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@logicate/database/adaptable"
+import { prisma } from "@logicate/database"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
@@ -90,7 +89,7 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
   },

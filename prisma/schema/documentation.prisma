@@ -1,20 +1,41 @@
-model Documentation {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  icon      String? // key of a custom icon
-  title     String
-  summary   String
-  relatedTo String[] @default([])
-  content   String // This should be markdown
+// model Documentation {
+//   id        String   @id @default(cuid())
+//   slug      String   @unique
+//   icon      String? // key of a custom icon
+//   title     String
+//   summary   String
+//   relatedTo String[] @default([])
+//   content   String // This should be markdown
 
-  createdAt DateTime @default(now())
-  createdBy String
+//   createdAt DateTime @default(now())
+//   createdBy String
 
-  updatedAt DateTime @updatedAt
-  updatedBy String
+//   updatedAt DateTime @updatedAt
+//   updatedBy String
 
-  createdByUser User @relation(fields: [createdBy], references: [id], name: "createdDocumentation")
-  updatedByUser User @relation(fields: [updatedBy], references: [id], name: "updatedDocumentation")
+//   createdByUser User @relation(fields: [createdBy], references: [id], name: "createdDocumentation")
+//   updatedByUser User @relation(fields: [updatedBy], references: [id], name: "updatedDocumentation")
 
-  @@index([slug])
+//   @@index([slug])
+// }
+
+model DocumentationReview {
+  id                String   @id @default(cuid())
+  documentationSlug String
+  helpful           Boolean
+  createdAt         DateTime @default(now())
+  createdBy         String
+
+  createdByUser User              @relation(fields: [createdBy], references: [id], name: "createdDocumentationReview")
+  documentation DocumentationPage @relation(fields: [documentationSlug], references: [slug], name: "documentationReview")
+}
+
+// TODO: Write a script to generate the documentation pages based on the pages in the app.
+model DocumentationPage {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  views       Int     @default(0)
+  interactive Boolean @default(false)
+
+  reviews DocumentationReview[] @relation("documentationReview")
 }

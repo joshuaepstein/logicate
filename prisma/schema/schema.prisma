@@ -80,8 +80,7 @@ model User {
 
   Invites Invites[]
 
-  updatedDocumentation Documentation[] @relation("updatedDocumentation")
-  createdDocumentation Documentation[] @relation("createdDocumentation")
+  createdDocumentationReview DocumentationReview[] @relation("createdDocumentationReview")
 }
 
 enum Language {

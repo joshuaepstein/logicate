@@ -6,14 +6,14 @@ export default function BackgroundElement({
   canvasReference,
 }: {
   showBackground: boolean
-  canvasReference: React.RefObject<HTMLDivElement | null>
+  canvasReference?: React.RefObject<HTMLDivElement | null>
 }) {
   const { canvas } = useCanvasStore()
   const backgroundElementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!backgroundElementRef.current) return
-    if (!canvasReference.current) return
+    if (!canvasReference?.current) return
     const { zoom } = canvas
     // const { width, height } = canvasReference.current.getBoundingClientRect();
 

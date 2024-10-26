@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { Item } from "../types"
+import { Item, Wire as WireItemType } from "../types"
 import useCanvasStore from "./useCanvasStore"
 
-export const useNode = (id: string) => {
+export const useNode = (id: string, itemsDefined?: Item[], wiresDefined?: WireItemType[]) => {
   const { items } = useCanvasStore()
-  return items.find((item) => item.id === id)
+  return itemsDefined ? itemsDefined.find((item) => item.id === id) : items.find((item) => item.id === id)
 }
 
-const useNodeHook = (id: string) => {
+const useNodeHook = (id: string, itemsDefined?: Item[], wiresDefined?: WireItemType[]) => {
   const [node, setNode] = useState<Item | null>(null)
   const { items } = useCanvasStore()
 

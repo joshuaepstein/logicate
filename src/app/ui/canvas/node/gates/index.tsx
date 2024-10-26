@@ -199,7 +199,7 @@ export const Gate = forwardRef<
             <div
               className="order-1 h-[2px] min-w-4 grow"
               style={{
-                backgroundColor: item.settings.color || "#000",
+                backgroundColor: (item && item.settings && item.settings.color) || "#000",
               }}
             />
             <div
@@ -207,7 +207,7 @@ export const Gate = forwardRef<
                 hidden: !isInverted,
               })}
               style={{
-                borderColor: item.settings.color || "#000",
+                borderColor: (item && item.settings && item.settings.color) || "#000",
               }}
             ></div>
           </div>
@@ -248,7 +248,7 @@ export const Gate = forwardRef<
                     cx="6.5"
                     cy="6.5"
                     r="6"
-                    stroke={item.settings.color || "#000"}
+                    stroke={(item && item.settings && item.settings.color) || "#000"}
                     strokeWidth="1"
                     fill="white"
                     data-logicate-input-terminal={index}
@@ -263,13 +263,13 @@ export const Gate = forwardRef<
                   "mr-px min-w-0": isOrType || isXorXnorType,
                 })}
                 style={{
-                  backgroundColor: item.settings.color || "#000",
+                  backgroundColor: (item && item.settings && item.settings.color) || "#000",
                 }}
               />
               <div
                 className="absolute z-[1] hidden h-2 w-2 rounded-[50%] border-2 bg-white"
                 style={{
-                  borderColor: item.settings.color || "#000",
+                  borderColor: (item && item.settings && item.settings.color) || "#000",
                 }}
               ></div>
             </div>
@@ -290,15 +290,15 @@ export const Gate = forwardRef<
             filter: isSelected(gateId) ? `drop-shadow(0px 0px 3px #0079db)` : "none",
             ...(inputs > 3 &&
               isOrType && {
-                backgroundImage: `url(${createSVGColouredElementOr(item.settings.color || "#000")})`,
+                backgroundImage: `url(${createSVGColouredElementOr((item && item.settings && item.settings.color) || "#000")})`,
                 backgroundPosition: "center left",
               }),
             ...(inputs > 3 &&
               isXorXnorType && {
-                backgroundImage: `url(${createSVGColouredElementXor(item.settings.color || "#000")})`,
+                backgroundImage: `url(${createSVGColouredElementXor((item && item.settings && item.settings.color) || "#000")})`,
                 backgroundPosition: "center left",
               }),
-            borderColor: item.settings.color || "#000",
+            borderColor: (item && item.settings && item.settings.color) || "#000",
           }}
         >
           <div className="pointer-events-auto flex h-full w-full items-center justify-center">

@@ -1,8 +1,10 @@
+"use client"
+
 import { cn } from "@/lib"
 import { useCallback, useEffect, useState } from "react"
 import useCanvasStore from "./hooks/useCanvasStore"
 import { useNode } from "./hooks/useNode"
-import { Wire as WireItemType } from "./types"
+import { Item, Wire as WireItemType } from "./types"
 
 type WireType = {
   start: { x: number; y: number; fromId: string; fromIndex: number; fromTerminal: "input" | "output" }
@@ -57,7 +59,10 @@ export const Wire = (props: WireType) => {
 export const ConnectionWire = ({
   wire,
   simulatedWires = [],
+  itemsDefined,
+  wiresDefined,
   className = "",
+  customStrokeScale = 1,
 }: {
   wire: WireItemType
   simulatedWires: {
@@ -65,12 +70,15 @@ export const ConnectionWire = ({
     active: boolean
   }[]
   className?: string
+  itemsDefined?: Item[]
+  wiresDefined?: WireItemType[]
+  customStrokeScale?: number
 }) => {
   const { items, wires, isSelected, selectWireId, setSelected, unselectWireId } = useCanvasStore()
   const { from, to, active, id } = wire
   const canvas = useCanvasElement()
-  const startNode = useNode(from.id)
-  const endNode = useNode(to.id)
+  const startNode = useNode(from.id, itemsDefined, wiresDefined)
+  const endNode = useNode(to.id, itemsDefined, wiresDefined)
   const [start, setStart] = useState<{
     center: {
       x: number
@@ -95,8 +103,8 @@ export const ConnectionWire = ({
   })
 
   const updateWirePositions = useCallback(() => {
-    const startWireTerminal = getWireTerminalLocation(from.id, from.node_index, "output")
-    const endWireTerminal = getWireTerminalLocation(to.id, to.node_index, "input")
+    const startWireTerminal = getWireTerminalLocation(from.id, from.node_index, "output", itemsDefined, wiresDefined)
+    const endWireTerminal = getWireTerminalLocation(to.id, to.node_index, "input", itemsDefined, wiresDefined)
 
     if (!startWireTerminal || !endWireTerminal || !canvas) return
     setStart({
@@ -129,7 +137,13 @@ export const ConnectionWire = ({
     updateWirePositions()
   }, [updateWirePositions, items, wire, canvas])
 
-  if (!canvas || !startNode || !endNode) return null
+  if (!canvas || !startNode || !endNode) {
+    console.log("no canvas or start or end node")
+    if (!canvas) console.log("no canvas")
+    if (!startNode) console.log("no start node")
+    if (!endNode) console.log("no end node")
+    return null
+  }
 
   return (
     <svg
@@ -147,7 +161,7 @@ export const ConnectionWire = ({
               `}
         stroke="black"
         fill="none"
-        strokeWidth="6"
+        strokeWidth={6 * customStrokeScale}
         style={{
           ...(isSelected(id) && {
             filter: "drop-shadow(0px 0px 3px #0079db)",
@@ -161,7 +175,7 @@ export const ConnectionWire = ({
                 ${start.center.x + (end.center.x - start.center.x) / 2},${end.center.y}
                 ${end.center.x},${end.center.y}
               `}
-        strokeWidth="4"
+        strokeWidth={4 * customStrokeScale}
         fill="none"
         className={cn("pointer-events-auto stroke-current text-white", {
           "text-white": !simulatedWires.find((wire) => wire.id === id)?.active,
@@ -180,9 +194,15 @@ export const ConnectionWire = ({
   )
 }
 
-const getWireTerminalLocation = (id: string, index: number, pos: "input" | "output") => {
+const getWireTerminalLocation = (
+  id: string,
+  index: number,
+  pos: "input" | "output",
+  itemsDefined?: Item[],
+  wiresDefined?: WireItemType[]
+) => {
   const { items } = useCanvasStore.getState()
-  const item = items.find((item) => item.id === id)
+  const item = itemsDefined ? itemsDefined.find((item) => item.id === id) : items.find((item) => item.id === id)
   if (!item) return null
   const htmlElement = document.querySelector(`[data-logicate-item="${id}"]`) as HTMLElement
   if (!htmlElement) return null
@@ -193,6 +213,7 @@ const getWireTerminalLocation = (id: string, index: number, pos: "input" | "outp
 }
 
 const useCanvasElement = () => {
+  if (typeof window === "undefined") return null
   const element = document.querySelector("[data-logicate-canvas]") as HTMLElement
   if (!element) return null
   return element

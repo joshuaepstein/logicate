@@ -1,5 +1,6 @@
 "use client"
 
+import CookieConsent from "@/components/cookie-consent"
 import useCMDK from "@/components/marketing/cmdk"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -25,6 +26,7 @@ export default function Providers({ children }: { children: ReactNode }) {
         <TooltipProvider>
           <CMDK />
           {children}
+          <CookieConsent />
           <Toaster richColors position="top-right" />
         </TooltipProvider>
         <Analytics />

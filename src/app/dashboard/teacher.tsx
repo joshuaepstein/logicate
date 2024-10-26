@@ -58,15 +58,15 @@ export default async function TeacherDashboard({ user }: { user: User }) {
   return (
     <div>
       <h1 className="text-3xl font-semibold">Your Dashboard</h1>
-      <p className="flex items-center justify-start text-sm text-neutralgrey-1000">
+      <p className="text-neutralgrey-1000 flex items-center justify-start text-sm">
         You have {classrooms.length} classroom{classrooms.length > 1 ? "s" : ""} with a total of{" "}
         {classrooms.reduce((acc, classroom) => acc + classroom._count.students, 0)} student
         {classrooms.reduce((acc, classroom) => acc + classroom._count.students, 0) > 1 ? "s" : ""}.
         <Tooltip>
-          <TooltipContent asChild>
+          <TooltipContent>
             <Link href="/dashboard/teacher/stats">View more stats</Link>
           </TooltipContent>
-          <TooltipTrigger asChild>
+          <TooltipTrigger>
             <Link href="/dashboard/teacher/stats">
               <InformationCircleContainedIcon className="ml-1 size-4" />
             </Link>
@@ -79,7 +79,7 @@ export default async function TeacherDashboard({ user }: { user: User }) {
             <Link
               href={`/dashboard/${classroom.id}`}
               key={index + classroom.id}
-              className="flex w-full flex-col items-start justify-start rounded-sm p-4 shadow-hard-soft-2xs"
+              className="shadow-hard-soft-2xs flex w-full flex-col items-start justify-start rounded-sm p-4"
             >
               <h1 className="text-xl font-medium">{classroom.name}</h1>
               <p>

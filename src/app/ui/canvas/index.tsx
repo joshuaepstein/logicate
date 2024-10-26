@@ -647,11 +647,11 @@ export default function Canvas({
   if (isMobile || isMobileQuery) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <LogoIcon className="mb-8 h-8 text-neutralgrey-700" />
-        <p className="text-sm font-medium text-neutralgrey-1100">Mobile/Tablet is not supported</p>
-        <p className="text-xs text-neutralgrey-1000/50">Please use a desktop device to use Logicate.</p>
+        <LogoIcon className="text-neutralgrey-700 mb-8 h-8" />
+        <p className="text-neutralgrey-1100 text-sm font-medium">Mobile/Tablet is not supported</p>
+        <p className="text-neutralgrey-1000/50 text-xs">Please use a desktop device to use Logicate.</p>
 
-        <p className="mt-4 text-xs text-neutralgrey-1000/50">
+        <p className="text-neutralgrey-1000/50 mt-4 text-xs">
           If you believe this is an error, please contact us at{" "}
           <Link href="mailto:support@joshepstein.co.uk" className="underline">
             support@joshepstein.co.uk

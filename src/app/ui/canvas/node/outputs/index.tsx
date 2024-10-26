@@ -1,7 +1,7 @@
 import { cn } from "@/lib"
 import { cursorInside } from "@/lib/dom-cursor"
+import useStorage from "@/lib/hooks/use-storage"
 import { forwardRef, useCallback, useEffect, useState } from "react"
-import { useCookie } from "react-use"
 import useCanvasStore from "../../hooks/useCanvasStore"
 import { OutputItem } from "../../types"
 import { WireTerminal } from "../wire-terminal"
@@ -37,7 +37,7 @@ export const Output = forwardRef<
     setSelectedIds,
     isSelected,
   } = useCanvasStore()
-  const [debug] = useCookie(`debugMode`)
+  const [debug] = useStorage()(`debugMode`, "false")
   const [position, setPosition] = useState({ x, y })
   const [offset, setOffset] = useState({ x, y })
   const [dragging, setDragging] = useState(false)
@@ -101,7 +101,10 @@ export const Output = forwardRef<
         ref={ref}
         className={cn(
           "pointer-events-none absolute grid w-auto origin-top-left cursor-default select-none items-center justify-center outline-none",
-          className
+          className,
+          {
+            "border border-red-500": debug && debug === "true",
+          }
         )}
         style={{ left: position.x, top: position.y }}
         tabIndex={-1}
@@ -116,7 +119,7 @@ export const Output = forwardRef<
         data-logicate-simulated={simulated.state}
       >
         {debug && debug === "true" && (
-          <p className={cn("absolute left-[80%] top-full w-[400%] text-2xs font-semibold text-red-500")} data-logicate-debug-info>
+          <p className={cn("text-2xs absolute left-[80%] top-full w-[400%] font-semibold text-red-500")} data-logicate-debug-info>
             <span>{outputId}</span>
             <br />
             <span>x: {position.x}</span>

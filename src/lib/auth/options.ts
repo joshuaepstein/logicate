@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@logicate/database"
+import { prisma } from "@logicate/database/adaptable"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
@@ -90,7 +90,6 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  // @ts-expect-error - because
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",

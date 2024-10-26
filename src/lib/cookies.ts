@@ -13,3 +13,7 @@ export function popCookie(key: string) {
 export function getCookie(key: string) {
   return Cookies.get(key)
 }
+
+export const getLocalStorage = (key: string) => {
+  return localStorage.getItem(key)
+}

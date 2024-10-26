@@ -22,10 +22,9 @@ export function RegisterForm() {
         })
           .then((response) => {
             if (response) {
-              // wait 5 seconds
               setTimeout(() => {
-                redirect("/?newLogin=true")
-              }, 5000)
+                redirect("/welcome")
+              }, 10)
             } else {
               toast.error("An error occurred while logging in", {
                 description: "You've been registered successfully, but we couldn't log you in. Please try again or go to the login page.",
@@ -58,7 +57,7 @@ export function RegisterForm() {
         <Label>Name</Label>
         <Input
           placeholder="John Smith"
-          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
+          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
           type="text"
           autoComplete="name"
           name="name"
@@ -70,7 +69,7 @@ export function RegisterForm() {
         <Label>Email</Label>
         <Input
           placeholder="john@smith.com"
-          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
+          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
           type="email"
           name="email"
           id="email"
@@ -81,7 +80,7 @@ export function RegisterForm() {
         <Label>Username</Label>
         <Input
           placeholder="johnsmith"
-          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
+          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
           type="text"
           autoComplete="username"
           name="username"
@@ -93,7 +92,7 @@ export function RegisterForm() {
         <Label>Password</Label>
         <Input
           placeholder="********"
-          className="w-full invalid:placeholder-shown:border-neutralgrey-500"
+          className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
           type="password"
           autoComplete="new-password"
           name="password"

@@ -27,6 +27,10 @@ async function main() {
         },
       },
       accountType: "TEACHER",
+      cookieConsent: {
+        required: true,
+        optional: true,
+      },
     },
   })
 
@@ -35,7 +39,9 @@ async function main() {
       name: faker.word.noun(),
       id: generateClassroomId(),
       students: {
-        connect: user,
+        connect: {
+          id: user.id,
+        },
       },
     },
   })

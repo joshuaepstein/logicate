@@ -70,6 +70,10 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
           profilePicture: `internal:${randomAvatar()}`,
         },
       },
+      cookieConsent: {
+        required: true,
+        optional: true,
+      },
     },
   })
 

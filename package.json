@@ -17,12 +17,14 @@
     "db:seed": "tsx prisma/seed.ts",
     "release": "./scripts/create-release.sh",
     "db:generate": "prisma generate",
-    "run-ts-file": "tsx"
+    "run-ts-file": "tsx",
+    "script": "tsx ./scripts/run.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@hookform/resolvers": "^3.9.0",
     "@jfstech/icons-react": "^0.2.2",
+    "@logicate/react-realtime-cursor": "^0.0.3",
     "@neondatabase/serverless": "^0.10.1",
     "@next/bundle-analyzer": "15.0.2-canary.3",
     "@prisma/adapter-neon": "^5.21.1",
@@ -110,6 +112,8 @@
     "recharts": "^2.13.0",
     "resend": "^4.0.0",
     "slugify": "^1.6.6",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "sonner": "^1.5.0",
     "sugar-high": "^0.7.1",
     "superjson": "^2.2.1",

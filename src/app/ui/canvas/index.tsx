@@ -213,6 +213,7 @@ export default function Canvas({
           // delete the links
           if (fromItem.itemType === "gate") {
             fromItem.outputs = fromItem.outputs.filter((output) => output.id !== deleteWire.to.id)
+            // file deepcode ignore DuplicateIfBody: <Code is very specific and do not want to replace with function as could break code and make it harder to understand>
           } else if (fromItem.itemType === "input") {
             fromItem.outputs = fromItem.outputs.filter((output) => output.id !== deleteWire.to.id)
           } else if (fromItem.itemType === "output") {

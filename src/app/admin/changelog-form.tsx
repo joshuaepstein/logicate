@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input/index"
+import { Input } from "@/components/ui/input"
 import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/modal"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/not-done-yet/accordion"
 import { Textarea } from "@/components/ui/textarea"

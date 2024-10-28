@@ -34,6 +34,9 @@ export default function ClientProfilePicture({
       style={{
         ...style,
         backgroundImage: `url(${profilePicture})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     />
   )

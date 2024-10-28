@@ -139,8 +139,27 @@ model Invites {
   updatedAt DateTime @updatedAt
   expires   DateTime
 
+  emailId String?
+
   accepted Boolean @default(false)
 
   from      User      @relation(fields: [fromId], references: [id])
   classroom Classroom @relation(fields: [classroomId], references: [id])
+}
+
+enum UserPermissions {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model UserPermission {
+  id          String          @id @default(cuid())
+  userId      String
+  classroomId String
+  permission  UserPermissions @default(MEMBER)
+
+  @@unique([userId, classroomId])
+  @@index([userId])
+  @@index([classroomId])
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { TextInput } from "@/components/ui/input/index"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib"
 import { DashIcon, Maximise01Icon, Minimise02Icon, Plus01Icon } from "@jfstech/icons-react/24/outline"
 import { AnimatePresence, motion } from "framer-motion"
@@ -36,7 +36,7 @@ export default function SettingsPopup() {
     <AnimatePresence>
       {selected.length === 1 && selected[0] && selectedItem && (
         <motion.div
-          className="min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white shadow-hard-xs"
+          className="shadow-hard-xs min-w-80 origin-bottom-right overflow-y-hidden rounded-md bg-white"
           initial={{
             opacity: 0,
             x: "20%",
@@ -50,8 +50,8 @@ export default function SettingsPopup() {
             x: "20%",
           }}
         >
-          <div className="flex w-full items-center justify-between border-b border-b-neutralgrey-400 px-4 py-2">
-            <h5 className="text-sm font-medium text-neutralgrey-1100">Node Settings</h5>
+          <div className="border-b-neutralgrey-400 flex w-full items-center justify-between border-b px-4 py-2">
+            <h5 className="text-neutralgrey-1100 text-sm font-medium">Node Settings</h5>
             <Button variant="no-borders" size="icon-xs" onClick={() => setMinimized(!minimized)}>
               {minimized ? <Maximise01Icon className="size-4" /> : <Minimise02Icon className="size-4" />}
             </Button>
@@ -77,7 +77,7 @@ export default function SettingsPopup() {
               >
                 {selectedItem.itemType === "gate" ? (
                   <div className="flex w-full flex-row items-center justify-between gap-4">
-                    <p className="text-sm text-neutralgrey-800">Inputs</p>
+                    <p className="text-neutralgrey-800 text-sm">Inputs</p>
                     <div className="flex w-max flex-row items-center">
                       <Button
                         variant="no-borders"
@@ -144,9 +144,9 @@ export default function SettingsPopup() {
                   </div>
                 ) : null}
                 <div className="flex w-full flex-row items-center justify-between gap-4">
-                  <p className="text-sm text-neutralgrey-800">Label</p>
+                  <p className="text-neutralgrey-800 text-sm">Label</p>
                   <div className="flex w-max flex-row items-center">
-                    <TextInput
+                    <Input
                       value={selectedItem.settings.label}
                       className="min-w-40"
                       onChange={(e) => {
@@ -163,7 +163,7 @@ export default function SettingsPopup() {
                   </div>
                 </div>
                 <div className="flex w-full flex-row items-center justify-between gap-4">
-                  <p className="text-sm text-neutralgrey-800">Colour</p>
+                  <p className="text-neutralgrey-800 text-sm">Colour</p>
                   <div className="flex w-max flex-row items-center">
                     <HexColorPicker
                       color={selectedItem.settings.color}
@@ -182,9 +182,9 @@ export default function SettingsPopup() {
                 </div>
                 {selectedItem.itemType === "input" || selectedItem.itemType === "output" ? (
                   <div className="flex w-full flex-row items-center justify-between gap-4">
-                    <p className="text-sm text-neutralgrey-800">Symbol</p>
+                    <p className="text-neutralgrey-800 text-sm">Symbol</p>
                     <div className="flex w-max flex-row items-center">
-                      <TextInput
+                      <Input
                         value={(selectedItem as InputItem | OutputItem).settings.expressionLetter}
                         className="min-w-40"
                         maxLength={1}

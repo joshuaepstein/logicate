@@ -1,3 +1,4 @@
+import { Container } from "@/components/ui/not-done-yet/container"
 import { getSession } from "@/lib/auth/utils"
 import { notFound } from "next/navigation"
 import StudentDashboard from "./student"
@@ -7,12 +8,18 @@ import TeacherDashboard from "./teacher"
 export default async function DashboardPage() {
   const session = await getSession()
 
-  switch (session.user.accountType) {
-    case "TEACHER":
-      return <TeacherDashboard user={session.user} />
-    case "STUDENT":
-      return <StudentDashboard user={session.user} />
-    default:
-      return notFound()
-  }
+  return (
+    <Container>
+      {(() => {
+        switch (session.user.accountType) {
+          case "TEACHER":
+            return <TeacherDashboard user={session.user} />
+          case "STUDENT":
+            return <StudentDashboard user={session.user} />
+          default:
+            return notFound()
+        }
+      })()}
+    </Container>
+  )
 }

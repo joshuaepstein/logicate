@@ -1,6 +1,6 @@
 "use client"
 
-import { Input } from "@/components/ui/input/index"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { signIn } from "next-auth/react"

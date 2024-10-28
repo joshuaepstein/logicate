@@ -1,0 +1,16 @@
+.react-realtime-cursor {
+  height: 100vh;
+  width: 100vw;
+  background-color: clear;
+  overflow: hidden;
+  cursor: none;
+  z-index: 999999999;
+}
+
+.react-realtime-cursor * {
+  cursor: none !important;
+}
+
+.react-realtime-cursor_chat-textarea::placeholder {
+  color: white;
+}

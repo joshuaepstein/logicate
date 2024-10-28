@@ -23,7 +23,7 @@ function parseFrontmatter(fileContent: string) {
 }
 
 function readMDXFile(filePath: fs.PathOrFileDescriptor) {
-  const rawContent = fs.readFileSync(filePath, "utf-8")
+  const rawContent = fs.readFileSync(filePath, "utf8")
   return parseFrontmatter(rawContent)
 }
 

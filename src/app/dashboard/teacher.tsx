@@ -5,13 +5,12 @@ import { unstable_cache } from "next/cache"
 import Link from "next/link"
 
 const getClassrooms = unstable_cache(
-  async (user) => {
-    if (!user) return []
+  async (userId: string) => {
     const classrooms = await prisma.classroom.findMany({
       where: {
         teachers: {
           some: {
-            id: user.id,
+            id: userId,
           },
         },
       },
@@ -54,7 +53,7 @@ const getClassrooms = unstable_cache(
   It should use a fetch function to get the classrooms so that we can update this using the revalidate option.
 */
 export default async function TeacherDashboard({ user }: { user: User }) {
-  const classrooms = await getClassrooms(user)
+  const classrooms = await getClassrooms(user.id)
   return (
     <div>
       <h1 className="text-3xl font-semibold">Your Dashboard</h1>

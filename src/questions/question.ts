@@ -1,5 +1,7 @@
 // import type { QuestionType } from '@logicate/database'
 
+import { BooleanExpression } from "./boolean-expression"
+
 export enum QuestionType {
   BOOLEAN_EXPRESSION = "BOOLEAN_EXPRESSION",
   TRUTH_TABLE = "TRUTH_TABLE",
@@ -47,5 +49,26 @@ export class Question {
       default:
         throw new Error("Invalid question type")
     }
+  }
+
+  public toJson() {
+    return JSON.stringify({
+      questionType: this._questionType,
+      questionData: this.questionData,
+      ...(this._answerType !== undefined && this.answerData !== undefined && { answerType: this._answerType, answerData: this.answerData }),
+    })
+  }
+
+  public static fromJson(json: string) {
+    const data = JSON.parse(json)
+    return new Question(data.questionType, data.questionData, data.answerType, data.answerData)
+  }
+
+  public getAnswer() {
+    return this.answerData
+  }
+
+  public getQuestion() {
+    return this.questionData
   }
 }

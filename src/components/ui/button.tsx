@@ -38,6 +38,8 @@ const buttonVariants = cva(
           "bg-green-800 text-base-white data-[debug=active]:bg-green-900 data-[debug=focus]:bg-green-900 data-[debug=hover]:bg-green-900 data-[debug=focus]:ring-neutralgrey-600 hover:bg-green-900 focus-visible:bg-green-900 focus-visible:ring-neutralgrey-600 disabled:bg-neutralgrey-300 disabled:text-neutralgrey-700",
         "green-borders":
           "border border-neutralgrey-500 bg-base-white text-green-700 data-[debug=active]:border-green-700 data-[debug=focus]:border-green-700 data-[debug=hover]:border-green-700 data-[debug=focus]:ring-green-400 hover:border-green-700 focus-visible:border-green-700 focus-visible:ring-green-400 disabled:bg-neutralgrey-300 disabled:text-neutralgrey-700",
+        "green-secondary":
+          "bg-green-100 text-green-700 data-[debug=active]:bg-green-200 data-[debug=focus]:bg-base-white data-[debug=hover]:bg-green-200 data-[debug=focus]:ring-green-400 hover:bg-green-200 focus-visible:bg-base-white focus-visible:ring-green-400 disabled:bg-neutralgrey-300 disabled:text-neutralgrey-700",
 
         orange:
           "bg-orange-800 text-base-white data-[debug=active]:bg-orange-900 data-[debug=focus]:bg-orange-900 data-[debug=hover]:bg-orange-900 data-[debug=focus]:ring-neutralgrey-600 hover:bg-orange-900 focus-visible:bg-orange-900 focus-visible:ring-neutralgrey-600 disabled:bg-neutralgrey-300 disabled:text-neutralgrey-700",
@@ -114,6 +116,7 @@ const noShadowVariants: ButtonProps["variant"][] = [
   "text-secondary",
   "text-destructive",
   "text-contrast",
+  "green-secondary",
 ]
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {

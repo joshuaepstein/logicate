@@ -3,7 +3,7 @@
 import LogoIcon from "@/components/Logo"
 import { Button } from "@/components/ui/button"
 import LoadingCircle from "@/components/ui/icons/loading-circle"
-import { Input } from "@/components/ui/input/index"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib"
 import { AuthError } from "next-auth"
 import { signIn } from "next-auth/react"
@@ -107,7 +107,7 @@ export default function LoginForm() {
           <Input
             placeholder="john@smith.com"
             required
-            className="w-full invalid:placeholder-shown:border-neutralgrey-500"
+            className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
             name="email"
             id="email"
             type="email"
@@ -117,11 +117,10 @@ export default function LoginForm() {
           <Input
             placeholder="********"
             required
-            className="w-full invalid:placeholder-shown:border-neutralgrey-500"
+            className="invalid:placeholder-shown:border-neutralgrey-500 w-full"
             name="password"
             id="password"
             type="password"
-            inputSize="sm"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

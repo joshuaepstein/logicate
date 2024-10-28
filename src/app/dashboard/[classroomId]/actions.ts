@@ -8,15 +8,11 @@ export const getClassroom = (classroomId: string) =>
         where: {
           id: classroomId,
         },
-        select: {
-          students: true,
-          createdAt: true,
-          description: true,
+        include: {
+          Invites: true,
           _count: true,
-          id: true,
-          name: true,
+          students: true,
           teachers: true,
-          updatedAt: true,
         },
       })
       return classroom

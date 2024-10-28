@@ -58,3 +58,11 @@ export const generateLockCode = () => {
 export const changelogId = () => {
   return "cl_" + nanoid(8)
 }
+
+export const generateInviteCode = () => {
+  // return nanoid(12)
+  // has email.split("@")[0] and add in the random characters from nanoid(6) so that it is unique
+  // return email.split("@")[0] + "-" + nanoid(6)
+  // get the length of email.split("@")[0] and after every letter add a random character from nanoid(1)
+  return nanoid(24)
+}

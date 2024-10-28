@@ -14,7 +14,7 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
 Table.displayName = "Table"
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-  ({ className, ...props }, ref) => <thead ref={ref} className={cn("", className)} {...props} />
+  ({ className, ...props }, ref) => <thead ref={ref} className={cn("border-x", className)} {...props} />
 )
 TableHeader.displayName = "TableHeader"
 
@@ -27,7 +27,7 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribut
   ({ className, ...props }, ref) => (
     <tfoot
       ref={ref}
-      className={cn("border-t bg-neutralgrey-200/50 font-medium dark:bg-neutralgrey-1100/50 [&>tr]:last:border-b-0", className)}
+      className={cn("bg-neutralgrey-200/50 dark:bg-neutralgrey-1100/50 border-t font-medium [&>tr]:last:border-b-0", className)}
       {...props}
     />
   )
@@ -37,7 +37,7 @@ TableFooter.displayName = "TableFooter"
 const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(({ className, ...props }, ref) => (
   <tr
     ref={ref}
-    className={cn("transition-colors data-[state=selected]:bg-neutralgrey-200 hover:bg-neutralgrey-100", className)}
+    className={cn("data-[state=selected]:bg-neutralgrey-200 hover:bg-neutralgrey-100 transition-colors", className)}
     {...props}
   />
 ))
@@ -85,16 +85,16 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
       {children}
       {sorted &&
         (sortDirection === "asc" ? (
-          <ArrowUpIcon className="ml-1 inline size-[14px] text-neutralgrey-900" />
+          <ArrowUpIcon className="text-neutralgrey-900 ml-1 inline size-[14px]" />
         ) : (
-          <ArrowDownIcon className="ml-1 inline size-[14px] text-neutralgrey-900" />
+          <ArrowDownIcon className="text-neutralgrey-900 ml-1 inline size-[14px]" />
         ))}
     </th>
   )
 )
 TableHead.displayName = "TableHead"
 
-const tableCellVariants = cva("border-x border-b border-neutralgrey-300 transition first:border-l-0", {
+const tableCellVariants = cva("border-x border-b border-neutralgrey-300 transition", {
   variants: {
     size: {
       sm: "h-12 px-4",
@@ -115,7 +115,7 @@ TableCell.displayName = "TableCell"
 
 const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HTMLTableCaptionElement>>(
   ({ className, ...props }, ref) => (
-    <caption ref={ref} className={cn("mt-4 text-sm text-neutralgrey-700 dark:text-neutralgrey-600", className)} {...props} />
+    <caption ref={ref} className={cn("text-neutralgrey-700 dark:text-neutralgrey-600 mt-4 text-sm", className)} {...props} />
   )
 )
 TableCaption.displayName = "TableCaption"

@@ -41,13 +41,15 @@ export default function TeacherClassroomDashboardHeader({
   if (!classroom) return null
   return (
     <header className="container flex w-full flex-row items-center justify-between">
-      <ul className="[&>a]:hover:text-neutralgrey-800 relative flex w-full flex-row items-center justify-start gap-0">
+      <ul className="[&>a]:hover:text-neutralgrey-800 group relative flex w-full flex-row items-center justify-start gap-0">
         <div className="bg-neutralgrey-400 absolute bottom-0 left-0 right-0 h-px w-full" />
         {TABS.map((tab, index) => (
           <Link
             key={"tab-" + index}
             href={`/dashboard/${classroom.id}/${tab.name.toLowerCase()}`}
-            className="hover:!text-neutralgrey-1300 text-neutralgrey-1300 relative transition"
+            className={cn("hover:!text-neutralgrey-1300 text-neutralgrey-1300 relative transition", {
+              "group-hover:!text-neutralgrey-1300": pathname === `/dashboard/${classroom.id}/${tab.name.toLowerCase()}`,
+            })}
           >
             <div
               className={cn(
@@ -58,7 +60,10 @@ export default function TeacherClassroomDashboardHeader({
               )}
             />
 
-            <p className={cn("flex items-center justify-center gap-2 px-10 py-4 text-[15px] font-[450]")}>
+            <p
+              className={cn("flex items-center justify-center gap-2 px-10 py-4 text-[15px] font-[450]")}
+              aria-current={pathname === `/dashboard/${classroom.id}/${tab.name.toLowerCase()}` ? "page" : undefined}
+            >
               <tab.icon className="size-4" />
               {tab.name}
             </p>

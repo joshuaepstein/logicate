@@ -48,13 +48,13 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
 
   return (
     <Suspense fallback={<LoadingNavbar />}>
-      <nav className="border-b-neutral-500 container flex h-16 items-center justify-between border-b">
+      <nav className="container flex h-16 items-center justify-between border-b border-b-neutral-500">
         <Link href="/">
           <Logo className="h-8 transition hover:scale-105 active:scale-95" />
         </Link>
         <div className="hidden items-center gap-4 md:flex">
           <ul className="flex items-center justify-start gap-4">
-            <li className="text-xs font-[450] text-neutralgrey-1200">
+            <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/canvas">Your Canvases</Link>
             </li>
             {/* {new Date() > NewFeatureDateLimit[NewFeature.INSIGHTS] ? (
@@ -92,18 +92,18 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
                 </motion.a>
               </motion.li>
             )} */}
-            <li className="text-xs font-[450] text-neutralgrey-1200">
+            <li className="text-neutralgrey-1200 text-xs font-[450]">
               <Link href="/changelog">Changelog</Link>
             </li>
           </ul>
           <div className="flex items-stretch justify-end gap-4">
             <div
-              className="hidden h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md bg-neutralgrey-200 px-2 md:flex"
+              className="bg-neutralgrey-200 hidden h-8 w-36 cursor-pointer select-none items-center justify-between rounded-md px-2 md:flex"
               onClick={() => {
                 setShowCMDK(true)
               }}
             >
-              <p className="text-sm text-neutralgrey-1000">Search</p>
+              <p className="text-neutralgrey-1000 text-sm">Search</p>
               <div className="flex items-center gap-1">
                 <Kbd variant="ghost" className="bg-neutralgrey-100">
                   ⌘
@@ -117,18 +117,18 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
               <>
                 <Link
                   href={"/login"}
-                  className="group flex items-center justify-center gap-2 rounded-md bg-neutralgrey-200 px-2 py-1 transition"
+                  className="bg-neutralgrey-200 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
                 >
-                  <span className="text-sm text-neutralgrey-1000 transition group-hover:text-neutralgrey-1200">Log in</span>{" "}
+                  <span className="text-neutralgrey-1000 group-hover:text-neutralgrey-1200 text-sm transition">Log in</span>{" "}
                   <Kbd variant="ghost" className="bg-neutralgrey-100">
                     L
                   </Kbd>
                 </Link>
                 <Link
                   href={"/register"}
-                  className="group flex items-center justify-center gap-2 rounded-md bg-neutralgrey-1100 px-2 py-1 transition hover:bg-neutralgrey-1300"
+                  className="bg-neutralgrey-1100 hover:bg-neutralgrey-1300 group flex items-center justify-center gap-2 rounded-md px-2 py-1 transition"
                 >
-                  <span className="text-sm text-neutralgrey-100 transition">Sign up</span>
+                  <span className="text-neutralgrey-100 text-sm transition">Sign up</span>
                   <Kbd variant="ghost" className="border-neutralgrey-1100 bg-neutralgrey-1000 text-neutralgrey-100">
                     N
                   </Kbd>
@@ -152,7 +152,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
                   <PopoverTrigger>
                     <ProfilePicture
                       type="user"
-                      className="size-8 rounded-md bg-contain bg-center bg-no-repeat shadow-hard-xs"
+                      className="shadow-hard-xs size-8 rounded-md bg-contain bg-center bg-no-repeat"
                       user={session.user}
                     />
                   </PopoverTrigger>
@@ -163,7 +163,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
                         signOut()
                       }}
                       className={cn(
-                        "mt-1.5 w-full rounded bg-neutralgrey-1100 px-2 py-1 text-left text-neutralgrey-400 transition duration-150 hover:bg-neutralgrey-1000 hover:text-neutralgrey-300"
+                        "bg-neutralgrey-1100 text-neutralgrey-400 hover:bg-neutralgrey-1000 hover:text-neutralgrey-300 mt-1.5 w-full rounded px-2 py-1 text-left transition duration-150"
                       )}
                     >
                       Logout
@@ -178,7 +178,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
       <AnimatePresence mode="wait">
         {
           //(new Date() <= NewFeatureDateLimit[NewFeature.INSIGHTS] && !hiddenInsights) ||
-          segment !== "/_not-found" ? (
+          segment !== "/_not-found" && process.env.NODE_ENV === "production" ? (
             <motion.div
               // initial={{ height: 0 }}
               // animate={{ height: 'auto' }}
@@ -186,7 +186,7 @@ export default function Navbar({ sessionPromise }: { sessionPromise: ReturnType<
               transition={{ duration: 0.5 }}
               className="animated-new-background sticky top-0 z-[123] flex items-center justify-center overflow-hidden text-center backdrop-blur-[6px]"
             >
-              <div className="py-2 text-xs font-medium text-neutralgrey-1200">
+              <div className="text-neutralgrey-1200 py-2 text-xs font-medium">
                 {/* Introducing Insights! <span className="ml-1 hue-rotate-180">🧠</span>{' '} */}
                 This web application is currently in development. There are bugs and unfinished features.
                 {/* <Link

@@ -129,11 +129,12 @@ model Classroom {
 // This stores the outgoing invitations to join a classroom
 // So we need to store a toUser and a fromUser
 model Invites {
-  id          String @id @default(cuid())
-  to          String
-  fromId      String
-  code        String @unique
-  classroomId String
+  id            String      @id @default(cuid())
+  to            String
+  fromId        String
+  code          String      @unique
+  classroomId   String
+  asAccountType AccountType @default(STUDENT)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

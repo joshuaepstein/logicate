@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { TextInput } from "@/components/ui/input"
+import { Input as TextInput } from "@/components/ui/input"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import { addToResend } from "./actions"
@@ -24,10 +24,9 @@ export default function SubscribeForm() {
             type="email"
             required
             className="block w-full min-w-0 max-w-none pl-12 pr-3 sm:leading-6"
-            displayError={false}
           />
           <svg
-            className="pointer-events-none absolute left-3 top-2 h-6 w-6 stroke-neutralgrey-600"
+            className="stroke-neutralgrey-600 pointer-events-none absolute left-3 top-2 h-6 w-6"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             strokeWidth="2"

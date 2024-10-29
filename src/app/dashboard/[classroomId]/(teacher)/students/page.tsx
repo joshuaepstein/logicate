@@ -21,10 +21,12 @@ export default async function TeacherClassroomDashboardPage(props: { params: Pro
       })
   )[] = [
     ...classroom.students.map((student) => ({ ...student, type: "student" })),
-    ...classroom.Invites.filter((invite) => !classroom.students.some((student) => student.email === invite.to)).map((invite) => ({
-      ...invite,
-      type: "invite",
-    })),
+    ...classroom.Invites.filter((invite) => !classroom.students.some((student) => student.email === invite.to))
+      .filter((invite) => invite.accepted === false && invite.expires > new Date() && invite.asAccountType === "STUDENT")
+      .map((invite) => ({
+        ...invite,
+        type: "invite",
+      })),
   ]
 
   return (

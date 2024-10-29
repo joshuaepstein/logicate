@@ -7,6 +7,7 @@ import { Failure, Success } from "@/types/api"
 import { sendEmail } from "@logicate/emails/index"
 import { revalidateTag } from "next/cache"
 import { z } from "zod"
+import { getPermissions } from "../settings/action"
 
 export const resetInviteCode = async (student: Invites) => {
   const { user } = await getSession()
@@ -152,6 +153,7 @@ export const inviteStudents = async (prevState: Failure<string> | Success<string
         to: email,
         code: code,
         accepted: false,
+        asAccountType: "STUDENT",
       },
     })
 
@@ -184,4 +186,135 @@ export const inviteStudents = async (prevState: Failure<string> | Success<string
   revalidateTag(`classroom-${classroomId}`)
 
   return Success("Invites sent successfully", { invites })
+}
+
+const inviteTeacherSchema = z.object({
+  email: z.string(),
+  classroomId: z.string(),
+})
+export const inviteTeacher = async (prevState: Failure<string> | Success<string> | undefined, formData: FormData) => {
+  if (!inviteTeacherSchema.safeParse(Object.fromEntries(formData)).success) {
+    return Failure("Invalid form data")
+  }
+
+  const { user } = await getSession()
+
+  const { email, classroomId } = inviteTeacherSchema.parse(Object.fromEntries(formData))
+
+  const code = generateInviteCode()
+
+  const classroom = await prisma.classroom.findUnique({
+    where: {
+      id: classroomId,
+    },
+  })
+
+  if (!classroom) {
+    return Failure("Classroom not found")
+  }
+
+  const existing = await prisma.classroom.findFirst({
+    where: {
+      id: classroomId,
+      teachers: {
+        some: {
+          email,
+        },
+      },
+    },
+  })
+
+  if (existing) {
+    return Failure("Teacher already exists in classroom")
+  }
+
+  const existingInvite = await prisma.invites.findFirst({
+    where: {
+      classroomId,
+      to: email,
+      asAccountType: "TEACHER",
+    },
+  })
+
+  if (existingInvite) {
+    return Failure("Teacher already invited")
+  }
+
+  const invite = await prisma.invites.create({
+    data: {
+      classroomId: classroom.id,
+      fromId: user.id,
+      to: email,
+      code: code,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 1 week
+      asAccountType: "TEACHER",
+      accepted: false,
+    },
+  })
+
+  const emailResponse = await sendEmail({
+    email: email,
+    subject: "You have been invited to a classroom on Logicate",
+    from: `${user.name} (${user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
+    text: `You have been invited to join ${classroom.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
+    marketing: false,
+  })
+
+  if (emailResponse && emailResponse.data) {
+    await prisma.invites.update({
+      where: {
+        id: invite.id,
+      },
+      data: {
+        emailId: emailResponse.data.id,
+      },
+    })
+  } else {
+    console.log("Invite created but not sent via email", { invite })
+    return Success("Invite created but not sent via email", { invite })
+  }
+
+  revalidateTag(`classroom-${classroomId}`)
+
+  return Success("Invite sent successfully", { invite })
+}
+
+export const removeStudent = async (classroomId: string, removeUserId: string) => {
+  const { user } = await getSession()
+  if (!user) {
+    return Failure("You must be logged in to remove a student")
+  }
+
+  const classroom = await prisma.classroom.findUnique({
+    where: {
+      id: classroomId,
+    },
+  })
+
+  if (!classroom) {
+    return Failure("Classroom not found")
+  }
+
+  const permission = await getPermissions(classroomId)
+
+  if (permission.find((permission) => permission.userId === user.id)?.permission !== "OWNER") {
+    return Failure("You do not have permission to remove this student")
+  }
+
+  const removed = await prisma.classroom.update({
+    where: {
+      id: classroomId,
+    },
+    data: {
+      students: {
+        disconnect: {
+          id: removeUserId,
+        },
+      },
+    },
+  })
+
+  revalidateTag(`classroom-${classroomId}`)
+
+  return removed
 }

@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, Table
 import { H3 } from "@/components/ui/typography"
 import { notFound } from "next/navigation"
 import { getClassroom } from "../actions"
-import { InviteStudentsDialog, RevokeButton } from "./client"
+import { InviteStudentsDialog, RemoveStudentButton, RevokeButton } from "./client"
 import EmailStatusDialog from "./email-status-dialog"
 
 export default async function TeacherClassroomDashboardPage(props: { params: Promise<{ classroomId: string }> }) {
@@ -66,10 +66,14 @@ export default async function TeacherClassroomDashboardPage(props: { params: Pro
                 {/* <Button variant="no-borders" size="icon-sm">
                   <Pencil01Icon className="size-4" />
                 </Button> */}
-                {student.type === "invite" && (
+                {student.type === "invite" ? (
                   <div className="flex flex-row items-center justify-start gap-2">
                     <EmailStatusDialog student={student} />
                     <RevokeButton student={student} />
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center justify-start gap-2">
+                    <RemoveStudentButton classroomId={classroomId} student={student} />
                   </div>
                 )}
               </TableCell>

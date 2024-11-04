@@ -65,7 +65,9 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     !path.startsWith("/canvas/demo") &&
     !path.startsWith("/changelog") &&
     path !== "/" &&
-    !path.startsWith("/legal/")
+    !path.startsWith("/legal/") &&
+    !path.startsWith("/auth/created") &&
+    !path.startsWith("/auth/verify")
   ) {
     if (fullPath.startsWith("/logout")) {
       const response = NextResponse.redirect(new URL("/login", req.url))

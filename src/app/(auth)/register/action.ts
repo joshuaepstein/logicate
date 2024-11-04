@@ -1,6 +1,8 @@
 "use server"
 
+import { sendVerificationRequest } from "@/lib/emails"
 import { hashPassword } from "@/lib/encrypt"
+import { nanoid } from "@/lib/id"
 import { randomAvatar } from "@/lib/random"
 import { Failure, Success } from "@/types/api"
 import { prisma } from "@logicate/database"
@@ -58,6 +60,7 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
 
   const hashedPassword = await hashPassword(password)
 
+  const verificationToken = nanoid(16)
   const newUser = await prisma.user.create({
     data: {
       username,
@@ -74,11 +77,25 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
         required: true,
         optional: true,
       },
+      verificationTokens: {
+        create: {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3), // 3 days
+          token: verificationToken,
+          completed: false,
+        },
+      },
     },
   })
 
   if (!newUser) {
     return Failure("Failed to create user")
+  }
+
+  // TODO: send verification email
+  const verificationEmail = await sendVerificationRequest(newUser.email, newUser.name, verificationToken)
+
+  if (!verificationEmail) {
+    return Failure("Failed to send verification email, however your account has been created - please try again later")
   }
 
   return Success("User created successfully", {

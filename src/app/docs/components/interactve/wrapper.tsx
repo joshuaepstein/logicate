@@ -41,7 +41,6 @@ export default function InteractiveWrapper({
 
   useEffect(() => {
     setWires(defaultWires || [])
-    console.log(defaultWires, wires)
   }, [defaultWires])
 
   const simulate = useCallback(() => {

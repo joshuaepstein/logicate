@@ -5,12 +5,12 @@ import LoadingCircle from "@/components/ui/icons/loading-circle"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/modal"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { Textarea } from "@/components/ui/textarea"
-import { Classroom, Invites } from "@/database"
+import { AccountType, Classroom, Invites } from "@/database"
 import { cn } from "@/lib"
 import { Plus01Icon, Trash01Icon } from "@jfstech/icons-react/24/outline"
 import { useActionState, useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { inviteStudents, revokeInvite } from "./action"
+import { inviteStudents, removeStudent, revokeInvite } from "./action"
 
 export const RevokeButton = ({ student }: { student: Invites }) => {
   const [revoking, revoke] = useTransition()
@@ -26,6 +26,53 @@ export const RevokeButton = ({ student }: { student: Invites }) => {
             toast.success(`Revoked invite for ${student.to}`)
           } else {
             toast.error(`Failed to revoke invite for ${student.to}`)
+          }
+        })
+      }
+    >
+      {revoking && (
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <LoadingCircle className="size-5" />
+        </div>
+      )}
+      <Trash01Icon
+        className={cn("size-5", {
+          "opacity-0": revoking,
+        })}
+      />
+    </Button>
+  )
+}
+
+export const RemoveStudentButton = ({
+  classroomId,
+  student,
+}: {
+  classroomId: string
+  student: {
+    id: string
+    name: string
+    email: string
+    username: string
+    progressLevel: number
+    accountType: AccountType
+  } & {
+    type: "student"
+  }
+}) => {
+  const [revoking, revoke] = useTransition()
+  return (
+    <Button
+      variant="destructive-secondary"
+      className="relative"
+      size="icon-2xs"
+      onClick={() =>
+        revoke(async () => {
+          const result = await removeStudent(classroomId, student.id)
+          if (result.success) {
+            toast.success(`Removed student ${student.email}`)
+          } else {
+            toast.error(result.error)
           }
         })
       }

@@ -6,7 +6,6 @@ const RECENT_CLASSROOMS_COOKIE = "recentClassrooms"
 
 const setRecentClassrooms = async (classrooms: string[]) => {
   const response = await (await cookies()).set(RECENT_CLASSROOMS_COOKIE, classrooms.join(","))
-  console.log("setRecentClassrooms", response)
   return response
 }
 

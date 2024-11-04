@@ -138,10 +138,6 @@ export const ConnectionWire = ({
   }, [updateWirePositions, items, wire, canvas])
 
   if (!canvas || !startNode || !endNode) {
-    console.log("no canvas or start or end node")
-    if (!canvas) console.log("no canvas")
-    if (!startNode) console.log("no start node")
-    if (!endNode) console.log("no end node")
     return null
   }
 

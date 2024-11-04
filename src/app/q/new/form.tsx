@@ -89,17 +89,17 @@ export function StageOne({
 }) {
   return (
     <>
-      <h4 className="mb-1 mt-2 text-neutralgrey-900">Select the question types you would like to include:</h4>
+      <h4 className="text-neutralgrey-900 mb-1 mt-2">Select the question types you would like to include:</h4>
       <div className="flex flex-row items-start justify-start gap-6">
         {Object.values(QuestionType).map((questionType, index) => {
           return (
             <div key={index} className="flex flex-col items-center justify-center">
               <div
                 className={cn(
-                  "peer flex size-48 scale-100 flex-col items-center justify-center rounded-md shadow-hard-soft-md transition hover:scale-105 hover:shadow-hard-soft-lg active:scale-[1]",
+                  "shadow-hard-soft-md hover:shadow-hard-soft-lg peer flex size-48 scale-100 flex-col items-center justify-center rounded-md transition hover:scale-105 active:scale-[1]",
                   {
-                    "bg-white fill-white text-blue-1000 !shadow-blue-1000/25": selectedQuestionTypes.includes(questionType),
-                    "bg-white fill-white text-neutralgrey-1300": !selectedQuestionTypes.includes(questionType),
+                    "text-blue-1000 !shadow-blue-1000/25 bg-white fill-white": selectedQuestionTypes.includes(questionType),
+                    "text-neutralgrey-1300 bg-white fill-white": !selectedQuestionTypes.includes(questionType),
                   }
                 )}
                 onClick={() => {
@@ -153,7 +153,7 @@ export function StageTwo({
 }) {
   return (
     <div className="flex flex-col gap-4">
-      <h4 className="mb-1 mt-2 text-neutralgrey-900">Select the number of questions you would like to include:</h4>
+      <h4 className="text-neutralgrey-900 mb-1 mt-2">Select the number of questions you would like to include:</h4>
       <div className="w-full max-w-lg">
         {/* <div className="flex w-max flex-row items-center">
           <Button
@@ -221,7 +221,6 @@ const CustomSlider = ({
         const x = e.clientX + 5
         const maxWidth = maxRect.width
         const width = rect.width
-        console.log(x, width, maxWidth)
         // get the position of the mouse relative to the slider
         const position = x - rect.left
         const percentage = (position / maxWidth) * 100
@@ -242,7 +241,7 @@ const CustomSlider = ({
 
   return (
     <div
-      className="group/p flex h-8 w-full items-center overflow-hidden rounded-md bg-neutralgrey-200 p-[2px]"
+      className="group/p bg-neutralgrey-200 flex h-8 w-full items-center overflow-hidden rounded-md p-[2px]"
       onMouseDown={(e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -254,7 +253,6 @@ const CustomSlider = ({
           const x = e.clientX
           const position = x - rect.left
           const percentage = (position / maxRect.width) * 100
-          console.log(percentage)
           ;(document.querySelector("[data-slider-questions]")! as HTMLDivElement).style.width = `${percentage}%`
           const newQuestionCount = Math.round((percentage / 100) * 50)
           setQuestionCount(newQuestionCount)
@@ -263,7 +261,7 @@ const CustomSlider = ({
       }}
     >
       <div
-        className="group relative flex h-full min-w-max items-center justify-end overflow-hidden rounded-[4px] bg-white pr-1.5 shadow-soft-xs"
+        className="shadow-soft-xs group relative flex h-full min-w-max items-center justify-end overflow-hidden rounded-[4px] bg-white pr-1.5"
         data-slider-questions
         style={{
           width: `${(questionCount / 50) * 100}%`,
@@ -282,11 +280,11 @@ const CustomSlider = ({
                 x: -100,
               }}
               style={{ fontSize }}
-              className="absolute left-2 flex overflow-hidden text-left leading-none text-neutralgrey-1300"
+              className="text-neutralgrey-1300 absolute left-2 flex overflow-hidden text-left leading-none"
             >
               <Digit place={10} value={questionCount} />
               <Digit place={1} value={questionCount} />{" "}
-              <span className="ml-1 text-neutralgrey-900">Question{questionCount > 1 ? "s" : ""}</span>
+              <span className="text-neutralgrey-900 ml-1">Question{questionCount > 1 ? "s" : ""}</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -301,7 +299,7 @@ const CustomSlider = ({
             setDragging(false)
           }}
         />
-        <div className="easey-bouncy ml-4 h-4 w-[3px] rounded-full bg-neutralgrey-800 transition-all group-hover/p:h-[18px] group-hover:h-[18px] group-hover/p:bg-neutralgrey-1300 group-hover:bg-neutralgrey-1100 group-active:h-[18px] group-active:bg-neutralgrey-1300" />
+        <div className="easey-bouncy bg-neutralgrey-800 group-hover/p:bg-neutralgrey-1300 group-hover:bg-neutralgrey-1100 group-active:bg-neutralgrey-1300 ml-4 h-4 w-[3px] rounded-full transition-all group-hover/p:h-[18px] group-hover:h-[18px] group-active:h-[18px]" />
       </div>
       <AnimatePresence mode="wait">
         {questionCount < 14 && (
@@ -316,11 +314,11 @@ const CustomSlider = ({
               y: 25,
             }}
             style={{ fontSize }}
-            className="ml-1 flex select-none overflow-hidden text-left leading-none text-neutralgrey-1300"
+            className="text-neutralgrey-1300 ml-1 flex select-none overflow-hidden text-left leading-none"
           >
             <Digit place={10} value={questionCount} />
             <Digit place={1} value={questionCount} />{" "}
-            <span className="ml-1 text-neutralgrey-900">Question{questionCount > 1 ? "s" : ""}</span>
+            <span className="text-neutralgrey-900 ml-1">Question{questionCount > 1 ? "s" : ""}</span>
           </motion.div>
         )}
       </AnimatePresence>

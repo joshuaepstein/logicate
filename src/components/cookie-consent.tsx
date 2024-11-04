@@ -1,6 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion } from "framer-motion"
+import Link from "next/link"
 import useCookieConsent from "./cookie-consent-hook"
 
 export default function CookieConsent() {
@@ -12,6 +13,42 @@ export default function CookieConsent() {
       prompted: true,
       required: true,
     })
+    fetch("/api/auth/cookie-consent", {
+      method: "POST",
+      body: JSON.stringify({
+        cookieConsent: {
+          optional: true,
+          prompted: true,
+          required: true,
+        },
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setCookieConsent({
+            optional: true,
+            prompted: true,
+            required: true,
+            databaseSuccess: true,
+          })
+        } else {
+          setCookieConsent({
+            optional: true,
+            prompted: true,
+            required: true,
+            databaseSuccess: false,
+          })
+        }
+      })
+      .catch((error) => {
+        setCookieConsent({
+          optional: true,
+          prompted: true,
+          required: true,
+          databaseSuccess: false,
+        })
+        console.error(error)
+      })
   }
 
   const handleAcceptRequired = () => {
@@ -20,6 +57,42 @@ export default function CookieConsent() {
       prompted: true,
       required: true,
     })
+    fetch("/api/auth/cookie-consent", {
+      method: "POST",
+      body: JSON.stringify({
+        cookieConsent: {
+          optional: false,
+          prompted: true,
+          required: true,
+        },
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setCookieConsent({
+            optional: false,
+            prompted: true,
+            required: true,
+            databaseSuccess: true,
+          })
+        } else {
+          setCookieConsent({
+            optional: false,
+            prompted: true,
+            required: true,
+            databaseSuccess: false,
+          })
+        }
+      })
+      .catch((error) => {
+        setCookieConsent({
+          optional: false,
+          prompted: true,
+          required: true,
+          databaseSuccess: false,
+        })
+        console.error(error)
+      })
   }
 
   return (
@@ -44,7 +117,11 @@ export default function CookieConsent() {
           <div className="">
             <div className="font-semibold text-black">We value your privacy</div>
             <div className="text-sm text-black">
-              By clicking “Accept all cookies”, you agree that Logicate can store cookies on your device.
+              By clicking “Accept all cookies”, you agree that Logicate can store cookies on your device. You can read more about our use of
+              cookies in our{" "}
+              <Link href="/legal/privacy" className="underline">
+                Privacy Policy
+              </Link>
             </div>
           </div>
           <div className="flex items-start justify-start gap-2.5">

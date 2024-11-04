@@ -2,9 +2,12 @@ import { prisma } from "@logicate/database"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
-import { NextAuthConfig } from "next-auth"
+import { CredentialsSignin, NextAuthConfig } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { randomAvatar } from "../random"
+import { ExceededLoginAttemptsError } from "./errors/ExceededLoginAttempts"
+import { InvalidCredentialsError } from "./errors/InvalidCredentials"
+import { NotVerifiedError } from "./errors/NotVerifiedError"
 import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account"
 import { validatePassword } from "./password"
 
@@ -20,7 +23,8 @@ export const authConfig: NextAuthConfig = {
       },
       async authorize(credentials) {
         if (!credentials) {
-          throw new Error("no-credentials")
+          // throw new AuthError("no-credentials")
+          return null
         }
 
         const { email, password } = credentials as {
@@ -29,7 +33,8 @@ export const authConfig: NextAuthConfig = {
         }
 
         if (!email || !password) {
-          throw new Error("no-credentials")
+          throw new CredentialsSignin("no-credentials")
+          // return null
         }
 
         const user = await prisma.user.findUnique({
@@ -45,15 +50,22 @@ export const authConfig: NextAuthConfig = {
                 profilePicture: true,
               },
             },
+            _count: {
+              select: {
+                verificationTokens: true,
+              },
+            },
           },
         })
 
         if (!user || !user.password) {
-          throw new Error("invalid-credentials")
+          throw new InvalidCredentialsError()
+          // return null
         }
 
         if (exceededLoginAttemptsThreshold(user)) {
-          throw new Error("exceeded-login-attempts")
+          throw new ExceededLoginAttemptsError()
+          // return null
         }
 
         const passwordMatch = await validatePassword({
@@ -65,10 +77,17 @@ export const authConfig: NextAuthConfig = {
           const exceededLoginAttempts = exceededLoginAttemptsThreshold(await incrementLoginAttemps(user))
 
           if (exceededLoginAttempts) {
-            throw new Error("exceeded-login-attempts")
+            throw new ExceededLoginAttemptsError()
+            // return null
           } else {
-            throw new Error("invalid-credentials")
+            throw new InvalidCredentialsError()
+            // return null
           }
+        }
+
+        if (user._count.verificationTokens > 0) {
+          throw new NotVerifiedError()
+          // return null
         }
 
         const updatedUser = await prisma.user.update({

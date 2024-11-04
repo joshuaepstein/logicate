@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth/utils"
 import { generateClassroomId, generateInviteCode } from "@/lib/id"
 import { Failure, Success } from "@/types/api"
 import { sendEmail } from "@logicate/emails/index"
+import InviteStudent from "@logicate/emails/templates/invite-student"
 import { revalidateTag } from "next/cache"
 import { z } from "zod"
 
@@ -75,9 +76,21 @@ export async function createClassroom(prevState: Failure<string> | Success<strin
 
       const emailResponse = await sendEmail({
         email: email,
-        subject: "You have been invited to a classroom on Logicate",
+        subject: `You have been invited to join ${name} on Logicate`,
         from: `${user.user.name} (${user.user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
-        text: `You have been invited to join ${name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
+        // text: `You have been invited to join ${name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
+        react: InviteStudent({
+          acceptUrl: `${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
+          classroomName: name,
+          inviter: {
+            name: user.user.name,
+            email: user.user.email,
+          },
+          to: {
+            email: email,
+            name: email.split("@")[0] ?? email,
+          },
+        }),
         marketing: false,
       })
 

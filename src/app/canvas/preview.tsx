@@ -26,7 +26,6 @@ export default function CanvasPreview({ logicateSession }: { logicateSession: Lo
       x: (minimumX + maximumX) / 2,
       y: (minimumY + maximumY) / 2,
     })
-    console.log(center)
   }, [logicateSession])
 
   useEffect(() => {
@@ -40,7 +39,6 @@ export default function CanvasPreview({ logicateSession }: { logicateSession: Lo
       x: (minimumX + maximumX) / 2,
       y: (minimumY + maximumY) / 2,
     })
-    console.log(center)
   }, [items])
 
   return (

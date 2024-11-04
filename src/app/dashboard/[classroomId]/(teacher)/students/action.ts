@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth/utils"
 import { generateInviteCode } from "@/lib/id"
 import { Failure, Success } from "@/types/api"
 import { sendEmail } from "@logicate/emails/index"
+import InviteTeacher from "@logicate/emails/templates/invite-teacher"
 import { revalidateTag } from "next/cache"
 import { z } from "zod"
 import { getPermissions } from "../settings/action"
@@ -256,8 +257,19 @@ export const inviteTeacher = async (prevState: Failure<string> | Success<string>
     email: email,
     subject: "You have been invited to a classroom on Logicate",
     from: `${user.name} (${user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
-    text: `You have been invited to join ${classroom.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
-    marketing: false,
+    // text: `You have been invited to join ${classroom.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
+    react: InviteTeacher({
+      acceptUrl: `${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
+      classroomName: classroom.name,
+      inviter: {
+        name: user.name,
+        email: user.email,
+      },
+      to: {
+        email: email,
+        name: email.split("@")[0] ?? email,
+      },
+    }),
   })
 
   if (emailResponse && emailResponse.data) {
@@ -270,7 +282,6 @@ export const inviteTeacher = async (prevState: Failure<string> | Success<string>
       },
     })
   } else {
-    console.log("Invite created but not sent via email", { invite })
     return Success("Invite created but not sent via email", { invite })
   }
 
@@ -279,7 +290,7 @@ export const inviteTeacher = async (prevState: Failure<string> | Success<string>
   return Success("Invite sent successfully", { invite })
 }
 
-export const removeStudent = async (classroomId: string, removeUserId: string) => {
+export const removeStudent = async (classroomId: string, removeUserId: string): Promise<Failure<string> | Success<string>> => {
   const { user } = await getSession()
   if (!user) {
     return Failure("You must be logged in to remove a student")
@@ -297,7 +308,10 @@ export const removeStudent = async (classroomId: string, removeUserId: string) =
 
   const permission = await getPermissions(classroomId)
 
-  if (permission.find((permission) => permission.userId === user.id)?.permission !== "OWNER") {
+  if (
+    permission.find((permission) => permission.userId === user.id)?.permission !== "OWNER" &&
+    permission.find((permission) => permission.userId === removeUserId)?.permission !== "ADMIN"
+  ) {
     return Failure("You do not have permission to remove this student")
   }
 
@@ -316,5 +330,5 @@ export const removeStudent = async (classroomId: string, removeUserId: string) =
 
   revalidateTag(`classroom-${classroomId}`)
 
-  return removed
+  return Success("Student removed successfully", { removed })
 }

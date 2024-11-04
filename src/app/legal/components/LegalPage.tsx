@@ -21,6 +21,10 @@ export default function LegalPage({
     <div className="flex flex-col justify-start gap-12 md:flex-row md:py-16">
       <div className="mt-8 h-max w-full px-6 md:sticky md:top-16 md:mt-0 md:flex md:w-1/3 md:flex-col md:px-0">
         <h1 className="text-4xl font-semibold leading-[1.15] md:text-right">{document.metadata.title}</h1>
+        <p className="text-neutralgrey-1000 text-sm md:text-right">
+          Last updated on{" "}
+          {new Date(document.metadata.updatedAt || "").toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })}
+        </p>
         <ul className="mt-16 flex h-max list-none flex-col gap-1 md:text-right">
           {getTableOfContents().map((heading) => {
             const text = heading.replace(/^#+ /, "")

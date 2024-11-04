@@ -1,5 +1,26 @@
 {
   "WillLuke.nextjs.addTypesOnSave": true,
   "WillLuke.nextjs.hasPrompted": true,
+  "files.exclude": {
+    "**/.git": false,
+    "**/.svn": false,
+    "**/.hg": false,
+    "**/CVS": false,
+    "**/.DS_Store": false,
+    "**/Thumbs.db": false,
+    "**/node_modules": false,
+    "**/dist": false,
+    "**/.next": false,
+    ".env.me": false,
+    ".env.vault": false,
+    ".eslintignore": false,
+    "prettier.config.js": false,
+    "postcss.config.js": false,
+    "tsconfig.json": false,
+    ".gitignore": false,
+    ".eslintrc.json": false,
+    "pnpm-lock.yaml": false,
+    "**/.vscode": false
+  },
   "tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list", "indicatorStyles"]
 }

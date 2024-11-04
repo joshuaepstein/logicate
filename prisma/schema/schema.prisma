@@ -81,6 +81,8 @@ model User {
   Invites Invites[]
 
   createdDocumentationReview DocumentationReview[] @relation("createdDocumentationReview")
+
+  UserPermission UserPermission[]
 }
 
 enum Language {
@@ -124,6 +126,8 @@ model Classroom {
   teachers User[] @relation("TeacherClassrooms")
 
   Invites Invites[]
+
+  UserPermission UserPermission[]
 }
 
 // This stores the outgoing invitations to join a classroom
@@ -144,8 +148,8 @@ model Invites {
 
   accepted Boolean @default(false)
 
-  from      User      @relation(fields: [fromId], references: [id])
-  classroom Classroom @relation(fields: [classroomId], references: [id])
+  from      User      @relation(fields: [fromId], references: [id], onDelete: Cascade)
+  classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
 }
 
 enum UserPermissions {
@@ -159,6 +163,9 @@ model UserPermission {
   userId      String
   classroomId String
   permission  UserPermissions @default(MEMBER)
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
 
   @@unique([userId, classroomId])
   @@index([userId])

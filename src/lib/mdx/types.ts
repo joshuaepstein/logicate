@@ -1,6 +1,6 @@
 export type LegalMetadata = {
   title: string
-  updatedDate: string
+  updatedAt: string
 }
 
 export type LegalDocument = {

@@ -7,6 +7,7 @@ export default function useCookieConsent(): [CookieConsent, (cookieConsent: Cook
     required: true,
     optional: true,
     prompted: true,
+    databaseSuccess: false,
   })
   const [cookieConsent, setCookieConsent] = useLocalStorage(COOKIE_CONSENT_KEY, COOKIE_CONSENT_DEFAULT)
 
@@ -30,6 +31,7 @@ type CookieConsent = {
   required: boolean
   optional: boolean
   prompted: boolean
+  databaseSuccess?: boolean
 }
 
 export const COOKIE_CONSENT_KEY = "cookieConsent"
@@ -37,4 +39,5 @@ export const COOKIE_CONSENT_DEFAULT: CookieConsent = {
   required: true,
   optional: true,
   prompted: false,
+  databaseSuccess: false,
 }

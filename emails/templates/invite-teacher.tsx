@@ -41,7 +41,7 @@ export default function InviteTeacher({
       </Text>
 
       <Text style={styles.text}>
-        If you do not wish to accept the invitation, please ignore this email or contact us at security@logicate.joshepstein.co.uk.
+        If you do not wish to accept the invitation, please ignore this email or contact us at security@logicate.uk.
       </Text>
     </Wrapper>
   )

@@ -52,7 +52,7 @@ export default function VerifyEmail({
               <Footer
                 email={user.email}
                 service="Authentication"
-                reasonForEmail="You were sent this email because you registered for a new account on Logicate. If you did not register, please ignore this email or contact us at security@logicate.joshepstein.co.uk"
+                reasonForEmail="You were sent this email because you registered for a new account on Logicate. If you did not register, please ignore this email or contact us at security@logicate.uk"
               />
             </Container>
           </Section>

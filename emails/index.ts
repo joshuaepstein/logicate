@@ -39,8 +39,7 @@ export const sendEmail = async ({
     scheduledAt,
     ...(marketing && {
       headers: {
-        // TODO: Configure this link
-        "List-Unsubscribe": "https://logicate.joshepstein.co.uk/account/settings",
+        "List-Unsubscribe": "https://logicate.uk/account/settings",
       },
     }),
   })

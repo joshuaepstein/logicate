@@ -45,7 +45,7 @@ export default function AccountLockedEmail({
               <Footer
                 email={user.email}
                 service="Authentication"
-                reasonForEmail="This email was sent to you due to unwanted access to your existing account. If you would like to speak to our security team, please email security@logicate.joshepstein.co.uk"
+                reasonForEmail="This email was sent to you due to unwanted access to your existing account. If you would like to speak to our security team, please email security@logicate.uk"
               />
             </Container>
           </Section>

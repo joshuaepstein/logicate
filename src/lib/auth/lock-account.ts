@@ -38,7 +38,7 @@ export const incrementLoginAttemps = async (user: Pick<User, "id" | "email" | "n
           email: user.email,
           name: user.name,
         },
-        unlockUrl: `https://logicate.joshepstein.co.uk/auth/unlock-account?code=${lockCode}`,
+        unlockUrl: `https://logicate.uk/auth/unlock-account?code=${lockCode}`,
       }),
       marketing: false,
       headers: {

@@ -8,7 +8,7 @@ export default function Wrapper({
   children,
   toEmail,
   preview,
-  reasonForEmail = "You were sent this email because you registered for a new account on Logicate. If you did not register, please ignore this email or contact us at security@logicate.joshepstein.co.uk",
+  reasonForEmail = "You were sent this email because you registered for a new account on Logicate. If you did not register, please ignore this email or contact us at security@logicate.uk",
   footerService = "Authentication",
 }: PropsWithChildren<{
   toEmail: string

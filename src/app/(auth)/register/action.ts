@@ -91,10 +91,13 @@ export async function registerAction(_: Failure<string> | Success<string> | unde
     return Failure("Failed to create user")
   }
 
-  // TODO: send verification email
   const verificationEmail = await sendVerificationRequest(newUser.email, newUser.name, verificationToken)
 
   if (!verificationEmail) {
+    return Failure("Failed to send verification email, however your account has been created - please try again later")
+  }
+
+  if (verificationEmail && verificationEmail.error) {
     return Failure("Failed to send verification email, however your account has been created - please try again later")
   }
 

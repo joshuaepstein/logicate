@@ -5,7 +5,7 @@ import { sendEmail } from "@logicate/emails/index"
 import VerifyEmail from "@logicate/emails/templates/verify"
 
 export async function sendVerificationRequest(email: string, name: string, code: string) {
-  return await sendEmail({
+  const emailRes = await sendEmail({
     email,
     subject: "Verify your email",
     react: VerifyEmail({
@@ -16,6 +16,10 @@ export async function sendVerificationRequest(email: string, name: string, code:
       verifyUrl: `${process.env.NEXT_PUBLIC_APP_URL}/auth/verify?code=${code}`,
     }),
   })
+  if (emailRes && emailRes.error) {
+    console.error(emailRes.error)
+  }
+  return emailRes
 }
 
 export async function sendVerificationRequestWithoutCode(email: string, name: string) {

@@ -121,7 +121,6 @@ export const authConfig: NextAuthConfig = {
   //       httpOnly: true,
   //       sameSite: "lax",
   //       path: "/",
-  //       // When working on localhost, the cookie domain must be omitted entirely
   //       domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
   //       secure: VERCEL_DEPLOYMENT,
   //     },

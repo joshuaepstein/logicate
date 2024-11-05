@@ -1,0 +1,16 @@
+# Add 'root' label to any root file changes
+# Quotation marks are required for the leading asterisk
+root:
+  - changed-files:
+      - any-glob-to-any-file: "*"
+
+Questions:
+  - changed-files:
+      - any-glob-to-any-file: "src/questions/*"
+
+feature:
+  - head-branch: ["^feature", "feature"]
+
+# Add 'release' label to any PR that is opened against the `main` branch
+production:
+  - base-branch: "production"

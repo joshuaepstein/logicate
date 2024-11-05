@@ -23,7 +23,7 @@ export const resetInviteCode = async (student: Invites) => {
   const emailResponse = await sendEmail({
     email: student.to,
     subject: "You have been invited to a classroom on Logicate",
-    from: `${user.name} (${user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
+    from: `${user.name} (${user.email}) from Logicate <system@logicate.uk>`,
     text: `You have been invited to join ${classroom?.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
     marketing: false,
   })
@@ -67,7 +67,7 @@ export const resendInvite = async (student: Invites) => {
   const emailResponse = await sendEmail({
     email: student.to,
     subject: `You have been invited to ${classroom?.name} on Logicate`,
-    from: `${user.name} (${user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
+    from: `${user.name} (${user.email}) from Logicate <system@logicate.uk>`,
     text: `You have been invited to join ${classroom?.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${student.code}`,
     marketing: false,
   })
@@ -161,7 +161,7 @@ export const inviteStudents = async (prevState: Failure<string> | Success<string
     const emailResponse = await sendEmail({
       email: email,
       subject: "You have been invited to a classroom on Logicate",
-      from: `${user.name} (${user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
+      from: `${user.name} (${user.email}) from Logicate <system@logicate.uk>`,
       text: `You have been invited to join ${classroom.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
       marketing: false,
     })
@@ -256,7 +256,7 @@ export const inviteTeacher = async (prevState: Failure<string> | Success<string>
   const emailResponse = await sendEmail({
     email: email,
     subject: "You have been invited to a classroom on Logicate",
-    from: `${user.name} (${user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
+    from: `${user.name} (${user.email}) from Logicate <system@logicate.uk>`,
     // text: `You have been invited to join ${classroom.name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
     react: InviteTeacher({
       acceptUrl: `${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,

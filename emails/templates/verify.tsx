@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function VerifyEmail({
-  user = { name: "Joshua Epstein", email: "josh@joshepstein.co.uk" },
+  user = { name: "Joshua Epstein", email: "josh@logicate.uk" },
   verifyUrl = "http://localhost:3000",
 }: Props) {
   return (

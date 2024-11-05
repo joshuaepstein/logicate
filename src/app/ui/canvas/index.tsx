@@ -654,8 +654,8 @@ export default function Canvas({
 
         <p className="text-neutralgrey-1000/50 mt-4 text-xs">
           If you believe this is an error, please contact us at{" "}
-          <Link href="mailto:support@joshepstein.co.uk" className="underline">
-            support@joshepstein.co.uk
+          <Link href="mailto:support@logicate.uk" className="underline">
+            support@logicate.uk
           </Link>
         </p>
       </div>

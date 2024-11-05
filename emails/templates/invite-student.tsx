@@ -10,8 +10,8 @@ type Props = {
 }
 
 export default function InviteStudent({
-  to = { name: "Joshua Epstein", email: "josh@joshepstein.co.uk" },
-  inviter = { name: "Joshua Epstein", email: "josh@joshepstein.co.uk" },
+  to = { name: "Joshua Epstein", email: "josh@logicate.uk" },
+  inviter = { name: "Joshua Epstein", email: "josh@logicate.uk" },
   acceptUrl = "http://localhost:3000",
   classroomName = "Logicate",
 }: Props) {

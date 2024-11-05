@@ -74,4 +74,4 @@ All rights reserved © Josh Epstein 2024
 
 ## Contact
 
-If you have any questions or feedback, please contact me at [josh@joshepstein.co.uk](mailto:josh@joshepstein.co.uk).
+If you have any questions or feedback, please contact me at [josh@logicate.uk](mailto:josh@logicate.uk).

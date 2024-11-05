@@ -28,10 +28,10 @@ export const sendEmail = async ({
 
   return resend.emails.send({
     to: email,
-    from: from || (marketing ? "Josh from Logicate <josh@joshepstein.co.uk" : "Logicate <system.logicate@joshepstein.co.uk>"),
+    from: from || (marketing ? "Josh from Logicate <josh@logicate.uk" : "Logicate <system@logicate.uk>"),
     bcc: bcc,
     ...(!replyToFromEmail && {
-      replyTo: "support.logicate@joshepstein.co.uk",
+      replyTo: "support@logicate.uk",
     }),
     subject,
     text,

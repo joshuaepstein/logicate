@@ -77,7 +77,7 @@ export async function createClassroom(prevState: Failure<string> | Success<strin
       const emailResponse = await sendEmail({
         email: email,
         subject: `You have been invited to join ${name} on Logicate`,
-        from: `${user.user.name} (${user.user.email}) from Logicate <system.logicate@joshepstein.co.uk>`,
+        from: `${user.user.name} (${user.user.email}) from Logicate <system@logicate.uk>`,
         // text: `You have been invited to join ${name} on Logicate. Click the link below to accept the invite: ${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,
         react: InviteStudent({
           acceptUrl: `${process.env.NEXT_PUBLIC_APP_URL}/join/${code}`,

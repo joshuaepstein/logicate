@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function AccountLockedEmail({
-  user = { name: "Joshua Epstein", email: "josh@joshepstein.co.uk" },
+  user = { name: "Joshua Epstein", email: "josh@logicate.uk" },
   unlockUrl = "http://localhost:3000",
 }: Props) {
   return (

@@ -11,6 +11,9 @@ Questions:
 feature:
   - head-branch: ["^feature", "feature"]
 
+bug-fix:
+  - head-branch: ["^bug-fix", "bug-fix"]
+
 # Add 'release' label to any PR that is opened against the `main` branch
 production:
   - base-branch: "production"

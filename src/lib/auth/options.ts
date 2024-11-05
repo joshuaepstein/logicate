@@ -11,6 +11,8 @@ import { NotVerifiedError } from "./errors/NotVerifiedError"
 import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account"
 import { validatePassword } from "./password"
 
+const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
+
 export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
@@ -112,19 +114,19 @@ export const authConfig: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
-  // cookies: {
-  //   sessionToken: {
-  //     name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
-  //     options: {
-  //       httpOnly: true,
-  //       sameSite: 'lax',
-  //       path: '/',
-  //       // When working on localhost, the cookie domain must be omitted entirely
-  //       domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
-  //       secure: VERCEL_DEPLOYMENT,
-  //     },
-  //   },
-  // },
+  cookies: {
+    sessionToken: {
+      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        // When working on localhost, the cookie domain must be omitted entirely
+        domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
+        secure: VERCEL_DEPLOYMENT,
+      },
+    },
+  },
   pages: {
     error: "/login",
   },
@@ -132,7 +134,34 @@ export const authConfig: NextAuthConfig = {
     jwt: async ({ token, user, trigger }) => {
       if (user) token.user = user
 
-      if (trigger === "update" || trigger === undefined) {
+      if (trigger === "update") {
+        const refreshedUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+        })
+        let publicDisplay = await prisma.publicDisplay.findUnique({
+          where: { userId: token.sub },
+        })
+        if (publicDisplay) {
+          if (publicDisplay.profilePicture === null) {
+            // publicDisplay.profilePicture = `internal:${randomAvatar()}`
+            const updatedProfilePicture = await prisma.publicDisplay.update({
+              where: { userId: token.sub },
+              data: {
+                profilePicture: `internal:${randomAvatar()}`,
+              },
+            })
+            publicDisplay = updatedProfilePicture
+          }
+        }
+        if (refreshedUser) {
+          token.user = {
+            ...refreshedUser,
+            publicDisplay: publicDisplay || {},
+          }
+        } else {
+          return {}
+        }
+      } else if (trigger === undefined) {
         // refresh the user because we want to make sure we have the latest data
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },

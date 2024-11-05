@@ -4,15 +4,17 @@ root:
   - changed-files:
       - any-glob-to-any-file: "*"
 
-Questions:
-  - changed-files:
-      - any-glob-to-any-file: "src/questions/*"
+# Questions:
+#   - changed-files:
+#       # - : "src/questions/*"
+#       -
 
 feature:
   - head-branch: ["^feature", "feature"]
 
 bug-fix:
-  - head-branch: ["^bug-fix", "bug-fix"]
+  # Adds a bug fix label to any PR with the branch name starting with "bug-fix-"
+  - head-branch: ["^bug-fix", "bug-fix", "bug-fix-*"]
 
 # Add 'release' label to any PR that is opened against the `main` branch
 production:

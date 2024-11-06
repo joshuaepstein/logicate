@@ -54,7 +54,7 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   }
 
   const user = await getUserViaToken(req)
-  console.log(user, "User")
+  console.log(user, "User", req, ev)
   if (
     (!user || !user.email) &&
     path !== "/login" &&

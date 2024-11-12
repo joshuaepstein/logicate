@@ -158,7 +158,7 @@ export const authConfig: NextAuthConfig = {
     session: async ({ session, token }) => {
       session.user = {
         id: token.sub,
-        // @ts-expect-error - unsure but it's fine
+        // @ts-ignore
         ...(token || session).user,
       }
 

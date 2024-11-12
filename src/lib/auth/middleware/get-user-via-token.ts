@@ -5,11 +5,10 @@ import { NextRequest } from "next/server"
 export async function getUserViaToken(req: NextRequest) {
   const session = (await getToken({
     req,
-    secret: process.env.SECRET_PASSWORD,
+    secret: process.env.AUTH_SECRET,
   })) as {
     email?: string
     user?: User
   }
-  console.log("session", session)
   return session?.user
 }

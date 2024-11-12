@@ -1,4 +1,4 @@
-import { prisma } from "@logicate/database"
+import {prisma, prismaAdapter} from "@logicate/database"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
@@ -11,6 +11,8 @@ import { NotVerifiedError } from "./errors/NotVerifiedError"
 import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account"
 import { validatePassword } from "./password"
 import {NoCredentialsError} from "@/lib/auth/errors/NoCredentials";
+import {PrismaAdapter} from "@auth/prisma-adapter";
+import {Adapter} from "next-auth/adapters";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
@@ -110,9 +112,9 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  // adapter: PrismaAdapter({
-  //   ...prismaAdapter,
-  // }) as Adapter,
+  adapter: PrismaAdapter({
+    ...prismaAdapter,
+  }) as Adapter,
   session: {
     strategy: "jwt",
   },

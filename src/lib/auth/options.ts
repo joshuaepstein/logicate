@@ -164,15 +164,10 @@ export const authConfig: NextAuthConfig = {
         } else {
           return {}
         }
-      } else if (trigger === undefined) {
-        // refresh the user because we want to make sure we have the latest data
-        const refreshedUser = await prisma.user.findUnique({
-          where: { id: token.sub },
-        })
+      } else {
         let publicDisplay = await prisma.publicDisplay.findUnique({
           where: { userId: token.sub },
         })
-
         if (publicDisplay) {
           if (publicDisplay.profilePicture === null) {
             // publicDisplay.profilePicture = `internal:${randomAvatar()}`
@@ -182,18 +177,13 @@ export const authConfig: NextAuthConfig = {
                 profilePicture: `internal:${randomAvatar()}`,
               },
             })
-
             publicDisplay = updatedProfilePicture
           }
         }
-
-        if (refreshedUser) {
-          token.user = {
-            ...refreshedUser,
-            publicDisplay: publicDisplay || {},
-          }
-        } else {
-          return {}
+        token.user = {
+          // @ts-ignore
+          ...token.user,
+          publicDisplay: publicDisplay || {},
         }
       }
 

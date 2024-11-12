@@ -10,6 +10,6 @@ export async function getUserViaToken(req: NextRequest) {
     email?: string
     user?: User
   }
-
+  console.log("session", session)
   return session?.user
 }

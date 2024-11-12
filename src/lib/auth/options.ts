@@ -1,8 +1,10 @@
-import { prisma } from "@logicate/database"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma, prismaAdapter } from "@logicate/database"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
 import { CredentialsSignin, NextAuthConfig } from "next-auth"
+import type { Adapter } from "next-auth/adapters"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { randomAvatar } from "../random"
 import { ExceededLoginAttemptsError } from "./errors/ExceededLoginAttempts"
@@ -110,7 +112,9 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  // adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter({
+    ...prismaAdapter,
+  }) as Adapter,
   session: {
     strategy: "jwt",
   },

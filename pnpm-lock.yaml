@@ -282,9 +282,6 @@ importers:
       resend:
         specifier: 4.0.1-alpha.0
         version: 4.0.1-alpha.0(react-dom@19.0.0-rc-02c0e824-20241028(react@19.0.0-rc-02c0e824-20241028))(react@19.0.0-rc-02c0e824-20241028)
-      root:
-        specifier: github:nextauthjs/next-auth
-        version: https://codeload.github.com/nextauthjs/next-auth/tar.gz/4b01b466b1d65d36945c07f1ee1d4944b218113d
       slugify:
         specifier: ^1.6.6
         version: 1.6.6
@@ -6122,11 +6119,6 @@ packages:
     resolution: {integrity: sha512-vGorVWIsWfX3xbcyAS+I047kFKapHYivmkaT63Smj77XwvLSJos6M1xGqZnBPFQFBRZDOcG1QnYEIxAvTr/HjA==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
-
-  root@https://codeload.github.com/nextauthjs/next-auth/tar.gz/4b01b466b1d65d36945c07f1ee1d4944b218113d:
-    resolution: {tarball: https://codeload.github.com/nextauthjs/next-auth/tar.gz/4b01b466b1d65d36945c07f1ee1d4944b218113d}
-    version: 0.0.0
-    engines: {node: ^18.18.0 || ^20.8.0 || ^22.0.0}
 
   rtl-css-js@1.16.1:
     resolution: {integrity: sha512-lRQgou1mu19e+Ya0LsTvKrVJ5TYUbqCVPAiImX3UfLTenarvPUl1QFdvu5Z3PYmHT9RCcwIfbjRQBntExyj3Zg==}
@@ -13114,8 +13106,6 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.24.4
       '@rollup/rollup-win32-x64-msvc': 4.24.4
       fsevents: 2.3.3
-
-  root@https://codeload.github.com/nextauthjs/next-auth/tar.gz/4b01b466b1d65d36945c07f1ee1d4944b218113d: {}
 
   rtl-css-js@1.16.1:
     dependencies:

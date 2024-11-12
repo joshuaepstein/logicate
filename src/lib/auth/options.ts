@@ -1,10 +1,12 @@
-import { prisma } from "@logicate/database"
+import { NoCredentialsError } from "@/lib/auth/errors/NoCredentials"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma, prismaAdapter } from "@logicate/database"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
 import { CredentialsSignin, NextAuthConfig } from "next-auth"
+import { Adapter } from "next-auth/adapters"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { randomAvatar } from "../random"
 import { ExceededLoginAttemptsError } from "./errors/ExceededLoginAttempts"
 import { InvalidCredentialsError } from "./errors/InvalidCredentials"
 import { NotVerifiedError } from "./errors/NotVerifiedError"
@@ -13,6 +15,9 @@ import { validatePassword } from "./password"
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
+/**
+ * AUTH_TRUST_HOST = true might be required for this to work.
+ */
 export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
@@ -25,8 +30,7 @@ export const authConfig: NextAuthConfig = {
       },
       async authorize(credentials) {
         if (!credentials) {
-          // throw new AuthError("no-credentials")
-          return null
+          throw new NoCredentialsError()
         }
 
         const { email, password } = credentials as {
@@ -110,86 +114,43 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  // adapter: PrismaAdapter({
-  //   ...prismaAdapter,
-  // }) as Adapter,
+  adapter: PrismaAdapter({
+    ...prismaAdapter,
+  }) as Adapter,
   session: {
     strategy: "jwt",
   },
-  cookies: {
-    sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
-        secure: VERCEL_DEPLOYMENT,
-      },
-    },
-  },
+  // cookies: {
+  //   sessionToken: {
+  //     name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+  //     options: {
+  //       httpOnly: true,
+  //       sameSite: "lax",
+  //       path: "/",
+  //       domain: VERCEL_DEPLOYMENT ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
+  //       secure: VERCEL_DEPLOYMENT,
+  //     },
+  //   },
+  // },
   pages: {
     error: "/login",
   },
   callbacks: {
     jwt: async ({ token, user, trigger }) => {
-      if (user) token.user = user
+      if (user) {
+        token.user = user
+      }
 
       if (trigger === "update") {
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
+          include: {
+            publicDisplay: true,
+          },
         })
-        let publicDisplay = await prisma.publicDisplay.findUnique({
-          where: { userId: token.sub },
-        })
-        if (publicDisplay) {
-          if (publicDisplay.profilePicture === null) {
-            // publicDisplay.profilePicture = `internal:${randomAvatar()}`
-            const updatedProfilePicture = await prisma.publicDisplay.update({
-              where: { userId: token.sub },
-              data: {
-                profilePicture: `internal:${randomAvatar()}`,
-              },
-            })
-            publicDisplay = updatedProfilePicture
-          }
-        }
-        if (refreshedUser) {
-          token.user = {
-            ...refreshedUser,
-            publicDisplay: publicDisplay || {},
-          }
-        } else {
-          return {}
-        }
-      } else if (trigger === undefined) {
-        // refresh the user because we want to make sure we have the latest data
-        const refreshedUser = await prisma.user.findUnique({
-          where: { id: token.sub },
-        })
-        let publicDisplay = await prisma.publicDisplay.findUnique({
-          where: { userId: token.sub },
-        })
-
-        if (publicDisplay) {
-          if (publicDisplay.profilePicture === null) {
-            // publicDisplay.profilePicture = `internal:${randomAvatar()}`
-            const updatedProfilePicture = await prisma.publicDisplay.update({
-              where: { userId: token.sub },
-              data: {
-                profilePicture: `internal:${randomAvatar()}`,
-              },
-            })
-
-            publicDisplay = updatedProfilePicture
-          }
-        }
 
         if (refreshedUser) {
-          token.user = {
-            ...refreshedUser,
-            publicDisplay: publicDisplay || {},
-          }
+          token.user = refreshedUser
         } else {
           return {}
         }
@@ -200,7 +161,7 @@ export const authConfig: NextAuthConfig = {
     session: async ({ session, token }) => {
       session.user = {
         id: token.sub,
-        // @ts-expect-error - unsure but it's fine
+        // @ts-ignore
         ...(token || session).user,
       }
 
@@ -249,5 +210,8 @@ export const authConfig: NextAuthConfig = {
         }
       }
     },
+  },
+  experimental: {
+    enableWebAuthn: true,
   },
 }

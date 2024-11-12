@@ -22,7 +22,7 @@ const appRoutes = {
   ui: "/ui.logicate",
 }
 
-export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
+export default async function middleware(req: NextRequest, _ev: NextFetchEvent) {
   const { domain, path, fullPath } = parse(req)
   let maintenance = false
   try {
@@ -54,7 +54,7 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   }
 
   const user = await getUserViaToken(req)
-  console.log(user, "User", req, ev)
+
   if (
     (!user || !user.email) &&
     path !== "/login" &&

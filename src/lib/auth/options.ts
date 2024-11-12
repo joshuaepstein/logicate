@@ -2,7 +2,7 @@ import { prisma } from "@logicate/database"
 import { sendEmail } from "@logicate/emails"
 import { subscribe } from "@logicate/emails/resend"
 import { waitUntil } from "@vercel/functions"
-import { CredentialsSignin, NextAuthConfig } from "next-auth"
+import {CredentialsSignin, NextAuthConfig} from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { randomAvatar } from "../random"
 import { ExceededLoginAttemptsError } from "./errors/ExceededLoginAttempts"
@@ -10,6 +10,7 @@ import { InvalidCredentialsError } from "./errors/InvalidCredentials"
 import { NotVerifiedError } from "./errors/NotVerifiedError"
 import { exceededLoginAttemptsThreshold, incrementLoginAttemps } from "./lock-account"
 import { validatePassword } from "./password"
+import {NoCredentialsError} from "@/lib/auth/errors/NoCredentials";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
@@ -25,8 +26,7 @@ export const authConfig: NextAuthConfig = {
       },
       async authorize(credentials) {
         if (!credentials) {
-          // throw new AuthError("no-credentials")
-          return null
+          throw new NoCredentialsError()
         }
 
         const { email, password } = credentials as {

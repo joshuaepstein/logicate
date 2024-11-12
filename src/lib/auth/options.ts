@@ -110,7 +110,9 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  // adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter({
+  //   ...prismaAdapter,
+  // }) as Adapter,
   session: {
     strategy: "jwt",
   },

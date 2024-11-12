@@ -211,4 +211,5 @@ export const authConfig: NextAuthConfig = {
       }
     },
   },
+  experimental: { enableWebAuthn: true },
 }

@@ -8,7 +8,7 @@ export const hashToken = async (
 ) => {
   const encoder = new TextEncoder()
 
-  const data = encoder.encode(`${token}${secret ? process.env.SECRET_PASSWORD : ""}`)
+  const data = encoder.encode(`${token}${secret ? process.env.AUTH_SECRET : ""}`)
   const hashBuffer = await crypto.subtle.digest("SHA-256", data)
   const hashArray = Array.from(new Uint8Array(hashBuffer))
 

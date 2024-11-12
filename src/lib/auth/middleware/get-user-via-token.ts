@@ -3,7 +3,6 @@ import { getToken } from "next-auth/jwt"
 import { NextRequest } from "next/server"
 
 export async function getUserViaToken(req: NextRequest) {
-  console.log("Starting getUserViaToken")
   const session = (await getToken({
     req,
     secret: process.env.AUTH_SECRET,
@@ -11,6 +10,5 @@ export async function getUserViaToken(req: NextRequest) {
     email?: string
     user?: User
   }
-  console.log("Session", session)
   return session?.user
 }

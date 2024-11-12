@@ -74,7 +74,6 @@ export default async function middleware(req: NextRequest, _ev: NextFetchEvent) 
       response.headers.set("x-url", fullPath)
       return response
     }
-    console.log("redirecting to login because user is not logged in", user)
     const response = NextResponse.redirect(new URL(`/login${path === "/" ? "" : `?next=${encodeURIComponent(fullPath)}`}`, req.url))
     response.headers.set("x-url", fullPath)
     return response

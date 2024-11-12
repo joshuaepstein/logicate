@@ -15,6 +15,9 @@ import { validatePassword } from "./password"
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
+/**
+ * This code is not working as expected. (This line is just to force a new build.)
+ */
 export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
